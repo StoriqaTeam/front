@@ -355,6 +355,7 @@ class Authorization extends Component<PropsType, StateType> {
   };
 
   recoverPassword = (): void => {
+    this.setState({ isLoading: true });
     const { environment, showAlert } = this.props;
     const { email } = this.state;
     requestPasswordResetMutation({
@@ -376,6 +377,9 @@ class Authorization extends Component<PropsType, StateType> {
         }
         return undefined;
       })
+      .finally(() => {
+        this.setState({ isLoading: false });
+      })
       .catch((errs: ResponseErrorType): void => {
         const relayErrors = fromRelayError({ source: { errors: [errs] } });
         if (relayErrors) {
@@ -390,12 +394,12 @@ class Authorization extends Component<PropsType, StateType> {
   };
 
   resetPassword = (): void => {
+    this.setState({ isLoading: true });
     const {
       environment,
       match: {
         params: { token },
       },
-      router: { push },
     } = this.props;
     const { password } = this.state;
     const params = {
@@ -426,7 +430,24 @@ class Authorization extends Component<PropsType, StateType> {
           link: { text: '' },
           onClick: this.handleAlertOnClick,
         });
-        push('/login');
+        // $FlowIgnoreMe
+        const jwtStr = pathOr(
+          null,
+          ['applyPasswordReset', 'token'],
+          Object.freeze(response),
+        );
+        if (jwtStr) {
+          const date = new Date();
+          const today = date;
+          const expirationDate = date;
+          expirationDate.setDate(today.getDate() + 14);
+          // $FlowIgnoreMe
+          JWT.setJWT(jwtStr);
+          if (this.props.handleLogin) {
+            this.props.handleLogin();
+            window.location = '/';
+          }
+        }
       },
       onError: (error: Error): void => {
         const relayErrors = fromRelayError(error);
@@ -549,6 +570,10 @@ class Authorization extends Component<PropsType, StateType> {
     );
   };
 
+  handleSocialClick = () => {
+    this.setState({ isLoading: true });
+  };
+
   renderRegistration = (): Node => {
     const {
       email,
@@ -626,7 +651,9 @@ class Authorization extends Component<PropsType, StateType> {
                   <div className="separatorBlock">
                     <Separator text="or" />
                   </div>
-                  <AuthorizationSocial />
+                  <AuthorizationSocial
+                    handleSocialClick={this.handleSocialClick}
+                  />
                 </Fragment>
               )}
             </div>

@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import {
   assocPath,
   propOr,
@@ -14,9 +15,11 @@ import {
   omit,
 } from 'ramda';
 import { createFragmentContainer, graphql } from 'react-relay';
+import copy from 'copy-to-clipboard';
 import { validate } from '@storiqa/shared';
 
 import { Input, Button, Select } from 'components/common';
+import { Icon } from 'components/Icon';
 import { BirthdateSelect } from 'components/common/BirthdateSelect';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 
@@ -60,12 +63,15 @@ type StateType = {
     [string]: ?any,
   },
   isLoading: boolean,
+  isCopiedRef: boolean,
 };
 
 const genderItems = [
   { id: 'male', label: 'Male' },
   { id: 'female', label: 'Female' },
 ];
+
+let timer;
 
 class PersonalData extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
@@ -81,7 +87,12 @@ class PersonalData extends Component<PropsType, StateType> {
       },
       formErrors: {},
       isLoading: false,
+      isCopiedRef: false,
     };
+  }
+
+  componentWillUnmount() {
+    clearInterval(timer);
   }
 
   handleSave = () => {
@@ -250,12 +261,29 @@ class PersonalData extends Component<PropsType, StateType> {
     </div>
   );
 
+  handleCopyRefLink = (refLink: string) => {
+    clearInterval(timer);
+
+    this.setState({ isCopiedRef: true });
+
+    timer = setInterval(() => {
+      this.setState({ isCopiedRef: false });
+    }, 3000);
+
+    copy(refLink);
+  };
+
   render() {
     const { subtitle } = this.props;
-    const { data, isLoading, formErrors } = this.state;
+    const { data, isLoading, formErrors, isCopiedRef } = this.state;
+    console.log('---isCopiedRef', isCopiedRef);
     // $FlowIgnoreMe
     const refNum = pathOr('', ['me', 'rawId'], this.props);
     const genderValue = find(propEq('id', toLower(data.gender)))(genderItems);
+
+    const refLink = process.env.REACT_APP_HOST
+      ? `${process.env.REACT_APP_HOST}?ref=${refNum}`
+      : '';
     return (
       <div styleName="personalData">
         <div styleName="personalDataWrap">
@@ -296,18 +324,28 @@ class PersonalData extends Component<PropsType, StateType> {
             label: t.labelPhone,
           })}
           <div styleName="formItem">
-            <Input
-              id="ref"
-              readonly="readonly"
-              value={
-                process.env.REACT_APP_HOST
-                  ? `${process.env.REACT_APP_HOST}?ref=${refNum}`
-                  : ''
-              }
-              label={t.labelRefLink}
-              onChange={() => {}}
-              fullWidth
-            />
+            <div styleName="inputRef">
+              <button
+                styleName={classNames('copyRefButton', { isCopiedRef })}
+                onClick={() => {
+                  this.handleCopyRefLink(refLink);
+                }}
+                data-test="copyRefButton"
+              >
+                <Icon type="copy" size={32} />
+              </button>
+              <Input
+                id="ref"
+                disabled
+                value={refLink}
+                label={t.labelRefLink}
+                onChange={() => {}}
+                fullWidth
+              />
+              <div styleName={classNames('copyMessage', { isCopiedRef })}>
+                {t.copied}
+              </div>
+            </div>
           </div>
           <div styleName="formItem">
             <div styleName="button">
