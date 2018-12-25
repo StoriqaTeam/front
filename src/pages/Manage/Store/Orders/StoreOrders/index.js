@@ -102,6 +102,7 @@ class StoreOrders extends Component<PropsType, StateType> {
       payment: order.paymentStatus ? t.paid : t.notPaid,
       status: order.state,
       subtotal: order.subtotal,
+      totalAmount: order.totalAmount,
     };
     return result;
   };
@@ -197,6 +198,7 @@ export default createRefetchContainer(
               price
               quantity
               subtotal
+              totalAmount
               createdAt
               paymentStatus
               deliveryCompany

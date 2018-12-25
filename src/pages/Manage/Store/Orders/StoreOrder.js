@@ -53,6 +53,7 @@ export default createRefetchContainer(
         order(slug: $slug) {
           id
           slug
+          deliveryCompany
           storeId
           product {
             baseProduct {
