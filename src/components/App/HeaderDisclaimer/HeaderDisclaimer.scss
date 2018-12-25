@@ -1,7 +1,8 @@
-@import "../../../styles/variables";
+@import '../../../styles/variables';
 
 .container {
   background-color: $color_blue;
+  height: 3rem;
 }
 
 .text {
@@ -37,7 +38,7 @@
   padding: 0.4rem 4rem;
   color: $color_white;
   font-size: 16px;
-  border: 1px solid rgba(255,255,255,.26);
+  border: 1px solid rgba(255, 255, 255, 0.26);
   border-radius: 0.5rem;
   transition: $transition_all_ease;
 
@@ -49,7 +50,7 @@
   }
 
   &:hover {
-    border: 1px solid rgba(255,255,255,.7);
+    border: 1px solid rgba(255, 255, 255, 0.7);
   }
 }
 
@@ -67,13 +68,13 @@
 
   &:hover {
     svg {
-      opacity: .9;
+      opacity: 0.9;
     }
   }
 
   svg {
     fill: $color_white;
-    opacity: .6;
+    opacity: 0.6;
     transition: $transition_all_ease;
   }
 }
