@@ -389,7 +389,7 @@ class OrderPage extends Component<PropsType, StateType> {
                   <Row>
                     <Col size={12} lg={5}>
                       <TextWithLabel
-                        label={t.labelDelivery}
+                        label={t.labelDeliveryPrice}
                         text={`${formatPrice(order.deliveryPrice)} STQ`}
                       />
                     </Col>

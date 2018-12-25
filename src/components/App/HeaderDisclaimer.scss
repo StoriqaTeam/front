@@ -2,6 +2,9 @@
 
 .container {
   background-color: $color_blue;
+  height: 3rem;
+  display: flex;
+  justify-content: center;
 }
 
 .text {
@@ -40,19 +43,14 @@
   padding: 0.1rem 2rem;
   color: $color_white;
   font-size: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.26);
-  border-radius: 0.5rem;
   transition: $transition_all_ease;
-
+  text-decoration: underline;
+  font-weight: bold;
   @media (max-width: #{$md - 1px}) {
     padding: 0.3rem 3rem;
     font-size: 14px;
     margin-left: 0;
     margin-top: 1rem;
-  }
-
-  &:hover {
-    border: 1px solid rgba(255, 255, 255, 0.7);
   }
 }
 
