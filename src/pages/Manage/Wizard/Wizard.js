@@ -1067,13 +1067,13 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           showModal={showConfirm}
           onClose={() => this.setState({ showConfirm: false })}
         >
-          <div styleName="endingWrapper">
+          <div styleName="endingWrapper" data-test="publishPopupWrapper">
             <div styleName="endingContent">
               <div styleName="title">{t.doYouReallyWantToLeaveThisPage}</div>
               <div styleName="buttonsContainer">
                 <Button
                   onClick={() => this.setState({ showConfirm: false })}
-                  dataTest="continueWizard"
+                  dataTest="publishWizardButton"
                   wireframe
                   big
                 >
@@ -1082,7 +1082,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
                 <div styleName="secondButton">
                   <Button
                     onClick={this.handleEndingWizard}
-                    dataTest="closeWizard"
+                    dataTest="cancelPublishWizardButton"
                     big
                   >
                     <span>{t.publishMyStore}</span>

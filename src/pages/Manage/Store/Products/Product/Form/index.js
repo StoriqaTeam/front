@@ -917,7 +917,10 @@ class Form extends Component<PropsType, StateType> {
           <div>
             {baseProduct && (
               <div styleName="status">
-                <ModerationStatus status={baseProduct.status} />
+                <ModerationStatus
+                  status={baseProduct.status}
+                  dataTest="productStatus"
+                />
               </div>
             )}
             <div styleName="form">
