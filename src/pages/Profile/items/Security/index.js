@@ -16,7 +16,7 @@ import classNames from 'classnames';
 import { validate } from '@storiqa/shared';
 
 import { Input } from 'components/common/Input';
-import { SpinnerButton } from 'components/common/SpinnerButton';
+import { Button } from 'components/common/Button';
 import { Icon } from 'components/Icon';
 import { PasswordHints } from 'components/PasswordHints';
 import { withShowAlert } from 'components/Alerts/AlertContext';
@@ -98,15 +98,24 @@ class Security extends Component<PropsType, StateType> {
             (value: string) => value && value.length > 0,
             t.passwordMustNotBeEmpty,
           ],
-          [() => isValidNewPassword, t.notValidPassword],
-          [(value: string) => value !== oldPassword, t.passwordHasNotChange],
+          [
+            (value: string) => value.length === 0 || isValidNewPassword,
+            t.notValidPassword,
+          ],
+          [
+            (value: string) => value.length === 0 || value !== oldPassword,
+            t.passwordHasNotChange,
+          ],
         ],
         repeatNewPassword: [
           [
             (value: string) => value && value.length > 0,
             t.passwordMustNotBeEmpty,
           ],
-          [(value: string) => value === newPassword, t.notTheSamePassword],
+          [
+            (value: string) => value.length === 0 || value === newPassword,
+            t.notTheSamePassword,
+          ],
         ],
       },
       {
@@ -265,6 +274,7 @@ class Security extends Component<PropsType, StateType> {
         type={seeValue ? 'text' : 'password'}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
+        dataTest={`${id}Input`}
       />
     );
   };
@@ -347,9 +357,14 @@ class Security extends Component<PropsType, StateType> {
             </div>
           </div>
         </div>
-        <SpinnerButton onClick={this.handleSave} isLoading={isLoading}>
+        <Button
+          big
+          onClick={this.handleSave}
+          isLoading={isLoading}
+          dataTest="saveSecuritySettingsButton"
+        >
           {t.save}
-        </SpinnerButton>
+        </Button>
       </div>
     );
   }

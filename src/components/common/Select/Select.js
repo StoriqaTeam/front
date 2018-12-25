@@ -406,7 +406,7 @@ class Select extends Component<PropsType, StateType> {
             styleName={classNames('label', {
               labelFloat:
                 withInput === true
-                  ? inputValue !== (null || '') || isFocusInput
+                  ? (inputValue !== null && inputValue !== '') || isFocusInput
                   : activeItem || isExpanded,
             })}
           >
@@ -427,6 +427,7 @@ class Select extends Component<PropsType, StateType> {
                 onChange={this.handleChangeInput}
                 onFocus={this.handleFocusInput}
                 onBlur={this.handleBlurInput}
+                dataTest={`${dataTest}Input`}
               />
             </div>
           )}

@@ -183,6 +183,7 @@ class Delivery extends Component<PropsType, StateType> {
           label: deliveryPackage.name,
         }
       : null;
+
     return (
       <div styleName="container">
         <div styleName="title">

@@ -9,6 +9,7 @@ import './ModerationStatus.scss';
 
 type PropTypes = {
   status: ModerationStatusType,
+  dataTest: string,
 };
 
 const ModerationStatus = (props: PropTypes) => (
@@ -20,6 +21,7 @@ const ModerationStatus = (props: PropTypes) => (
       published: props.status === 'PUBLISHED',
       blocked: props.status === 'BLOCKED',
     })}
+    data-test={props.dataTest}
   >
     {props.status}
   </div>

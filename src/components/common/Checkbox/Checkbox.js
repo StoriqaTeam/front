@@ -11,6 +11,7 @@ type PropsType = {
   label: string | Element<'span'>,
   isChecked: ?boolean,
   onChange: <T: string>(T) => T | void,
+  dataTest?: string,
 };
 
 class Checkbox extends PureComponent<PropsType> {
@@ -28,7 +29,7 @@ class Checkbox extends PureComponent<PropsType> {
     e.stopPropagation();
   };
   render() {
-    const { id, label, isChecked } = this.props;
+    const { id, label, isChecked, dataTest } = this.props;
     return (
       <div
         styleName="container"
@@ -43,7 +44,7 @@ class Checkbox extends PureComponent<PropsType> {
           type="checkbox"
           checked={isChecked}
           onChange={this.onChange}
-          data-test={id}
+          data-test={dataTest != null ? dataTest : id}
           onClick={this.stopPropagation}
         />
         <label htmlFor={id} styleName="label">
