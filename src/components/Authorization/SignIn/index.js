@@ -84,19 +84,18 @@ class SignIn extends Component<PropsType, StateType> {
             {t.forgotPassword}
           </span>
         </div>
-        {formValid && (
-          <div styleName="signInGroup">
-            <div styleName="signInButton">
-              <Button
-                onClick={onLoginClick}
-                type="button"
-                dataTest="signInButton"
-              >
-                <span> {t.signIn}</span>
-              </Button>
-            </div>
+        <div styleName="signInGroup">
+          <div styleName="signInButton">
+            <Button
+              onClick={onLoginClick}
+              type="button"
+              dataTest="signInButton"
+              disabled={!formValid}
+            >
+              <span> {t.signIn}</span>
+            </Button>
           </div>
-        )}
+        </div>
       </div>
     );
   }

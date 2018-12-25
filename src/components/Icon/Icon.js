@@ -23,10 +23,13 @@ import Eye from 'components/Icon/svg/eye.svg';
 import EyeBlue from 'components/Icon/svg/eyeBlue.svg';
 import Facebook from 'components/Icon/svg/facebook.svg';
 import FacebookGray from 'components/Icon/svg/facebook_gray.svg';
+import MediumGray from 'components/Icon/svg/medium_gray.svg';
+import RedditGray from 'components/Icon/svg/reddit_gray.svg';
 import Google from 'components/Icon/svg/google.svg';
 import Heart from 'components/Icon/svg/heart.svg';
 import Instagram from 'components/Icon/svg/instagram.svg';
 import InstagramGray from 'components/Icon/svg/instagram_gray.svg';
+import YoutubeGray from 'components/Icon/svg/youtube_gray.svg';
 import LeftArrowSlider from 'components/Icon/svg/leftArrowSlider.svg';
 import Login from 'components/Icon/svg/login.svg';
 import Logo from 'components/Icon/svg/logo.svg';
@@ -105,10 +108,13 @@ const iconsMap = {
   eyeBlue: <EyeBlue />,
   facebook: <Facebook />,
   facebookGray: <FacebookGray />,
+  mediumGray: <MediumGray />,
+  redditGray: <RedditGray />,
   google: <Google />,
   heart: <Heart />,
   instagram: <Instagram />,
   instagramGray: <InstagramGray />,
+  youtubeGray: <YoutubeGray />,
   leftArrowSlider: <LeftArrowSlider />,
   login: <Login />,
   logo: <Logo />,
@@ -144,6 +150,7 @@ const iconsMap = {
   addVariant: <AddVariant />,
   copy: <Copy />,
   coupon: <Coupon />,
+  //
 
   // For product
   mainFoto: <MainFoto />,

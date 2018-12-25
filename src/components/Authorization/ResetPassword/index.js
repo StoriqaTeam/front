@@ -69,8 +69,8 @@ class ResetPassword extends Component<PropsType, StateType> {
             errors={password === passwordRepeat ? null : [t.errorNotMatch]}
           />
         </div>
-        <div styleName="recoverPasswordButtons">
-          <Button onClick={onClick} big disabled={!formValid}>
+        <div styleName="resetPasswordButtons">
+          <Button onClick={onClick} big disabled={!formValid} fullWidth>
             {t.submitNewPassword}
           </Button>
         </div>

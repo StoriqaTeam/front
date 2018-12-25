@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { remove, isNil, findIndex, propEq, isEmpty } from 'ramda';
 import classNames from 'classnames';
+import { routerShape, withRouter } from 'found';
 
 import { Icon } from 'components/Icon';
 
@@ -19,6 +20,7 @@ type PropsType = {
   transparent: boolean,
   grouped: boolean,
   menuTitle?: string,
+  router: routerShape,
 };
 
 type StateType = {
@@ -73,7 +75,6 @@ class Collapse extends Component<PropsType, StateType> {
     this.setState(
       {
         index,
-        isOpen: false,
         title: item.title,
       },
       () => {
@@ -95,7 +96,30 @@ class Collapse extends Component<PropsType, StateType> {
           <span styleName="itemTitle">{item.title}</span>
           <ul>
             {!isNil(item.links) &&
-              item.links.map(link => <li key={link.id}>{link.name}</li>)}
+              item.links.map(({ id, name, appLink, pdfLink, link }) => (
+                <li key={id}>
+                  {appLink != null && (
+                    <button
+                      styleName="navItem"
+                      onClick={() => {
+                        this.props.router.push(appLink);
+                      }}
+                    >
+                      {name}
+                    </button>
+                  )}
+                  {pdfLink != null && (
+                    <a href={pdfLink} target="_blank" styleName="navItem">
+                      {name}
+                    </a>
+                  )}
+                  {link != null && (
+                    <a href={link} target="_blank" styleName="navItem">
+                      {name}
+                    </a>
+                  )}
+                </li>
+              ))}
           </ul>
         </li>
       ))}
@@ -156,4 +180,4 @@ class Collapse extends Component<PropsType, StateType> {
   }
 }
 
-export default Collapse;
+export default withRouter(Collapse);

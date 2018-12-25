@@ -37,11 +37,6 @@ const ProductStore = () => (
                   <Rating value={store.rating} />
                 </div>
               </Link>
-              <div styleName="storeDetails">
-                <p>
-                  {t.items} {store.productsCount}
-                </p>
-              </div>
             </div>
           </div>
         ) : (

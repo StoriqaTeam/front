@@ -32,6 +32,11 @@
   @media (min-width: $lg) {
     align-items: flex-start;
   }
+
+  @media (max-width: #{$lg - 1px}) {
+    text-align: center;
+    text-align: -webkit-center;
+  }
 }
 
 .footerLogo {
@@ -120,6 +125,10 @@
   @media (min-width: $md) {
     margin-top: 0;
   }
+
+  @media (max-width: #{$md - 1px}) {
+    margin-top: 4rem;
+  }
 }
 
 @media (min-width: $xl) {
@@ -128,3 +137,6 @@
   }
 }
 
+.logo {
+  margin-bottom: 4rem;
+}

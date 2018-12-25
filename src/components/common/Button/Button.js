@@ -3,6 +3,7 @@
 import React, { PureComponent } from 'react';
 import type { Node } from 'react';
 import classNames from 'classnames';
+import { dissoc } from 'ramda';
 
 import { Icon } from 'components/Icon';
 
@@ -114,7 +115,7 @@ class Button extends PureComponent<PropsTypes> {
         disabled={disabled || isLoading}
         type="button"
         data-test={dataTest}
-        {...props}
+        {...dissoc('href', props)}
       >
         <div styleName="spinner" />
         <div styleName="children">{children}</div>

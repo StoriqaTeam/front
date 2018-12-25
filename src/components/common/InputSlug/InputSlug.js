@@ -4,7 +4,7 @@ import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import { Environment } from 'relay-runtime';
 
-import { Context } from 'components/App';
+import { ContextDecorator } from 'components/App';
 import debounce from 'lodash.debounce';
 import { Input } from 'components/common/Input';
 import fetchStoreSlugExists from './fetchStoreSlugExists';
@@ -15,6 +15,7 @@ import t from './i18n';
 
 type PropsType = {
   slug: string,
+  realSlug: string,
   onChange: (value: ?string) => void,
   environment: Environment,
 };
@@ -73,6 +74,11 @@ class InputSlug extends Component<PropsType, StateType> {
           this.props.onChange(null);
         },
       );
+      return;
+    }
+
+    const { realSlug } = this.props;
+    if (realSlug && realSlug === slugValue) {
       return;
     }
 
@@ -208,4 +214,4 @@ class InputSlug extends Component<PropsType, StateType> {
   }
 }
 
-export default Context(InputSlug);
+export default ContextDecorator(InputSlug);

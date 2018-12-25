@@ -344,10 +344,12 @@ class Form extends Component<PropsType, StateType> {
   renderTextarea = ({
     id,
     label,
+    limit,
     required,
   }: {
     id: string,
     label: string,
+    limit?: number,
     required?: boolean,
   }) => {
     const hereLabel = required ? (
@@ -366,6 +368,7 @@ class Form extends Component<PropsType, StateType> {
           label={hereLabel}
           onChange={this.handleTextareaChange(id)}
           errors={propOr(null, id, this.state.formErrors)}
+          limit={limit}
           fullWidth
         />
       </div>
@@ -390,13 +393,15 @@ class Form extends Component<PropsType, StateType> {
       propEq('id', toLower(defaultLanguage || '')),
       langItems || [],
     );
+    // $FlowIgnore
+    const realSlug = pathOr('', ['store', 'slug'], this.props);
 
     return (
       <div styleName="container">
         <div styleName="form">
           {status && (
             <div styleName="storeStatus">
-              <ModerationStatus status={status} />
+              <ModerationStatus status={status} dataTest="storeStatus" />
             </div>
           )}
           <div styleName="formHeader">
@@ -461,11 +466,16 @@ class Form extends Component<PropsType, StateType> {
             limit: 50,
           })}
           <div styleName="formItem maxWidthInput">
-            <InputSlug slug={this.state.form.slug} onChange={this.writeSlug} />
+            <InputSlug
+              slug={this.state.form.slug}
+              realSlug={realSlug}
+              onChange={this.writeSlug}
+            />
           </div>
           {this.renderTextarea({
             id: 'shortDescription',
             label: t.labelShortDescription,
+            limit: 170,
             required: true,
           })}
           {this.renderTextarea({

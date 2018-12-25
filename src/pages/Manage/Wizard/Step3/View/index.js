@@ -4,11 +4,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { omit, pathOr, head, map, addIndex, isEmpty, filter } from 'ramda';
 import { Col, Row } from 'layout';
+import axios from 'axios';
 
 import { Icon } from 'components/Icon';
 import { CardProduct } from 'components/CardProduct';
 import { Button } from 'components/common/Button';
-import { getNameText } from 'utils';
+import { getNameText, log } from 'utils';
 import { Modal } from 'components/Modal';
 
 import ProductLayer from '../ProductLayer';
@@ -64,13 +65,37 @@ type PropsType = {
 type StateType = {
   showForm: boolean,
   deleteId: ?string,
+  priceUsd: ?number,
 };
 
 class ThirdStepView extends React.Component<PropsType, StateType> {
   state = {
     showForm: false,
     deleteId: null,
+    priceUsd: null,
   };
+
+  componentDidMount() {
+    this.isMount = true;
+    axios
+      .get('https://api.coinmarketcap.com/v1/ticker/storiqa/')
+      .then(({ data }) => {
+        const dataObj = head(data);
+        if (dataObj && this.isMount) {
+          this.setState({ priceUsd: Number(dataObj.price_usd) });
+        }
+        return true;
+      })
+      .catch(error => {
+        log.debug(error);
+      });
+  }
+
+  componentWillUnmount() {
+    this.isMount = false;
+  }
+
+  isMount = false;
 
   prepareAttributesValues = (
     attributes: Array<{
@@ -200,7 +225,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
       onSave,
       isSavingInProgress,
     } = this.props;
-    const { showForm, deleteId } = this.state;
+    const { showForm, deleteId, priceUsd } = this.state;
     const productsArr = map(item => item.node, products);
     const filteredProductsArr = filter(item => {
       // $FlowIgnoreMe
@@ -242,7 +267,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
                   <Col size={12} md={4} xl={3} key={index}>
                     <div styleName="productItem cardItem">
                       <div styleName="productContent">
-                        <CardProduct item={item} />
+                        <CardProduct item={item} priceUsd={priceUsd} />
                         <ProductLayer
                           onDelete={this.handleOnShowDelete(item.id)}
                           onEdit={this.handleOnShowForm(item)}

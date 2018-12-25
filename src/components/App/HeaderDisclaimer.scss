@@ -1,15 +1,19 @@
-@import "../../styles/variables";
+@import '../../styles/variables';
 
 .container {
   background-color: $color_blue;
+  height: 3rem;
+  display: flex;
+  justify-content: center;
 }
 
 .text {
   color: $color_white;
-  font-size: 18px;
+  font-size: 12px;
+  margin-left: 2rem;
 
   @media (max-width: #{$md - 1px}) {
-    font-size: 14px;
+    font-size: 10px;
   }
 }
 
@@ -17,10 +21,10 @@
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: center;
   max-width: 170rem;
   width: 100%;
   margin: 0 auto;
-  padding: 1.1rem 8rem 1.1rem 2rem;
 
   @media (max-width: #{$md - 1px}) {
     display: block;
@@ -34,22 +38,19 @@
 .link {
   display: inline-block;
   margin-left: 4rem;
-  padding: 0.4rem 4rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0.1rem 2rem;
   color: $color_white;
-  font-size: 16px;
-  border: 1px solid rgba(255,255,255,.26);
-  border-radius: 0.5rem;
+  font-size: 12px;
   transition: $transition_all_ease;
-
+  text-decoration: underline;
+  font-weight: bold;
   @media (max-width: #{$md - 1px}) {
     padding: 0.3rem 3rem;
     font-size: 14px;
     margin-left: 0;
     margin-top: 1rem;
-  }
-
-  &:hover {
-    border: 1px solid rgba(255,255,255,.7);
   }
 }
 
@@ -58,7 +59,7 @@
   right: 2rem;
   top: 50%;
   margin-top: -2rem;
-  padding: 1rem;
+  padding: 1.5rem;
   cursor: pointer;
 
   @media (max-width: #{$md - 1px}) {
@@ -67,13 +68,13 @@
 
   &:hover {
     svg {
-      opacity: .9;
+      opacity: 0.9;
     }
   }
 
   svg {
     fill: $color_white;
-    opacity: .6;
+    opacity: 0.6;
     transition: $transition_all_ease;
   }
 }

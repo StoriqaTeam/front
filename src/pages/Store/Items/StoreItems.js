@@ -142,6 +142,7 @@ class StoreItems extends Component<PropsType, StateType> {
               load
               onClick={this.productsRefetch}
               dataTest="shopProductsLoadMoreButton"
+              wireframe
             >
               {t.loadMore}
             </Button>
@@ -177,6 +178,12 @@ export default createPaginationContainer(
             name {
               text
               lang
+            }
+            store {
+              name {
+                text
+                lang
+              }
             }
             category {
               rawId

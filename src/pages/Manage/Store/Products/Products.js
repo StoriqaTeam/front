@@ -160,6 +160,7 @@ class Products extends PureComponent<PropsType> {
               load
               onClick={this.productsRefetch}
               dataTest="storeProductsLoadMoreButton"
+              wireframe
             >
               {t.loadMore}
             </Button>

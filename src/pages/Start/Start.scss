@@ -6,8 +6,10 @@
   flex: 1 0 auto;
   width: 100%;
   padding: 0 0 4rem;
+  margin-top: 2rem;
 
   @media (min-width: $lg) {
+    margin-top: 0;
     padding: 2rem 0 4rem;
   }
 }
@@ -91,16 +93,28 @@
   border-radius: 0.5rem;
   overflow: hidden;
 
-  @media (min-width: $md) {
-    min-height: 24rem;
+  @media (max-width: #{$xxl - 1px}) {
+    height: 37rem;
   }
 
-  @media (min-width: $lg) {
-    min-height: 29rem;
+  @media (max-width: #{$xl - 1px}) {
+    height: 31rem;
   }
 
-  @media (min-width: $xl) {
-    min-height: 40rem;
+  @media (max-width: #{$lg - 1px}) {
+    height: 26rem;
+  }
+
+  @media (max-width: #{$md - 1px}) {
+    height: 20rem;
+  }
+
+  @media (max-width: #{$sm - 1px}) {
+    height: 27rem;
+  }
+
+  @media (min-width: $xxl) {
+    height: 40rem;
   }
 
   .loader {

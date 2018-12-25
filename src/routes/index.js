@@ -299,7 +299,23 @@ const routes = (
         prepareVariables={(...args) => {
           const queryObj = pathOr('', ['query'], last(args).location);
           const searchTerm = urlToInput(queryObj);
-          return { searchTerm: pick(['name', 'options'], searchTerm) };
+          return {
+            searchTerm: {
+              name: searchTerm.name,
+              options: pick(
+                [
+                  'attrFilters',
+                  'priceFilter',
+                  'currency',
+                  'categoryId',
+                  'storeId',
+                  'sortBy',
+                  'status',
+                ],
+                searchTerm.options || {},
+              ),
+            },
+          };
         }}
       />
       <Route

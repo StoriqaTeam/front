@@ -1,4 +1,4 @@
-@import "../../styles/variables";
+@import '../../styles/variables';
 
 .container {
   background-color: $color_opacity_white;
@@ -17,13 +17,19 @@
 
   &.noBorder {
     border: none;
-    .link:last-child {border-right: 0; padding-right: 2rem;}
+    .link:last-child {
+      border-right: 0;
+      padding-right: 2rem;
+    }
   }
 
   &.noBorderX {
     border-left: none;
     border-right: none;
-    .link:last-child {border-right: 0; padding-right: 2rem;}
+    .link:last-child {
+      border-right: 0;
+      padding-right: 2rem;
+    }
   }
 }
 
@@ -38,7 +44,6 @@
 
     &:last-child {
       padding-right: 2.5rem;
-      border-right: 1px solid $color_grey_minor;
     }
 
     svg {

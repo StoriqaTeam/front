@@ -97,6 +97,22 @@
   font-size: 11px;
 }
 
+.inputWrap {
+  position: relative;
+  margin-right: -3.5rem;
+  z-index: 5;
+}
+
+.clickPlane {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5rem;
+  z-index: 0;
+  cursor: default;
+}
+
 .forForm .wrap,
 .forSearch .wrap,
 .isBirthdate .wrap {
@@ -244,6 +260,7 @@
   position: relative;
   overflow-y: auto;
   padding-right: 2rem;
+  z-index: 1;
 }
 
 .item {

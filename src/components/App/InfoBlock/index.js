@@ -31,19 +31,19 @@ class InfoBlock extends Component<{}, StateType> {
         id: '0',
         type: 'facebookGray',
         size: 32,
-        href: 'https://www.facebook.com/storiqa',
+        href: 'https://www.facebook.com/storiqa.marketplace/',
       },
       {
         id: '1',
-        type: 'pinterestGray',
+        type: 'mediumGray',
         size: 32,
-        href: 'https://www.pinterest.com/storiqa',
+        href: 'https://medium.com/storiqa',
       },
       {
         id: '2',
         type: 'twitterGray',
         size: 32,
-        href: 'https://twitter.com/storiqa',
+        href: 'https://twitter.com/StoriqaMarket',
       },
       {
         id: '3',
@@ -53,9 +53,15 @@ class InfoBlock extends Component<{}, StateType> {
       },
       {
         id: '4',
-        type: 'vkGray',
+        type: 'redditGray',
         size: 32,
-        href: 'https://vk.com/storiqa',
+        href: 'https://www.reddit.com/r/Storiqa/',
+      },
+      {
+        id: '5',
+        type: 'youtubeGray',
+        size: 32,
+        href: 'https://www.youtube.com/channel/UCU_VW6azYd0cXFACzofUy5w',
       },
     ],
     // links: [
