@@ -57,61 +57,80 @@ const fallback = {
 /**
  * Pages
  */
-const StartSelling = loadable(() =>
-  import('../pages/StartSelling/StartSelling'),
-);
-const Cart = loadable(() => import('../pages/Cart'));
-const Checkout = loadable(() => import('../pages/Checkout'));
-const BuyNow = loadable(() => import('../pages/BuyNow/BuyNow'));
-const Login = loadable(() => import('../pages/Login/Login'));
-const Categories = loadable(
-  () => import(/* webpackPreload: true */ '../pages/Search/Categories'),
+const StartSelling = loadable(
+  () =>
+    import(/* webpackChunkName: "StartSelling" */ '../pages/StartSelling/StartSelling'),
   fallback,
 );
-const Profile = loadable(() => import('../pages/Profile/Profile'));
-const Store = loadable(() => import('../pages/Store/Store'));
+const Cart = loadable(() =>
+  import(/* webpackChunkName: "Cart" */ '../pages/Cart'),
+);
+const Checkout = loadable(() =>
+  import(/* webpackChunkName: "Checkout" */ '../pages/Checkout'),
+);
+const BuyNow = loadable(() =>
+  import(/* webpackChunkName: "BuyNow" */ '../pages/BuyNow/BuyNow'),
+);
+const Login = loadable(() =>
+  import(/* webpackChunkName: "Login" */ '../pages/Login/Login'),
+);
+const Categories = loadable(
+  () =>
+    import(/* webpackChunkName: "Categories", webpackPreload: true */ '../pages/Search/Categories'),
+  fallback,
+);
+const Profile = loadable(() =>
+  import(/* webpackChunkName: "Profile" */ '../pages/Profile/Profile'),
+);
+const Store = loadable(() =>
+  import(/* webpackChunkName: "Store" */ '../pages/Store/Store'),
+);
 const Stores = loadable(
-  () => import(/* webpackPreload: true */ '../pages/Stores/Stores'),
+  () =>
+    import(/* webpackChunkName: "Stores", webpackPreload: true */ '../pages/Stores/Stores'),
   fallback,
 );
 
 const ProductCard = loadable(
-  () => import(/* webpackPrefetch: true */ '../pages/Store/Product/Product'),
+  () =>
+    import(/* webpackChunkName: "ProductCard", webpackPreload: true */ '../pages/Store/Product/Product'),
   fallback,
 );
 /**
  * Manage
  */
 const NewStore = loadable(() =>
-  import('../pages/Manage/Store/Settings/NewStore'),
+  import(/* webpackChunkName: "NewStore" */ '../pages/Manage/Store/Settings/NewStore'),
 );
 const EditStore = loadable(() =>
-  import('../pages/Manage/Store/Settings/EditStore'),
+  import(/* webpackChunkName: "EditStore" */ '../pages/Manage/Store/Settings/EditStore'),
 );
 const NewProduct = loadable(() =>
-  import('../pages/Manage/Store/Products/Product/NewProduct'),
+  import(/* webpackChunkName: "NewProduct" */ '../pages/Manage/Store/Products/Product/NewProduct'),
 );
 const EditProduct = loadable(() =>
-  import('../pages/Manage/Store/Products/Product/EditProduct'),
+  import(/* webpackChunkName: "EditProduct" */ '../pages/Manage/Store/Products/Product/EditProduct'),
 );
-const Wizard = loadable(() => import('../pages/Manage/Wizard/Wizard'));
+const Wizard = loadable(() =>
+  import(/* webpackChunkName: "Wizard" */ '../pages/Manage/Wizard/Wizard'),
+);
 const Contacts = loadable(() =>
-  import('../pages/Manage/Store/Contacts/Contacts'),
+  import(/* webpackChunkName: "Contacts" */ '../pages/Manage/Store/Contacts/Contacts'),
 );
 const StoreOrder = loadable(() =>
-  import('../pages/Manage/Store/Orders/StoreOrder'),
+  import(/* webpackChunkName: "StoreOrder" */ '../pages/Manage/Store/Orders/StoreOrder'),
 );
 const StoreOrders = loadable(() =>
-  import('../pages/Manage/Store/Orders/StoreOrders'),
+  import(/* webpackChunkName: "StoreOrders" */ '../pages/Manage/Store/Orders/StoreOrders'),
 );
 const Products = loadable(() =>
-  import('../pages/Manage/Store/Products/Products'),
+  import(/* webpackChunkName: "Products" */ '../pages/Manage/Store/Products/Products'),
 );
 const Storages = loadable(() =>
-  import('../pages/Manage/Store/Storages/Storages'),
+  import(/* webpackChunkName: "Storages" */ '../pages/Manage/Store/Storages/Storages'),
 );
 const OrderInvoice = loadable(() =>
-  import('../pages/Manage/Store/OrderInvoice/OrderInvoice'),
+  import(/* webpackChunkName: "OrderInvoice" */ '../pages/Manage/Store/OrderInvoice/OrderInvoice'),
 );
 
 const routes = (
