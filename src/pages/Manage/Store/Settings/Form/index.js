@@ -491,7 +491,7 @@ class Form extends Component<PropsType, StateType> {
                 onClick={this.handleSave}
                 isLoading={isLoading}
                 disabled={!slug || !this.isSaveAvailable()}
-                dataTest="saveButton"
+                dataTest="saveStoreButton"
               >
                 {t.save}
               </Button>
@@ -504,7 +504,7 @@ class Form extends Component<PropsType, StateType> {
                   onClick={this.props.onClickOnSendToModeration}
                   isLoading={isLoading}
                   disabled={!slug}
-                  dataTest="sendToModerationButton"
+                  dataTest="sendToModerationStoreButton"
                 >
                   {t.sendToModeration}
                 </Button>
