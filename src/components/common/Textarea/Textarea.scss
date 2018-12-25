@@ -87,3 +87,15 @@
   color: $color_red;
   line-height: 3rem;
  }
+
+.valueLength {
+  position: absolute;
+  bottom: -3rem;
+  right: 0;
+  color: $color_grey_minor;
+  font-size: 12px;
+}
+
+.maxValueLength {
+  color: $color_red;
+}
