@@ -101,20 +101,33 @@ class Select extends Component<PropsType, StateType> {
   }
 
   componentDidUpdate(prevProps: PropsType, prevState: StateType) {
-    const { isExpanded, items } = this.state;
+    const { isExpanded, items: stateItems, inputValue } = this.state;
     if (
       prevState.isExpanded !== isExpanded &&
       isExpanded &&
       prevProps.activeItem
     ) {
       this.handleAutoScroll(
-        this.getIndexFromItems(prevProps.activeItem, items),
+        this.getIndexFromItems(prevProps.activeItem, stateItems),
       );
     }
 
-    const { withInput, activeItem } = this.props;
+    const { withInput, activeItem, items } = this.props;
     if (withInput === true && activeItem && !prevProps.activeItem) {
       this.updateInputValue(activeItem.label);
+    }
+
+    if (
+      withInput !== true &&
+      JSON.stringify(items) !== JSON.stringify(prevProps.items)
+    ) {
+      this.updateStateItems(items);
+    }
+    if (
+      withInput === true &&
+      JSON.stringify(items) !== JSON.stringify(prevProps.items)
+    ) {
+      this.updateInputValue(inputValue || '');
     }
   }
 
@@ -127,6 +140,12 @@ class Select extends Component<PropsType, StateType> {
 
   getIndexFromItems = (item: ?SelectItemType, items: Array<SelectItemType>) =>
     item ? findIndex(propEq('id', item.id))(items) : -1;
+
+  updateStateItems = (items: Array<SelectItemType>) => {
+    this.setState({
+      items,
+    });
+  };
 
   updateInputValue = (value: string) => {
     this.setState({
