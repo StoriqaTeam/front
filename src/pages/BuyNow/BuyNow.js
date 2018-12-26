@@ -412,8 +412,8 @@ class BuyNow extends Component<PropsType, StateType> {
     const { deliveryAddress } = this.state;
     let { errors } = validate(
       {
-        receiverName: [[val => Boolean(val), 'Receiver name is required']],
-        phone: [[val => Boolean(val), 'Receiver phone is required']],
+        receiverName: [[val => Boolean(val), t.errors.receiverNameRequired]],
+        phone: [[val => Boolean(val), t.errors.receiverPhoneRequired]],
       },
       this.state,
     );
@@ -422,9 +422,17 @@ class BuyNow extends Component<PropsType, StateType> {
       !deliveryAddress.postalCode ||
       !deliveryAddress.value
     ) {
+      const errorString = `
+        ${!deliveryAddress.country ? t.errors.country : ''}
+        ${!deliveryAddress.value ? `, ${t.errors.address}` : ''}
+        ${!deliveryAddress.postalCode ? `, ${t.errors.postalCode}` : ''}
+        ${t.errors.areRequired}
+      `;
       errors = {
         ...errors,
-        deliveryAddress: ['Country, address and postal code are required'],
+        deliveryAddress: [
+          errorString.replace(/^(\s+)?,\s+/, '').replace(/\s+,\s+/g, ', '),
+        ],
       };
     }
     if (errors && !isEmpty(errors)) {
