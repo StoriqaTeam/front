@@ -233,15 +233,23 @@ class Checkout extends Component<PropsType, StateType> {
     const { addressFull } = this.state.orderInput;
     let { errors } = validate(
       {
-        receiverName: [[val => Boolean(val), 'Receiver name is required']],
-        receiverPhone: [[val => Boolean(val), 'Receiver phone is required']],
+        receiverName: [[val => Boolean(val), t.errors.receiverNameRequired]],
+        receiverPhone: [[val => Boolean(val), t.errors.receiverPhoneRequired]],
       },
       this.state.orderInput,
     );
     if (!addressFull.country || !addressFull.postalCode || !addressFull.value) {
+      const errorString = `
+        ${!addressFull.country ? t.errors.country : ''}
+        ${!addressFull.value ? `, ${t.errors.address}` : ''}
+        ${!addressFull.postalCode ? `, ${t.errors.postalCode}` : ''}
+        ${t.errors.areRequired}
+      `;
       errors = {
         ...errors,
-        deliveryAddress: ['Country, address and postal code are required'],
+        deliveryAddress: [
+          errorString.replace(/^(\s+)?,\s+/, '').replace(/\s+,\s+/g, ', '),
+        ],
       };
     }
     if (errors && !isEmpty(errors)) {
