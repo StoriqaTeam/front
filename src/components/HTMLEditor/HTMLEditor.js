@@ -19,6 +19,7 @@ type PropsType = {
 
 type StateType = {
   value: {},
+  isReadonly: boolean,
 };
 
 const tablePlugin = PluginDeepTable();
@@ -75,7 +76,7 @@ const NodeImg = props => {
 };
 
 type NodeColorType = 'gray' | 'blue' | 'pink';
-const colorsHashMap = {
+const colorsHashMap: { [NodeColorType]: string } = {
   gray: '#505050',
   blue: '#03A9FF',
   pink: '#FF62A4',
@@ -116,6 +117,7 @@ const NodeAligned = props => {
 class HTMLEditor extends Component<PropsType, StateType> {
   state = {
     value: initialValue,
+    isReadonly: false,
   };
 
   onChange = ({ value }) => {
@@ -171,6 +173,9 @@ class HTMLEditor extends Component<PropsType, StateType> {
 
     if (blockType === 'table') {
       this.onChange(this.editor.insertTable());
+      this.editor.insertBlock({
+        type: 'paragraph',
+      });
     } else if (blockType === 'video') {
       const src = window.prompt('Enter the id(!) of the youtube video:');
       if (!src) return;
@@ -361,17 +366,22 @@ class HTMLEditor extends Component<PropsType, StateType> {
     const { value } = this.state;
     const isTable = this.editor && this.editor.isSelectionInTable(value);
 
+    let toolbar = null;
+    if (!this.state.isReadonly) {
+      toolbar = isTable ? (
+        this.renderTableToolbar()
+      ) : (
+        <Toolbar
+          editorValue={this.state.value}
+          onMarkButtonClick={this.handleMarkButtonClicked}
+          onBlockButtonClick={this.handleBlockButtonClicked}
+        />
+      );
+    }
+
     return (
       <div styleName="editor">
-        {isTable ? (
-          this.renderTableToolbar()
-        ) : (
-          <Toolbar
-            editorValue={this.state.value}
-            onMarkButtonClick={this.handleMarkButtonClicked}
-            onBlockButtonClick={this.handleBlockButtonClicked}
-          />
-        )}
+        {toolbar}
         <Editor
           autoFocus
           schema={schema}
@@ -394,7 +404,37 @@ class HTMLEditor extends Component<PropsType, StateType> {
           renderNode={this.renderNode}
           plugins={plugins}
           placeholder="Enter some text..."
+          readOnly={this.state.isReadonly}
         />
+        <button
+          onClick={() => {
+            const stringData = JSON.stringify(this.state.value.toJSON());
+            localStorage.setItem('editor_data', stringData);
+          }}
+        >
+          Save
+        </button>
+        <br />
+        <button
+          onClick={() => {
+            const jsonData = JSON.parse(localStorage.getItem('editor_data'));
+            this.onChange({
+              value: Value.fromJSON(jsonData),
+            });
+          }}
+        >
+          Load
+        </button>
+        <br />
+        <button
+          onClick={() => {
+            this.setState(prevState => ({
+              isReadonly: !prevState.isReadonly,
+            }));
+          }}
+        >
+          Toggle readonly
+        </button>
       </div>
     );
   }
