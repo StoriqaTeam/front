@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import ReactAutocomplete from 'react-autocomplete';
 import { pick, isEmpty } from 'ramda';
+import classNames from 'classnames';
 import debounce from 'lodash.debounce';
 
 import { Input } from 'components/common/Input';
@@ -54,8 +55,11 @@ class Autocomplete extends Component<PropsType, StateType> {
           wrapperStyle={{ position: 'relative' }}
           items={autocompleteItems}
           getItemValue={item => item.label}
-          renderItem={(item: any) => (
-            <div key={item.id} styleName="item">
+          renderItem={(item, isHighlighted) => (
+            <div
+              key={item.id}
+              styleName={classNames('item', { isHighlighted })}
+            >
               {item.label}
             </div>
           )}

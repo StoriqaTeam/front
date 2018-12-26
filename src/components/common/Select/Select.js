@@ -57,6 +57,7 @@ type PropsType = {
   isMobile: boolean,
   renderSelectItem?: (item: SelectItemType) => Node,
   withInput?: boolean,
+  maxItemsHeight?: number,
 };
 
 const maxItemsCount = 5;
@@ -204,8 +205,8 @@ class Select extends Component<PropsType, StateType> {
 
     if (withInput === true) {
       const { activeItem, onSelect } = this.props;
-      const { items, hoverItem } = this.state;
-      if (e.keyCode === 40 || e.keyCode === 38) {
+      const { items, hoverItem, isOpenItems } = this.state;
+      if (isOpenItems && (e.keyCode === 40 || e.keyCode === 38)) {
         const activeItemIdx = this.getIndexFromItems(
           hoverItem || activeItem,
           items,
@@ -394,6 +395,7 @@ class Select extends Component<PropsType, StateType> {
       isMobile,
       renderSelectItem,
       withInput,
+      maxItemsHeight,
     } = this.props;
     const {
       isExpanded,
@@ -478,7 +480,12 @@ class Select extends Component<PropsType, StateType> {
               onKeyDown={() => {}}
               role="button"
               tabIndex="0"
-              style={{ maxHeight: `${maxItemsCount * itemHeight / 8}rem` }}
+              style={{
+                maxHeight:
+                  maxItemsHeight != null
+                    ? `${maxItemsHeight}rem`
+                    : `${maxItemsCount * itemHeight / 8}rem`,
+              }}
             >
               {items.map(item => {
                 const { id } = item;

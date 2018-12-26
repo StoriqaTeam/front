@@ -38,7 +38,7 @@
 }
 
 .item {
-  font-size: 1.5rem;
+  font-size: 12px;
   padding: 0.25rem 1rem;
   text-align: left;
   line-height: 2rem;
@@ -51,4 +51,8 @@
   &:hover {
     color: $color_blue;
   }
+}
+
+.isHighlighted {
+  color: $color_blue;
 }
