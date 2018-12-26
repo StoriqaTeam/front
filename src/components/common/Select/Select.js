@@ -205,8 +205,8 @@ class Select extends Component<PropsType, StateType> {
 
     if (withInput === true) {
       const { activeItem, onSelect } = this.props;
-      const { items, hoverItem } = this.state;
-      if (e.keyCode === 40 || e.keyCode === 38) {
+      const { items, hoverItem, isOpenItems } = this.state;
+      if (isOpenItems && (e.keyCode === 40 || e.keyCode === 38)) {
         const activeItemIdx = this.getIndexFromItems(
           hoverItem || activeItem,
           items,
