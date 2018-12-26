@@ -57,20 +57,13 @@ type PropsType = {
   isMobile: boolean,
   renderSelectItem?: (item: SelectItemType) => Node,
   withInput?: boolean,
+  maxItemsHeight?: number,
 };
 
 const maxItemsCount = 5;
 const itemHeight = 24;
 
 class Select extends Component<PropsType, StateType> {
-  // static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
-  //   const { withEmpty } = nextProps;
-  //   const { items } = prevState;
-  //   return {
-  //     items: !isNil(withEmpty) ? prepend({ id: '', label: '' }, items) : items,
-  //   };
-  // }
-
   static defaultProps = {
     onClick: () => {},
     isMobile: false,
@@ -109,20 +102,33 @@ class Select extends Component<PropsType, StateType> {
   }
 
   componentDidUpdate(prevProps: PropsType, prevState: StateType) {
-    const { isExpanded, items } = this.state;
+    const { isExpanded, items: stateItems, inputValue } = this.state;
     if (
       prevState.isExpanded !== isExpanded &&
       isExpanded &&
       prevProps.activeItem
     ) {
       this.handleAutoScroll(
-        this.getIndexFromItems(prevProps.activeItem, items),
+        this.getIndexFromItems(prevProps.activeItem, stateItems),
       );
     }
 
-    const { withInput, activeItem } = this.props;
+    const { withInput, activeItem, items } = this.props;
     if (withInput === true && activeItem && !prevProps.activeItem) {
       this.updateInputValue(activeItem.label);
+    }
+
+    if (
+      withInput !== true &&
+      JSON.stringify(items) !== JSON.stringify(prevProps.items)
+    ) {
+      this.updateStateItems(items);
+    }
+    if (
+      withInput === true &&
+      JSON.stringify(items) !== JSON.stringify(prevProps.items)
+    ) {
+      this.updateInputValue(inputValue || '');
     }
   }
 
@@ -135,6 +141,12 @@ class Select extends Component<PropsType, StateType> {
 
   getIndexFromItems = (item: ?SelectItemType, items: Array<SelectItemType>) =>
     item ? findIndex(propEq('id', item.id))(items) : -1;
+
+  updateStateItems = (items: Array<SelectItemType>) => {
+    this.setState({
+      items,
+    });
+  };
 
   updateInputValue = (value: string) => {
     this.setState({
@@ -193,8 +205,8 @@ class Select extends Component<PropsType, StateType> {
 
     if (withInput === true) {
       const { activeItem, onSelect } = this.props;
-      const { items, hoverItem } = this.state;
-      if (e.keyCode === 40 || e.keyCode === 38) {
+      const { items, hoverItem, isOpenItems } = this.state;
+      if (isOpenItems && (e.keyCode === 40 || e.keyCode === 38)) {
         const activeItemIdx = this.getIndexFromItems(
           hoverItem || activeItem,
           items,
@@ -383,6 +395,7 @@ class Select extends Component<PropsType, StateType> {
       isMobile,
       renderSelectItem,
       withInput,
+      maxItemsHeight,
     } = this.props;
     const {
       isExpanded,
@@ -414,7 +427,7 @@ class Select extends Component<PropsType, StateType> {
             styleName={classNames('label', {
               labelFloat:
                 withInput === true
-                  ? inputValue !== (null || '') || isFocusInput
+                  ? (inputValue !== null && inputValue !== '') || isFocusInput
                   : activeItem || isExpanded,
             })}
           >
@@ -435,6 +448,7 @@ class Select extends Component<PropsType, StateType> {
                 onChange={this.handleChangeInput}
                 onFocus={this.handleFocusInput}
                 onBlur={this.handleBlurInput}
+                dataTest={`${dataTest}Input`}
               />
             </div>
           )}
@@ -466,7 +480,12 @@ class Select extends Component<PropsType, StateType> {
               onKeyDown={() => {}}
               role="button"
               tabIndex="0"
-              style={{ maxHeight: `${maxItemsCount * itemHeight / 8}rem` }}
+              style={{
+                maxHeight:
+                  maxItemsHeight != null
+                    ? `${maxItemsHeight}rem`
+                    : `${maxItemsCount * itemHeight / 8}rem`,
+              }}
             >
               {items.map(item => {
                 const { id } = item;

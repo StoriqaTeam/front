@@ -814,9 +814,10 @@ class Form extends Component<PropsType, StateType> {
   renderTextarea = (props: {
     id: string,
     label: string,
+    limit?: number,
     required?: boolean,
   }) => {
-    const { id, label, required } = props;
+    const { id, label, required, limit } = props;
     const requiredLabel = (
       <span>
         {label} <span styleName="asterisk">*</span>
@@ -833,6 +834,7 @@ class Form extends Component<PropsType, StateType> {
         label={required ? requiredLabel : label}
         onChange={this.handleTextareaChange(id)}
         errors={errors}
+        limit={limit}
         fullWidth
       />
     );
@@ -917,7 +919,10 @@ class Form extends Component<PropsType, StateType> {
           <div>
             {baseProduct && (
               <div styleName="status">
-                <ModerationStatus status={baseProduct.status} />
+                <ModerationStatus
+                  status={baseProduct.status}
+                  dataTest="productStatus"
+                />
               </div>
             )}
             <div styleName="form">
@@ -946,6 +951,7 @@ class Form extends Component<PropsType, StateType> {
                 {this.renderTextarea({
                   id: 'shortDescription',
                   label: t.labelShortDescription,
+                  limit: 170,
                   required: true,
                 })}
               </div>
@@ -1125,7 +1131,7 @@ class Form extends Component<PropsType, StateType> {
                         big
                         fullWidth
                         onClick={this.sendToModeration}
-                        dataTest="saveProductButton"
+                        dataTest="sendToModerationProductButton"
                         isLoading={isSendingToModeration || isLoading}
                       >
                         {t.sendToModeration}

@@ -361,7 +361,9 @@ class Form extends Component<PropsType, StateType> {
             </div>
           )}
           value={autocompleteValue}
-          onChange={e => this.handleOnChangeAddress(e.target.value)}
+          onChange={e => {
+            this.handleOnChangeAddress(e.target.value);
+          }}
           onSelect={(selectedValue, item) => {
             this.handleOnSetAddress(selectedValue, item);
           }}

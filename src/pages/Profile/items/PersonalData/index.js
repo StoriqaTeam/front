@@ -257,6 +257,7 @@ class PersonalData extends Component<PropsType, StateType> {
         errors={propOr(null, id, this.state.formErrors)}
         limit={limit}
         fullWidth
+        dataTest={`${id}Input`}
       />
     </div>
   );
@@ -276,7 +277,6 @@ class PersonalData extends Component<PropsType, StateType> {
   render() {
     const { subtitle } = this.props;
     const { data, isLoading, formErrors, isCopiedRef } = this.state;
-    console.log('---isCopiedRef', isCopiedRef);
     // $FlowIgnoreMe
     const refNum = pathOr('', ['me', 'rawId'], this.props);
     const genderValue = find(propEq('id', toLower(data.gender)))(genderItems);
@@ -317,6 +317,7 @@ class PersonalData extends Component<PropsType, StateType> {
               birthdate={data.birthdate}
               handleBirthdateSelect={this.handleBirthdateSelect}
               errors={propOr(null, 'birthdate', formErrors)}
+              dataTest="profileBirthdate"
             />
           </div>
           {this.renderInput({
@@ -342,7 +343,10 @@ class PersonalData extends Component<PropsType, StateType> {
                 onChange={() => {}}
                 fullWidth
               />
-              <div styleName={classNames('copyMessage', { isCopiedRef })}>
+              <div
+                styleName={classNames('copyMessage', { isCopiedRef })}
+                data-test="copyRefButton"
+              >
                 {t.copied}
               </div>
             </div>
@@ -354,7 +358,7 @@ class PersonalData extends Component<PropsType, StateType> {
                 fullWidth
                 onClick={this.handleSave}
                 isLoading={isLoading}
-                dataTest="saveButton"
+                dataTest="savePersonalDataButton"
               >
                 {t.save}
               </Button>

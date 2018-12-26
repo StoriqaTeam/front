@@ -67,6 +67,10 @@
   font-size: 12px;
   color: $color_red;
   line-height: 2rem;
+
+  &:first-letter {
+    text-transform: uppercase;
+  }
 }
 
 .newAddressWrap {

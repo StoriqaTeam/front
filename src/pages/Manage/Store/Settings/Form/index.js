@@ -342,10 +342,12 @@ class Form extends Component<PropsType, StateType> {
   renderTextarea = ({
     id,
     label,
+    limit,
     required,
   }: {
     id: string,
     label: string,
+    limit?: number,
     required?: boolean,
   }) => {
     const hereLabel = required ? (
@@ -364,6 +366,7 @@ class Form extends Component<PropsType, StateType> {
           label={hereLabel}
           onChange={this.handleTextareaChange(id)}
           errors={propOr(null, id, this.state.formErrors)}
+          limit={limit}
           fullWidth
         />
       </div>
@@ -396,7 +399,7 @@ class Form extends Component<PropsType, StateType> {
         <div styleName="form">
           {status && (
             <div styleName="storeStatus">
-              <ModerationStatus status={status} />
+              <ModerationStatus status={status} dataTest="storeStatus" />
             </div>
           )}
           <div styleName="formHeader">
@@ -470,6 +473,7 @@ class Form extends Component<PropsType, StateType> {
           {this.renderTextarea({
             id: 'shortDescription',
             label: t.labelShortDescription,
+            limit: 170,
             required: true,
           })}
           <HTMLEditor />
@@ -481,7 +485,7 @@ class Form extends Component<PropsType, StateType> {
                 onClick={this.handleSave}
                 isLoading={isLoading}
                 disabled={!slug || !this.isSaveAvailable()}
-                dataTest="saveButton"
+                dataTest="saveStoreButton"
               >
                 {t.save}
               </Button>
@@ -494,7 +498,7 @@ class Form extends Component<PropsType, StateType> {
                   onClick={this.props.onClickOnSendToModeration}
                   isLoading={isLoading}
                   disabled={!slug}
-                  dataTest="sendToModerationButton"
+                  dataTest="sendToModerationStoreButton"
                 >
                   {t.sendToModeration}
                 </Button>

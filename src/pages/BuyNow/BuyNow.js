@@ -25,7 +25,7 @@ import { Container, Row, Col } from 'layout';
 import { Input, RadioButton, Select, Checkbox } from 'components/common';
 import { AddressForm } from 'components/AddressAutocomplete';
 import { StickyBar } from 'components/StickyBar';
-import { log, getNameText, currentCurrency } from 'utils';
+import { log, getNameText, currentCurrency, fromRelayError } from 'utils';
 import smoothscroll from 'libs/smoothscroll';
 import {
   BuyNowMutation,
@@ -314,6 +314,7 @@ class BuyNow extends Component<PropsType, StateType> {
   };
 
   goToCheckout = () => {
+    // const { errors } = this.state;
     this.setState({ errors: {} });
     const preValidationErrors = this.validate();
     if (!isEmpty(preValidationErrors)) {
@@ -325,74 +326,94 @@ class BuyNow extends Component<PropsType, StateType> {
       this.createAddress();
     }
 
-    if (this.props.me != null && this.props.me.phone === null) {
-      updateUserPhoneMutation({
-        environment: this.props.relay.environment,
-        variables: {
-          input: {
-            clientMutationId: '',
-            id: this.props.me.id,
-            phone: this.state.phone,
-          },
-        },
-      })
-        .then(() => true)
-        .catch(log.error);
-    }
-
-    const { deliveryAddress } = this.state;
-    // $FlowIgnore
-    const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
-    this.setState({ isLoadingCheckout: true });
-    const variables = {
-      productId: parseFloat(queryParams.variant),
-      quantity: parseFloat(queryParams.quantity),
-    };
-    fetchBuyNow(
-      this.props.relay.environment,
-      deliveryAddress && deliveryAddress.countryCode === queryParams.country
-        ? assoc('shippingId', parseFloat(queryParams.delivery), variables)
-        : variables,
-    )
-      .then(({ calculateBuyNow }) => {
-        const {
-          couponsDiscounts,
-          totalCost,
-          totalCostWithoutDiscounts,
-          totalCount,
-          deliveryCost,
-          subtotalWithoutDiscounts,
-        } = calculateBuyNow;
-        this.setState({
-          step: 2,
-          isLoadingCheckout: false,
-          buyNowData: {
+    const handleFetchBuyNow = () => {
+      const { deliveryAddress } = this.state;
+      // $FlowIgnore
+      const queryParams = pathOr(
+        [],
+        ['match', 'location', 'query'],
+        this.props,
+      );
+      this.setState({ isLoadingCheckout: true });
+      const variables = {
+        productId: parseFloat(queryParams.variant),
+        quantity: parseFloat(queryParams.quantity),
+      };
+      fetchBuyNow(
+        this.props.relay.environment,
+        deliveryAddress && deliveryAddress.countryCode === queryParams.country
+          ? assoc('shippingId', parseFloat(queryParams.delivery), variables)
+          : variables,
+      )
+        .then(({ calculateBuyNow }) => {
+          const {
             couponsDiscounts,
             totalCost,
             totalCostWithoutDiscounts,
             totalCount,
             deliveryCost,
             subtotalWithoutDiscounts,
+          } = calculateBuyNow;
+          this.setState({
+            step: 2,
+            isLoadingCheckout: false,
+            buyNowData: {
+              couponsDiscounts,
+              totalCost,
+              totalCostWithoutDiscounts,
+              totalCount,
+              deliveryCost,
+              subtotalWithoutDiscounts,
+            },
+          });
+          return true;
+        })
+        .catch(() => {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
+            link: { text: 'Close.' },
+          });
+          this.setState({ isLoadingCheckout: false });
+        });
+    };
+
+    const { me } = this.props;
+
+    if (me != null && me.phone !== this.state.phone) {
+      updateUserPhoneMutation({
+        environment: this.props.relay.environment,
+        variables: {
+          input: {
+            clientMutationId: '',
+            id: me.id,
+            phone: this.state.phone,
           },
-        });
-        return true;
+        },
       })
-      .catch(() => {
-        this.props.showAlert({
-          type: 'danger',
-          text: 'Something going wrong :(',
-          link: { text: 'Close.' },
+        .then(() => {
+          handleFetchBuyNow();
+          return true;
+        })
+        .catch(error => {
+          const relayErrors = fromRelayError({ source: { errors: [error] } });
+          // $FlowIgnoreMe
+          const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+          if (!isEmpty(validationErrors)) {
+            this.setState({ errors: validationErrors });
+          }
         });
-        this.setState({ isLoadingCheckout: false });
-      });
+      return;
+    }
+    handleFetchBuyNow();
   };
 
   validate = () => {
     const { deliveryAddress } = this.state;
     let { errors } = validate(
       {
-        receiverName: [[val => Boolean(val), 'Receiver name is required']],
-        phone: [[val => Boolean(val), 'Receiver phone is required']],
+        receiverName: [[val => Boolean(val), t.errors.receiverNameRequired]],
+        phone: [[val => Boolean(val), t.errors.receiverPhoneRequired]],
       },
       this.state,
     );
@@ -401,9 +422,17 @@ class BuyNow extends Component<PropsType, StateType> {
       !deliveryAddress.postalCode ||
       !deliveryAddress.value
     ) {
+      const errorString = `
+        ${!deliveryAddress.country ? t.errors.country : ''}
+        ${!deliveryAddress.value ? `, ${t.errors.address}` : ''}
+        ${!deliveryAddress.postalCode ? `, ${t.errors.postalCode}` : ''}
+        ${t.errors.areRequired}
+      `;
       errors = {
         ...errors,
-        deliveryAddress: ['Country, address and postal code are required'],
+        deliveryAddress: [
+          errorString.replace(/^(\s+)?,\s+/, '').replace(/\s+,\s+/g, ', '),
+        ],
       };
     }
     if (errors && !isEmpty(errors)) {
@@ -815,13 +844,12 @@ class BuyNow extends Component<PropsType, StateType> {
                                     id="phone"
                                     label={
                                       <span>
-                                        {t.labelReceiverPhone}{' '}
+                                        {`${t.labelReceiverPhone} `}
                                         <span styleName="red">*</span>
                                       </span>
                                     }
                                     onChange={this.handleChangePhone}
                                     value={phone}
-                                    limit={50}
                                     errors={errors.phone}
                                   />
                                 </div>

@@ -199,10 +199,10 @@ class EditProduct extends Component<PropsType, StateType> {
         ? [{ lang: 'EN', text: seoDescription }]
         : null,
       currency,
-      lengthCm: metrics.lengthCm,
-      widthCm: metrics.widthCm,
-      heightCm: metrics.heightCm,
-      weightG: metrics.weightG,
+      lengthCm: metrics.lengthCm || null,
+      widthCm: metrics.widthCm || null,
+      heightCm: metrics.heightCm || null,
+      weightG: metrics.weightG || null,
       environment: this.props.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         this.setState({ isLoading: false });

@@ -39,6 +39,7 @@ const WizardFooter = ({
               onKeyDown={() => {}}
               role="button"
               tabIndex="0"
+              data-test={`wizardGoBackButton-${currentStep}`}
             >
               <Icon type="arrowLeft" />
               <span>{t.goBack}</span>
@@ -59,7 +60,7 @@ const WizardFooter = ({
               dataTest="wizardBackButton"
               big
               disabled={!isReadyToNext}
-              isLoading={isSavingInProgress}
+              isLoading={currentStep !== 3 && isSavingInProgress}
             >
               {(currentStep === 3 && <span>{t.publishStore}</span>) || (
                 <span>{t.nextStep}</span>
@@ -74,6 +75,7 @@ const WizardFooter = ({
             onKeyDown={() => {}}
             role="button"
             tabIndex="0"
+            data-test={`wizardGoBackButton-${currentStep}`}
           >
             <Icon type="arrowLeft" />
             <span>{t.goBack}</span>

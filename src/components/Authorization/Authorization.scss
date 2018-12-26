@@ -127,3 +127,15 @@
     width: 100%;
   }
 }
+
+.resetPasswordButtons {
+  button:first-child {
+    margin-bottom: 2rem;
+    margin-right: 0;
+
+    @media (min-width: $md) {
+      margin-bottom: 0;
+      margin-right: 2rem;
+    }
+  }
+}

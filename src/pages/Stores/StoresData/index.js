@@ -29,7 +29,9 @@ const StoresData = ({ store }: PropsType) => (
       {store.logo ? (
         <img src={convertSrc(store.logo, 'small')} alt="img" />
       ) : (
-        <Icon type="camera" size={32} />
+        <div styleName="icon">
+          <Icon type="camera" size={32} />
+        </div>
       )}
     </div>
     <div styleName="storeInfo">

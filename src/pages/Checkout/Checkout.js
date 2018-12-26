@@ -22,7 +22,8 @@ import {
 import { routerShape, withRouter } from 'found';
 import { validate } from '@storiqa/shared';
 
-import { log } from 'utils';
+import { renameKeys } from 'utils/ramda';
+import { log, fromRelayError } from 'utils';
 import {
   CreateUserDeliveryAddressFullMutation,
   CreateOrdersMutation,
@@ -189,39 +190,66 @@ class Checkout extends Component<PropsType, StateType> {
       this.setState({ errors: preValidationErrors });
       return;
     }
-    this.setState({ step: 2 });
 
-    const phone = pathOr(null, ['phone'])(this.props.me);
-    const userId = pathOr(null, ['id'])(this.props.me);
-    if (phone === null && userId !== null) {
+    const { orderInput } = this.state;
+    const { me } = this.props;
+
+    if (me != null && me.phone !== orderInput.receiverPhone) {
       updateUserPhoneMutation({
         environment: this.context.environment,
         variables: {
           input: {
             clientMutationId: '',
-            id: userId,
-            phone: this.state.orderInput.receiverPhone,
+            id: me.id,
+            phone: orderInput.receiverPhone,
           },
         },
       })
-        .then(() => true)
-        .catch(log.error);
+        .then(() => {
+          this.setState({ step: 2 });
+          return true;
+        })
+        .catch(error => {
+          const relayErrors = fromRelayError({ source: { errors: [error] } });
+          // $FlowIgnoreMe
+          const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+          if (!isEmpty(validationErrors)) {
+            this.setState({
+              errors: renameKeys(
+                {
+                  phone: 'receiverPhone',
+                },
+                validationErrors,
+              ),
+            });
+          }
+        });
+      return;
     }
+    this.setState({ step: 2 });
   };
 
   validate = () => {
     const { addressFull } = this.state.orderInput;
     let { errors } = validate(
       {
-        receiverName: [[val => Boolean(val), 'Receiver name is required']],
-        receiverPhone: [[val => Boolean(val), 'Receiver phone is required']],
+        receiverName: [[val => Boolean(val), t.errors.receiverNameRequired]],
+        receiverPhone: [[val => Boolean(val), t.errors.receiverPhoneRequired]],
       },
       this.state.orderInput,
     );
     if (!addressFull.country || !addressFull.postalCode || !addressFull.value) {
+      const errorString = `
+        ${!addressFull.country ? t.errors.country : ''}
+        ${!addressFull.value ? `, ${t.errors.address}` : ''}
+        ${!addressFull.postalCode ? `, ${t.errors.postalCode}` : ''}
+        ${t.errors.areRequired}
+      `;
       errors = {
         ...errors,
-        deliveryAddress: ['Country, address and postal code are required'],
+        deliveryAddress: [
+          errorString.replace(/^(\s+)?,\s+/, '').replace(/\s+,\s+/g, ', '),
+        ],
       };
     }
     if (errors && !isEmpty(errors)) {

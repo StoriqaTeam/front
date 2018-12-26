@@ -41,7 +41,6 @@ type PropsType = {
       }>,
     },
     rating: number,
-    priceUsd: ?number,
     store: {
       name: Array<{
         lang: string,
@@ -50,22 +49,15 @@ type PropsType = {
     },
   },
   isSearchPage: boolean,
+  priceUsd: ?number,
 };
 
 class CardProduct extends PureComponent<PropsType> {
   render() {
     const {
-      item: {
-        rawId,
-        storeId,
-        name,
-        products,
-        currency,
-        rating,
-        priceUsd,
-        store,
-      },
+      item: { rawId, storeId, name, products, currency, rating, store },
       isSearchPage,
+      priceUsd,
     } = this.props;
     let discount = null;
     let photoMain = null;
@@ -158,7 +150,7 @@ class CardProduct extends PureComponent<PropsType> {
                           reverse
                           dark
                           withTilda
-                          withSlash
+                          withSlash={priceUsd != null}
                           price={priceItem.price || 0}
                           fontSize={16}
                           currencyPrice={priceUsd}

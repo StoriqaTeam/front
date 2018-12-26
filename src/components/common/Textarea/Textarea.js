@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import type { Element } from 'react';
 import classNames from 'classnames';
 import TextareaAutosize from 'react-autosize-textarea';
+import { isNil } from 'ramda';
 
 import './Textarea.scss';
 
@@ -15,6 +16,7 @@ type PropsType = {
   onBlur?: () => void,
   onChange: (e: SyntheticInputEvent<HTMLInputElement>) => void,
   fullWidth: ?boolean,
+  limit?: ?number,
 };
 
 type StateType = {
@@ -32,7 +34,11 @@ class Textarea extends Component<PropsType, StateType> {
   }
 
   handleChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
-    const { onChange } = this.props;
+    const { onChange, limit } = this.props;
+    const { value } = e.target;
+    if (limit != null && value.length > limit) {
+      return;
+    }
     onChange(e);
   };
 
@@ -55,8 +61,7 @@ class Textarea extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { id, value, label, errors, fullWidth } = this.props;
-
+    const { id, value, label, errors, fullWidth, limit } = this.props;
     const { labelFloat, isFocus } = this.state;
 
     return (
@@ -89,6 +94,16 @@ class Textarea extends Component<PropsType, StateType> {
                   {item}
                 </div>
               ))}
+            </div>
+          )}
+        {isFocus &&
+          !isNil(limit) && (
+            <div
+              styleName={classNames('valueLength', {
+                maxValueLength: value && value.length === limit,
+              })}
+            >
+              {value ? value.length : 0} / {limit}
             </div>
           )}
       </label>
