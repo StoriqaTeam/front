@@ -24,6 +24,7 @@ import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import ModerationStatus from 'pages/common/ModerationStatus';
+import { HTMLEditor } from 'components/HTMLEditor';
 
 import { uploadFile, convertSrc } from 'utils';
 
@@ -95,12 +96,9 @@ class Form extends Component<PropsType, StateType> {
     if (store) {
       this.state = {
         form: {
-          // $FlowIgnoreMe
-          name: pathOr('', ['name', 0, 'text'], store),
-          // $FlowIgnoreMe
-          longDescription: pathOr('', ['longDescription', 0, 'text'], store),
-          // $FlowIgnoreMe
-          shortDescription: pathOr('', ['shortDescription', 0, 'text'], store),
+          name: pathOr('', ['name', 0, 'text'])(store),
+          longDescription: pathOr('', ['longDescription', 0, 'text'])(store),
+          shortDescription: pathOr('', ['shortDescription', 0, 'text'])(store),
           defaultLanguage: store.defaultLanguage || 'EN',
           slug: store.slug || '',
           cover: store.cover || '',
@@ -474,11 +472,7 @@ class Form extends Component<PropsType, StateType> {
             label: t.labelShortDescription,
             required: true,
           })}
-          {this.renderTextarea({
-            id: 'longDescription',
-            label: t.labelLongDescription,
-            required: true,
-          })}
+          <HTMLEditor />
           <div styleName="buttonsPanel">
             <div styleName="saveButton">
               <Button

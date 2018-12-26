@@ -94,38 +94,6 @@ class EditStore extends Component<PropsType, StateType> {
           return;
         }
 
-        // change status to DRAFT after saving published store
-        /* if (status === 'PUBLISHED') {
-          draftStoreFromUserMutation({
-            environment,
-            variables: {
-              id: form.rawId,
-            },
-          })
-            .then(() => {
-              this.props.showAlert({
-                type: 'success',
-                text: 'Saved!',
-                link: { text: '' },
-              });
-              return true;
-            })
-            .catch(error => {
-              log.error(error);
-              this.props.showAlert({
-                type: 'danger',
-                text: `Error when updating store status`,
-                link: { text: 'Close.' },
-              });
-            });
-        } else {
-          this.props.showAlert({
-            type: 'success',
-            text: 'Saved!',
-            link: { text: '' },
-          });
-        } */
-
         this.props.showAlert({
           type: 'success',
           text: t.saved,

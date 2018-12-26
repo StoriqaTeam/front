@@ -17,6 +17,7 @@
     "gen-uid": "0.0.2",
     "jwt-decode": "2.2.0",
     "lodash.debounce": "4.0.8",
+    "material-icons-react": "1.0.4",
     "moment": "2.22.2",
     "morgan": "1.9.0",
     "prop-types": "15.6.0",
