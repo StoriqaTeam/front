@@ -85,12 +85,66 @@ class HTMLEditor extends Component<PropsType, StateType> {
   isAlignBlockType = (blockType: MarkType): boolean =>
     contains(blockType, ['align_left', 'align_center', 'align_right']);
 
+  hasLinks = () => {
+    const { value } = this.state;
+    return value.inlines.some(inline => inline.type == 'link');
+  };
+
   handleMarkButtonClicked = (type: MarkType) => {
     this.editor.toggleMark(type);
   };
 
   handleBlockButtonClicked = (blockType: MarkType) => {
-    if (this.isAlignBlockType(blockType)) {
+    const isActive = this.state.value.blocks.some(
+      node => node.type === blockType,
+    );
+
+    if (blockType === 'link') {
+      if (this.hasLinks()) {
+        this.editor.command(editor => {
+          editor.unwrapInline('link');
+        });
+      } else if (this.state.value.selection.isExpanded) {
+        const href = window.prompt('Enter the URL of the link:');
+
+        if (href === null) {
+          return;
+        }
+
+        this.editor.command((editor, href) => {
+          editor.wrapInline({
+            type: 'link',
+            data: { href },
+          });
+
+          editor.moveToEnd();
+        }, href);
+      } else {
+        const href = window.prompt('Enter the URL of the link:');
+
+        if (href === null) {
+          return;
+        }
+
+        const text = window.prompt('Enter the text for the link:');
+
+        if (text === null) {
+          return;
+        }
+
+        this.editor
+          .insertText(text)
+          .moveFocusBackward(text.length)
+          .command((editor, href) => {
+            editor.wrapInline({
+              type: 'link',
+              data: { href },
+            });
+
+            editor.moveToEnd();
+          }, href);
+      }
+    } else if (this.isAlignBlockType(blockType)) {
       const isType = this.state.value.blocks.some(
         block =>
           !!this.state.value.document.getClosest(
@@ -108,9 +162,6 @@ class HTMLEditor extends Component<PropsType, StateType> {
         this.editor.wrapBlock(blockType);
       }
     } else {
-      const isActive = this.state.value.blocks.some(
-        node => node.type === blockType,
-      );
       this.editor.setBlocks(isActive ? 'paragraph' : blockType);
     }
   };
@@ -160,6 +211,15 @@ class HTMLEditor extends Component<PropsType, StateType> {
         return <NodeAligned {...props} align="center" />;
       case 'align_right':
         return <NodeAligned {...props} align="right" />;
+      case 'link': {
+        const { data } = node;
+        const href = data.get('href');
+        return (
+          <a {...attributes} href={href}>
+            {children}
+          </a>
+        );
+      }
       default:
         return next();
     }
