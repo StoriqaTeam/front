@@ -144,6 +144,7 @@ class Toolbar extends Component<PropsType> {
         {this.renderBlockButton('link')}
         {this.renderBlockButton('image')}
         {this.renderBlockButton('video')}
+        {this.renderBlockButton('table')}
       </div>
     );
   }

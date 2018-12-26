@@ -10387,6 +10387,13 @@ slate-base64-serializer@^0.2.94:
   dependencies:
     isomorphic-base64 "^1.0.2"
 
+slate-deep-table@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/slate-deep-table/-/slate-deep-table-0.8.0.tgz#9b4306a3b1515434833cee262abda676738d09a8"
+  dependencies:
+    immutable "^3.8.1"
+    slate-html-serializer "^0.7.20"
+
 slate-dev-environment@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/slate-dev-environment/-/slate-dev-environment-0.2.1.tgz#760f500f18af0dc61bcae39eec4160c420fea537"
@@ -10399,6 +10406,12 @@ slate-hotkeys@^0.2.8:
   dependencies:
     is-hotkey "0.1.4"
     slate-dev-environment "^0.2.1"
+
+slate-html-serializer@^0.7.20:
+  version "0.7.33"
+  resolved "https://registry.yarnpkg.com/slate-html-serializer/-/slate-html-serializer-0.7.33.tgz#49a19bb346ef2f7ba017090815d7e35061a77a09"
+  dependencies:
+    type-of "^2.0.1"
 
 slate-plain-serializer@^0.6.33:
   version "0.6.33"
@@ -10433,9 +10446,9 @@ slate-react@0.21.15:
     tiny-invariant "^1.0.1"
     tiny-warning "^0.0.3"
 
-slate@0.44.9:
-  version "0.44.9"
-  resolved "https://registry.yarnpkg.com/slate/-/slate-0.44.9.tgz#0fc9ba9f08b379b86c4c0a1ddebbe6bf28aa3c4b"
+slate@0.43.7:
+  version "0.43.7"
+  resolved "https://registry.yarnpkg.com/slate/-/slate-0.43.7.tgz#8e33860dd0ea698c106fe781b2fb926e56e271df"
   dependencies:
     debug "^3.1.0"
     direction "^0.1.5"

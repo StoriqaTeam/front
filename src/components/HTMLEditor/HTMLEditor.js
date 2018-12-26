@@ -2,15 +2,16 @@
 
 import React, { Component } from 'react';
 import { Editor } from 'slate-react';
-import { Value, Block } from 'slate';
+import { Value } from 'slate';
 import { contains } from 'ramda';
-
-import type { Node } from 'react';
+import PluginDeepTable from 'slate-deep-table';
 
 import { log } from 'utils';
 
 import Toolbar from './Toolbar';
 import NodeVideo from './NodeVideo';
+
+import './HTMLEditor.scss';
 
 type PropsType = {
   //
@@ -20,16 +21,13 @@ type StateType = {
   value: {},
 };
 
+const tablePlugin = PluginDeepTable();
+
+const plugins = [tablePlugin];
+
 const initialValue = Value.fromJSON({
   document: {
     nodes: [
-      // {
-      //   object: 'block',
-      //   type: 'video',
-      //   data: {
-      //     video: 'https://www.youtube.com/embed/FaHEusBG20c',
-      //   },
-      // },
       {
         object: 'block',
         type: 'paragraph',
@@ -38,7 +36,7 @@ const initialValue = Value.fromJSON({
             object: 'text',
             leaves: [
               {
-                text: 'hi',
+                text: '',
               },
             ],
           },
@@ -121,8 +119,35 @@ class HTMLEditor extends Component<PropsType, StateType> {
   };
 
   onChange = ({ value }) => {
-    log.debug({ value });
     this.setState({ value });
+  };
+
+  onInsertTable = () => {
+    this.onChange(this.editor.insertTable());
+  };
+
+  onInsertColumn = () => {
+    this.onChange(this.editor.insertColumn());
+  };
+
+  onInsertRow = () => {
+    this.onChange(this.editor.insertRow());
+  };
+
+  onRemoveColumn = () => {
+    this.onChange(this.editor.removeColumn());
+  };
+
+  onRemoveRow = () => {
+    this.onChange(this.editor.removeRow());
+  };
+
+  onRemoveTable = () => {
+    this.onChange(this.editor.removeTable());
+  };
+
+  onToggleHeaders = () => {
+    this.onChange(this.editor.toggleTableHeaders());
   };
 
   editor = null;
@@ -144,7 +169,9 @@ class HTMLEditor extends Component<PropsType, StateType> {
       node => node.type === blockType,
     );
 
-    if (blockType === 'video') {
+    if (blockType === 'table') {
+      this.onChange(this.editor.insertTable());
+    } else if (blockType === 'video') {
       const src = window.prompt('Enter the id(!) of the youtube video:');
       if (!src) return;
       this.editor.command((editor, _src, target) => {
@@ -310,14 +337,41 @@ class HTMLEditor extends Component<PropsType, StateType> {
     }
   };
 
+  renderTableToolbar = () => (
+    <div className="toolbar">
+      <button style={{ margin: '0.5rem' }} onClick={this.onInsertColumn}>
+        Insert Column
+      </button>
+      <button style={{ margin: '0.5rem' }} onClick={this.onInsertRow}>
+        Insert Row
+      </button>
+      <button style={{ margin: '0.5rem' }} onClick={this.onRemoveColumn}>
+        Remove Column
+      </button>
+      <button style={{ margin: '0.5rem' }} onClick={this.onRemoveRow}>
+        Remove Row
+      </button>
+      <button style={{ margin: '0.5rem' }} onClick={this.onRemoveTable}>
+        Remove Table
+      </button>
+    </div>
+  );
+
   render() {
+    const { value } = this.state;
+    const isTable = this.editor && this.editor.isSelectionInTable(value);
+
     return (
-      <div>
-        <Toolbar
-          editorValue={this.state.value}
-          onMarkButtonClick={this.handleMarkButtonClicked}
-          onBlockButtonClick={this.handleBlockButtonClicked}
-        />
+      <div styleName="editor">
+        {isTable ? (
+          this.renderTableToolbar()
+        ) : (
+          <Toolbar
+            editorValue={this.state.value}
+            onMarkButtonClick={this.handleMarkButtonClicked}
+            onBlockButtonClick={this.handleBlockButtonClicked}
+          />
+        )}
         <Editor
           autoFocus
           schema={schema}
@@ -325,16 +379,21 @@ class HTMLEditor extends Component<PropsType, StateType> {
           onChange={this.onChange}
           ref={ref => {
             this.editor = ref;
+            if (ref) {
+              this.submitChange = ref.change;
+            }
           }}
           style={{
-            border: '1px solid black',
-            width: '500px',
-            height: '300px',
+            border: '1px solid lightgray',
+            width: '90%',
+            height: '500px',
             padding: '2rem',
             overflowY: 'scroll',
           }}
           renderMark={this.renderMark}
           renderNode={this.renderNode}
+          plugins={plugins}
+          placeholder="Enter some text..."
         />
       </div>
     );
