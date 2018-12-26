@@ -18,7 +18,8 @@ export type MarkType =
   | 'h4'
   | 'align_left'
   | 'align_center'
-  | 'align_right';
+  | 'align_right'
+  | 'color_red';
 
 type PropsType = {
   onMarkButtonClick: (markType: MarkType) => void,
@@ -67,10 +68,76 @@ class Toolbar extends Component<PropsType> {
         {this.renderMarkButton('bold')}
         {this.renderMarkButton('italic')}
         {this.renderMarkButton('underlined')}
+        {this.renderMarkButton(
+          'color_gray',
+          <div
+            style={{
+              width: '2rem',
+              height: '2rem',
+              margin: '0.5rem',
+              backgroundColor: '#505050',
+            }}
+          />,
+        )}
+        {this.renderMarkButton(
+          'color_blue',
+          <div
+            style={{
+              width: '2rem',
+              height: '2rem',
+              margin: '0.5rem',
+              backgroundColor: '#03A9FF',
+            }}
+          />,
+        )}
+        {this.renderMarkButton(
+          'color_pink',
+          <div
+            style={{
+              width: '2rem',
+              height: '2rem',
+              margin: '0.5rem',
+              backgroundColor: '#FF62A4',
+            }}
+          />,
+        )}
         {this.renderBlockButton('h1', <div>&nbsp;h1&nbsp;</div>)}
         {this.renderBlockButton('h2', <div>&nbsp;h2&nbsp;</div>)}
         {this.renderBlockButton('h3', <div>&nbsp;h3&nbsp;</div>)}
         {this.renderBlockButton('h4', <div>&nbsp;h4&nbsp;</div>)}
+        {this.renderMarkButton(
+          'bg_color_gray',
+          <div
+            style={{
+              width: '2rem',
+              height: '2rem',
+              margin: '0.5rem',
+              backgroundColor: '#505050',
+            }}
+          />,
+        )}
+        {this.renderMarkButton(
+          'bg_color_blue',
+          <div
+            style={{
+              width: '2rem',
+              height: '2rem',
+              margin: '0.5rem',
+              backgroundColor: '#03A9FF',
+            }}
+          />,
+        )}
+        {this.renderMarkButton(
+          'bg_color_pink',
+          <div
+            style={{
+              width: '2rem',
+              height: '2rem',
+              margin: '0.5rem',
+              backgroundColor: '#FF62A4',
+            }}
+          />,
+        )}
         {this.renderBlockButton('align_left')}
         {this.renderBlockButton('align_center')}
         {this.renderBlockButton('align_right')}

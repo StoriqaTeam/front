@@ -31,6 +31,33 @@ const initialValue = Value.fromJSON({
   },
 });
 
+type NodeColorType = 'gray' | 'blue' | 'pink';
+const colorsHashMap = {
+  gray: '#505050',
+  blue: '#03A9FF',
+  pink: '#FF62A4',
+};
+const NodeColor = props => {
+  const { children, attributes } = props;
+  return (
+    <span {...attributes} style={{ color: colorsHashMap[props.color] }}>
+      {children}
+    </span>
+  );
+};
+
+const NodeBgColor = props => {
+  const { children, attributes } = props;
+  return (
+    <span
+      {...attributes}
+      style={{ backgroundColor: colorsHashMap[props.color] }}
+    >
+      {children}
+    </span>
+  );
+};
+
 class HTMLEditor extends Component<PropsType, StateType> {
   state = {
     value: initialValue,
@@ -52,7 +79,22 @@ class HTMLEditor extends Component<PropsType, StateType> {
 
   handleBlockButtonClicked = (blockType: MarkType) => {
     if (this.isAlignBlockType(blockType)) {
-      this.editor.wrapBlock(blockType);
+      const isType = this.state.value.blocks.some(
+        block =>
+          !!this.state.value.document.getClosest(
+            block.key,
+            parent => parent.type === blockType,
+          ),
+      );
+      if (isType) {
+        this.editor
+          .setBlocks('paragraph')
+          .unwrapBlock('align_left')
+          .unwrapBlock('align_center')
+          .unwrapBlock('align_right');
+      } else {
+        this.editor.wrapBlock(blockType);
+      }
     } else {
       const isActive = this.state.value.blocks.some(
         node => node.type === blockType,
@@ -65,6 +107,18 @@ class HTMLEditor extends Component<PropsType, StateType> {
     const { children, mark, attributes } = props;
 
     switch (mark.type) {
+      case 'color_gray':
+        return <NodeColor {...props} color="gray" />;
+      case 'color_blue':
+        return <NodeColor {...props} color="blue" />;
+      case 'color_pink':
+        return <NodeColor {...props} color="pink" />;
+      case 'bg_color_gray':
+        return <NodeBgColor {...props} color="gray" />;
+      case 'bg_color_blue':
+        return <NodeBgColor {...props} color="blue" />;
+      case 'bg_color_pink':
+        return <NodeBgColor {...props} color="pink" />;
       case 'bold':
         return <strong {...attributes}>{children}</strong>;
       case 'italic':
