@@ -6,7 +6,7 @@ import { head, pathOr, find, propEq, map, length, whereEq } from 'ramda';
 import classname from 'classnames';
 
 import { Select, SpinnerCircle } from 'components/common';
-import { log, getCookie } from 'utils';
+import { log, getCookie, formatPrice } from 'utils';
 import { fetchAvailableShippingForUser } from 'relay/queries';
 
 import type { SelectItemType, CountryType } from 'types';
@@ -231,6 +231,7 @@ class Delivery extends Component<PropsType, StateType> {
                     onSelect={log.debug}
                     activeItem={deliveryPackageSelectItem}
                     dataTest="productDeliveryPackageSelect"
+                    maxItemsHeight={18.5}
                     renderSelectItem={(item: SelectItemType) => {
                       const pkgType: ?PackageType = find(
                         whereEq({ companyPackageRawId: parseInt(item.id, 10) }),
@@ -274,7 +275,7 @@ class Delivery extends Component<PropsType, StateType> {
                                     selected: isChecked,
                                   })}
                                 >
-                                  {`${pkgType.price} STQ`}
+                                  {`${formatPrice(pkgType.price)} STQ`}
                                 </div>
                               </div>
                             </div>
@@ -297,7 +298,9 @@ class Delivery extends Component<PropsType, StateType> {
             </div>
             <div styleName="textWrapper">
               <div styleName="pkgName">Price</div>
-              <div styleName="pkgPrice">{deliveryPackage.price} STQ</div>
+              <div styleName="pkgPrice">
+                {formatPrice(deliveryPackage.price)} STQ
+              </div>
             </div>
           </div>
         )}
