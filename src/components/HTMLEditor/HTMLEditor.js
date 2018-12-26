@@ -10,6 +10,7 @@ import type { Node } from 'react';
 import { log } from 'utils';
 
 import Toolbar from './Toolbar';
+import NodeVideo from './NodeVideo';
 
 type PropsType = {
   //
@@ -22,6 +23,13 @@ type StateType = {
 const initialValue = Value.fromJSON({
   document: {
     nodes: [
+      // {
+      //   object: 'block',
+      //   type: 'video',
+      //   data: {
+      //     video: 'https://www.youtube.com/embed/FaHEusBG20c',
+      //   },
+      // },
       {
         object: 'block',
         type: 'paragraph',
@@ -30,7 +38,7 @@ const initialValue = Value.fromJSON({
             object: 'text',
             leaves: [
               {
-                text: '',
+                text: 'hi',
               },
             ],
           },
@@ -43,6 +51,9 @@ const initialValue = Value.fromJSON({
 const schema = {
   blocks: {
     image: {
+      isVoid: true,
+    },
+    video: {
       isVoid: true,
     },
   },
@@ -133,7 +144,24 @@ class HTMLEditor extends Component<PropsType, StateType> {
       node => node.type === blockType,
     );
 
-    if (blockType === 'image') {
+    if (blockType === 'video') {
+      const src = window.prompt('Enter the id(!) of the youtube video:');
+      if (!src) return;
+      this.editor.command((editor, _src, target) => {
+        if (target) {
+          editor.select(target);
+        }
+
+        editor
+          .insertBlock({
+            type: 'video',
+            data: { video: `https://www.youtube.com/embed/${_src}` },
+          })
+          .insertBlock({
+            type: 'paragraph',
+          });
+      }, src);
+    } else if (blockType === 'image') {
       const src = window.prompt('Enter the URL of the image:');
       if (!src) return;
       this.editor.command((editor, _src, target) => {
@@ -275,6 +303,8 @@ class HTMLEditor extends Component<PropsType, StateType> {
         const src = node.data.get('src');
         return <NodeImg {...props} src={src} selected={isFocused} />;
       }
+      case 'video':
+        return <NodeVideo {...props} />;
       default:
         return next();
     }

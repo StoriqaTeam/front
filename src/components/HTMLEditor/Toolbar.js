@@ -143,6 +143,7 @@ class Toolbar extends Component<PropsType> {
         {this.renderBlockButton('align_right')}
         {this.renderBlockButton('link')}
         {this.renderBlockButton('image')}
+        {this.renderBlockButton('video')}
       </div>
     );
   }
