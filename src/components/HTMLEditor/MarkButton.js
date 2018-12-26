@@ -25,6 +25,8 @@ const iconsHashMap: { [MarkType]: string } = {
   align_left: 'format_align_left',
   align_center: 'format_align_center',
   align_right: 'format_align_right',
+  link: 'insert_link',
+  image: 'insert_photo',
 };
 
 const defaultIcon = 'insert_emoticon';

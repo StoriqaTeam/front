@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { Editor } from 'slate-react';
-import { Value } from 'slate';
+import { Value, Block } from 'slate';
 import { contains } from 'ramda';
 
 import type { Node } from 'react';
@@ -25,11 +25,45 @@ const initialValue = Value.fromJSON({
       {
         object: 'block',
         type: 'paragraph',
-        nodes: [],
+        nodes: [
+          {
+            object: 'text',
+            leaves: [
+              {
+                text: '',
+              },
+            ],
+          },
+        ],
       },
     ],
   },
 });
+
+const schema = {
+  blocks: {
+    image: {
+      isVoid: true,
+    },
+  },
+};
+
+const NodeImg = props => {
+  const { attributes, src, selected } = props;
+  return (
+    <img
+      {...attributes}
+      src={src}
+      alt=""
+      style={{
+        display: 'block',
+        maxWidth: '100%',
+        maxHeight: '20em',
+        boxShadow: selected ? '0 0 0 2px blue' : 'none',
+      }}
+    />
+  );
+};
 
 type NodeColorType = 'gray' | 'blue' | 'pink';
 const colorsHashMap = {
@@ -87,7 +121,7 @@ class HTMLEditor extends Component<PropsType, StateType> {
 
   hasLinks = () => {
     const { value } = this.state;
-    return value.inlines.some(inline => inline.type == 'link');
+    return value.inlines.some(inline => inline.type === 'link');
   };
 
   handleMarkButtonClicked = (type: MarkType) => {
@@ -99,7 +133,24 @@ class HTMLEditor extends Component<PropsType, StateType> {
       node => node.type === blockType,
     );
 
-    if (blockType === 'link') {
+    if (blockType === 'image') {
+      const src = window.prompt('Enter the URL of the image:');
+      if (!src) return;
+      this.editor.command((editor, _src, target) => {
+        if (target) {
+          editor.select(target);
+        }
+
+        editor
+          .insertBlock({
+            type: 'image',
+            data: { src: _src },
+          })
+          .insertBlock({
+            type: 'paragraph',
+          });
+      }, src);
+    } else if (blockType === 'link') {
       if (this.hasLinks()) {
         this.editor.command(editor => {
           editor.unwrapInline('link');
@@ -194,7 +245,7 @@ class HTMLEditor extends Component<PropsType, StateType> {
   };
 
   renderNode = (props, editor, next) => {
-    const { attributes, children, node } = props;
+    const { attributes, children, node, isFocused } = props;
 
     switch (node.type) {
       case 'h1':
@@ -220,6 +271,10 @@ class HTMLEditor extends Component<PropsType, StateType> {
           </a>
         );
       }
+      case 'image': {
+        const src = node.data.get('src');
+        return <NodeImg {...props} src={src} selected={isFocused} />;
+      }
       default:
         return next();
     }
@@ -235,6 +290,7 @@ class HTMLEditor extends Component<PropsType, StateType> {
         />
         <Editor
           autoFocus
+          schema={schema}
           value={this.state.value}
           onChange={this.onChange}
           ref={ref => {
@@ -245,6 +301,7 @@ class HTMLEditor extends Component<PropsType, StateType> {
             width: '500px',
             height: '300px',
             padding: '2rem',
+            overflowY: 'scroll',
           }}
           renderMark={this.renderMark}
           renderNode={this.renderNode}

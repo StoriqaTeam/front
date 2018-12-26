@@ -18,7 +18,8 @@ export type MarkType =
   | 'h4'
   | 'align_left'
   | 'align_center'
-  | 'align_right';
+  | 'align_right'
+  | 'image';
 
 type PropsType = {
   onMarkButtonClick: (markType: MarkType) => void,
@@ -141,6 +142,7 @@ class Toolbar extends Component<PropsType> {
         {this.renderBlockButton('align_center')}
         {this.renderBlockButton('align_right')}
         {this.renderBlockButton('link')}
+        {this.renderBlockButton('image')}
       </div>
     );
   }
