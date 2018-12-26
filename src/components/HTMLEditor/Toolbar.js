@@ -18,8 +18,7 @@ export type MarkType =
   | 'h4'
   | 'align_left'
   | 'align_center'
-  | 'align_right'
-  | 'color_red';
+  | 'align_right';
 
 type PropsType = {
   onMarkButtonClick: (markType: MarkType) => void,

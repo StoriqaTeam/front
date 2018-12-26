@@ -58,6 +58,18 @@ const NodeBgColor = props => {
   );
 };
 
+const NodeAligned = props => {
+  const { children, attributes } = props;
+  return (
+    <div
+      style={{ display: 'flex', flex: 1, justifyContent: props.align }}
+      {...attributes}
+    >
+      {children}
+    </div>
+  );
+};
+
 class HTMLEditor extends Component<PropsType, StateType> {
   state = {
     value: initialValue,
@@ -143,32 +155,11 @@ class HTMLEditor extends Component<PropsType, StateType> {
       case 'h4':
         return <h4 {...attributes}>{children}</h4>;
       case 'align_left':
-        return (
-          <div
-            style={{ display: 'flex', flex: 1, justifyContent: 'left' }}
-            {...attributes}
-          >
-            {children}
-          </div>
-        );
+        return <NodeAligned {...props} align="left" />;
       case 'align_center':
-        return (
-          <div
-            style={{ display: 'flex', flex: 1, justifyContent: 'center' }}
-            {...attributes}
-          >
-            {children}
-          </div>
-        );
+        return <NodeAligned {...props} align="center" />;
       case 'align_right':
-        return (
-          <div
-            style={{ display: 'flex', flex: 1, justifyContent: 'right' }}
-            {...attributes}
-          >
-            {children}
-          </div>
-        );
+        return <NodeAligned {...props} align="right" />;
       default:
         return next();
     }
