@@ -58,7 +58,7 @@ const ProductsTableRow = ({
       </div>
       <Col size={4} sm={4} md={2} lg={2} xl={1}>
         <div styleName="foto">
-          {!product || isNil(product.photoMain) ? (
+          {!product || isNil(product.photoMain) || product.photoMain === '' ? (
             <Icon type="camera" size={40} />
           ) : (
             <ImageLoader
