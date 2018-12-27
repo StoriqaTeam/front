@@ -218,11 +218,9 @@ class PersonalData extends Component<PropsType, StateType> {
     if (id === 'phone' && !/^\+?\d*$/.test(value)) {
       return;
     }
-    if (value.length <= 50) {
-      this.setState((prevState: StateType) =>
-        assocPath(['data', id], value, prevState),
-      );
-    }
+    this.setState((prevState: StateType) =>
+      assocPath(['data', id], value, prevState),
+    );
   };
 
   handleGenderSelect = (genderValue: { id: string, label: string }) => {
