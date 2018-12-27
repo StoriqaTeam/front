@@ -83,7 +83,7 @@ const routes = (
             isoCode
           }
           currencies
-          categoriesWithProducts {
+          categories {
             name {
               lang
               text
@@ -367,6 +367,9 @@ const routes = (
               baseProduct(id: $productID, visibility: "active") {
                 ...Product_baseProduct
               }
+              categoriesWithProducts {
+                ...Form_categoriesWithProducts
+              }
             }
           `}
           prepareVariables={(_, { params }) => ({
@@ -591,11 +594,19 @@ const routes = (
             />
             <Route
               path="/product/new"
-              Component={({ me }) => <NewProduct me={me} />}
+              Component={({ me, categoriesWithProducts }) => (
+                <NewProduct
+                  me={me}
+                  categoriesWithProducts={categoriesWithProducts}
+                />
+              )}
               query={graphql`
                 query routes_NewProduct_Query {
                   me {
                     ...NewProduct_me
+                  }
+                  categoriesWithProducts {
+                    ...Form_categoriesWithProducts
                   }
                 }
               `}

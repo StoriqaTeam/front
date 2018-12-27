@@ -545,6 +545,7 @@ class EditProduct extends Component<PropsType, StateType> {
 
   render() {
     const { me, router, match } = this.props;
+    console.log('---this.props', this.props);
     const {
       isLoading,
       availablePackages,

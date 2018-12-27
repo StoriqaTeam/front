@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
-import { routerShape, matchShape } from 'found';
+import { routerShape, matchShape, withRouter } from 'found';
 import {
   assocPath,
   isEmpty,
@@ -26,6 +26,7 @@ import {
 import { validate } from '@storiqa/shared';
 import classNames from 'classnames';
 import { Environment } from 'relay-runtime';
+import { createFragmentContainer, graphql } from 'react-relay';
 import debounce from 'lodash.debounce';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
@@ -1374,5 +1375,61 @@ class Form extends Component<PropsType, StateType> {
   }
 }
 
-// $FlowIgnoreMe
-export default withErrorBoundary(withShowAlert(Form));
+export default createFragmentContainer(
+  // $FlowIgnore
+  withRouter(withErrorBoundary(withShowAlert(Form))),
+  graphql`
+    fragment Form_categoriesWithProducts on CategoryWithProducts {
+      name {
+        lang
+        text
+      }
+      children {
+        id
+        rawId
+        parentId
+        level
+        name {
+          lang
+          text
+        }
+        children {
+          id
+          rawId
+          parentId
+          level
+          name {
+            lang
+            text
+          }
+          children {
+            id
+            rawId
+            parentId
+            level
+            name {
+              lang
+              text
+            }
+            getAttributes {
+              id
+              rawId
+              name {
+                text
+                lang
+              }
+              metaField {
+                values
+                translatedValues {
+                  translations {
+                    text
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `,
+);
