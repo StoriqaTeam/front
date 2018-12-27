@@ -170,13 +170,11 @@ class Form extends Component<PropsType, StateType> {
   handleInputChange = (id: string) => (e: any) => {
     this.setState({ formErrors: omit([id], this.state.formErrors) });
     const { value } = e.target;
-    if (value.length <= 50) {
-      this.setState((prevState: StateType) =>
-        assocPath(['form', id], value, prevState),
-      );
-      if (this.props.handleNewStoreNameChange && id === 'name') {
-        this.props.handleNewStoreNameChange(value);
-      }
+    this.setState((prevState: StateType) =>
+      assocPath(['form', id], value, prevState),
+    );
+    if (this.props.handleNewStoreNameChange && id === 'name') {
+      this.props.handleNewStoreNameChange(value);
     }
   };
 
