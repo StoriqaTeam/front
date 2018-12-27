@@ -3,7 +3,6 @@
 import React from 'react';
 
 import { Icon } from 'components/Icon';
-import { Checkbox } from 'components/common/Checkbox';
 import { Col } from 'layout';
 
 import './StoragesHeader.scss';
@@ -14,9 +13,6 @@ const StoragesHeader = () => (
   <div styleName="container">
     <Col size={12} sm={6} md={5} lg={3} xl={3} mdVisible>
       <div styleName="headerCheckbox">
-        <div styleName="checkBox">
-          <Checkbox id="header" onChange={() => {}} />
-        </div>
         <div>
           <span>{t.storage}</span>
           <Icon inline type="sortArrows" />

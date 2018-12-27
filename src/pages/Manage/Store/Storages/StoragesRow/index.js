@@ -3,7 +3,6 @@
 import React from 'react';
 
 import { Icon } from 'components/Icon';
-import { Checkbox } from 'components/common/Checkbox';
 import { Col } from 'layout';
 
 import { addressToString } from 'utils';
@@ -21,7 +20,6 @@ type PropsType = {
     SyntheticEvent<HTMLDivElement | HTMLButtonElement>,
   ) => void,
   // onDelete: () => void,
-  handleCheckboxClick: (id: string | number) => void,
   id: string,
   name: string,
   slug: string,
@@ -31,7 +29,6 @@ type PropsType = {
 const StoragesRow = ({
   onEdit,
   // onDelete,
-  handleCheckboxClick,
   id,
   name,
   slug,
@@ -51,9 +48,6 @@ const StoragesRow = ({
   >
     <Col size={12} sm={12} md={5} lg={3} xl={3}>
       <div styleName="storageName">
-        <span styleName="checkBox">
-          <Checkbox id={`storage-${id}`} onChange={handleCheckboxClick} />
-        </span>
         <div>{name || `Storage ${slug}`}</div>
       </div>
     </Col>
