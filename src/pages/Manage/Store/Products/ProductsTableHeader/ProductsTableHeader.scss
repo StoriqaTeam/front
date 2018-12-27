@@ -27,8 +27,8 @@
 }
 
 .colColor {
+  font-size: 14px;
   color: $color_grey_minor;
- // padding-left: 3rem;
 }
 
 .td {
@@ -39,34 +39,12 @@
   color: $color_grey;
 }
 
-.tdCheckbox {
-  display: none;
-  width: 5%;
-  @media (min-width: $md) {
-    display: block;
-  }
-}
 .tdFoto {
   margin-right: 2rem;
-  width: 9%;
+  width: 10%;
 }
-.tdName {width: 21%;}
+.tdName {width: 22%;}
 .tdCategory {width: 18%;}
 .tdPrice {width: 10%;}
 .tdCashback {width: 10%;}
-.tdCharacteristics {width: 24%;}
-.tdDelete {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.deleteButton, .editButton {
-  & svg {
-    fill: $color_grey_minor;
-    transition: $transition_all_ease;
-  }
-
-  &:hover svg {
-    fill: $color_grey;
-  }
-}
+.tdCharacteristics {width: 25%;}
