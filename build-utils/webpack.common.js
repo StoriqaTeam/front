@@ -7,6 +7,7 @@ const postcssPresetEnv = require('postcss-preset-env');
 
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
+const LoadablePlugin = require('@loadable/webpack-plugin')
 
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
@@ -19,7 +20,6 @@ const webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(
   require('./webpack-isomorphic-tools-configuration'),
 ).development(process.env.NODE_ENV !== 'production');
 
-// 'static/css/[name].[contenthash:8].css'
 module.exports = (mode) => {
   const prodMode = process.env.NODE_ENV === 'production';
   return {
@@ -161,7 +161,7 @@ module.exports = (mode) => {
       ],
     },
     plugins: [
-      
+      new LoadablePlugin(),
       //
       // Makes some environment variables available to the JS code, for example:
       // if (process.env.NODE_ENV === 'production') { ... }. See `./env.js`.

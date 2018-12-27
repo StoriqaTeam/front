@@ -462,7 +462,7 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-syntax-dynamic-import@7.2.0":
+"@babel/plugin-syntax-dynamic-import@7.2.0", "@babel/plugin-syntax-dynamic-import@^7.2.0":
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-dynamic-import/-/plugin-syntax-dynamic-import-7.2.0.tgz#69c159ffaf4998122161ad8ebc5e6d1f55df8612"
   dependencies:
@@ -1235,11 +1235,27 @@
     debug "^3.1.0"
     lodash.once "^4.1.1"
 
+"@loadable/babel-plugin@5.2.2":
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/@loadable/babel-plugin/-/babel-plugin-5.2.2.tgz#448f21ce984cee827a7bd4ce7c625c343c3b12e6"
+  dependencies:
+    "@babel/plugin-syntax-dynamic-import" "^7.2.0"
+
 "@loadable/component@5.2.2":
   version "5.2.2"
   resolved "https://registry.yarnpkg.com/@loadable/component/-/component-5.2.2.tgz#64db5fb1e93d6bc93596947336283979f055d5d2"
   dependencies:
     hoist-non-react-statics "^3.2.1"
+
+"@loadable/server@5.2.2":
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/@loadable/server/-/server-5.2.2.tgz#39e682d13f1f682402a5e6774ed1e882a207f9f0"
+  dependencies:
+    lodash "^4.17.11"
+
+"@loadable/webpack-plugin@5.2.2":
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/@loadable/webpack-plugin/-/webpack-plugin-5.2.2.tgz#b8d43fdc2393eb334fa678d3df1e9cbc4bc5e0b8"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"

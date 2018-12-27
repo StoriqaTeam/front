@@ -5,9 +5,9 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
-const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
+// const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
+// const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const RelayCompilerWebpackPlugin = require('relay-compiler-webpack-plugin');
 
@@ -28,6 +28,8 @@ const handler = (percentage, message, ...args) => {
 
 module.exports = (mode) => {
   const commonConfig = require('./webpack.common')();
+
+  const BUILD_PATH = path.resolve(__dirname, '../build')
 
   return webpackMerge(commonConfig, {
 
@@ -52,6 +54,7 @@ module.exports = (mode) => {
       // changing JS code would still trigger a refresh.
     ],
     output: {
+      path: path.join(BUILD_PATH),
       // Add /* filename */ comments to generated require()s in the output.
       pathinfo: true,
       // This does not produce a real file. It's just the virtual path that is
@@ -68,14 +71,6 @@ module.exports = (mode) => {
     },
     plugins: [
       new webpack.ProgressPlugin(handler),
-      new HtmlWebpackPlugin({
-        alwaysWriteToDisk: true,
-        template: path.resolve(__dirname, 'templates/dev.html'),
-        filename: 'index.dev.html',
-      }),
-      new HtmlWebpackHarddiskPlugin({
-        outputPath: path.resolve(__dirname, 'templates')
-      }), 
       new HardSourceWebpackPlugin.ExcludeModulePlugin([
         {
           // HardSource works with mini-css-extract-plugin but due to how

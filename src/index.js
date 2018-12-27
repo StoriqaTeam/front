@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom';
-
 import buildApp from 'components/entry';
+import { loadableReady } from '@loadable/component';
+
 import { log } from 'utils';
 
 import './windowModal';
@@ -15,7 +16,10 @@ if (process.env.BROWSER && buildApp) {
       if (process.env.NODE_ENV === 'development' && module.hot) {
         ReactDOM.render(App, document.getElementById('root'));
       } else {
-        ReactDOM.hydrate(App, document.getElementById('root'));
+        loadableReady(() => {
+          const root = document.getElementById('main');
+          ReactDOM.hydrate(App, root);
+        });
       }
       // $FlowIgnore
       if (process.env.NODE_ENV === 'development' && module.hot) {
