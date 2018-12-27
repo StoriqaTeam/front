@@ -783,7 +783,7 @@ class Form extends Component<PropsType, StateType> {
   renderInput = (props: {
     id: string,
     label: string,
-    limit: number,
+    limit?: number,
     required?: boolean,
   }) => {
     const { id, label, limit, required } = props;
@@ -943,7 +943,6 @@ class Form extends Component<PropsType, StateType> {
                 {this.renderInput({
                   id: 'name',
                   label: t.labelProductName,
-                  limit: 50,
                   required: true,
                 })}
               </div>
