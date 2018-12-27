@@ -118,10 +118,8 @@ class Contacts extends Component<PropsType, StateType> {
     e: SyntheticInputEvent<HTMLInputElement>,
   ) => {
     const { value } = e.target;
-    if (value.length <= 50) {
-      const val = id === 'phone' ? value.replace(/\s/g, '') : value;
-      this.setState(assocPath(['form', id], val, this.state));
-    }
+    const val = id === 'phone' ? value.replace(/\s/g, '') : value;
+    this.setState(assocPath(['form', id], val, this.state));
   };
 
   handleUpdateForm = (form: { address: string }) => {
