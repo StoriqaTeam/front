@@ -29,8 +29,6 @@ const handler = (percentage, message, ...args) => {
 module.exports = (mode) => {
   const commonConfig = require('./webpack.common')();
 
-  const BUILD_PATH = path.resolve(__dirname, '../build')
-
   return webpackMerge(commonConfig, {
 
     mode: 'development',
@@ -54,7 +52,7 @@ module.exports = (mode) => {
       // changing JS code would still trigger a refresh.
     ],
     output: {
-      path: path.join(BUILD_PATH),
+     
       // Add /* filename */ comments to generated require()s in the output.
       pathinfo: true,
       // This does not produce a real file. It's just the virtual path that is

@@ -228,7 +228,7 @@ app.use(
 
       const statsFile = path.resolve(
         __dirname,
-        '../build/loadable-stats.json',
+        '../dist/loadable-stats.json',
       );
 
       const extractor = new ChunkExtractor({ statsFile });

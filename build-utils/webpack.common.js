@@ -2,9 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
 const ExtractCssChunks = require('extract-css-chunks-webpack-plugin');
-
 const postcssPresetEnv = require('postcss-preset-env');
-
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const LoadablePlugin = require('@loadable/webpack-plugin')
@@ -161,7 +159,7 @@ module.exports = (mode) => {
       ],
     },
     plugins: [
-      new LoadablePlugin(),
+      new LoadablePlugin({ writeToDisk: true }),
       //
       // Makes some environment variables available to the JS code, for example:
       // if (process.env.NODE_ENV === 'production') { ... }. See `./env.js`.
@@ -184,8 +182,8 @@ module.exports = (mode) => {
       new ExtractCssChunks({
         // Options similar to the same options in webpackOptions.output
         // both options are optional
-        filename: prodMode ? 'static/css/[name].[contenthash:8].css' : '[name].css',
-        chunkFilename: prodMode ? 'static/css/[id].[contenthash:8].css' : '[id].css',
+        filename: prodMode ? 'static/css/[name].[contenthash:8].css' : 'static/css/[name].css',
+        chunkFilename: prodMode ? 'static/css/[id].[contenthash:8].css' : 'static/css/[id].css',
         hot: true, // if you want HMR - we try to automatically inject hot reloading but if it's not working, add it to the config
         orderWarning: true, // Disable to remove warnings about conflicting order between imports
         reloadAll: true, // when desperation kicks in - this is a brute force HMR flag
