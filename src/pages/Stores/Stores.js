@@ -168,8 +168,12 @@ export default createPaginationContainer(
         first: { type: "Int", defaultValue: 8 }
         after: { type: "ID", defaultValue: null }
       ) {
-      findStore(searchTerm: $text, first: $first, after: $after)
-        @connection(key: "Stores_findStore") {
+      findStore(
+        searchTerm: $text
+        first: $first
+        after: $after
+        visibility: "published"
+      ) @connection(key: "Stores_findStore") {
         pageInfo {
           searchFilters {
             totalCount

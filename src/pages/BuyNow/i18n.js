@@ -58,7 +58,7 @@ const translations: TranslationsBundleType = {
     labelChooseYourAddress: 'Choose your address',
     labelAddress: 'Address',
     labelOrFillFieldsBelowAndSaveAsAddress:
-      'Or fill fields below and save as address',
+      'Fill fields below and save as address',
     labelSaveAsANewAddress: 'Save as a new address',
     errors: {
       receiverNameRequired: 'Receiver name is required',
