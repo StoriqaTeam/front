@@ -1,7 +1,6 @@
 // @flow strict
 import React from 'react';
 
-import { Checkbox } from 'components/common/Checkbox';
 import { Icon } from 'components/Icon';
 import { Col } from 'layout';
 
@@ -11,9 +10,6 @@ import t from './i18n';
 
 const ProductsTableHeader = () => (
   <div styleName="headerRowWrap">
-    <div styleName="tdCheckbox">
-      <Checkbox id="header" onChange={() => {}} />
-    </div>
     <Col size={1} sm={2} md={2} lg={2} xl={1} mdVisible />
     <Col size={4} sm={4} md={4} lg={3} xl={2}>
       <div styleName="colColor name">
@@ -43,13 +39,6 @@ const ProductsTableHeader = () => (
       <div styleName="colColor">
         <span>{t.characteristics}</span>
         <Icon inline type="sortArrows" />
-      </div>
-    </Col>
-    <Col size={3} sm={3} md={3} lg={1} xl={1}>
-      <div styleName="tdDelete">
-        <button styleName="deleteButton">
-          <Icon type="basket" size={32} />
-        </button>
       </div>
     </Col>
   </div>
