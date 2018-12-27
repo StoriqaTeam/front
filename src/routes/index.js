@@ -367,9 +367,6 @@ const routes = (
               baseProduct(id: $productID, visibility: "active") {
                 ...Product_baseProduct
               }
-              categoriesWithProducts {
-                ...Form_categoriesWithProducts
-              }
             }
           `}
           prepareVariables={(_, { params }) => ({
@@ -594,19 +591,16 @@ const routes = (
             />
             <Route
               path="/product/new"
-              Component={({ me, categoriesWithProducts }) => (
-                <NewProduct
-                  me={me}
-                  categoriesWithProducts={categoriesWithProducts}
-                />
+              Component={({ me, allCategories }) => (
+                <NewProduct me={me} allCategories={allCategories} />
               )}
               query={graphql`
                 query routes_NewProduct_Query {
                   me {
                     ...NewProduct_me
                   }
-                  categoriesWithProducts {
-                    ...Form_categoriesWithProducts
+                  allCategories {
+                    ...Form_allCategories
                   }
                 }
               `}
@@ -630,6 +624,9 @@ const routes = (
                   me {
                     id
                     ...EditProduct_me @arguments(productId: $productID)
+                  }
+                  allCategories {
+                    ...Form_allCategories
                   }
                 }
               `}

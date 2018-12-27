@@ -28,6 +28,7 @@ import {
 } from 'relay/mutations';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 
+import type { CategoryType } from 'types';
 import type {
   FormErrorsType,
   CustomAttributeType,
@@ -59,6 +60,7 @@ type PropsType = {
   router: routerShape,
   environment: Environment,
   match: matchShape,
+  allCategories: Array<CategoryType>,
 };
 
 type StateType = {
@@ -544,8 +546,7 @@ class EditProduct extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { me, router, match } = this.props;
-    console.log('---this.props', this.props);
+    const { me, router, match, allCategories } = this.props;
     const {
       isLoading,
       availablePackages,
@@ -569,7 +570,7 @@ class EditProduct extends Component<PropsType, StateType> {
               baseProduct={baseProduct}
               onSave={this.handleSave}
               formErrors={formErrors}
-              categories={directories.categories}
+              allCategories={allCategories}
               currencies={directories.currencies}
               isLoading={isLoading}
               availablePackages={availablePackages}

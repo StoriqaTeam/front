@@ -96,7 +96,7 @@ type PropsType = {
   router: routerShape,
   match: matchShape,
   onSave: (form: FormType, isAddVariant?: boolean) => {},
-  categories: Array<CategoryType>,
+  allCategories: Array<CategoryType>,
   currencies: Array<string>,
   onChangeShipping: (shippingData: ?FullShippingType) => void,
   onCreateAttribute: (attribute: GetAttributeType) => void,
@@ -578,10 +578,10 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleSelectedCategory = (categoryId: number) => {
-    const { categories, onResetAttribute } = this.props;
+    const { allCategories, onResetAttribute } = this.props;
     const category = findCategory(
       whereEq({ rawId: parseInt(categoryId, 10) }),
-      categories,
+      allCategories,
     );
     this.setState(
       (prevState: StateType) => ({
@@ -999,7 +999,7 @@ class Form extends Component<PropsType, StateType> {
                 <CategorySelector
                   id="categoryId"
                   onlyView={Boolean(baseProduct)}
-                  categories={this.props.categories}
+                  categories={this.props.allCategories}
                   category={baseProduct && baseProduct.category}
                   onSelect={itemId => {
                     this.handleSelectedCategory(itemId);
@@ -1379,7 +1379,7 @@ export default createFragmentContainer(
   // $FlowIgnore
   withRouter(withErrorBoundary(withShowAlert(Form))),
   graphql`
-    fragment Form_categoriesWithProducts on CategoryWithProducts {
+    fragment Form_allCategories on Category {
       name {
         lang
         text
