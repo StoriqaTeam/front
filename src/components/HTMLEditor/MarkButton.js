@@ -13,7 +13,7 @@ import './MarkButton.scss';
 
 type PropsType = {
   markType: MarkType,
-  isActive: boolean,
+  active: boolean,
   onClick: (markType: MarkType) => void,
   btnNode?: Node,
 };
@@ -55,7 +55,7 @@ class MarkButton extends React.PureComponent<PropsType> {
           log.debug('MarkButton::click', { type: this.props.markType });
           this.props.onClick(this.props.markType);
         }}
-        styleName={classname({ isActive: this.props.isActive })}
+        styleName={classname({ isActive: this.props.active })}
       >
         {this.props.btnNode || getIcon(this.props.markType)}
       </button>

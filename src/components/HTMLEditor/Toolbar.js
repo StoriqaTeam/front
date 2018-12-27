@@ -32,7 +32,6 @@ class Toolbar extends Component<PropsType> {
     const isActive = this.props.editorValue.blocks.some(
       node => node.type === blockType,
     );
-    log.debug('hasBlock', isActive);
     return isActive;
   };
 
@@ -40,13 +39,12 @@ class Toolbar extends Component<PropsType> {
     const isActive = this.props.editorValue.activeMarks.some(
       mark => mark.type === blockType,
     );
-    log.debug('hasMark', isActive);
     return isActive;
   };
 
   renderMarkButton = (markType: MarkType, btnNode?: Node) => (
     <MarkButton
-      active={this.hasBlock(markType)}
+      active={this.hasMark(markType)}
       markType={markType}
       onClick={this.props.onMarkButtonClick}
       btnNode={btnNode}

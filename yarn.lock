@@ -10387,7 +10387,7 @@ slate-base64-serializer@^0.2.94:
   dependencies:
     isomorphic-base64 "^1.0.2"
 
-slate-deep-table@^0.8.0:
+slate-deep-table@0.8.0:
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/slate-deep-table/-/slate-deep-table-0.8.0.tgz#9b4306a3b1515434833cee262abda676738d09a8"
   dependencies:
