@@ -129,6 +129,7 @@ class Checkout extends Component<PropsType, StateType> {
   storesRef: any;
 
   createAddress = () => {
+    this.setState({ checkoutInProcess: true });
     // $FlowIgnore
     const addressFull = pathOr(null, ['orderInput', 'addressFull'], this.state);
     // $FlowIgnore
@@ -142,10 +143,6 @@ class Checkout extends Component<PropsType, StateType> {
       },
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        this.setState(() => ({
-          isAddressSelect: true,
-          isNewAddress: false,
-        }));
         if (errors) {
           this.props.showAlert({
             type: 'danger',
@@ -159,12 +156,19 @@ class Checkout extends Component<PropsType, StateType> {
           text: t.addressCreated,
           link: { text: '' },
         });
+        this.setState({
+          isAddressSelect: true,
+          isNewAddress: false,
+          checkoutInProcess: false,
+          step: 2,
+        });
       },
       onError: (error: Error) => {
         log.error(error);
         this.setState(() => ({
           isAddressSelect: true,
           isNewAddress: false,
+          checkoutInProcess: false,
         }));
         this.props.showAlert({
           type: 'danger',
@@ -175,10 +179,11 @@ class Checkout extends Component<PropsType, StateType> {
     });
   };
 
-  handleChangeStep = step => () => {
+  handleChangeStep = (step: number) => {
     const { saveAsNewAddress, isNewAddress } = this.state;
     if (saveAsNewAddress && isNewAddress) {
       this.createAddress();
+      return;
     }
     this.setState({ step });
   };
@@ -193,7 +198,6 @@ class Checkout extends Component<PropsType, StateType> {
 
     const { orderInput } = this.state;
     const { me } = this.props;
-
     if (me != null && me.phone !== orderInput.receiverPhone) {
       updateUserPhoneMutation({
         environment: this.context.environment,
@@ -206,7 +210,7 @@ class Checkout extends Component<PropsType, StateType> {
         },
       })
         .then(() => {
-          this.setState({ step: 2 });
+          this.handleChangeStep(2);
           return true;
         })
         .catch(error => {
@@ -226,7 +230,7 @@ class Checkout extends Component<PropsType, StateType> {
         });
       return;
     }
-    this.setState({ step: 2 });
+    this.handleChangeStep(2);
   };
 
   validate = () => {
@@ -263,7 +267,7 @@ class Checkout extends Component<PropsType, StateType> {
   };
 
   handleOnChangeOrderInput = orderInput => {
-    this.setState({ orderInput });
+    this.setState({ orderInput, errors: {} });
   };
 
   handleOnChangeAddressType = () => {
@@ -313,7 +317,7 @@ class Checkout extends Component<PropsType, StateType> {
               invoiceId: response.createOrders.invoice.id,
               checkoutInProcess: false,
             });
-            this.handleChangeStep(3)();
+            this.handleChangeStep(3);
 
             const { invoice } = response.createOrders;
 

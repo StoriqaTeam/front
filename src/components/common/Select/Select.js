@@ -427,7 +427,9 @@ class Select extends Component<PropsType, StateType> {
             styleName={classNames('label', {
               labelFloat:
                 withInput === true
-                  ? (inputValue !== null && inputValue !== '') || isFocusInput
+                  ? (inputValue !== null && inputValue !== '') ||
+                    isFocusInput ||
+                    isOpenItems
                   : activeItem || isExpanded,
             })}
           >

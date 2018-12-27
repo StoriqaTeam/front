@@ -20,9 +20,9 @@ const translations: TranslationsBundleType = {
     deliveryInfo: 'Delivery Info',
     labelReceiverName: 'Receiver Name',
     labelReceiverPhone: 'Receiver Phone',
-    labelChooseYourAddress: 'choose your address',
+    labelChooseYourAddress: 'Choose your address',
     labelAddress: 'Address',
-    labelOrFillFields: 'Or fill fields below and save as address',
+    labelOrFillFields: 'Fill fields below and save as address',
     labelSaveAsNewAddress: 'Save as a new address',
   },
 };

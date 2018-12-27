@@ -75,6 +75,10 @@
 
 .newAddressWrap {
   @media (max-width: #{$xl - 1px}) {
+    margin-top: 4rem;
+  }
+
+  &.isEmptyDeliveryAddressesFull {
     margin-top: 2rem;
   }
 }
