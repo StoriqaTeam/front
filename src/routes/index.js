@@ -83,7 +83,7 @@ const routes = (
             isoCode
           }
           currencies
-          categories {
+          categoriesWithProducts {
             name {
               lang
               text
