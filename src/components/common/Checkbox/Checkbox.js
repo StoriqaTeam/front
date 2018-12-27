@@ -30,6 +30,7 @@ class Checkbox extends PureComponent<PropsType> {
   };
   render() {
     const { id, label, isChecked, dataTest } = this.props;
+    const dataTestValue = dataTest != null ? dataTest : id;
     return (
       <div
         styleName="container"
@@ -44,11 +45,13 @@ class Checkbox extends PureComponent<PropsType> {
           type="checkbox"
           checked={isChecked}
           onChange={this.onChange}
-          data-test={dataTest != null ? dataTest : id}
+          data-test={dataTestValue}
           onClick={this.stopPropagation}
         />
         <label htmlFor={id} styleName="label">
+          <span styleName="labelBefore" data-test={dataTestValue} />
           <span styleName="labelText">{label}</span>
+          <span styleName="labelAfter" data-test={dataTestValue} />
         </label>
       </div>
     );

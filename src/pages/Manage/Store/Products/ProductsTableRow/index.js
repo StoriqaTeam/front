@@ -4,7 +4,6 @@ import { isEmpty, map, pathOr, isNil } from 'ramda';
 // $FlowIgnoreMe
 import ImageLoader from 'libs/react-image-loader';
 
-import { Checkbox } from 'components/common/Checkbox';
 import { Icon } from 'components/Icon';
 import BannerLoading from 'components/Banner/BannerLoading';
 import { Col } from 'layout';
@@ -29,16 +28,10 @@ type PropsType = {
     },
   },
   onEdit: number => void,
-  onCheckbox: string => void,
   onDelete: (string, SyntheticEvent<HTMLButtonElement>) => void,
 };
 
-const ProductsTableRow = ({
-  item,
-  onEdit,
-  onDelete,
-  onCheckbox,
-}: PropsType) => {
+const ProductsTableRow = ({ item, onEdit, onDelete }: PropsType) => {
   const { product } = item;
   // $FlowIgnoreMe
   const attributes = pathOr([], ['product', 'attributes'], item);
@@ -53,9 +46,6 @@ const ProductsTableRow = ({
       tabIndex="0"
       data-test="editProductButton"
     >
-      <div styleName="td tdCheckbox">
-        <Checkbox id={item.rawId} onChange={onCheckbox} />
-      </div>
       <Col size={4} sm={4} md={2} lg={2} xl={1}>
         <div styleName="foto">
           {!product || isNil(product.photoMain) ? (
