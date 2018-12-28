@@ -80,7 +80,7 @@ const Login = loadable(
 );
 const Categories = loadable(
   () =>
-    import(/* webpackChunkName: "Categories", webpackPreload: true */ '../pages/Search/Categories'),
+    import(/* webpackChunkName: "Categories", webpackPrefetch: true */ '../pages/Search/Categories'),
   fallback,
 );
 const Profile = loadable(
@@ -93,7 +93,7 @@ const Store = loadable(
 );
 const Stores = loadable(
   () =>
-    import(/* webpackChunkName: "Stores", webpackPreload: true */ '../pages/Stores/Stores'),
+    import(/* webpackChunkName: "Stores", webpackPrefetch: true */ '../pages/Stores/Stores'),
   fallback,
 );
 
@@ -122,23 +122,35 @@ const Wizard = loadable(
     import(/* webpackChunkName: "Wizard" */ '../pages/Manage/Wizard/Wizard'),
   fallback,
 );
-const Contacts = loadable(() =>
-  import(/* webpackChunkName: "Contacts" */ '../pages/Manage/Store/Contacts/Contacts'),
+const Contacts = loadable(
+  () =>
+    import(/* webpackChunkName: "Contacts" */ '../pages/Manage/Store/Contacts/Contacts'),
+  fallback,
 );
-const StoreOrder = loadable(() =>
-  import(/* webpackChunkName: "StoreOrder" */ '../pages/Manage/Store/Orders/StoreOrder'),
+const StoreOrder = loadable(
+  () =>
+    import(/* webpackChunkName: "StoreOrder" */ '../pages/Manage/Store/Orders/StoreOrder'),
+  fallback,
 );
-const StoreOrders = loadable(() =>
-  import(/* webpackChunkName: "StoreOrders" */ '../pages/Manage/Store/Orders/StoreOrders'),
+const StoreOrders = loadable(
+  () =>
+    import(/* webpackChunkName: "StoreOrders" */ '../pages/Manage/Store/Orders/StoreOrders'),
+  fallback,
 );
-const Products = loadable(() =>
-  import(/* webpackChunkName: "Products" */ '../pages/Manage/Store/Products/Products'),
+const Products = loadable(
+  () =>
+    import(/* webpackChunkName: "Products" */ '../pages/Manage/Store/Products/Products'),
+  fallback,
 );
-const Storages = loadable(() =>
-  import(/* webpackChunkName: "Storages" */ '../pages/Manage/Store/Storages/Storages'),
+const Storages = loadable(
+  () =>
+    import(/* webpackChunkName: "Storages" */ '../pages/Manage/Store/Storages/Storages'),
+  fallback,
 );
-const OrderInvoice = loadable(() =>
-  import(/* webpackChunkName: "OrderInvoice" */ '../pages/Manage/Store/OrderInvoice/OrderInvoice'),
+const OrderInvoice = loadable(
+  () =>
+    import(/* webpackChunkName: "OrderInvoice" */ '../pages/Manage/Store/OrderInvoice/OrderInvoice'),
+  fallback,
 );
 
 const routes = (
