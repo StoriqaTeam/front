@@ -93,20 +93,13 @@
   line-height: 2.5rem;
 }
 
-.tdCheckbox {
-  display: none;
-  width: 5%;
-  @media (min-width: $md) {
-    display: block;
-  }
-}
-.tdFoto {width: 9%;}
-.tdName {width: 21%;}
+.tdFoto {width: 10%;}
+.tdName {width: 22%;}
 .tdCategory {width: 18%;}
 .tdPrice {width: 10%;}
 .tdCashback {width: 10%;}
-.tdCharacteristics {width: 24%;}
-.tdDelete {width: 4%; justify-content: flex-end;}
+.tdCharacteristics {width: 25%;}
+.tdDelete {width: 5%; justify-content: flex-end;}
 
 
 .deleteButton, .editButton {

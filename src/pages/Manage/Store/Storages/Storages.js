@@ -146,7 +146,7 @@ class Storages extends PureComponent<PropsType> {
                     handleCheckboxClick={this.handleCheckboxClick}
                   />
                 ),
-                head(storages),
+                [head(storages)],
               )
             )}
           </div>

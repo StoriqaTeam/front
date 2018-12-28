@@ -562,11 +562,9 @@ class Form extends Component<PropsType, StateType> {
   handleInputChange = (id: string) => (e: any) => {
     this.setState({ formErrors: omit([id], this.state.formErrors) });
     const { value } = e.target;
-    if (value.length <= 50) {
-      this.setState((prevState: StateType) =>
-        assocPath(['form', id], value, prevState),
-      );
-    }
+    this.setState((prevState: StateType) =>
+      assocPath(['form', id], value, prevState),
+    );
   };
 
   handleTextareaChange = (id: string) => (e: any) => {
@@ -784,7 +782,7 @@ class Form extends Component<PropsType, StateType> {
   renderInput = (props: {
     id: string,
     label: string,
-    limit: number,
+    limit?: number,
     required?: boolean,
   }) => {
     const { id, label, limit, required } = props;
@@ -944,7 +942,6 @@ class Form extends Component<PropsType, StateType> {
                 {this.renderInput({
                   id: 'name',
                   label: t.labelProductName,
-                  limit: 50,
                   required: true,
                 })}
               </div>

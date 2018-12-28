@@ -17,6 +17,7 @@ import {
   assoc,
 } from 'ramda';
 import { routerShape } from 'found';
+import classNames from 'classnames';
 import { validate } from '@storiqa/shared';
 
 import { Page } from 'components/App';
@@ -797,6 +798,7 @@ class BuyNow extends Component<PropsType, StateType> {
       variants,
     );
     const productName = getNameText(baseProduct.name, 'EN');
+    const isEmptyDeliveryAddressesFull = isEmpty(me.deliveryAddressesFull);
 
     return (
       <div styleName="container">
@@ -853,47 +855,46 @@ class BuyNow extends Component<PropsType, StateType> {
                                     errors={errors.phone}
                                   />
                                 </div>
-                                <div styleName="selectItem">
-                                  <RadioButton
-                                    id="existingAddressCheckbox"
-                                    label={t.labelChooseYourAddress}
-                                    isChecked={selectedAddress !== null}
-                                    onChange={this.handleOnChangeAddressType}
-                                  />
-                                  {selectedAddress !== null && (
-                                    <div styleName="select">
-                                      <Select
-                                        label={t.labelAddress}
-                                        items={addresses}
-                                        activeItem={selectedAddress}
-                                        onSelect={this.handleOnSelectAddress}
-                                        forForm
-                                        containerStyle={{ width: '26rem' }}
-                                        dataTest="selectExistingAddress"
-                                      />
-                                    </div>
-                                  )}
-                                </div>
-                              </Col>
-                              <Col size={12} xlHidden>
-                                {deliveryAddress && (
-                                  <AddressInfo
-                                    addressFull={deliveryAddress}
-                                    receiverName={receiverName}
-                                    email={me.email}
-                                  />
+                                {!isEmptyDeliveryAddressesFull && (
+                                  <div styleName="selectItem">
+                                    <RadioButton
+                                      id="existingAddressCheckbox"
+                                      label={t.labelChooseYourAddress}
+                                      isChecked={selectedAddress !== null}
+                                      onChange={this.handleOnChangeAddressType}
+                                    />
+                                    {selectedAddress !== null && (
+                                      <div styleName="select">
+                                        <Select
+                                          label={t.labelAddress}
+                                          items={addresses}
+                                          activeItem={selectedAddress}
+                                          onSelect={this.handleOnSelectAddress}
+                                          forForm
+                                          containerStyle={{ width: '26rem' }}
+                                          dataTest="selectExistingAddress"
+                                        />
+                                      </div>
+                                    )}
+                                  </div>
                                 )}
                               </Col>
                               <Col size={12} sm={9} md={8} xl={12}>
-                                <div styleName="addressFormWrap">
-                                  <RadioButton
-                                    id="newAddressCheckbox"
-                                    label={
-                                      t.labelOrFillFieldsBelowAndSaveAsAddress
-                                    }
-                                    isChecked={selectedAddress === null}
-                                    onChange={this.handleOnChangeAddressType}
-                                  />
+                                <div
+                                  styleName={classNames('addressFormWrap', {
+                                    isEmptyDeliveryAddressesFull,
+                                  })}
+                                >
+                                  {!isEmptyDeliveryAddressesFull && (
+                                    <RadioButton
+                                      id="newAddressCheckbox"
+                                      label={
+                                        t.labelOrFillFieldsBelowAndSaveAsAddress
+                                      }
+                                      isChecked={selectedAddress === null}
+                                      onChange={this.handleOnChangeAddressType}
+                                    />
+                                  )}
                                   {selectedAddress === null && (
                                     <Fragment>
                                       <div
@@ -930,16 +931,17 @@ class BuyNow extends Component<PropsType, StateType> {
                             </Row>
                           </div>
                         </Col>
-                        <Col size={6} xlVisibleOnly>
-                          {deliveryAddress.country && (
-                            <div styleName="addressInfo">
-                              <AddressInfo
-                                addressFull={deliveryAddress}
-                                receiverName={receiverName}
-                                email={me.email}
-                              />
-                            </div>
-                          )}
+                        <Col size={12} xl={6}>
+                          {deliveryAddress &&
+                            deliveryAddress.country && (
+                              <div styleName="addressInfo">
+                                <AddressInfo
+                                  addressFull={deliveryAddress}
+                                  receiverName={receiverName}
+                                  email={me.email}
+                                />
+                              </div>
+                            )}
                         </Col>
                       </Row>
                     </Container>
