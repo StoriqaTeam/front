@@ -4,9 +4,9 @@ import React, { Component } from 'react';
 
 import type { Node } from 'react';
 
-import { log } from 'utils';
-
 import MarkButton from './MarkButton';
+
+import './Toolbar.scss';
 
 export type MarkType =
   | 'bold'
@@ -62,7 +62,7 @@ class Toolbar extends Component<PropsType> {
 
   render() {
     return (
-      <div>
+      <div styleName="container">
         {this.renderMarkButton('bold')}
         {this.renderMarkButton('italic')}
         {this.renderMarkButton('underlined')}

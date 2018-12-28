@@ -1,20 +1,24 @@
 // @flow strict
 
 import React, { Component } from 'react';
+import type { Node } from 'react';
 import { Editor } from 'slate-react';
 import { Value } from 'slate';
 import { contains } from 'ramda';
 import PluginDeepTable from 'slate-deep-table';
 
-import { log } from 'utils';
-
 import Toolbar from './Toolbar';
-import NodeVideo from './NodeVideo';
+import NodeVideo from './Nodes/NodeVideo';
+import NodeColor from './Nodes/NodeColor';
+import NodeBgColor from './Nodes/NodeBgColor';
+import NodeImg from './Nodes/NodeImg';
+import NodeAligned from './Nodes/NodeAligned';
 
 import './HTMLEditor.scss';
 
 type PropsType = {
   //
+  children: Node,
 };
 
 type StateType = {
@@ -56,62 +60,6 @@ const schema = {
       isVoid: true,
     },
   },
-};
-
-const NodeImg = props => {
-  const { attributes, src, selected } = props;
-  return (
-    <img
-      {...attributes}
-      src={src}
-      alt=""
-      style={{
-        display: 'block',
-        maxWidth: '100%',
-        maxHeight: '20em',
-        boxShadow: selected ? '0 0 0 2px blue' : 'none',
-      }}
-    />
-  );
-};
-
-type NodeColorType = 'gray' | 'blue' | 'pink';
-const colorsHashMap: { [NodeColorType]: string } = {
-  gray: '#505050',
-  blue: '#03A9FF',
-  pink: '#FF62A4',
-};
-const NodeColor = props => {
-  const { children, attributes } = props;
-  return (
-    <span {...attributes} style={{ color: colorsHashMap[props.color] }}>
-      {children}
-    </span>
-  );
-};
-
-const NodeBgColor = props => {
-  const { children, attributes } = props;
-  return (
-    <span
-      {...attributes}
-      style={{ backgroundColor: colorsHashMap[props.color] }}
-    >
-      {children}
-    </span>
-  );
-};
-
-const NodeAligned = props => {
-  const { children, attributes } = props;
-  return (
-    <div
-      style={{ display: 'flex', flex: 1, justifyContent: props.align }}
-      {...attributes}
-    >
-      {children}
-    </div>
-  );
 };
 
 class HTMLEditor extends Component<PropsType, StateType> {
@@ -381,6 +329,9 @@ class HTMLEditor extends Component<PropsType, StateType> {
 
     return (
       <div styleName="editor">
+        <h3 styleName="title">
+          <strong>Shop Editor</strong>
+        </h3>
         {toolbar}
         <Editor
           autoFocus
@@ -395,7 +346,6 @@ class HTMLEditor extends Component<PropsType, StateType> {
           }}
           style={{
             border: '1px solid lightgray',
-            width: '90%',
             height: '500px',
             padding: '2rem',
             overflowY: 'scroll',

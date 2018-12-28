@@ -1,13 +1,28 @@
 // @flow strict
 
-import React from 'react';
+import React, { PureComponent } from 'react';
+
 import classname from 'classnames';
 
-import type { Node } from 'react';
+import type { Node, Component } from 'react';
 
 import { log } from 'utils';
 
 import type { MarkType } from './Toolbar';
+
+import AlignCenter from './svg/align-center.svg';
+import AlignLeft from './svg/align-left.svg';
+import AlignRight from './svg/align-right.svg';
+import Bold from './svg/bold.svg';
+import Image from './svg/image.svg';
+import Italic from './svg/italic.svg';
+import Justified from './svg/justified.svg';
+import Link from './svg/link.svg';
+import Table from './svg/table.svg';
+import TextColor from './svg/text-color.svg';
+import Text from './svg/text.svg';
+import Underline from './svg/underline.svg';
+import Video from './svg/video.svg';
 
 import './MarkButton.scss';
 
@@ -18,46 +33,50 @@ type PropsType = {
   btnNode?: Node,
 };
 
-const iconsHashMap: { [MarkType]: string } = {
-  bold: 'format_bold',
-  italic: 'format_italic',
-  underlined: 'format_underlined',
-  align_left: 'format_align_left',
-  align_center: 'format_align_center',
-  align_right: 'format_align_right',
-  link: 'insert_link',
-  image: 'insert_photo',
-  video: 'ondemand_video',
-  table: 'border_all',
+const iconsHashMap: { [MarkType]: Component<*> } = {
+  align_center: <AlignCenter />,
+  align_left: <AlignLeft />,
+  align_right: <AlignRight />,
+  bold: <Bold />,
+  image: <Image />,
+  italic: <Italic />,
+  justified: <Justified />,
+  link: <Link />,
+  table: <Table />,
+  text: <Text />,
+  textColor: <TextColor />,
+  underlined: <Underline />,
+  video: <Video />,
 };
 
 const defaultIcon = 'insert_emoticon';
 
 const getIcon = (markType: MarkType): Node => {
-  // dirty hack. material-icons-react crashes build on server side.
   if (process.env.BROWSER) {
-    const MaterialIcon = require('material-icons-react').default; // eslint-disable-line
-    return <MaterialIcon icon={iconsHashMap[markType] || defaultIcon} />;
+    return iconsHashMap[markType] || defaultIcon;
   }
   return <div>[*]</div>;
 };
 
-class MarkButton extends React.PureComponent<PropsType> {
+class MarkButton extends PureComponent<PropsType> {
   componentDidMount() {
     //
   }
 
   render() {
+    const { onClick, btnNode, markType, active } = this.props;
     return (
       <button
         onClick={event => {
           event.preventDefault();
           log.debug('MarkButton::click', { type: this.props.markType });
-          this.props.onClick(this.props.markType);
+          onClick(this.props.markType);
         }}
-        styleName={classname({ isActive: this.props.active })}
+        styleName={classname('container', {
+          isActive: active,
+        })}
       >
-        {this.props.btnNode || getIcon(this.props.markType)}
+        {btnNode || getIcon(markType)}
       </button>
     );
   }
