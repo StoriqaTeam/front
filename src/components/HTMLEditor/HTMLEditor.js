@@ -151,9 +151,7 @@ class HTMLEditor extends Component<PropsType, StateType> {
           .insertBlock({
             type: 'paragraph',
           });
-
       }, src);
-
     } else if (blockType === 'image') {
       const src = window.prompt('Enter the URL of the image:');
       if (!src) return;
@@ -170,9 +168,7 @@ class HTMLEditor extends Component<PropsType, StateType> {
           .insertBlock({
             type: 'paragraph',
           });
-
       }, src);
-
     } else if (blockType === 'link') {
       if (this.hasLinks()) {
         this.editor.command(editor => {
@@ -192,9 +188,7 @@ class HTMLEditor extends Component<PropsType, StateType> {
           });
 
           editor.moveToEnd();
-
         }, href);
-
       } else {
         const href = window.prompt('Enter the URL of the link:');
 
@@ -218,7 +212,6 @@ class HTMLEditor extends Component<PropsType, StateType> {
             });
 
             editor.moveToEnd();
-
           }, href);
       }
     } else if (this.isAlignBlockType(blockType)) {
@@ -288,6 +281,8 @@ class HTMLEditor extends Component<PropsType, StateType> {
         return <NodeAligned {...props} align="center" />;
       case 'align_right':
         return <NodeAligned {...props} align="right" />;
+      case 'align_justify':
+        return <NodeAligned {...props} align="justify" />;
       case 'link': {
         const { data } = node;
         const href = data.get('href');

@@ -11,10 +11,7 @@ type PropsType = {
 };
 
 const NodeAligned = ({ children, attributes, align }: PropsType) => (
-  <div
-    style={{ display: 'flex', flex: 1, justifyContent: align }}
-    {...attributes}
-  >
+  <div style={{ textAlign: align }} {...attributes}>
     {children}
   </div>
 );

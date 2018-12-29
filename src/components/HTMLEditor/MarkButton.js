@@ -9,12 +9,12 @@ import type { Node, Component } from 'react';
 import { log } from 'utils';
 
 import AlignCenter from './svg/align-center.svg';
+import AlignJustify from './svg/align-justify.svg';
 import AlignLeft from './svg/align-left.svg';
 import AlignRight from './svg/align-right.svg';
 import Bold from './svg/bold.svg';
 import Image from './svg/image.svg';
 import Italic from './svg/italic.svg';
-import Justified from './svg/justified.svg';
 import Link from './svg/link.svg';
 import Table from './svg/table.svg';
 import TextColor from './svg/text-color.svg';
@@ -35,12 +35,12 @@ type PropsType = {
 
 const iconsHashMap: { [MarkType]: Component<*> } = {
   align_center: <AlignCenter />,
+  align_justify: <AlignJustify />,
   align_left: <AlignLeft />,
   align_right: <AlignRight />,
   bold: <Bold />,
   image: <Image />,
   italic: <Italic />,
-  justified: <Justified />,
   link: <Link />,
   table: <Table />,
   text: <Text />,
