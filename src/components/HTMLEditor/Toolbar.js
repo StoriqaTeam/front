@@ -24,7 +24,10 @@ export type MarkType =
 type PropsType = {
   onMarkButtonClick: (markType: MarkType) => void,
   onBlockButtonClick: (markType: MarkType) => void,
-  editorValue: {},
+  editorValue: {
+    blocks: Array<string>,
+    activeMarks: Array<string>,
+  },
 };
 
 class Toolbar extends Component<PropsType> {

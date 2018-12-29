@@ -51,9 +51,8 @@ const iconsHashMap: { [MarkType]: Component<*> } = {
 
 const defaultIcon = 'insert_emoticon';
 
-const getIcon = (markType: MarkType): Node => (
-  iconsHashMap[markType] || defaultIcon
-);
+const getIcon = (markType: MarkType): Node =>
+  iconsHashMap[markType] || defaultIcon;
 
 class MarkButton extends PureComponent<PropsType> {
   handleClick = (evt: SyntheticEvent<HTMLButtonElement>): void => {
