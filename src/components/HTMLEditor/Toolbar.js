@@ -91,11 +91,11 @@ class Toolbar extends Component<PropsType> {
             }}
           />,
         )}
-        {this.renderBlockButton('h1', <div>&nbsp;h1&nbsp;</div>)}
+        {/* {this.renderBlockButton('h1', <div>&nbsp;h1&nbsp;</div>)}
         {this.renderBlockButton('h2', <div>&nbsp;h2&nbsp;</div>)}
         {this.renderBlockButton('h3', <div>&nbsp;h3&nbsp;</div>)}
-        {this.renderBlockButton('h4', <div>&nbsp;h4&nbsp;</div>)}
-        {this.renderMarkButton(
+        {this.renderBlockButton('h4', <div>&nbsp;h4&nbsp;</div>)} */}
+        {/* {this.renderMarkButton(
           'bg_color_gray',
           <div
             style={{
@@ -127,7 +127,7 @@ class Toolbar extends Component<PropsType> {
               backgroundColor: '#FF62A4',
             }}
           />,
-        )}
+        )} */}
         {this.renderBlockButton('align_left')}
         {this.renderBlockButton('align_center')}
         {this.renderBlockButton('align_right')}
