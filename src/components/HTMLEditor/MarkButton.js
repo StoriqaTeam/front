@@ -51,21 +51,17 @@ const iconsHashMap: { [MarkType]: Component<*> } = {
 
 const defaultIcon = 'insert_emoticon';
 
-const getIcon = (markType: MarkType): Node => {
-  if (process.env.BROWSER) {
-    return iconsHashMap[markType] || defaultIcon;
-  }
-  return <div>[*]</div>;
-};
+const getIcon = (markType: MarkType): Node => (
+  iconsHashMap[markType] || defaultIcon
+);
 
 class MarkButton extends PureComponent<PropsType> {
-  
-  handleClick = (evt:SyntheticEvent<HTMLButtonElement>): void => {
-    const { onClick} = this.props;
+  handleClick = (evt: SyntheticEvent<HTMLButtonElement>): void => {
+    const { onClick } = this.props;
     evt.preventDefault();
     log.debug('MarkButton::click', { type: this.props.markType });
     onClick(this.props.markType);
-  }
+  };
 
   render() {
     const { btnNode, markType, active } = this.props;
