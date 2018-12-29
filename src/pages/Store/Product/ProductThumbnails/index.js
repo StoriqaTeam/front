@@ -91,7 +91,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
           {option.image ? (
             <figure
               styleName={classNames('thumbnailContainer', {
-                clicked: isSelected || selected === index,
+                clicked: isSelected && selected === index,
                 disabled: isDisabled,
               })}
             >
@@ -104,7 +104,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
           ) : (
             <div
               styleName={classNames('emptyImg', {
-                clicked: isSelected || selected === index,
+                clicked: isSelected && selected === index,
                 disabled: isDisabled,
               })}
             >

@@ -34,6 +34,8 @@
   margin-top: 3rem;
   color: $color_grey_minor;
   max-width: 60rem;
+  word-wrap: break-word;
+  word-break: break-all;
 }
 
 .line {

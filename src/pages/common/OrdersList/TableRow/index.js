@@ -77,7 +77,7 @@ class TableRow extends PureComponent<PropsType> {
             </span>
           </Col>
           <Col lg={2} xl={1} xlVisible>
-            {rowItem.delivery || '-'}
+            {rowItem.delivery || '—'}
           </Col>
           <Col size={5} sm={4} md={3} lg={2} xl={2}>
             <span styleName="link">
