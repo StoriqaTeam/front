@@ -110,7 +110,7 @@ class HTMLEditor extends Component<PropsType, StateType> {
     return value.inlines.some(inline => inline.type === 'link');
   };
 
-  handleMarkButtonClicked = (type: MarkType) => {
+  handleMarkButtonClicked = (type: MarkType): void => {
     this.editor.toggleMark(type);
   };
 

@@ -59,19 +59,19 @@ const getIcon = (markType: MarkType): Node => {
 };
 
 class MarkButton extends PureComponent<PropsType> {
-  componentDidMount() {
-    //
+  
+  handleClick = (evt:SyntheticEvent<HTMLButtonElement>): void => {
+    const { onClick} = this.props;
+    evt.preventDefault();
+    log.debug('MarkButton::click', { type: this.props.markType });
+    onClick(this.props.markType);
   }
 
   render() {
-    const { onClick, btnNode, markType, active } = this.props;
+    const { btnNode, markType, active } = this.props;
     return (
       <button
-        onClick={event => {
-          event.preventDefault();
-          log.debug('MarkButton::click', { type: this.props.markType });
-          onClick(this.props.markType);
-        }}
+        onClick={this.handleClick}
         styleName={classname('container', {
           isActive: active,
         })}
