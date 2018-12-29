@@ -17,6 +17,7 @@ import {
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { renameKeys } from 'utils/ramda';
 
+import type { CategoryType } from 'types';
 import type {
   FormErrorsType,
   CustomAttributeType,
@@ -46,6 +47,7 @@ type PropsType = {
   router: routerShape,
   match: matchShape,
   environment: Environment,
+  allCategories: Array<CategoryType>,
 };
 
 type StateType = {
@@ -416,7 +418,7 @@ class NewProduct extends Component<PropsType, StateType> {
               customAttributes={customAttributes}
               formErrors={formErrors}
               onSave={this.handleSave}
-              categories={directories.categories}
+              allCategories={this.props.allCategories}
               currencies={directories.currencies}
               onChangeShipping={this.handleChangeShipping}
               onCreateAttribute={this.handleCreateAttribute}
