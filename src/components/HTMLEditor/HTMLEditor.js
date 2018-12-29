@@ -16,6 +16,8 @@ import NodeAligned from './Nodes/NodeAligned';
 
 import './HTMLEditor.scss';
 
+import type { MarkType } from './types';
+
 type PropsType = {
   //
   children: Node,
@@ -24,6 +26,15 @@ type PropsType = {
 type StateType = {
   value: {},
   isReadonly: boolean,
+};
+
+type RenderType = {
+  mark: string,
+  node: string,
+  attributes: {
+    [string]: boolean,
+  },
+  isFocused: boolean,
 };
 
 const tablePlugin = PluginDeepTable();
@@ -140,7 +151,9 @@ class HTMLEditor extends Component<PropsType, StateType> {
           .insertBlock({
             type: 'paragraph',
           });
+
       }, src);
+
     } else if (blockType === 'image') {
       const src = window.prompt('Enter the URL of the image:');
       if (!src) return;
@@ -157,7 +170,9 @@ class HTMLEditor extends Component<PropsType, StateType> {
           .insertBlock({
             type: 'paragraph',
           });
+
       }, src);
+
     } else if (blockType === 'link') {
       if (this.hasLinks()) {
         this.editor.command(editor => {
@@ -177,7 +192,9 @@ class HTMLEditor extends Component<PropsType, StateType> {
           });
 
           editor.moveToEnd();
+
         }, href);
+
       } else {
         const href = window.prompt('Enter the URL of the link:');
 
@@ -201,6 +218,7 @@ class HTMLEditor extends Component<PropsType, StateType> {
             });
 
             editor.moveToEnd();
+
           }, href);
       }
     } else if (this.isAlignBlockType(blockType)) {
@@ -225,7 +243,7 @@ class HTMLEditor extends Component<PropsType, StateType> {
     }
   };
 
-  renderMark = (props, editor, next) => {
+  renderMark = (props: RenderType, editor, next) => {
     const { children, mark, attributes } = props;
 
     switch (mark.type) {
@@ -252,7 +270,7 @@ class HTMLEditor extends Component<PropsType, StateType> {
     }
   };
 
-  renderNode = (props, editor, next) => {
+  renderNode = (props: RenderType, editor, next) => {
     const { attributes, children, node, isFocused } = props;
 
     switch (node.type) {

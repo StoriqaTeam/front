@@ -8,18 +8,7 @@ import MarkButton from './MarkButton';
 
 import './Toolbar.scss';
 
-export type MarkType =
-  | 'bold'
-  | 'italic'
-  | 'underline'
-  | 'h1'
-  | 'h2'
-  | 'h3'
-  | 'h4'
-  | 'align_left'
-  | 'align_center'
-  | 'align_right'
-  | 'image';
+import type { MarkType } from './types';
 
 type PropsType = {
   onMarkButtonClick: (markType: MarkType) => void,

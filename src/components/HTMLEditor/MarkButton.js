@@ -8,8 +8,6 @@ import type { Node, Component } from 'react';
 
 import { log } from 'utils';
 
-import type { MarkType } from './Toolbar';
-
 import AlignCenter from './svg/align-center.svg';
 import AlignLeft from './svg/align-left.svg';
 import AlignRight from './svg/align-right.svg';
@@ -25,6 +23,8 @@ import Underline from './svg/underline.svg';
 import Video from './svg/video.svg';
 
 import './MarkButton.scss';
+
+import type { MarkType } from './types';
 
 type PropsType = {
   markType: MarkType,
