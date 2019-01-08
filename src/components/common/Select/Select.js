@@ -344,11 +344,13 @@ class Select extends Component<PropsType, StateType> {
   handleChangeInput = (e: SyntheticInputEvent<HTMLInputElement>) => {
     const { value } = e.target;
     const { activeItem } = this.props;
+    const items = this.updateItems(value);
     this.setState(
       {
         inputValue: value,
-        items: this.updateItems(value),
+        items,
         isOpenItems: true,
+        hoverItem: length(items) === 1 ? head(items) : null,
       },
       () => {
         const activeItemIdx = this.getIndexFromItems(

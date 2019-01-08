@@ -389,36 +389,44 @@ class OrderPage extends Component<PropsType, StateType> {
                   <Row>
                     <Col size={12} lg={5}>
                       <TextWithLabel
+                        label={t.labelDelivery}
+                        text={order.delivery}
+                      />
+                    </Col>
+                    <Col size={12} lg={7}>
+                      <TextWithLabel
                         label={t.labelDeliveryPrice}
                         text={`${formatPrice(order.deliveryPrice)} STQ`}
                       />
                     </Col>
-                    <Col size={12} lg={7}>
+                  </Row>
+                </div>
+                <div styleName="infoBlockItem">
+                  <Row>
+                    <Col size={12} lg={5}>
                       <TextWithLabel
                         label={t.labelTrackID}
                         text={order.trackId}
                       />
                     </Col>
+                    <Col size={12} lg={7}>
+                      <TextWithLabel
+                        label={t.labelQuantity}
+                        text={`${order.quantity}`}
+                      />
+                    </Col>
                   </Row>
                 </div>
-                {order.couponPrice && (
-                  <div styleName="infoBlockItem">
-                    <Row>
-                      <Col size={12} lg={5}>
-                        <TextWithLabel
-                          label={t.labelCouponDiscount}
-                          text={`−${formatPrice(order.couponPrice)} STQ`}
-                        />
-                      </Col>
-                    </Row>
-                  </div>
-                )}
                 <div styleName="infoBlockItem">
                   <Row>
                     <Col size={12} lg={5}>
                       <TextWithLabel
-                        label={t.labelQuantity}
-                        text={`${order.quantity}`}
+                        label={t.labelCouponDiscount}
+                        text={
+                          order.couponPrice
+                            ? `−${formatPrice(order.couponPrice)} STQ`
+                            : '—'
+                        }
                       />
                     </Col>
                     <Col size={12} lg={7}>
