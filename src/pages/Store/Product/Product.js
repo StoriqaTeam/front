@@ -13,7 +13,6 @@ import {
   dissoc,
   propEq,
   has,
-  prop,
   pathOr,
   find,
 } from 'ramda';
@@ -35,6 +34,7 @@ import {
   makeWidgets,
   filterVariantsByAttributes,
   attributesFromVariants,
+  availableAttributesFromVariants,
   sortByProp,
   isNoSelected,
 } from './utils';
@@ -240,16 +240,7 @@ class Product extends Component<PropsType, StateType> {
     attributeId: string,
     attributeValue: string,
   }): void => {
-    const {
-      selectedAttributes: prevSelectedAttributes,
-      availableAttributes: prevAvailableAttributes,
-    } = this.state;
-
-    const isUnselect = propEq(
-      item.attributeId,
-      item.attributeValue,
-      prevSelectedAttributes,
-    );
+    const { selectedAttributes: prevSelectedAttributes } = this.state;
 
     const selectedAttributes = ifElse(
       propEq(item.attributeId, item.attributeValue),
@@ -268,17 +259,14 @@ class Product extends Component<PropsType, StateType> {
       variants,
     );
 
-    const availableAttributes = attributesFromVariants(matchedVariants);
+    const availableAttributes = availableAttributesFromVariants(
+      selectedAttributes,
+      variants,
+    );
 
     this.setState({
       selectedAttributes,
-      availableAttributes: isUnselect
-        ? availableAttributes
-        : assoc(
-            item.attributeId,
-            prop(item.attributeId, prevAvailableAttributes),
-            availableAttributes,
-          ),
+      availableAttributes,
       // $FlowIgnoreMe
       productVariant: head(matchedVariants),
       isAddToCart: false,

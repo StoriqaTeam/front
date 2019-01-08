@@ -33,13 +33,43 @@ type StateType = {
 
 class ProductMaterial extends Component<PropsType, StateType> {
   handleSelect = (selected: SelectItemType): void => {
-    this.props.onSelect({
-      attributeId: this.props.id,
-      attributeValue: selected.label,
-    });
+    const { selectedValue } = this.props;
+    if (!selected.id) {
+      if (!selectedValue) {
+        return;
+      }
+      this.props.onSelect({
+        attributeId: this.props.id,
+        attributeValue: selectedValue,
+      });
+    } else {
+      this.props.onSelect({
+        attributeId: this.props.id,
+        attributeValue: selected.label,
+      });
+    }
   };
   render() {
     const { title, options, isOnSelected } = this.props;
+
+    const items = filter(
+      item => contains(item.label, this.props.availableValues),
+      map(
+        item => ({
+          id: item.label,
+          label: item.label,
+        }),
+        sortBy(prop('label'), options),
+      ),
+    );
+
+    const activeItem = this.props.selectedValue
+      ? {
+          id: this.props.selectedValue,
+          label: this.props.selectedValue,
+        }
+      : { id: 'placeholder', label: 'Choose item' };
+
     return (
       <div styleName="container">
         <div id={title} styleName={classNames('title', { isOnSelected })}>
@@ -48,24 +78,9 @@ class ProductMaterial extends Component<PropsType, StateType> {
         {isNil(options) ? null : (
           <Select
             forForm
-            activeItem={
-              this.props.selectedValue
-                ? {
-                    id: this.props.selectedValue,
-                    label: this.props.selectedValue,
-                  }
-                : { id: 'placeholder', label: 'Choose item' }
-            }
-            items={filter(
-              item => contains(item.label, this.props.availableValues),
-              map(
-                item => ({
-                  id: item.label,
-                  label: item.label,
-                }),
-                sortBy(prop('label'), options),
-              ),
-            )}
+            withEmpty
+            activeItem={activeItem}
+            items={items}
             onSelect={this.handleSelect}
             fullWidth
             dataTest="productMaterialSelect"
