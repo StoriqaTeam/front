@@ -591,11 +591,16 @@ const routes = (
             />
             <Route
               path="/product/new"
-              Component={({ me }) => <NewProduct me={me} />}
+              Component={({ me, allCategories }) => (
+                <NewProduct me={me} allCategories={allCategories} />
+              )}
               query={graphql`
                 query routes_NewProduct_Query {
                   me {
                     ...NewProduct_me
+                  }
+                  allCategories {
+                    ...Form_allCategories
                   }
                 }
               `}
@@ -619,6 +624,9 @@ const routes = (
                   me {
                     id
                     ...EditProduct_me @arguments(productId: $productID)
+                  }
+                  allCategories {
+                    ...Form_allCategories
                   }
                 }
               `}
