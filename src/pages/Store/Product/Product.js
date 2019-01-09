@@ -259,6 +259,10 @@ class Product extends Component<PropsType, StateType> {
       variants,
     );
 
+    if (isEmpty(matchedVariants)) {
+      return;
+    }
+
     const availableAttributes = availableAttributesFromVariants(
       selectedAttributes,
       variants,

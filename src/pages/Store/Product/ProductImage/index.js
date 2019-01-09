@@ -11,7 +11,7 @@ import { ImageZoom } from 'components/ImageZoom';
 import BannerLoading from 'components/Banner/BannerLoading';
 import ImageLoader from 'libs/react-image-loader';
 
-import { ProductThumbnails, ProductDiscount } from '../index';
+import { ProductVariantThumbnails, ProductDiscount } from '../index';
 
 import { makeAdditionalPhotos } from '../utils';
 
@@ -106,7 +106,7 @@ class ProductImage extends Component<PropsType, StateType> {
         >
           {hasThumbnails ? (
             <div styleName="thumbnailsContent">
-              <ProductThumbnails
+              <ProductVariantThumbnails
                 isFirstSelected
                 isReset={isEmpty(selected)}
                 onClick={this.handleClick}
