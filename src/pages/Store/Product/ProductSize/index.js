@@ -45,7 +45,7 @@ class ProductSize extends PureComponent<PropsType> {
                 }}
                 styleName={`size ${
                   option.label === this.props.selectedValue ? 'clicked' : ''
-                }`}
+                } ${!available ? 'disabled' : ''}`}
               >
                 {option.label}
                 {!available || separator() ? (

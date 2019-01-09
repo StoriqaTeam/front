@@ -139,6 +139,7 @@ class Product extends Component<PropsType, StateType> {
         quantity: 0,
         preOrder: false,
         preOrderDays: 0,
+        attributes: [],
       },
       unselectedAttr: null,
       selectedAttributes: {},
