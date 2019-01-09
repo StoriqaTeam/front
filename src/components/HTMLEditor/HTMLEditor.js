@@ -267,6 +267,8 @@ class HTMLEditor extends Component<PropsType, StateType> {
     const { attributes, children, node, isFocused } = props;
 
     switch (node.type) {
+      case 'paragraph':
+        return <p {...attributes}>{children}</p>;
       case 'h1':
         return <h1 {...attributes}>{children}</h1>;
       case 'h2':
