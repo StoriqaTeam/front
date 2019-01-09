@@ -275,6 +275,8 @@ class HTMLEditor extends Component<PropsType, StateType> {
         return <h3 {...attributes}>{children}</h3>;
       case 'h4':
         return <h4 {...attributes}>{children}</h4>;
+      case 'h5':
+        return <h5 {...attributes}>{children}</h5>;
       case 'align_left':
         return <NodeAligned {...props} align="left" />;
       case 'align_center':
