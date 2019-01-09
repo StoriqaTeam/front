@@ -1,8 +1,26 @@
 // @flow strict
 
-import React from 'react';
+import React, { Component } from 'react';
 
-class Video extends React.Component {
+type PropsType = {
+  isFocused: boolean,
+  isSelected: boolean,
+  attributes: {
+    [string]: boolean,
+  },
+  editor: {
+    // $FlowIgnoreMe
+    setNodeByKey: (string, { [string]: string }) => any,
+  },
+  node: {
+    key: string,
+    data: {
+      get: string => string,
+    },
+  },
+};
+
+class Video extends Component<PropsType> {
   onChange = e => {
     const video = e.target.value;
     const { node, editor } = this.props;
