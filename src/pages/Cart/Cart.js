@@ -201,6 +201,7 @@ export default createPaginationContainer(
                 id
                 isShippingAvailable
               }
+              quantity
             }
           }
         }

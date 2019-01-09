@@ -6,6 +6,7 @@ import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
   buyNow: string,
+  preOrder: string,
   addToCart: string,
   viewCart: string,
   youMustSelectAnAttribute: string,
@@ -15,6 +16,7 @@ type TranslationsBundleType = Translation<TranslationDicType>;
 const translations: TranslationsBundleType = {
   en: {
     buyNow: 'Buy now',
+    preOrder: 'Pre-order',
     addToCart: 'Add to cart',
     viewCart: 'View cart',
     youMustSelectAnAttribute: 'You must select an attribute(s): ',
