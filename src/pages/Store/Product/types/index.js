@@ -98,6 +98,10 @@ export type ProductVariantType = {
   quantity: number,
   preOrder: boolean,
   preOrderDays: number,
+  attributes: Array<{
+    value: string,
+    metaField: ?string,
+  }>,
 };
 
 export type SelectionType = {

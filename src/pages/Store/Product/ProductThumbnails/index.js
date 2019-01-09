@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { isEmpty, isNil } from 'ramda';
+import { isEmpty, isNil, contains, find, propEq } from 'ramda';
 import classNames from 'classnames';
 
 import BannerLoading from 'components/Banner/BannerLoading';
@@ -14,7 +14,7 @@ import './ProductThumbnails.scss';
 
 import { sortByProp } from '../utils';
 
-import type { WidgetOptionType } from '../types';
+import type { ProductVariantType, WidgetOptionType } from '../types';
 
 type PropsType = {
   /* eslint-disable react/no-unused-prop-types */
@@ -27,6 +27,7 @@ type PropsType = {
   isOnSelected: boolean,
   availableValues?: Array<string>,
   selectedValue: ?string,
+  productVariant: ProductVariantType,
 };
 
 type StateType = {
@@ -63,37 +64,59 @@ class ProductThumbnails extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { options, row, title, isOnSelected, selectedValue } = this.props;
+    const {
+      options,
+      row,
+      title,
+      isOnSelected,
+      selectedValue,
+      availableValues,
+      productVariant,
+    } = this.props;
 
-    const mapOptions = option => (
-      <button
-        key={`${option.label || option.id}`}
-        data-test={`productThumbail${option.label}`}
-        onClick={() => this.handleClick(option)}
-      >
-        {option.image ? (
-          <figure
-            styleName={classNames('thumbnailContainer', {
-              clicked: option.label === selectedValue,
-            })}
-          >
-            <ImageLoader
-              fit
-              src={convertSrc(option.image, 'medium')}
-              loader={<BannerLoading />}
-            />
-          </figure>
-        ) : (
-          <div
-            styleName={classNames('emptyImg', {
-              clicked: option.label === selectedValue,
-            })}
-          >
-            <Icon type="camera" size={40} />
-          </div>
-        )}
-      </button>
-    );
+    const mapOptions = option => {
+      const productVariantAttribute = find(propEq('value', option.label))(
+        productVariant.attributes,
+      );
+      const img = productVariantAttribute
+        ? productVariantAttribute.metaField
+        : option.image;
+      const isDisabled = availableValues
+        ? !contains(option.label, availableValues)
+        : option.state === 'disabled';
+
+      return (
+        <button
+          key={`${option.label || option.id}`}
+          data-test={`productThumbail${option.label}`}
+          onClick={() => this.handleClick(option)}
+        >
+          {img ? (
+            <figure
+              styleName={classNames('thumbnailContainer', {
+                clicked: option.label === selectedValue,
+                disabled: isDisabled,
+              })}
+            >
+              <ImageLoader
+                fit
+                src={convertSrc(img, 'medium')}
+                loader={<BannerLoading />}
+              />
+            </figure>
+          ) : (
+            <div
+              styleName={classNames('emptyImg', {
+                clicked: option.label === selectedValue,
+                disabled: isDisabled,
+              })}
+            >
+              <Icon type="camera" size={40} />
+            </div>
+          )}
+        </button>
+      );
+    };
 
     return (
       <div
