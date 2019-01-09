@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { isNil, sortBy, prop, map, filter, contains } from 'ramda';
+import { isNil, sortBy, prop, map } from 'ramda';
 import classNames from 'classnames';
 
 import { Select } from 'components/common/Select';
@@ -24,7 +24,6 @@ type PropsType = {
   }) => void,
   selectedValue: ?string,
   isOnSelected: boolean,
-  availableValues: Array<string>,
 };
 
 type StateType = {
@@ -51,18 +50,13 @@ class ProductMaterial extends Component<PropsType, StateType> {
   };
   render() {
     const { title, options, isOnSelected } = this.props;
-
-    const items = filter(
-      item => contains(item.label, this.props.availableValues),
-      map(
-        item => ({
-          id: item.label,
-          label: item.label,
-        }),
-        sortBy(prop('label'), options),
-      ),
+    const items = map(
+      item => ({
+        id: item.label,
+        label: item.label,
+      }),
+      sortBy(prop('label'), options),
     );
-
     const activeItem = this.props.selectedValue
       ? {
           id: this.props.selectedValue,

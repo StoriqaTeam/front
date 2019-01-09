@@ -38,16 +38,14 @@ class ProductSize extends PureComponent<PropsType> {
                 key={`${option.label}`}
                 data-test={`productSize${option.label}`}
                 onClick={() => {
-                  if (available) {
-                    this.props.onClick({
-                      attributeId: this.props.id,
-                      attributeValue: option.label,
-                    });
-                  }
+                  this.props.onClick({
+                    attributeId: this.props.id,
+                    attributeValue: option.label,
+                  });
                 }}
                 styleName={`size ${
                   option.label === this.props.selectedValue ? 'clicked' : ''
-                } ${!available ? 'disabled' : ''}`}
+                }`}
               >
                 {option.label}
                 {!available || separator() ? (

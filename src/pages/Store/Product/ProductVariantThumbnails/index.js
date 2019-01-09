@@ -10,7 +10,7 @@ import { convertSrc } from 'utils';
 
 import { Icon } from 'components/Icon';
 
-import './ProductThumbnails.scss';
+import './ProductVariantThumbnails.scss';
 
 import { sortByProp } from '../utils';
 
@@ -33,7 +33,7 @@ type StateType = {
   selected: ?number,
 };
 
-class ProductThumbnails extends Component<PropsType, StateType> {
+class ProductVariantThumbnails extends Component<PropsType, StateType> {
   static getDerivedStateFromProps(
     nextProps: PropsType,
     prevState: StateType,
@@ -55,26 +55,29 @@ class ProductThumbnails extends Component<PropsType, StateType> {
   };
 
   state = {
-    selected: null, // eslint-disable-line
+    selected: null,
   };
 
-  handleClick = (option: WidgetOptionType): void => {
-    this.props.onClick(option);
+  handleClick = (option: WidgetOptionType, index: number): void => {
+    this.setState({ selected: index }, () => {
+      this.props.onClick(option);
+    });
   };
 
   render() {
-    const { options, row, title, isOnSelected, selectedValue } = this.props;
+    const { options, row, title, isOnSelected } = this.props;
+    const { selected } = this.state;
 
-    const mapOptions = option => (
+    const mapOptions = (option, index) => (
       <button
         key={`${option.label || option.id}`}
         data-test={`productThumbail${option.label}`}
-        onClick={() => this.handleClick(option)}
+        onClick={() => this.handleClick(option, index)}
       >
         {option.image ? (
           <figure
             styleName={classNames('thumbnailContainer', {
-              clicked: option.label === selectedValue,
+              clicked: selected === index,
             })}
           >
             <ImageLoader
@@ -86,7 +89,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
         ) : (
           <div
             styleName={classNames('emptyImg', {
-              clicked: option.label === selectedValue,
+              clicked: selected === index,
             })}
           >
             <Icon type="camera" size={40} />
@@ -115,4 +118,4 @@ class ProductThumbnails extends Component<PropsType, StateType> {
   }
 }
 
-export default ProductThumbnails;
+export default ProductVariantThumbnails;

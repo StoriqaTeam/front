@@ -122,7 +122,11 @@ class Select extends Component<PropsType, StateType> {
       withInput !== true &&
       JSON.stringify(items) !== JSON.stringify(prevProps.items)
     ) {
-      this.updateStateItems(items);
+      if (prevProps.withEmpty === true) {
+        this.updateStateItems(prepend({ id: '', label: '-' }, items));
+      } else {
+        this.updateStateItems(items);
+      }
     }
     if (
       withInput === true &&
