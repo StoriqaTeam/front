@@ -1,6 +1,7 @@
 // @flow strict
 
 import React, { PureComponent } from 'react';
+import punycode from 'punycode';
 
 import classNames from 'classnames';
 
@@ -114,7 +115,11 @@ class Input extends PureComponent<PropsType, StateType> {
    * @return {void}
    */
   handleChange = (evt: { target: { name: string, value: string } }): void => {
-    const { name, value } = evt.target;
+    const { name } = evt.target;
+    let { value } = evt.target;
+    if (name === 'email') {
+      value = punycode.toUnicode(value).replace(/[^\w-/@/.]/g, '');
+    }
     this.validate(name, value);
 
     this.setState({

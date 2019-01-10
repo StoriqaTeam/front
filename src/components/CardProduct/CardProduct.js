@@ -47,17 +47,25 @@ type PropsType = {
         text: string,
       }>,
     },
+    priceUsd: ?number,
   },
   isSearchPage: boolean,
-  priceUsd: ?number,
 };
 
 class CardProduct extends PureComponent<PropsType> {
   render() {
     const {
-      item: { rawId, storeId, name, products, currency, rating, store },
+      item: {
+        rawId,
+        storeId,
+        name,
+        products,
+        currency,
+        rating,
+        store,
+        priceUsd,
+      },
       isSearchPage,
-      priceUsd,
     } = this.props;
     let discount = null;
     let photoMain = null;
