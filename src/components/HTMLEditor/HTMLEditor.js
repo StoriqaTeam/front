@@ -73,6 +73,8 @@ const schema = {
   },
 };
 
+const DEFAULT_NODE = 'paragraph';
+
 class HTMLEditor extends Component<PropsType, StateType> {
   state = {
     value: initialValue,
@@ -121,6 +123,22 @@ class HTMLEditor extends Component<PropsType, StateType> {
     return value.inlines.some(inline => inline.type === 'link');
   };
 
+  /**
+   * Check if the current selection has a mark with `type` in it.
+   */
+  hasMark = type => {
+    const { value } = this.state;
+    return value.activeMarks.some(mark => mark.type === type);
+  };
+
+  /**
+   * Check if the any of the currently selected blocks are of `type`.
+   */
+  hasBlock = type => {
+    const { value } = this.state;
+    return value.blocks.some(node => node.type === type);
+  };
+
   handleMarkButtonClicked = (type: MarkType): void => {
     this.editor.toggleMark(type);
   };
@@ -130,12 +148,49 @@ class HTMLEditor extends Component<PropsType, StateType> {
       node => node.type === blockType,
     );
 
+    // // Handle everything but list buttons.
+    // if (blockType !== 'bulleted-list' && blockType !== 'numbered-list') {
+    //   console.log('no list');
+    //   const isList = this.hasBlock('list-item');
+
+    //   if (isList) {
+    //     this.editor
+    //       .setBlocks(isActive ? DEFAULT_NODE : blockType)
+    //       .unwrapBlock('bulleted-list')
+    //       .unwrapBlock('numbered-list');
+    //   } else {
+    //     this.editor.setBlocks(isActive ? DEFAULT_NODE : blockType);
+    //   }
+    // } else {
+    //   // Handle the extra wrapping required for list buttons.
+    //   const isList = this.hasBlock('list-item');
+    //   const isType = this.editor.value.blocks.some(block =>
+    //     !!this.editor.value.document.getClosest(block.key, parent => parent.type === blockType)
+    //   );
+
+    //   if (isList && isType) {
+    //     this.editor
+    //       .setBlocks(DEFAULT_NODE)
+    //       .unwrapBlock('bulleted-list')
+    //       .unwrapBlock('numbered-list');
+    //   } else if (isList) {
+    //     this.editor
+    //       .unwrapBlock(
+    //         blockType === 'bulleted-list' ? 'numbered-list' : 'bulleted-list'
+    //       )
+    //       .wrapBlock(blockType);
+    //   } else {
+    //     this.editor.setBlocks('list-item').wrapBlock(blockType);
+    //   }
+    // }
+
     if (blockType === 'table') {
       this.onChange(this.editor.insertTable());
       this.editor.insertBlock({
         type: 'paragraph',
       });
     } else if (blockType === 'video') {
+      // eslint-disable-next-line
       const src = window.prompt('Enter the id(!) of the youtube video:');
       if (!src) return;
       this.editor.command((editor, _src, target) => {
@@ -153,6 +208,7 @@ class HTMLEditor extends Component<PropsType, StateType> {
           });
       }, src);
     } else if (blockType === 'image') {
+      // eslint-disable-next-line
       const src = window.prompt('Enter the URL of the image:');
       if (!src) return;
       this.editor.command((editor, _src, target) => {
@@ -175,27 +231,29 @@ class HTMLEditor extends Component<PropsType, StateType> {
           editor.unwrapInline('link');
         });
       } else if (this.state.value.selection.isExpanded) {
+        // eslint-disable-next-line
         const href = window.prompt('Enter the URL of the link:');
 
         if (href === null) {
           return;
         }
 
-        this.editor.command((editor, href) => {
+        this.editor.command((editor, _href) => {
           editor.wrapInline({
             type: 'link',
-            data: { href },
+            data: { href: _href },
           });
 
           editor.moveToEnd();
         }, href);
       } else {
+        // eslint-disable-next-line
         const href = window.prompt('Enter the URL of the link:');
 
         if (href === null) {
           return;
         }
-
+        // eslint-disable-next-line
         const text = window.prompt('Enter the text for the link:');
 
         if (text === null) {
@@ -205,10 +263,10 @@ class HTMLEditor extends Component<PropsType, StateType> {
         this.editor
           .insertText(text)
           .moveFocusBackward(text.length)
-          .command((editor, href) => {
+          .command((editor, _href) => {
             editor.wrapInline({
               type: 'link',
-              data: { href },
+              data: { href: _href },
             });
 
             editor.moveToEnd();
@@ -279,6 +337,10 @@ class HTMLEditor extends Component<PropsType, StateType> {
         return <h4 {...attributes}>{children}</h4>;
       case 'h5':
         return <h5 {...attributes}>{children}</h5>;
+      case 'bulleted-list':
+        return <ul {...attributes}>{children}</ul>;
+      case 'list-item':
+        return <li {...attributes}>{children}</li>;
       case 'align_left':
         return <NodeAligned {...props} align="left" />;
       case 'align_center':

@@ -16,6 +16,7 @@ import Bold from './svg/bold.svg';
 import Image from './svg/image.svg';
 import Italic from './svg/italic.svg';
 import Link from './svg/link.svg';
+import List from './svg/list.svg';
 import Table from './svg/table.svg';
 import TextColor from './svg/text-color.svg';
 import Text from './svg/text.svg';
@@ -42,6 +43,7 @@ const iconsHashMap: { [MarkType]: Component<*> } = {
   image: <Image />,
   italic: <Italic />,
   link: <Link />,
+  'bulleted-list': <List />,
   table: <Table />,
   text: <Text />,
   textColor: <TextColor />,
