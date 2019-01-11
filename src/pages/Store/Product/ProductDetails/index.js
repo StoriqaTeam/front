@@ -189,7 +189,6 @@ class ProductDetails extends Component<PropsType, StateType> {
             </div>
             <ProductPrice {...productVariant} priceUsd={priceUsd} />
             <p styleName="productDescription">{productDescription}</p>
-            <div styleName="line" />
             <Delivery
               userAddress={userAddress}
               baseProductRawId={baseProductRawId}

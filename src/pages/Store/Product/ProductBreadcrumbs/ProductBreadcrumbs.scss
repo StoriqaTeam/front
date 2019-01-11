@@ -1,12 +1,14 @@
 @import "../../../../styles/variables";
 
 .container {
-  display: none;
   margin-top: 2rem;
-  // padding-left: 2rem;
 
-  @media (min-width: $lg) {
-    display: block;
+  @media (max-width: #{$lg - 1px}) {
+    padding: 0 2rem;
+  }
+
+  @media (max-width: #{$md - 1px}) {
+    display: none;
   }
 
   .item {
@@ -18,9 +20,7 @@
     .separator {
       margin: 0 1rem;
     }
-
   }
-
 }
 
 .active {

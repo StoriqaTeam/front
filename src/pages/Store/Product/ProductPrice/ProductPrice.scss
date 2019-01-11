@@ -81,9 +81,11 @@
 
 .discountPrice {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   margin-top: 1rem;
   font-size: 26px;
+  line-height: 4rem;
 
   @media (max-width: #{$md - 1px}) {
     display: block;
@@ -96,10 +98,13 @@
   text-transform: uppercase;
 }
 
+.basePrice {
+  margin-right: 1rem;
+}
+
 .currencyPrice {
   display: flex;
   align-items: baseline;
-  margin-left: 1rem;
 
   @media (max-width: #{$md - 1px}) {
     margin-left: 0;

@@ -26,7 +26,6 @@ import { AddInCartMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { extractText, isEmpty, log, convertCountries } from 'utils';
 import { productViewTracker, addToCartTracker } from 'rrHalper';
-import { StickyBar } from 'components/StickyBar';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
@@ -40,7 +39,6 @@ import {
 } from './utils';
 
 import {
-  ImageDetail,
   ProductBreadcrumbs,
   ProductButtons,
   ProductContext,
@@ -431,13 +429,11 @@ class Product extends Component<PropsType, StateType> {
               ) : null}
               <div styleName="productContent">
                 <Row>
-                  <Col sm={12} md={12} lg={6} xl={6}>
-                    <StickyBar>
-                      <ProductImage {...productVariant} />
-                      <ImageDetail />
-                    </StickyBar>
+                  <Col sm={12} md={7} lg={7} xl={7}>
+                    <ProductImage {...productVariant} />
+                    {this.makeTabs(longDescription)}
                   </Col>
-                  <Col sm={12} md={12} lg={6} xl={6}>
+                  <Col sm={12} md={5} lg={5} xl={5}>
                     <div styleName="detailsWrapper">
                       <ProductDetails
                         productTitle={extractText(name)}
@@ -478,7 +474,6 @@ class Product extends Component<PropsType, StateType> {
                   </Col>
                 </Row>
               </div>
-              {this.makeTabs(longDescription)}
             </div>
           </ProductContext.Provider>
         )}
