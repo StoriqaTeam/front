@@ -149,40 +149,7 @@ class HTMLEditor extends Component<PropsType, StateType> {
     );
 
     // // Handle everything but list buttons.
-    // if (blockType !== 'bulleted-list' && blockType !== 'numbered-list') {
-    //   console.log('no list');
-    //   const isList = this.hasBlock('list-item');
-
-    //   if (isList) {
-    //     this.editor
-    //       .setBlocks(isActive ? DEFAULT_NODE : blockType)
-    //       .unwrapBlock('bulleted-list')
-    //       .unwrapBlock('numbered-list');
-    //   } else {
-    //     this.editor.setBlocks(isActive ? DEFAULT_NODE : blockType);
-    //   }
-    // } else {
-    //   // Handle the extra wrapping required for list buttons.
-    //   const isList = this.hasBlock('list-item');
-    //   const isType = this.editor.value.blocks.some(block =>
-    //     !!this.editor.value.document.getClosest(block.key, parent => parent.type === blockType)
-    //   );
-
-    //   if (isList && isType) {
-    //     this.editor
-    //       .setBlocks(DEFAULT_NODE)
-    //       .unwrapBlock('bulleted-list')
-    //       .unwrapBlock('numbered-list');
-    //   } else if (isList) {
-    //     this.editor
-    //       .unwrapBlock(
-    //         blockType === 'bulleted-list' ? 'numbered-list' : 'bulleted-list'
-    //       )
-    //       .wrapBlock(blockType);
-    //   } else {
-    //     this.editor.setBlocks('list-item').wrapBlock(blockType);
-    //   }
-    // }
+    
 
     if (blockType === 'table') {
       this.onChange(this.editor.insertTable());
@@ -289,10 +256,43 @@ class HTMLEditor extends Component<PropsType, StateType> {
       } else {
         this.editor.wrapBlock(blockType);
       }
+    } else if (blockType !== 'bulleted-list' && blockType !== 'numbered-list') {
+  
+      const isList = this.hasBlock('list-item');
+
+      if (isList) {
+        this.editor
+          .setBlocks(isActive ? DEFAULT_NODE : blockType)
+          .unwrapBlock('bulleted-list')
+          .unwrapBlock('numbered-list');
+      } else {
+        this.editor.setBlocks(isActive ? DEFAULT_NODE : blockType);
+      }
     } else {
+      // Handle the extra wrapping required for list buttons.
+      const isList = this.hasBlock('list-item');
+      const isType = this.editor.value.blocks.some(block =>
+        !!this.editor.value.document.getClosest(block.key, parent => parent.type === blockType)
+      );
+
+      if (isList && isType) {
+        this.editor
+          .setBlocks(DEFAULT_NODE)
+          .unwrapBlock('bulleted-list')
+          .unwrapBlock('numbered-list');
+      } else if (isList) {
+        this.editor
+          .unwrapBlock(
+            blockType === 'bulleted-list' ? 'numbered-list' : 'bulleted-list'
+          )
+          .wrapBlock(blockType);
+      } else {
+        this.editor.setBlocks('list-item').wrapBlock(blockType);
+      }
+    } /* else {
       this.editor.setBlocks(isActive ? 'paragraph' : blockType);
-    }
-  };
+    } */
+  }
 
   renderMark = (props: RenderType, editor, next) => {
     const { children, mark, attributes } = props;
