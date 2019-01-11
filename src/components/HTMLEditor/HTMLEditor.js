@@ -290,9 +290,7 @@ class HTMLEditor extends Component<PropsType, StateType> {
       } else {
         this.editor.setBlocks('list-item').wrapBlock(blockType);
       }
-    } /* else {
-      this.editor.setBlocks(isActive ? 'paragraph' : blockType);
-    } */
+    }
   };
 
   renderMark = (props: RenderType, editor, next) => {
@@ -339,9 +337,9 @@ class HTMLEditor extends Component<PropsType, StateType> {
       case 'h5':
         return <h5 {...attributes}>{children}</h5>;
       case 'bulleted_list':
-        return <ul {...attributes}>{children}</ul>;
+        return <ul styleName="list" {...attributes}>{children}</ul>;
       case 'numbered_list':
-        return <ol {...attributes}>{children}</ol>;
+        return <ol styleName="list" {...attributes}>{children}</ol>;
       case 'list-item':
         return <li {...attributes}>{children}</li>;
       case 'align_left':

@@ -44,3 +44,13 @@
   margin-bottom: 2.75rem;
   text-transform: uppercase;
 }
+
+.list {
+  padding-left: 2rem;
+}
+
+ol.list {
+  li {
+    list-style-type: decimal;
+  }
+}
