@@ -13,13 +13,14 @@ import AlignJustify from './svg/align-justify.svg';
 import AlignLeft from './svg/align-left.svg';
 import AlignRight from './svg/align-right.svg';
 import Bold from './svg/bold.svg';
+import BulletedList from './svg/bulleted-list.svg';
 import Image from './svg/image.svg';
 import Italic from './svg/italic.svg';
 import Link from './svg/link.svg';
-import List from './svg/list.svg';
+import NumberedList from './svg/numbered-list.svg';
 import Table from './svg/table.svg';
-import TextColor from './svg/text-color.svg';
 import Text from './svg/text.svg';
+import TextColor from './svg/text-color.svg';
 import Underline from './svg/underline.svg';
 import Video from './svg/video.svg';
 
@@ -40,10 +41,11 @@ const iconsHashMap: { [MarkType]: Component<*> } = {
   align_left: <AlignLeft />,
   align_right: <AlignRight />,
   bold: <Bold />,
+  bulleted_list: <BulletedList />,
   image: <Image />,
   italic: <Italic />,
   link: <Link />,
-  'bulleted-list': <List />,
+  numbered_list: <NumberedList />,
   table: <Table />,
   text: <Text />,
   textColor: <TextColor />,

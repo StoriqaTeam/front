@@ -190,7 +190,8 @@ class Toolbar extends Component<PropsType, StateType> {
         {this.renderBlockButton('align_center')}
         {this.renderBlockButton('align_right')}
         {this.renderBlockButton('align_justify')}
-        {this.renderBlockButton('bulleted-list')}
+        {this.renderBlockButton('bulleted_list')}
+        {this.renderBlockButton('numbered_list')}
         {this.renderBlockButton('link')}
         {this.renderBlockButton('image')}
         {this.renderBlockButton('video')}
