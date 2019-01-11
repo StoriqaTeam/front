@@ -303,7 +303,7 @@ class Form extends Component<PropsType, StateType> {
         longDescription: JSON.stringify(value),
       },
     });
-  }
+  };
 
   writeSlug = (slugValue: string) => {
     this.setState((prevState: StateType) =>
@@ -484,10 +484,9 @@ class Form extends Component<PropsType, StateType> {
             limit: 170,
             required: true,
           })}
-          <pre>{JSON.stringify(this.state.form.longDescription, null, 2)}</pre>
-          <HTMLEditor 
-            onChange={this.handleLongDescription}
-          />
+          <HTMLEditor
+            content={this.state.form.longDescription}
+            onChange={this.handleLongDescription} />
           <div styleName="buttonsPanel">
             <div styleName="saveButton">
               <Button

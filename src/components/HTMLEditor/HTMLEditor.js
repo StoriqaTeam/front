@@ -2,10 +2,14 @@
 
 import React, { Component } from 'react';
 import type { Node } from 'react';
+ // @FlowIgnoreMe
 import { Editor } from 'slate-react';
+ // @FlowIgnoreMe
 import { Value } from 'slate';
 import { contains } from 'ramda';
 import PluginDeepTable from 'slate-deep-table';
+
+import { isJson } from 'utils';
 
 import Toolbar from './Toolbar';
 import NodeVideo from './Nodes/NodeVideo';
@@ -20,7 +24,8 @@ import type { MarkType } from './types';
 
 type PropsType = {
   // @FlowIgnoreMe
-  onChange: (any) => any,
+  onChange: any => any,
+  content: string,
   children: Node,
 };
 
@@ -42,7 +47,8 @@ const tablePlugin = PluginDeepTable();
 
 const plugins = [tablePlugin];
 
-const initialValue = Value.fromJSON({
+const initialValue = (val: string) => (
+  Value.fromJSON({
   document: {
     nodes: [
       {
@@ -53,7 +59,7 @@ const initialValue = Value.fromJSON({
             object: 'text',
             leaves: [
               {
-                text: '',
+                text: val,
               },
             ],
           },
@@ -61,7 +67,8 @@ const initialValue = Value.fromJSON({
       },
     ],
   },
-});
+})
+);
 
 const schema = {
   blocks: {
@@ -81,10 +88,15 @@ class HTMLEditor extends Component<PropsType, StateType> {
     onChange: () => {},
   };
 
-  state = {
-    value: initialValue,
-    isReadonly: false,
-  };
+  constructor(props) {
+    super(props);
+    const { content } = props;
+    this.state = {
+      value: !isJson(content) ? initialValue(content) : Value.fromJSON(JSON.parse(content)),
+      isReadonly: false,
+    };
+  }
+  
 
   onInsertTable = () => {
     this.handleChange(this.editor.insertTable());
@@ -452,7 +464,7 @@ class HTMLEditor extends Component<PropsType, StateType> {
           placeholder="Enter some text..."
           readOnly={this.state.isReadonly}
         />
-        <button
+        {/* <button
           onClick={() => {
             const stringData = JSON.stringify(this.state.value.toJSON());
             localStorage.setItem('editor_data', stringData);
@@ -480,7 +492,7 @@ class HTMLEditor extends Component<PropsType, StateType> {
           }}
         >
           Toggle readonly
-        </button>
+        </button> */}
       </div>
     );
   }
