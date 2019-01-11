@@ -456,6 +456,9 @@ const routes = (
               cart {
                 ...UserDataTotalLocalFragment
               }
+              allCategories {
+                ...ThirdForm_allCategories
+              }
             }
           `}
           Component={Wizard}

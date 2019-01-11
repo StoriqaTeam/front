@@ -942,6 +942,7 @@ class Form extends Component<PropsType, StateType> {
                 {this.renderInput({
                   id: 'name',
                   label: t.labelProductName,
+                  limit: 150,
                   required: true,
                 })}
               </div>
