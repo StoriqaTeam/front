@@ -295,6 +295,16 @@ class Form extends Component<PropsType, StateType> {
     this.setState(assocPath(['form', 'cover'], '', this.state));
   };
 
+  handleLongDescription = value => {
+    const { form } = this.state;
+    this.setState({
+      form: {
+        ...form,
+        longDescription: JSON.stringify(value),
+      },
+    });
+  }
+
   writeSlug = (slugValue: string) => {
     this.setState((prevState: StateType) =>
       assocPath(['form', 'slug'], slugValue, prevState),
@@ -474,7 +484,10 @@ class Form extends Component<PropsType, StateType> {
             limit: 170,
             required: true,
           })}
-          <HTMLEditor />
+          <pre>{JSON.stringify(this.state.form.longDescription, null, 2)}</pre>
+          <HTMLEditor 
+            onChange={this.handleLongDescription}
+          />
           <div styleName="buttonsPanel">
             <div styleName="saveButton">
               <Button

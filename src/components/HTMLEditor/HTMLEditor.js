@@ -19,7 +19,8 @@ import './HTMLEditor.scss';
 import type { MarkType } from './types';
 
 type PropsType = {
-  //
+  // @FlowIgnoreMe
+  onChange: (any) => any,
   children: Node,
 };
 
@@ -76,41 +77,48 @@ const schema = {
 const DEFAULT_NODE = 'paragraph';
 
 class HTMLEditor extends Component<PropsType, StateType> {
+  static defaultProps = {
+    onChange: () => {},
+  };
+
   state = {
     value: initialValue,
     isReadonly: false,
   };
 
-  onChange = ({ value }) => {
-    this.setState({ value });
-  };
-
   onInsertTable = () => {
-    this.onChange(this.editor.insertTable());
+    this.handleChange(this.editor.insertTable());
   };
 
   onInsertColumn = () => {
-    this.onChange(this.editor.insertColumn());
+    this.handleChange(this.editor.insertColumn());
   };
 
   onInsertRow = () => {
-    this.onChange(this.editor.insertRow());
+    this.handleChange(this.editor.insertRow());
   };
 
   onRemoveColumn = () => {
-    this.onChange(this.editor.removeColumn());
+    this.handleChange(this.editor.removeColumn());
   };
 
   onRemoveRow = () => {
-    this.onChange(this.editor.removeRow());
+    this.handleChange(this.editor.removeRow());
   };
 
   onRemoveTable = () => {
-    this.onChange(this.editor.removeTable());
+    this.handleChange(this.editor.removeTable());
   };
 
   onToggleHeaders = () => {
-    this.onChange(this.editor.toggleTableHeaders());
+    this.handleChange(this.editor.toggleTableHeaders());
+  };
+
+  handleChange = ({ value }) => {
+    const { onChange } = this.props;
+    this.setState({ value }, () => {
+      onChange(value);
+    });
   };
 
   editor = null;
@@ -149,7 +157,7 @@ class HTMLEditor extends Component<PropsType, StateType> {
     );
 
     if (blockType === 'table') {
-      this.onChange(this.editor.insertTable());
+      this.handleChange(this.editor.insertTable());
       this.editor.insertBlock({
         type: 'paragraph',
       });
@@ -337,9 +345,17 @@ class HTMLEditor extends Component<PropsType, StateType> {
       case 'h5':
         return <h5 {...attributes}>{children}</h5>;
       case 'bulleted_list':
-        return <ul styleName="list" {...attributes}>{children}</ul>;
+        return (
+          <ul styleName="list" {...attributes}>
+            {children}
+          </ul>
+        );
       case 'numbered_list':
-        return <ol styleName="list" {...attributes}>{children}</ol>;
+        return (
+          <ol styleName="list" {...attributes}>
+            {children}
+          </ol>
+        );
       case 'list-item':
         return <li {...attributes}>{children}</li>;
       case 'align_left':
@@ -417,7 +433,7 @@ class HTMLEditor extends Component<PropsType, StateType> {
           autoFocus
           schema={schema}
           value={this.state.value}
-          onChange={this.onChange}
+          onChange={this.handleChange}
           ref={ref => {
             this.editor = ref;
             if (ref) {
@@ -448,7 +464,7 @@ class HTMLEditor extends Component<PropsType, StateType> {
         <button
           onClick={() => {
             const jsonData = JSON.parse(localStorage.getItem('editor_data'));
-            this.onChange({
+            this.handleChange({
               value: Value.fromJSON(jsonData),
             });
           }}
