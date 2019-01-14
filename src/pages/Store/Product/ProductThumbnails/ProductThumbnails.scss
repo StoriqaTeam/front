@@ -18,9 +18,11 @@
 }
 
 .thumbnailContainer {
-  height: 10rem;
+  height: 5rem;
   position: relative;
-  width: 10rem;
+  width: 5rem;
+  border-radius: 1rem;
+  overflow: hidden;
 
   img[src] {
     height: 100%;
@@ -31,7 +33,6 @@
 
   &.clicked {
     position: relative;
-    border-radius: 0.5rem;
     overflow: hidden;
 
     &:before {
@@ -42,17 +43,23 @@
       right: 0;
       bottom: 0;
       border: 2px solid $color_blue;
+      border-radius: 1rem;
       z-index: 1;
     }
   }
 }
 
+.button {
+  //
+}
+
 .thumbnails {
   display: flex;
+  margin-top: -2rem;
 }
 
 .title {
-  margin: 4rem 0 3rem;
+  margin: 4rem 0 2rem;
   font-size: 14px;
   letter-spacing: 1.2px;
   text-transform: uppercase;
@@ -64,6 +71,7 @@
 
 .column {
   flex-flow: column;
+
   button {
     margin-bottom: 1rem;
   }
@@ -71,8 +79,11 @@
 
 .row {
   flex-flow: row;
+  flex-wrap: wrap;
+
   button {
     margin-right: 2rem;
+    margin-top: 2rem;
   }
 }
 
@@ -83,13 +94,14 @@
 
 .emptyImg {
   position: relative;
-  height: 10rem;
-  width: 10rem;
+  height: 5rem;
+  width: 5rem;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: $color_grey_trivial;
-  border-radius: 0.5rem;
+  border: 1px solid $color_grey_light;
+  border-radius: 1rem;
 
   &.clicked {
     border: 0.25rem solid $color_blue;

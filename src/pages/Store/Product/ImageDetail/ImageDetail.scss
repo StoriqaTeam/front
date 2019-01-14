@@ -5,8 +5,9 @@
   display: none;
   font-size: 13px;
   letter-spacing: 0.1px;
-  padding: 1rem;
+  padding: 1.5rem;
   text-align: center;
+
   @media (min-width: $md) {
     display: block;
   }

@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 import { isEmpty, isNil, contains, find, propEq } from 'ramda';
 import classNames from 'classnames';
 
-import BannerLoading from 'components/Banner/BannerLoading';
 import ImageLoader from 'libs/react-image-loader';
 import { convertSrc } from 'utils';
 
@@ -88,10 +87,11 @@ class ProductThumbnails extends Component<PropsType, StateType> {
       return (
         <button
           key={`${option.label || option.id}`}
+          styleName="button"
           data-test={`productThumbail${option.label}`}
           onClick={() => this.handleClick(option)}
         >
-          {img ? (
+          {option.image ? (
             <figure
               styleName={classNames('thumbnailContainer', {
                 clicked: option.label === selectedValue,
@@ -101,7 +101,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
               <ImageLoader
                 fit
                 src={convertSrc(img, 'medium')}
-                loader={<BannerLoading />}
+                loader={<div />}
               />
             </figure>
           ) : (
@@ -111,7 +111,7 @@ class ProductThumbnails extends Component<PropsType, StateType> {
                 disabled: isDisabled,
               })}
             >
-              <Icon type="camera" size={40} />
+              <Icon type="camera" size={24} />
             </div>
           )}
         </button>

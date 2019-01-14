@@ -1,8 +1,17 @@
 // @flow strict
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { head, pathOr, find, propEq, map, length, whereEq } from 'ramda';
+import {
+  head,
+  pathOr,
+  find,
+  propEq,
+  map,
+  length,
+  whereEq,
+  isEmpty,
+} from 'ramda';
 import classname from 'classnames';
 
 import { Select, SpinnerCircle } from 'components/common';
@@ -14,6 +23,8 @@ import type { DeliveryAddress, DeliveryDataType, PackageType } from '../types';
 
 import CheckedIcon from './img/checked.svg';
 import './Delivery.scss';
+
+import t from './i18n';
 
 type StateType = {
   isFetching: boolean,
@@ -187,7 +198,7 @@ class Delivery extends Component<PropsType, StateType> {
     return (
       <div styleName="container">
         <div styleName="title">
-          <strong>Delivery</strong>
+          <strong>{t.delivery}</strong>
         </div>
         <div styleName="selectsWrapper">
           <div styleName="chooseCountry">
@@ -203,23 +214,23 @@ class Delivery extends Component<PropsType, StateType> {
                 dataTest="productDeliveryCountrySelect"
               />
             </div>
+            {isFetching && (
+              <div styleName="loading">
+                <SpinnerCircle
+                  additionalStyles={{
+                    width: '3rem',
+                    height: '3rem',
+                  }}
+                  containerStyles={{
+                    marginLeft: '3rem',
+                    marginTop: '3rem',
+                  }}
+                />
+              </div>
+            )}
           </div>
           <div styleName="chooseDeliveryCompany">
             <div styleName="select">
-              {isFetching && (
-                <div styleName="loading">
-                  <SpinnerCircle
-                    additionalStyles={{
-                      width: '3rem',
-                      height: '3rem',
-                    }}
-                    containerStyles={{
-                      marginLeft: '3rem',
-                      marginTop: '3rem',
-                    }}
-                  />
-                </div>
-              )}
               {!isFetching &&
                 deliveryPackages instanceof Array &&
                 deliveryPackages.length > 0 && (
@@ -253,11 +264,13 @@ class Delivery extends Component<PropsType, StateType> {
                             /* eslint-enable */
                           >
                             <div styleName="companyNameRow">
-                              <CheckedIcon
-                                styleName={classname('checked', {
+                              <div
+                                styleName={classname('checkedIcon', {
                                   hidden: !isChecked,
                                 })}
-                              />
+                              >
+                                <CheckedIcon />
+                              </div>
                               <div styleName="companyNameWrap">
                                 <div
                                   styleName={classname('companyName', {
@@ -267,7 +280,7 @@ class Delivery extends Component<PropsType, StateType> {
                                   {isChecked === true ? (
                                     <strong>{pkgType.name}</strong>
                                   ) : (
-                                    pkgType.name
+                                    <span>{pkgType.name}</span>
                                   )}
                                 </div>
                                 <div
@@ -288,21 +301,29 @@ class Delivery extends Component<PropsType, StateType> {
             </div>
           </div>
         </div>
+        {country &&
+          !isFetching &&
+          isEmpty(deliveryPackages) && (
+            <div styleName="notShipping">{t.sellerDoesNotShip}</div>
+          )}
         {deliveryPackage && (
-          <div key={deliveryPackage.id} styleName="deliveryPackage">
-            <div styleName="logoWrapper">
-              {deliveryPackage.logo !== null &&
-                deliveryPackage.logo !== '' && (
-                  <img src={deliveryPackage.logo} alt="" styleName="logo" />
-                )}
-            </div>
-            <div styleName="textWrapper">
-              <div styleName="pkgName">Price</div>
-              <div styleName="pkgPrice">
-                {formatPrice(deliveryPackage.price)} STQ
+          <Fragment>
+            <div key={deliveryPackage.id} styleName="deliveryPackage">
+              <div styleName="logoWrapper">
+                {deliveryPackage.logo !== null &&
+                  deliveryPackage.logo !== '' && (
+                    <img src={deliveryPackage.logo} alt="" styleName="logo" />
+                  )}
+              </div>
+              <div styleName="textWrapper">
+                <div styleName="pkgName">{t.price}</div>
+                <div styleName="pkgPrice">
+                  {formatPrice(deliveryPackage.price)} STQ
+                </div>
               </div>
             </div>
-          </div>
+            <div styleName="warning">{t.warning}</div>
+          </Fragment>
         )}
       </div>
     );

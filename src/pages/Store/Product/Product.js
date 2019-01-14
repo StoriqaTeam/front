@@ -18,6 +18,7 @@ import {
 } from 'ramda';
 import { Environment } from 'relay-runtime';
 import smoothscroll from 'libs/smoothscroll';
+import MediaQuery from 'libs/react-responsive';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { AppContext, Page } from 'components/App';
@@ -26,7 +27,6 @@ import { AddInCartMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { extractText, isEmpty, log, convertCountries } from 'utils';
 import { productViewTracker, addToCartTracker } from 'rrHalper';
-import { StickyBar } from 'components/StickyBar';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
@@ -40,7 +40,6 @@ import {
 } from './utils';
 
 import {
-  ImageDetail,
   ProductBreadcrumbs,
   ProductButtons,
   ProductContext,
@@ -431,13 +430,13 @@ class Product extends Component<PropsType, StateType> {
               ) : null}
               <div styleName="productContent">
                 <Row>
-                  <Col sm={12} md={12} lg={6} xl={6}>
-                    <StickyBar>
-                      <ProductImage {...productVariant} />
-                      <ImageDetail />
-                    </StickyBar>
+                  <Col sm={12} md={7} lg={7} xl={7}>
+                    <ProductImage {...productVariant} />
+                    <MediaQuery minWidth={768}>
+                      {this.makeTabs(longDescription)}
+                    </MediaQuery>
                   </Col>
-                  <Col sm={12} md={12} lg={6} xl={6}>
+                  <Col sm={12} md={5} lg={5} xl={5}>
                     <div styleName="detailsWrapper">
                       <ProductDetails
                         productTitle={extractText(name)}
@@ -474,11 +473,13 @@ class Product extends Component<PropsType, StateType> {
                         <div styleName="line" />
                         <ProductStore />
                       </ProductDetails>
+                      <MediaQuery maxWidth={767}>
+                        {this.makeTabs(longDescription)}
+                      </MediaQuery>
                     </div>
                   </Col>
                 </Row>
               </div>
-              {this.makeTabs(longDescription)}
             </div>
           </ProductContext.Provider>
         )}
