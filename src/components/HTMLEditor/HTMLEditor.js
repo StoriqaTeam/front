@@ -1,10 +1,9 @@
-// @flow strict
-
+// @flow
 import React, { Component } from 'react';
 import type { Node } from 'react';
- // @FlowIgnoreMe
+// @FlowIgnoreMe
 import { Editor } from 'slate-react';
- // @FlowIgnoreMe
+// @FlowIgnoreMe
 import { Value } from 'slate';
 import { contains } from 'ramda';
 import PluginDeepTable from 'slate-deep-table';
@@ -27,6 +26,8 @@ type PropsType = {
   onChange: any => any,
   content: string,
   children: Node,
+  readOnly: boolean,
+  noHeight?: boolean,
 };
 
 type StateType = {
@@ -47,28 +48,27 @@ const tablePlugin = PluginDeepTable();
 
 const plugins = [tablePlugin];
 
-const initialValue = (val: string) => (
+const initialValue = (val: string) =>
   Value.fromJSON({
-  document: {
-    nodes: [
-      {
-        object: 'block',
-        type: 'paragraph',
-        nodes: [
-          {
-            object: 'text',
-            leaves: [
-              {
-                text: val,
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-})
-);
+    document: {
+      nodes: [
+        {
+          object: 'block',
+          type: 'paragraph',
+          nodes: [
+            {
+              object: 'text',
+              leaves: [
+                {
+                  text: val,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  });
 
 const schema = {
   blocks: {
@@ -86,17 +86,20 @@ const DEFAULT_NODE = 'paragraph';
 class HTMLEditor extends Component<PropsType, StateType> {
   static defaultProps = {
     onChange: () => {},
+    readOnly: false,
+    noHeight: undefined,
   };
 
   constructor(props) {
     super(props);
     const { content } = props;
     this.state = {
-      value: !isJson(content) ? initialValue(content) : Value.fromJSON(JSON.parse(content)),
+      value: !isJson(content)
+        ? initialValue(content)
+        : Value.fromJSON(JSON.parse(content)),
       isReadonly: false,
     };
   }
-  
 
   onInsertTable = () => {
     this.handleChange(this.editor.insertTable());
@@ -419,11 +422,12 @@ class HTMLEditor extends Component<PropsType, StateType> {
   );
 
   render() {
+    const { readOnly, noHeight } = this.props;
     const { value } = this.state;
     const isTable = this.editor && this.editor.isSelectionInTable(value);
 
     let toolbar = null;
-    if (!this.state.isReadonly) {
+    if (!this.state.isReadonly && !readOnly) {
       toolbar = isTable ? (
         this.renderTableToolbar()
       ) : (
@@ -437,9 +441,6 @@ class HTMLEditor extends Component<PropsType, StateType> {
 
     return (
       <div styleName="editor">
-        <h3 styleName="title">
-          <strong>Shop Editor</strong>
-        </h3>
         {toolbar}
         <Editor
           autoFocus
@@ -453,16 +454,16 @@ class HTMLEditor extends Component<PropsType, StateType> {
             }
           }}
           style={{
-            border: '1px solid lightgray',
-            height: '500px',
-            padding: '2rem',
+            border: readOnly ? 'none' : '1px solid lightgray',
+            height: noHeight ? 'auto' : '500px',
+            padding: readOnly ? '0' : '2rem',
             overflowY: 'scroll',
           }}
           renderMark={this.renderMark}
           renderNode={this.renderNode}
           plugins={plugins}
           placeholder="Enter some text..."
-          readOnly={this.state.isReadonly}
+          readOnly={this.state.isReadonly || readOnly}
         />
         {/* <button
           onClick={() => {

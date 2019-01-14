@@ -297,6 +297,7 @@ class Form extends Component<PropsType, StateType> {
 
   handleLongDescription = value => {
     const { form } = this.state;
+
     this.setState({
       form: {
         ...form,
@@ -484,9 +485,14 @@ class Form extends Component<PropsType, StateType> {
             limit: 170,
             required: true,
           })}
+
+          <h3 styleName="title">
+            <strong>Shop Editor</strong>
+          </h3>
           <HTMLEditor
             content={this.state.form.longDescription}
-            onChange={this.handleLongDescription} />
+            onChange={this.handleLongDescription}
+          />
           <div styleName="buttonsPanel">
             <div styleName="saveButton">
               <Button
