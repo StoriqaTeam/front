@@ -632,7 +632,6 @@ class Authorization extends Component<PropsType, StateType> {
       selected,
       isRecoverPassword,
     } = this.state;
-    console.log('---this.state', this.state);
     return (
       <PopUpWrapper
         title={modalTitle}
