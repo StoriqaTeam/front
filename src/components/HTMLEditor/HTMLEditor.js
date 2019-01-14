@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import type { Node } from 'react';
+import classNames from 'classnames';
 // @FlowIgnoreMe
 import { Editor } from 'slate-react';
 // @FlowIgnoreMe
@@ -439,7 +440,7 @@ class HTMLEditor extends Component<PropsType, StateType> {
     }
 
     return (
-      <div styleName="editor">
+      <div styleName={classNames('editor', { readOnly })}>
         {toolbar}
         <Editor
           autoFocus
