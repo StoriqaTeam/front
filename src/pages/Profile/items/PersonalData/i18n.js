@@ -38,7 +38,7 @@ const translations: TranslationsBundleType = {
     labelGender: 'Gender',
     labelBirthdate: 'Birthday',
     labelPhone: 'Phone',
-    labelRefLink: 'Referal link',
+    labelRefLink: 'Referral link',
     copied: 'Copied',
   },
 };
