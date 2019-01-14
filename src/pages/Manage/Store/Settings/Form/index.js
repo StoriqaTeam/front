@@ -24,6 +24,7 @@ import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import ModerationStatus from 'pages/common/ModerationStatus';
+import { HTMLEditor } from 'components/HTMLEditor';
 
 import { uploadFile, convertSrc } from 'utils';
 
@@ -95,12 +96,12 @@ class Form extends Component<PropsType, StateType> {
     if (store) {
       this.state = {
         form: {
-          // $FlowIgnoreMe
-          name: pathOr('', ['name', 0, 'text'], store),
-          // $FlowIgnoreMe
-          longDescription: pathOr('', ['longDescription', 0, 'text'], store),
-          // $FlowIgnoreMe
-          shortDescription: pathOr('', ['shortDescription', 0, 'text'], store),
+          // $FlowIgnore
+          name: pathOr('', ['name', 0, 'text'])(store),
+          // $FlowIgnore
+          longDescription: pathOr('', ['longDescription', 0, 'text'])(store),
+          // $FlowIgnore
+          shortDescription: pathOr('', ['shortDescription', 0, 'text'])(store),
           defaultLanguage: store.defaultLanguage || 'EN',
           slug: store.slug || '',
           cover: store.cover || '',
@@ -297,6 +298,17 @@ class Form extends Component<PropsType, StateType> {
     this.setState(assocPath(['form', 'cover'], '', this.state));
   };
 
+  handleLongDescription = value => {
+    const { form } = this.state;
+
+    this.setState({
+      form: {
+        ...form,
+        longDescription: JSON.stringify(value),
+      },
+    });
+  };
+
   writeSlug = (slugValue: string) => {
     this.setState((prevState: StateType) =>
       assocPath(['form', 'slug'], slugValue, prevState),
@@ -476,11 +488,14 @@ class Form extends Component<PropsType, StateType> {
             limit: 170,
             required: true,
           })}
-          {this.renderTextarea({
-            id: 'longDescription',
-            label: t.labelLongDescription,
-            required: true,
-          })}
+
+          <h3 styleName="title">
+            <strong>Shop Editor</strong>
+          </h3>
+          <HTMLEditor
+            content={this.state.form.longDescription}
+            onChange={this.handleLongDescription}
+          />
           <div styleName="buttonsPanel">
             <div styleName="saveButton">
               <Button
