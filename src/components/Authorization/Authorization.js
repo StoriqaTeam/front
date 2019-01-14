@@ -22,6 +22,8 @@ import {
   fromRelayError,
   errorsHandler,
   removeCookie,
+  setCookie,
+  getCookie,
   jwt as JWT,
 } from 'utils';
 
@@ -107,6 +109,10 @@ class Authorization extends Component<PropsType, StateType> {
   };
   constructor(props) {
     super(props);
+
+    const isRegistered = getCookie('registered');
+    const indexByRegistered = isRegistered === 'true' ? 1 : 0;
+
     this.state = {
       email: '',
       emailValid: false,
@@ -124,7 +130,7 @@ class Authorization extends Component<PropsType, StateType> {
       password: '',
       passwordValid: false,
       passwordRepeat: '',
-      selected: this.props.isSignUp && !this.props.isLogin ? 0 : 1,
+      selected: this.props.isSignUp ? 0 : indexByRegistered,
     };
     if (process.env.BROWSER) {
       document.addEventListener('keydown', this.handleKeydown);
@@ -205,6 +211,7 @@ class Authorization extends Component<PropsType, StateType> {
         removeCookie('REFERAL');
         removeCookie('REFERER');
         removeCookie('UTM_MARKS');
+        setCookie('registered', true);
         const { onCloseModal } = this.props;
         if (onCloseModal) {
           onCloseModal();
@@ -265,6 +272,7 @@ class Authorization extends Component<PropsType, StateType> {
           const expirationDate = date;
           expirationDate.setDate(today.getDate() + 14);
           JWT.setJWT(jwtStr);
+          setCookie('registered', true);
           if (this.props.handleLogin) {
             this.props.handleLogin();
             if (from && from !== '') {
@@ -582,9 +590,9 @@ class Authorization extends Component<PropsType, StateType> {
       password,
       formValid,
       errors,
-      isSignUp,
+      selected,
     } = this.state;
-    return isSignUp ? (
+    return selected === 0 ? (
       <SignUp
         email={email}
         firstName={firstName}

@@ -15,7 +15,7 @@ const ImageDetail = () => (
     <span styleName="zoom">
       <Zoom />
     </span>
-    {isMobileBrowser() ? t.touchAndDrag : t.moveYourMouse} {t.toSeeTheDetails}
+    {isMobileBrowser() ? t.touchAndDrag : t.moveYourMouse}
   </p>
 );
 

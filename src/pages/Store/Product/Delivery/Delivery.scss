@@ -16,21 +16,18 @@
 .selectsWrapper {
   display: flex;
 
-  @media (max-width: #{$sm - 1px}) {
+  @media (max-width: #{$xl - 1px}) {
     display: block;
+    max-width: 42rem;
   }
 }
 
 .chooseCountry {
+  position: relative;
   flex: 0.5;
 
   .select {
     width: 100%;
-    margin-bottom: 4rem;
-
-    @media (max-width: #{$sm - 1px}) {
-      margin-bottom: 6rem;
-    }
   }
 }
 
@@ -38,9 +35,8 @@
   flex: 0.5;
   margin-left: 2rem;
 
-  @media (max-width: #{$sm - 1px}) {
+  @media (max-width: #{$xl - 1px}) {
     margin-left: 0;
-    margin-bottom: 6rem;
   }
 }
 
@@ -52,10 +48,12 @@
   cursor: pointer;
 
   .companyNameRow {
-    display: flex;
+    //display: flex;
 
-    .checked {
-      margin-top: 1rem;
+    .checkedIcon {
+      position: absolute;
+      left: 0.5rem;
+      top: 2.25rem;
 
       &.hidden {
         visibility: hidden;
@@ -63,6 +61,7 @@
     }
 
     .companyNameWrap {
+      position: relative;
       margin-left: 1rem;
 
       .selected {
@@ -75,6 +74,10 @@
         font-size: 14px;
         font-weight: 500;
         color: $color_grey;
+        width: calc(100% - 1px);
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
       }
 
       .price {
@@ -130,7 +133,7 @@
   display: flex;
   background-color: $color_grey_trivial;
   border-radius: 0.5rem;
-  height: 8.75rem;
+  margin-top: 2rem;
   padding: 2rem;
 
   .logoWrapper {
@@ -162,8 +165,14 @@
 
 .loading {
   position: absolute;
+  top: 0;
+  right: -4rem;
   background-color: rgba(255, 255, 255, 0.5);
   z-index: 20;
+
+  @media (max-width: #{$xl - 1px}) {
+    top: -2.5rem;
+  }
 }
 
 .notShippingText {
@@ -178,4 +187,19 @@
   align-items: center;
   color: $color_red;
   font-size: 1.5rem;
+}
+
+.notShipping {
+  position: absolute;
+  top: 100%;
+  margin-top: 0.5rem;
+  font-size: 12px;
+  color: $color_pink;
+}
+
+.warning {
+  margin-top: 1rem;
+  font-size: 12px;
+  line-height: 2rem;
+  color: $color_grey_minor;
 }

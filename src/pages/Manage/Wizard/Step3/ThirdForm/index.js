@@ -1,6 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
+import { createFragmentContainer, graphql } from 'react-relay';
 import { map, pathOr, whereEq, filter, isEmpty } from 'ramda';
 
 import { findCategory } from 'utils';
@@ -16,7 +17,7 @@ import AttributesForm from '../AttributesForm';
 import type { AttrValueType } from '../AttributesForm';
 import type { BaseProductNodeType } from '../../Wizard';
 
-import './Form.scss';
+import './ThirdForm.scss';
 
 import t from './i18n';
 
@@ -37,6 +38,7 @@ type PropsType = {
   onSave: (callback: () => void) => void,
   onClose: () => void,
   isSavingInProgress: boolean,
+  allCategories: CategoriesTreeType,
 };
 
 const photoIcons = [
@@ -203,7 +205,13 @@ class ThirdForm extends PureComponent<PropsType> {
   };
 
   render() {
-    const { data, onSave, onClose, isSavingInProgress } = this.props;
+    const {
+      data,
+      onSave,
+      onClose,
+      isSavingInProgress,
+      allCategories,
+    } = this.props;
     // $FlowIgnoreMe
     const categoryId = pathOr(null, ['data', 'categoryId'], this.props);
     return (
@@ -290,7 +298,7 @@ class ThirdForm extends PureComponent<PropsType> {
                     </div>
                     <div styleName="categorySelector">
                       <CategorySelector
-                        categories={this.props.categories}
+                        categories={allCategories}
                         onSelect={id => this.props.onChange({ categoryId: id })}
                         category={{ rawId: data.categoryId }}
                       />
@@ -426,4 +434,60 @@ class ThirdForm extends PureComponent<PropsType> {
   }
 }
 
-export default ThirdForm;
+export default createFragmentContainer(
+  ThirdForm,
+  graphql`
+    fragment ThirdForm_allCategories on Category {
+      name {
+        lang
+        text
+      }
+      children {
+        id
+        rawId
+        parentId
+        level
+        name {
+          lang
+          text
+        }
+        children {
+          id
+          rawId
+          parentId
+          level
+          name {
+            lang
+            text
+          }
+          children {
+            id
+            rawId
+            parentId
+            level
+            name {
+              lang
+              text
+            }
+            getAttributes {
+              id
+              rawId
+              name {
+                text
+                lang
+              }
+              metaField {
+                values
+                translatedValues {
+                  translations {
+                    text
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `,
+);

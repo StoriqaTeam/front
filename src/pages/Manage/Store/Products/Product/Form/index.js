@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
-import { routerShape, matchShape } from 'found';
+import { routerShape, matchShape, withRouter } from 'found';
 import {
   assocPath,
   isEmpty,
@@ -26,6 +26,7 @@ import {
 import { validate } from '@storiqa/shared';
 import classNames from 'classnames';
 import { Environment } from 'relay-runtime';
+import { createFragmentContainer, graphql } from 'react-relay';
 import debounce from 'lodash.debounce';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
@@ -95,7 +96,7 @@ type PropsType = {
   router: routerShape,
   match: matchShape,
   onSave: (form: FormType, isAddVariant?: boolean) => {},
-  categories: Array<CategoryType>,
+  allCategories: Array<CategoryType>,
   currencies: Array<string>,
   onChangeShipping: (shippingData: ?FullShippingType) => void,
   onCreateAttribute: (attribute: GetAttributeType) => void,
@@ -575,10 +576,10 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleSelectedCategory = (categoryId: number) => {
-    const { categories, onResetAttribute } = this.props;
+    const { allCategories, onResetAttribute } = this.props;
     const category = findCategory(
       whereEq({ rawId: parseInt(categoryId, 10) }),
-      categories,
+      allCategories,
     );
     this.setState(
       (prevState: StateType) => ({
@@ -941,6 +942,7 @@ class Form extends Component<PropsType, StateType> {
                 {this.renderInput({
                   id: 'name',
                   label: t.labelProductName,
+                  limit: 150,
                   required: true,
                 })}
               </div>
@@ -995,7 +997,7 @@ class Form extends Component<PropsType, StateType> {
                 <CategorySelector
                   id="categoryId"
                   onlyView={Boolean(baseProduct)}
-                  categories={this.props.categories}
+                  categories={this.props.allCategories}
                   category={baseProduct && baseProduct.category}
                   onSelect={itemId => {
                     this.handleSelectedCategory(itemId);
@@ -1371,5 +1373,61 @@ class Form extends Component<PropsType, StateType> {
   }
 }
 
-// $FlowIgnoreMe
-export default withErrorBoundary(withShowAlert(Form));
+export default createFragmentContainer(
+  // $FlowIgnore
+  withRouter(withErrorBoundary(withShowAlert(Form))),
+  graphql`
+    fragment Form_allCategories on Category {
+      name {
+        lang
+        text
+      }
+      children {
+        id
+        rawId
+        parentId
+        level
+        name {
+          lang
+          text
+        }
+        children {
+          id
+          rawId
+          parentId
+          level
+          name {
+            lang
+            text
+          }
+          children {
+            id
+            rawId
+            parentId
+            level
+            name {
+              lang
+              text
+            }
+            getAttributes {
+              id
+              rawId
+              name {
+                text
+                lang
+              }
+              metaField {
+                values
+                translatedValues {
+                  translations {
+                    text
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `,
+);

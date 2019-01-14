@@ -11,24 +11,27 @@
 }
 
 .counter {
+  display: block;
   margin-top: 2rem;
   align-items: flex-start;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
 
-  @media (min-width: $md) {
+
+  @media (min-width: $lg), (max-width: #{$md - 1px}) {
+    display: flex;
+    justify-content: flex-start;
     align-items: center;
-    flex-direction: row;
     padding: 0;
   }
 }
 
 .stock {
+  display: inline-block;
+  margin-right: 1rem;
   padding-left: 0;
   padding-top: 1rem;
 
-  @media (min-width: $md) {
+  @media (min-width: $lg), (max-width: #{$md - 1px}) {
+    margin-right: 0;
     padding-left: 2rem;
     padding-top: 0;
   }
@@ -39,7 +42,7 @@
   padding-left: 0;
   padding-top: 0;
 
-  @media (min-width: $md) {
+  @media (min-width: $lg), (max-width: #{$md - 1px}) {
     padding-left: 1rem;
   }
 }

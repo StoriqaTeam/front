@@ -10,7 +10,12 @@ import { log } from 'utils';
 import { Rating } from 'components/common/Rating';
 
 import type { CountryType } from 'types';
-import type { WidgetType, DeliveryAddress, DeliveryDataType } from '../types';
+import type {
+  WidgetType,
+  DeliveryAddress,
+  DeliveryDataType,
+  ProductVariantType,
+} from '../types';
 
 import {
   ProductContext,
@@ -48,6 +53,7 @@ type PropsType = {
   countries: Array<CountryType>,
   onChangeDeliveryData: (deliveryData: DeliveryDataType) => void,
   deliveryData: DeliveryDataType,
+  productVariant: ProductVariantType,
 };
 
 class ProductDetails extends Component<PropsType, StateType> {
@@ -78,7 +84,7 @@ class ProductDetails extends Component<PropsType, StateType> {
   isMount = false;
 
   generateWidget = (widget: WidgetType, index: number): Node => {
-    const { unselectedAttr } = this.props;
+    const { unselectedAttr, productVariant } = this.props;
     let WidgetComponent;
     switch (widget.uiElement) {
       case 'CHECKBOX':
@@ -148,6 +154,7 @@ class ProductDetails extends Component<PropsType, StateType> {
               (unselectedAttr && unselectedAttr.indexOf(widget.title) > -1) ||
               false
             }
+            productVariant={productVariant}
           />
         );
         break;
@@ -182,7 +189,6 @@ class ProductDetails extends Component<PropsType, StateType> {
             </div>
             <ProductPrice {...productVariant} priceUsd={priceUsd} />
             <p styleName="productDescription">{productDescription}</p>
-            <div styleName="line" />
             <Delivery
               userAddress={userAddress}
               baseProductRawId={baseProductRawId}

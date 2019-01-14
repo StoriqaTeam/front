@@ -16,11 +16,17 @@ import ProductLayer from '../ProductLayer';
 import FormWrapper from '../../FormWrapper';
 
 import type { BaseProductNodeType } from '../../Wizard';
-import Form from '../Form';
+import ThirdForm from '../ThirdForm';
 
 import './View.scss';
 
 import t from './i18n';
+
+type CategoriesTreeType = {
+  rawId: number,
+  level: number,
+  children: ?Array<CategoriesTreeType>,
+};
 
 type ProductNodeType = {
   id: string,
@@ -60,6 +66,7 @@ type PropsType = {
   formStateData: BaseProductNodeType,
   onChangeEditingProduct: (val: boolean) => void,
   isSavingInProgress: boolean,
+  allCategories: CategoriesTreeType,
 };
 
 type StateType = {
@@ -224,6 +231,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
       onUploadPhoto,
       onSave,
       isSavingInProgress,
+      allCategories,
     } = this.props;
     const { showForm, deleteId, priceUsd } = this.state;
     const productsArr = map(item => item.node, products);
@@ -235,7 +243,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     const mapIndexed = addIndex(map);
     if (showForm) {
       return (
-        <Form
+        <ThirdForm
           data={formStateData}
           categories={this.context.directories.categories}
           onChange={onChange}
@@ -243,6 +251,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
           onSave={onSave}
           onClose={this.handleOnCloseModal}
           isSavingInProgress={isSavingInProgress}
+          allCategories={allCategories}
         />
       );
     }

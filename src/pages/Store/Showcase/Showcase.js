@@ -7,12 +7,14 @@ import axios from 'axios';
 
 import { log } from 'utils';
 
-import { GoodsSlider } from 'components/GoodsSlider';
 import { SearchNoResults } from 'components/SearchNoResults';
+import Goods from 'pages/Start/Goods';
 
 import type { Showcase_shop as ShowcaseShopType } from './__generated__/Showcase_shop.graphql';
 
 import './Showcase.scss';
+
+import t from './i18n';
 
 type StateType = {
   priceUsd: ?number,
@@ -77,13 +79,13 @@ class Showcase extends Component<PropsType, StateType> {
         {viewedProducts &&
           !isEmpty(viewedProducts) && (
             <div styleName="item">
-              <GoodsSlider items={viewedProducts} title="Most Popular" />
+              <Goods items={viewedProducts} title={t.mostPopular} />
             </div>
           )}
         {discountProducts &&
           !isEmpty(discountProducts) && (
             <div styleName="item">
-              <GoodsSlider items={discountProducts} title="Sale" />
+              <Goods items={discountProducts} title={t.sale} />
             </div>
           )}
         {isEmpty(viewedProducts) &&
