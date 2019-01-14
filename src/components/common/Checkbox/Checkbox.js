@@ -48,9 +48,9 @@ class Checkbox extends PureComponent<PropsType> {
           onClick={this.stopPropagation}
         />
         <label htmlFor={id} styleName="label" data-test={dataTestValue}>
-          <span styleName="labelBefore" data-test={dataTestValue} />
+          <span styleName="labelBefore" />
           <span styleName="labelText">{label}</span>
-          <span styleName="labelAfter" data-test={dataTestValue} />
+          <span styleName="labelAfter" />
         </label>
       </div>
     );

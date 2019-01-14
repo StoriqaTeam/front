@@ -11,7 +11,11 @@ import { ImageZoom } from 'components/ImageZoom';
 import BannerLoading from 'components/Banner/BannerLoading';
 import ImageLoader from 'libs/react-image-loader';
 
-import { ProductThumbnails, ProductDiscount } from '../index';
+import {
+  ProductVariantThumbnails,
+  ProductDiscount,
+  ImageDetail,
+} from '../index';
 
 import { makeAdditionalPhotos } from '../utils';
 
@@ -97,8 +101,7 @@ class ProductImage extends Component<PropsType, StateType> {
     const showMobileSlider = !isNil(additionalPhotos) && !isNil(photoMain);
     const hasThumbnails = !isEmpty(additionalPhotos);
     return (
-      <div styleName="container">
-        {discount > 0 ? <ProductDiscount discount={discount} /> : null}
+      <div styleName={classNames('container', { hasThumbnails })}>
         <div
           styleName={
             hasThumbnails ? 'thumbnailsWrapper' : 'noThumbnailsWrapper'
@@ -106,7 +109,7 @@ class ProductImage extends Component<PropsType, StateType> {
         >
           {hasThumbnails ? (
             <div styleName="thumbnailsContent">
-              <ProductThumbnails
+              <ProductVariantThumbnails
                 isFirstSelected
                 isReset={isEmpty(selected)}
                 onClick={this.handleClick}
@@ -123,6 +126,7 @@ class ProductImage extends Component<PropsType, StateType> {
             hasThumbnails,
           })}
         >
+          {discount > 0 ? <ProductDiscount discount={discount} /> : null}
           <div styleName="imageContainer">
             {photoMain || selected ? (
               <ImageZoom>
@@ -161,6 +165,11 @@ class ProductImage extends Component<PropsType, StateType> {
               </div>
             )}
           </div>
+          {Boolean(photoMain || selected) && (
+            <div styleName="imageDetail">
+              <ImageDetail />
+            </div>
+          )}
         </div>
         {showMobileSlider ? (
           <div styleName="imageSlider">

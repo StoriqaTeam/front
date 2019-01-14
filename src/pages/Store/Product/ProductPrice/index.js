@@ -53,7 +53,7 @@ const ProductPrice = ({
               </strong>
             </div>
             <div styleName="discountPrice">
-              <b>
+              <b styleName="basePrice">
                 {formatPrice(item.price)} {item.currencyCode}
               </b>
               {!isNil(priceUsd) && (

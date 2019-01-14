@@ -5,15 +5,20 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  touchAndDrag: string,
-  moveYourMouse: string,
+  delivery: string,
+  price: string,
+  warning: string,
+  sellerDoesNotShip: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    touchAndDrag: 'Touch and drag',
-    moveYourMouse: 'Move your mouse to see the details',
+    delivery: 'Delivery',
+    price: 'Price',
+    warning:
+      'International items may be subject to customs processing and additional charges',
+    sellerDoesNotShip: 'Seller does not ship to selected country',
   },
 };
 

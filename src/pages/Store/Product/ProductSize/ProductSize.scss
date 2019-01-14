@@ -26,6 +26,8 @@
 .sizes {
   align-items: center;
   display: flex;
+  flex-wrap: wrap;
+  margin-top: -0.5rem;
 }
 
 .size {
@@ -39,13 +41,16 @@
   opacity: 1;
   position: relative;
   text-align: center;
+  margin-right: -1px;
+  margin-top: 0.5rem;
 
   & + .size {
-    margin-left: 1rem;
+    //margin-left: -1px;
   }
 
   &.clicked {
     border: 1px solid $color_blue !important;
+    z-index: 1;
   }
 
   &.clicked + button {
