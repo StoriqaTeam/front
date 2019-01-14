@@ -68,6 +68,7 @@ type PropsType = {
   isResetPassword: boolean,
   router: routerShape,
   isLogin: boolean,
+  noPopup?: boolean,
 };
 
 type StateType = {
@@ -110,8 +111,10 @@ class Authorization extends Component<PropsType, StateType> {
   constructor(props) {
     super(props);
 
+    const { noPopup } = props;
     const isRegistered = getCookie('registered');
-    const indexByRegistered = isRegistered === 'true' ? 1 : 0;
+    const selected = this.props.isSignUp ? 0 : 1;
+    const indexByRegistered = isRegistered !== 'true' && noPopup ? 0 : selected;
 
     this.state = {
       email: '',
@@ -126,11 +129,11 @@ class Authorization extends Component<PropsType, StateType> {
       isSignUp: this.props.isSignUp,
       lastName: '',
       lastNameValid: false,
-      modalTitle: this.setModalTitle(),
+      modalTitle: this.setModalTitle(indexByRegistered),
       password: '',
       passwordValid: false,
       passwordRepeat: '',
-      selected: this.props.isSignUp ? 0 : indexByRegistered,
+      selected: indexByRegistered,
     };
     if (process.env.BROWSER) {
       document.addEventListener('keydown', this.handleKeydown);
@@ -157,12 +160,12 @@ class Authorization extends Component<PropsType, StateType> {
     }
   }
 
-  setModalTitle = (): string => {
-    const { isSignUp, isResetPassword } = this.props;
+  setModalTitle = (index: 1 | 0): string => {
+    const { isResetPassword } = this.props;
     if (isResetPassword) {
       return t.recoverPassword;
     }
-    return headerTabsItems[isSignUp ? 0 : 1].name;
+    return headerTabsItems[index].name;
   };
 
   handleAlertOnClick = (): void => {
@@ -629,6 +632,7 @@ class Authorization extends Component<PropsType, StateType> {
       selected,
       isRecoverPassword,
     } = this.state;
+    console.log('---this.state', this.state);
     return (
       <PopUpWrapper
         title={modalTitle}
