@@ -96,8 +96,11 @@ class Form extends Component<PropsType, StateType> {
     if (store) {
       this.state = {
         form: {
+          // $FlowIgnore
           name: pathOr('', ['name', 0, 'text'])(store),
+          // $FlowIgnore
           longDescription: pathOr('', ['longDescription', 0, 'text'])(store),
+          // $FlowIgnore
           shortDescription: pathOr('', ['shortDescription', 0, 'text'])(store),
           defaultLanguage: store.defaultLanguage || 'EN',
           slug: store.slug || '',

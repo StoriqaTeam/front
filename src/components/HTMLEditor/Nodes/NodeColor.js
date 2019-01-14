@@ -1,4 +1,3 @@
-// @flow strict
 import React from 'react';
 
 import type { NodeColorType } from '../types';

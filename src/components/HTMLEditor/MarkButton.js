@@ -1,5 +1,3 @@
-// @flow strict
-
 import React, { PureComponent } from 'react';
 
 import classname from 'classnames';
