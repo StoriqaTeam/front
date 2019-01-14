@@ -48,7 +48,7 @@ import CheckoutHeader from './CheckoutHeader';
 import CheckoutAddress from './CheckoutContent/CheckoutAddress';
 import CheckoutProducts from './CheckoutContent/CheckoutProducts';
 import CheckoutSidebar from './CheckoutSidebar';
-import { PaymentInfo } from './PaymentInfo';
+import { PaymentInfo } from './PaymentInfoFiat';
 import CartStore from '../Cart/CartStore';
 import CartEmpty from '../Cart/CartEmpty';
 import CheckoutContext from './CheckoutContext';
@@ -289,6 +289,23 @@ class Checkout extends Component<PropsType, StateType> {
     this.setState(prevState => ({
       saveAsNewAddress: !prevState.saveAsNewAddress,
     }));
+  };
+
+  handleCheckoutFiat = () => {
+    const {
+      orderInput: { addressFull, receiverName, receiverPhone },
+    } = this.state;
+    console.log(
+      '---addressFull, receiverName, receiverPhone',
+      addressFull,
+      receiverName,
+      receiverPhone,
+    );
+
+    this.setState({
+      invoiceId: 'asdasdasdasdasd',
+    });
+    this.handleChangeStep(3);
   };
 
   handleCheckout = () => {
@@ -540,7 +557,7 @@ class Checkout extends Component<PropsType, StateType> {
                               buttonText={step === 1 ? t.next : t.checkout}
                               isReadyToClick={this.checkReadyToCheckout()}
                               checkoutInProcess={this.state.checkoutInProcess}
-                              onCheckout={this.handleCheckout}
+                              onCheckout={this.handleCheckoutFiat}
                               goToCheckout={this.goToCheckout}
                             />
                           </StickyBar>
