@@ -23,15 +23,11 @@
 }
 
 .chooseCountry {
+  position: relative;
   flex: 0.5;
 
   .select {
     width: 100%;
-    //margin-bottom: 4rem;
-
-    @media (max-width: #{$xl - 1px}) {
-      //margin-bottom: 5rem;
-    }
   }
 }
 
@@ -52,10 +48,12 @@
   cursor: pointer;
 
   .companyNameRow {
-    display: flex;
+    //display: flex;
 
-    .checked {
-      margin-top: 1rem;
+    .checkedIcon {
+      position: absolute;
+      left: 0.5rem;
+      top: 2.25rem;
 
       &.hidden {
         visibility: hidden;
@@ -63,6 +61,7 @@
     }
 
     .companyNameWrap {
+      position: relative;
       margin-left: 1rem;
 
       .selected {
@@ -75,6 +74,10 @@
         font-size: 14px;
         font-weight: 500;
         color: $color_grey;
+        width: calc(100% - 1px);
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
       }
 
       .price {
@@ -162,8 +165,14 @@
 
 .loading {
   position: absolute;
+  top: 0;
+  right: -4rem;
   background-color: rgba(255, 255, 255, 0.5);
   z-index: 20;
+
+  @media (max-width: #{$xl - 1px}) {
+    top: -2.5rem;
+  }
 }
 
 .notShippingText {

@@ -11,9 +11,9 @@
     padding-right: 2rem;
   }
 
-  //@media (max-width: #{$md - 1px}) {
-  //  padding-left: 2rem;
-  //}
+  @media (max-width: #{$md - 1px}) {
+    padding-bottom: 2rem;
+  }
 
   & h2 {
     color: $color_black;

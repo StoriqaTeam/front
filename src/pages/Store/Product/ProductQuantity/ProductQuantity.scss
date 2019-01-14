@@ -16,7 +16,7 @@
   align-items: flex-start;
 
 
-  @media (min-width: $lg) {
+  @media (min-width: $lg), (max-width: #{$md - 1px}) {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -30,7 +30,7 @@
   padding-left: 0;
   padding-top: 1rem;
 
-  @media (min-width: $lg) {
+  @media (min-width: $lg), (max-width: #{$md - 1px}) {
     margin-right: 0;
     padding-left: 2rem;
     padding-top: 0;
@@ -42,7 +42,7 @@
   padding-left: 0;
   padding-top: 0;
 
-  @media (min-width: $lg) {
+  @media (min-width: $lg), (max-width: #{$md - 1px}) {
     padding-left: 1rem;
   }
 }

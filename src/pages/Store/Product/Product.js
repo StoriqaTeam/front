@@ -18,6 +18,7 @@ import {
 } from 'ramda';
 import { Environment } from 'relay-runtime';
 import smoothscroll from 'libs/smoothscroll';
+import MediaQuery from 'libs/react-responsive';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { AppContext, Page } from 'components/App';
@@ -431,7 +432,9 @@ class Product extends Component<PropsType, StateType> {
                 <Row>
                   <Col sm={12} md={7} lg={7} xl={7}>
                     <ProductImage {...productVariant} />
-                    {this.makeTabs(longDescription)}
+                    <MediaQuery minWidth={768}>
+                      {this.makeTabs(longDescription)}
+                    </MediaQuery>
                   </Col>
                   <Col sm={12} md={5} lg={5} xl={5}>
                     <div styleName="detailsWrapper">
@@ -470,6 +473,9 @@ class Product extends Component<PropsType, StateType> {
                         <div styleName="line" />
                         <ProductStore />
                       </ProductDetails>
+                      <MediaQuery maxWidth={767}>
+                        {this.makeTabs(longDescription)}
+                      </MediaQuery>
                     </div>
                   </Col>
                 </Row>

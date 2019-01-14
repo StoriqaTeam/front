@@ -214,23 +214,23 @@ class Delivery extends Component<PropsType, StateType> {
                 dataTest="productDeliveryCountrySelect"
               />
             </div>
+            {isFetching && (
+              <div styleName="loading">
+                <SpinnerCircle
+                  additionalStyles={{
+                    width: '3rem',
+                    height: '3rem',
+                  }}
+                  containerStyles={{
+                    marginLeft: '3rem',
+                    marginTop: '3rem',
+                  }}
+                />
+              </div>
+            )}
           </div>
           <div styleName="chooseDeliveryCompany">
             <div styleName="select">
-              {isFetching && (
-                <div styleName="loading">
-                  <SpinnerCircle
-                    additionalStyles={{
-                      width: '3rem',
-                      height: '3rem',
-                    }}
-                    containerStyles={{
-                      marginLeft: '3rem',
-                      marginTop: '3rem',
-                    }}
-                  />
-                </div>
-              )}
               {!isFetching &&
                 deliveryPackages instanceof Array &&
                 deliveryPackages.length > 0 && (
@@ -264,11 +264,13 @@ class Delivery extends Component<PropsType, StateType> {
                             /* eslint-enable */
                           >
                             <div styleName="companyNameRow">
-                              <CheckedIcon
-                                styleName={classname('checked', {
+                              <div
+                                styleName={classname('checkedIcon', {
                                   hidden: !isChecked,
                                 })}
-                              />
+                              >
+                                <CheckedIcon />
+                              </div>
                               <div styleName="companyNameWrap">
                                 <div
                                   styleName={classname('companyName', {
@@ -278,7 +280,7 @@ class Delivery extends Component<PropsType, StateType> {
                                   {isChecked === true ? (
                                     <strong>{pkgType.name}</strong>
                                   ) : (
-                                    pkgType.name
+                                    <span>{pkgType.name}</span>
                                   )}
                                 </div>
                                 <div

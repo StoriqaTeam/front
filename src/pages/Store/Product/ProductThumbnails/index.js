@@ -4,8 +4,6 @@ import React, { Component } from 'react';
 import { isEmpty, isNil, contains, find, propEq } from 'ramda';
 import classNames from 'classnames';
 
-import { SpinnerCircle } from 'components/common';
-import BannerLoading from 'components/Banner/BannerLoading';
 import ImageLoader from 'libs/react-image-loader';
 import { convertSrc } from 'utils';
 
