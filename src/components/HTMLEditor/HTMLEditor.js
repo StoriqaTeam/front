@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import type { Node } from 'react';
 import classNames from 'classnames';
-// @FlowIgnoreMe
 import { Editor } from 'slate-react';
-// @FlowIgnoreMe
 import { Value } from 'slate';
 import { contains } from 'ramda';
 import PluginDeepTable from 'slate-deep-table';
@@ -22,7 +20,6 @@ import './HTMLEditor.scss';
 import type { MarkType } from './types';
 
 type PropsType = {
-  // @FlowIgnoreMe
   onChange: any => any,
   content: string,
   children: Node,
