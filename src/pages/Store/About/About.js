@@ -2,9 +2,11 @@
 
 import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
-// import xss from 'xss';
+import xss from 'xss';
 import { addressToString, getNameText } from 'utils';
 import { HTMLEditor } from 'components/HTMLEditor';
+import serializer from 'components/HTMLEditor/serializer';
+import { Value } from 'slate';
 
 // import ImageLoader from 'libs/react-image-loader';
 // import BannerLoading from 'components/Banner/BannerLoading';
@@ -52,21 +54,47 @@ class About extends PureComponent<PropsType> {
             {modifLongDescription && (
               <div styleName="item">
                 <div styleName="subtitle">{t.description}</div>
-                {/* <div
+                <pre>
+                  {JSON.stringify(
+                    serializer.serialize(
+                      Value.fromJSON(JSON.parse(modifLongDescription)),
+                    ),
+                  )}
+                </pre>
+                <div
                   styleName="description"
                   // eslint-disable-next-line
                   dangerouslySetInnerHTML={{
-                    __html: xss(`${modifLongDescription}`, {
-                      whiteList: {
-                        img: ['src', 'style', 'sizes', 'srcset'],
-                        br: [],
-                        hr: [],
-                        div: ['style'],
+                    __html: xss(
+                      `${serializer.serialize(
+                        Value.fromJSON(JSON.parse(modifLongDescription)),
+                      )}`,
+                      {
+                        whiteList: {
+                          // img: ['src', 'style', 'sizes', 'srcset'],
+                          iframe: [
+                            'id',
+                            'src',
+                            'height',
+                            'sizes',
+                            'width',
+                            'frameBorder',
+                            'type',
+                          ],
+                          br: [],
+                          hr: [],
+                          div: ['style'],
+                          span: ['style'],
+                          u: ['style'],
+                          ol: ['style'],
+                          ul: ['style'],
+                          code: ['style'],
+                        },
                       },
-                    }),
+                    ),
                   }}
-                /> */}
-                <HTMLEditor noHeight readOnly content={modifLongDescription} />
+                />
+                {/* <HTMLEditor noHeight readOnly content={modifLongDescription} /> */}
               </div>
             )}
           </div>
