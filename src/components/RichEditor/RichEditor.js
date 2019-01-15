@@ -95,7 +95,7 @@ class RichEditor extends Component<PropsType> {
             preview_styles: 'font-size color',
             fontsize_formats: '10px 12px 14px 16px 18px 24px',
             toolbar:
-              'undo redo | bold italic underline | styleselect | alignleft aligncenter alignright | numlist bullist | link media | fontsizeselect forecolor | table',
+              'undo redo | bold italic underline | styleselect | alignleft aligncenter alignright | numlist bullist | link image media | fontsizeselect forecolor | table',
             setup(editor) {
               // set the editor font size
               editor.on('init', () => {
