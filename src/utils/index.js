@@ -38,3 +38,4 @@ export { default as isMobileBrowser } from './isMobileBrowser';
 export { default as vendorCodeGenerator } from './vendorCodeGenerator';
 export { default as jwt } from './jwt';
 export { default as getQueryRefParams } from './getQueryRefParams';
+export { default as isJson } from './isJson';

@@ -2,8 +2,9 @@
 
 import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
-import xss from 'xss';
+// import xss from 'xss';
 import { addressToString, getNameText } from 'utils';
+import { HTMLEditor } from 'components/HTMLEditor';
 
 // import ImageLoader from 'libs/react-image-loader';
 // import BannerLoading from 'components/Banner/BannerLoading';
@@ -47,10 +48,11 @@ class About extends PureComponent<PropsType> {
                 <div>{address}</div>
               </div>
             )}
+
             {modifLongDescription && (
               <div styleName="item">
                 <div styleName="subtitle">{t.description}</div>
-                <div
+                {/* <div
                   styleName="description"
                   // eslint-disable-next-line
                   dangerouslySetInnerHTML={{
@@ -63,7 +65,8 @@ class About extends PureComponent<PropsType> {
                       },
                     }),
                   }}
-                />
+                /> */}
+                <HTMLEditor noHeight readOnly content={modifLongDescription} />
               </div>
             )}
           </div>

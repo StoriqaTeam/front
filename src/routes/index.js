@@ -715,7 +715,7 @@ const routes = (
             return; // eslint-disable-line
           }
           // eslint-disable-next-line
-          return <Component alone {...props} />;
+          return <Component noPopup {...props} />;
         }}
       />
 
