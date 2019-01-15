@@ -4,9 +4,6 @@ import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import xss from 'xss';
 import { addressToString, getNameText } from 'utils';
-import { HTMLEditor } from 'components/HTMLEditor';
-import serializer from 'components/HTMLEditor/serializer';
-import { Value } from 'slate';
 
 // import ImageLoader from 'libs/react-image-loader';
 // import BannerLoading from 'components/Banner/BannerLoading';
@@ -22,15 +19,48 @@ type PropsType = {
 };
 
 class About extends PureComponent<PropsType> {
+  htmlDecode = (input: string) => {
+    const e = document.createElement('div');
+    e.children = input;
+    return e;
+  };
   render() {
     const { shop } = this.props;
     const name = getNameText(shop.name, 'EN');
     const longDescription = getNameText(shop.longDescription, 'EN');
-    const modifLongDescription = longDescription
-      ? longDescription.replace(/\n/g, '<hr />')
-      : null;
     // $FlowIgnoreMe
     const address = addressToString(shop.addressFull);
+    /* eslint-disable no-underscore-dangle */
+    const __html = xss(longDescription, {
+      whiteList: {
+        br: [],
+        hr: [],
+        a: ['style', 'href', 'target', 'rel'],
+        p: ['style'],
+        ol: ['style'],
+        h1: ['style'],
+        h2: ['style'],
+        h3: ['style'],
+        h4: ['style'],
+        h5: ['style'],
+        h6: ['style'],
+        ul: ['style'],
+        li: ['style'],
+        em: ['style'],
+        img: ['src', 'style', 'sizes', 'srcset', 'width', 'height'],
+        sub: ['style'],
+        sup: ['style'],
+        div: ['style'],
+        span: ['style'],
+        strong: ['style'],
+        iframe: ['src', 'style', 'width', 'height'],
+        table: ['style'],
+        tr: ['style'],
+        td: ['style'],
+        tbody: ['style'],
+        thead: ['style'],
+      },
+    });
     return (
       <div styleName="container">
         <div styleName="title">
@@ -50,51 +80,16 @@ class About extends PureComponent<PropsType> {
                 <div>{address}</div>
               </div>
             )}
-
-            {modifLongDescription && (
+            {longDescription && (
               <div styleName="item">
                 <div styleName="subtitle">{t.description}</div>
-                <pre>
-                  {JSON.stringify(
-                    serializer.serialize(
-                      Value.fromJSON(JSON.parse(modifLongDescription)),
-                    ),
-                  )}
-                </pre>
                 <div
                   styleName="description"
                   // eslint-disable-next-line
                   dangerouslySetInnerHTML={{
-                    __html: xss(
-                      `${serializer.serialize(
-                        Value.fromJSON(JSON.parse(modifLongDescription)),
-                      )}`,
-                      {
-                        whiteList: {
-                          // img: ['src', 'style', 'sizes', 'srcset'],
-                          iframe: [
-                            'id',
-                            'src',
-                            'height',
-                            'sizes',
-                            'width',
-                            'frameBorder',
-                            'type',
-                          ],
-                          br: [],
-                          hr: [],
-                          div: ['style'],
-                          span: ['style'],
-                          u: ['style'],
-                          ol: ['style'],
-                          ul: ['style'],
-                          code: ['style'],
-                        },
-                      },
-                    ),
+                    __html,
                   }}
                 />
-                {/* <HTMLEditor noHeight readOnly content={modifLongDescription} /> */}
               </div>
             )}
           </div>

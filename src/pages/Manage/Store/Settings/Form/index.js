@@ -24,7 +24,7 @@ import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import ModerationStatus from 'pages/common/ModerationStatus';
-import { HTMLEditor } from 'components/HTMLEditor';
+import { RichEditor } from 'components/RichEditor';
 
 import { uploadFile, convertSrc } from 'utils';
 
@@ -298,13 +298,13 @@ class Form extends Component<PropsType, StateType> {
     this.setState(assocPath(['form', 'cover'], '', this.state));
   };
 
-  handleLongDescription = value => {
+  handleLongDescription = longDescription => {
     const { form } = this.state;
-
+    console.log('longDescription', longDescription);
     this.setState({
       form: {
         ...form,
-        longDescription: JSON.stringify(value),
+        longDescription,
       },
     });
   };
@@ -492,7 +492,7 @@ class Form extends Component<PropsType, StateType> {
           <h3 styleName="title">
             <strong>Shop Editor</strong>
           </h3>
-          <HTMLEditor
+          <RichEditor
             content={this.state.form.longDescription}
             onChange={this.handleLongDescription}
           />
