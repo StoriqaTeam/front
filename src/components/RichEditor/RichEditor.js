@@ -93,9 +93,16 @@ class RichEditor extends Component<PropsType> {
             min_height: 400,
             plugins: 'textcolor colorpicker link image table media lists',
             preview_styles: 'font-size color',
-            fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
+            fontsize_formats: '10px 12px 14px 16px 18px 24px',
             toolbar:
               'undo redo | bold italic underline | styleselect | alignleft aligncenter alignright | numlist bullist | link media | fontsizeselect forecolor | table',
+            setup(editor) {
+              // set the editor font size
+              editor.on('init', () => {
+                /* eslint-disable no-param-reassign */
+                editor.getBody().style.fontSize = '16px';
+              });
+            },
           }}
         />
       </Fragment>
