@@ -509,7 +509,9 @@ class Select extends Component<PropsType, StateType> {
                           ? hoverItem.id === id
                           : activeItem && activeItem.id === id,
                     })}
-                    data-test={`${dataTest}_item`}
+                    data-test={`${dataTest}_item${
+                      label != null ? `_${label}` : ''
+                    }_${item.label}`}
                   >
                     {item.label}
                   </div>
