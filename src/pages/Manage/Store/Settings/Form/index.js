@@ -300,7 +300,6 @@ class Form extends Component<PropsType, StateType> {
 
   handleLongDescription = longDescription => {
     const { form } = this.state;
-    console.log('longDescription', longDescription);
     this.setState({
       form: {
         ...form,

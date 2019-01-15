@@ -19,11 +19,6 @@ type PropsType = {
 };
 
 class About extends PureComponent<PropsType> {
-  htmlDecode = (input: string) => {
-    const e = document.createElement('div');
-    e.children = input;
-    return e;
-  };
   render() {
     const { shop } = this.props;
     const name = getNameText(shop.name, 'EN');

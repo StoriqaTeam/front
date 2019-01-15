@@ -1,11 +1,12 @@
 // @flow strict
 
 import React, { Component, Fragment } from 'react';
+// $FlowIgnore
 import { Editor } from '@tinymce/tinymce-react';
 import { isEmpty } from 'ramda';
 
 type PropsType = {
-  onChange: () => string,
+  onChange: string => void,
   content: string,
 };
 /* eslint-disable no-unused-vars */
@@ -71,7 +72,7 @@ class RichEditor extends Component<PropsType> {
   static defaultProps = {
     onChange: () => {},
   };
-
+  // $FlowIgnore
   handleEditorChange = e => {
     const { onChange } = this.props;
     const html = e.target.getContent();
