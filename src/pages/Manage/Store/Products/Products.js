@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { pathOr, isEmpty, map, head } from 'ramda';
+import { pathOr, isEmpty, map, head, addIndex } from 'ramda';
 import { withRouter, routerShape } from 'found';
 import { graphql, createPaginationContainer, Relay } from 'react-relay';
 
@@ -133,6 +133,7 @@ class Products extends PureComponent<PropsType> {
       };
       return newItem;
     }, baseProducts);
+    const mapIndexed = addIndex(map);
     return (
       <div styleName="container">
         <ProductsHeader onAdd={this.addProduct} />
@@ -140,14 +141,15 @@ class Products extends PureComponent<PropsType> {
         {isEmpty(products) ? (
           <div styleName="emptyProductsBlock">{t.noProducts}</div>
         ) : (
-          map(
-            item => (
+          mapIndexed(
+            (item, index) => (
               <ProductsTableRow
                 key={item.rawId}
                 item={item}
                 onEdit={this.editProduct}
                 onDelete={this.handleDelete}
                 onCheckbox={this.handleCheckboxClick}
+                index={index}
               />
             ),
             products,
