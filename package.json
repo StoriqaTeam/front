@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "@storiqa/shared": "git+https://stqcommon:Tz-q6qDL%23d3Mz8hm@github.com/StoriqaTeam/libstqfrontend",
+    "@tinymce/tinymce-react": "2.4.0",
     "axios": "0.18.0",
     "body-parser": "1.18.2",
     "classnames": "2.2.5",
@@ -39,10 +40,6 @@
     "redux-thunk": "2.2.0",
     "relay-runtime": "1.5.0-rc.1",
     "resize-observer-polyfill": "1.5.0",
-    "slate": "0.43.7",
-    "slate-deep-table": "0.8.0",
-    "slate-html-serializer": "0.7.33",
-    "slate-react": "0.21.15",
     "smoothscroll-polyfill": "0.4.3",
     "universal-cookie": "2.2.0",
     "universal-cookie-express": "2.1.2",
