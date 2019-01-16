@@ -294,6 +294,15 @@ class Form extends Component<PropsType, StateType> {
       });
   };
 
+  handleError = (error: { message: string }): void => {
+    const { showAlert } = this.props;
+    showAlert({
+      type: 'danger',
+      text: error.message,
+      link: { text: t.close },
+    });
+  };
+
   handleDeleteCover = () => {
     this.setState(assocPath(['form', 'cover'], '', this.state));
   };
@@ -494,6 +503,7 @@ class Form extends Component<PropsType, StateType> {
           <RichEditor
             content={this.state.form.longDescription}
             onChange={this.handleLongDescription}
+            onError={this.handleError}
           />
           <div styleName="buttonsPanel">
             <div styleName="saveButton">

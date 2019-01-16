@@ -5,8 +5,11 @@ import React, { Component, Fragment } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { isEmpty } from 'ramda';
 
+import filePickerCallback from './filePickerCallback';
+
 type PropsType = {
   onChange: string => void,
+  onError: (error: { message: string }) => void,
   content: string,
 };
 /* eslint-disable no-unused-vars */
@@ -71,6 +74,7 @@ const formats = {
 class RichEditor extends Component<PropsType> {
   static defaultProps = {
     onChange: () => {},
+    onError: () => {},
   };
   // $FlowIgnore
   handleEditorChange = e => {
@@ -80,7 +84,7 @@ class RichEditor extends Component<PropsType> {
   };
 
   render() {
-    const { content } = this.props;
+    const { content, onError } = this.props;
     return (
       <Fragment>
         <Editor
@@ -104,6 +108,9 @@ class RichEditor extends Component<PropsType> {
                 editor.getBody().style.fontSize = '16px';
               });
             },
+            file_picker_types: 'image',
+
+            file_picker_callback: filePickerCallback(onError),
           }}
         />
       </Fragment>
