@@ -165,7 +165,7 @@ class Warehouses extends Component<PropsType, StateType> {
                 </div>
                 <div styleName="td tdAddress">
                   <div styleName="address">
-                    {addressToString(addressFull) || t.save}
+                    {addressToString(addressFull) || t.noAddress}
                   </div>
                 </div>
                 <div styleName="td tdQuantity">
