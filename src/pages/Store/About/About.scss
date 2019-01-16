@@ -58,13 +58,22 @@
     }
   }
   
-  ul {
+  ul, ol {
     padding-left: 3rem;
   }
 
-  li {
-    list-style-type: initial;
+  ul {
+    li {
+      list-style-type: disc;
+    }
   }
+
+  ol {
+    li {
+      list-style-type: decimal;
+    }
+  }
+
 }
 
 .banners {
