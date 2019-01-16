@@ -142,14 +142,16 @@ class Products extends PureComponent<PropsType> {
           <div styleName="emptyProductsBlock">{t.noProducts}</div>
         ) : (
           mapIndexed(
+            /* eslint-disable no-return-assign */
             (item, index) => (
+              /* eslint-disable no-plusplus, no-param-reassign, no-return-assign */
               <ProductsTableRow
                 key={item.rawId}
                 item={item}
                 onEdit={this.editProduct}
                 onDelete={this.handleDelete}
                 onCheckbox={this.handleCheckboxClick}
-                index={index}
+                index={(index += 1)}
               />
             ),
             products,

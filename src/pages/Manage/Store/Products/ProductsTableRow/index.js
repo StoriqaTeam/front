@@ -45,7 +45,7 @@ const ProductsTableRow = ({ item, onEdit, onDelete, index }: PropsType) => {
       onKeyDown={() => {}}
       role="button"
       tabIndex="0"
-      data-test="editProductButton"
+      data-test={`productRow_${index}`}
     >
       <Col size={4} sm={4} md={2} lg={2} xl={1}>
         <div styleName="foto">
@@ -116,7 +116,10 @@ const ProductsTableRow = ({ item, onEdit, onDelete, index }: PropsType) => {
       </Col>
       <Col size={4} sm={4} md={3} lg={1} xl={1}>
         <div styleName="buttons">
-          <button styleName="editButton" data-test={`editButton${index}`}>
+          <button
+            styleName="editButton"
+            data-test={`editProductButton_${index}`}
+          >
             <Icon type="note" size={32} />
           </button>
           <button
@@ -124,7 +127,7 @@ const ProductsTableRow = ({ item, onEdit, onDelete, index }: PropsType) => {
             onClick={(e: SyntheticEvent<HTMLButtonElement>) => {
               onDelete(item.id, e);
             }}
-            data-test={`deleteButton${index}`}
+            data-test={`deleteProductButton_${index}`}
           >
             <Icon type="basket" size={32} />
           </button>
