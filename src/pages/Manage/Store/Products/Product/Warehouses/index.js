@@ -173,6 +173,7 @@ class Warehouses extends Component<PropsType, StateType> {
                       type="number"
                       inline
                       fullWidth
+                      dataTest="quantity"
                       value={
                         thisProduct ? storageFocusValue : `${item.quantity}`
                       }
