@@ -329,7 +329,7 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
                 onKeyDown={() => {}}
                 role="button"
                 tabIndex="0"
-                data-test={item.dataTest}
+                data-test={item.title}
               >
                 {item.title}
               </div>
