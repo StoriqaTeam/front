@@ -48,7 +48,7 @@ class About extends PureComponent<PropsType> {
         div: ['class', 'style'],
         span: ['class', 'style'],
         strong: ['class', 'style'],
-        iframe: ['class', 'style', 'src', 'width', 'height'],
+        iframe: ['class', 'style', 'src', 'width', 'height', 'frameborder'],
         table: ['class', 'style'],
         tr: ['class', 'style'],
         td: ['class', 'style'],
