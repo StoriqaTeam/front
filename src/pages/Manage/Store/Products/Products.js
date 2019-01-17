@@ -11,6 +11,7 @@ import { ManageStore } from 'pages/Manage/Store';
 import { getNameText, log, fromRelayError } from 'utils';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Button } from 'components/common/Button';
+import { Modal } from 'components/Modal';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
@@ -31,7 +32,15 @@ type PropsType = {
   me: ProductsMe,
 };
 
-class Products extends PureComponent<PropsType> {
+type StateType = {
+  showModal: boolean,
+};
+
+class Products extends PureComponent<PropsType, StateType> {
+  state = {
+    showModal: false,
+  };
+
   addProduct = () => {
     // $FlowIgnoreMe
     const storeId = pathOr(null, ['match', 'params', 'storeId'], this.props);
@@ -110,12 +119,19 @@ class Products extends PureComponent<PropsType> {
     });
   };
 
+  handleDeleteModal = () => {};
+
+  handleCloseModal = (): void => {
+    this.setState({ showModal: false });
+  };
+
   productsRefetch = () => {
     this.props.relay.loadMore(8);
   };
 
   render() {
     const { me } = this.props;
+    const { showModal } = this.state;
     // $FlowIgnoreMe
     const baseProducts = pathOr([], ['myStore', 'baseProducts', 'edges'], me);
     const products = map(item => {
@@ -138,6 +154,15 @@ class Products extends PureComponent<PropsType> {
       <div styleName="container">
         <ProductsHeader onAdd={this.addProduct} />
         <ProductsTableHeader />
+        <Modal
+          showModal={showModal}
+          onClose={this.handleCloseModal}
+          render={() => (
+            <div>
+              <h1>jasasa</h1>
+            </div>
+          )}
+        />
         {isEmpty(products) ? (
           <div styleName="emptyProductsBlock">{t.noProducts}</div>
         ) : (
