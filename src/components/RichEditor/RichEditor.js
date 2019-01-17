@@ -5,6 +5,7 @@ import React, { Component, Fragment } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { isEmpty } from 'ramda';
 
+import setup from './setup';
 import filePickerCallback from './filePickerCallback';
 
 type PropsType = {
@@ -62,13 +63,7 @@ class RichEditor extends Component<PropsType> {
             fontsize_formats: '10px 12px 14px 16px 18px 24px',
             toolbar:
               'undo redo | bold italic underline | styleselect | alignleft aligncenter alignright | numlist bullist | link image media | fontsizeselect forecolor | table',
-            setup(editor) {
-              // set the editor font size
-              editor.on('init', () => {
-                /* eslint-disable no-param-reassign */
-                editor.getBody().style.fontSize = '16px';
-              });
-            },
+            setup,
             file_picker_types: 'image',
 
             file_picker_callback: filePickerCallback(onError),
