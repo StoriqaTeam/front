@@ -1,3 +1,3 @@
 // @flow
 
-export { default as PaymentInfo } from './PaymentInfoFiat';
+export { default as PaymentInfoFiat } from './PaymentInfoFiat';

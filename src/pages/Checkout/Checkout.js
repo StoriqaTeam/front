@@ -38,6 +38,7 @@ import { transactionTracker } from 'rrHalper';
 import type { AddressFullType } from 'components/AddressAutocomplete/AddressForm';
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { CreateOrdersMutationResponseType } from 'relay/mutations/CreateOrdersMutation';
+import type { OrderStatusType } from 'types';
 
 // eslint-disable-next-line
 import type Cart_cart from '../Cart/__generated__/Cart_cart.graphql';
@@ -48,7 +49,8 @@ import CheckoutHeader from './CheckoutHeader';
 import CheckoutAddress from './CheckoutContent/CheckoutAddress';
 import CheckoutProducts from './CheckoutContent/CheckoutProducts';
 import CheckoutSidebar from './CheckoutSidebar';
-import { PaymentInfo } from './PaymentInfoFiat';
+// import { PaymentInfoFiat } from './PaymentInfoFiat';
+import { PaymentInfo } from './PaymentInfo';
 import CartStore from '../Cart/CartStore';
 import CartEmpty from '../Cart/CartEmpty';
 import CheckoutContext from './CheckoutContext';
@@ -76,6 +78,25 @@ type StateType = {
     addressFull: AddressFullType,
     receiverName: string,
     receiverPhone: string,
+  },
+  invoice: ?{
+    id: string,
+    amount: number,
+    currency: string,
+    priceReservedDueDateTime: string,
+    state: OrderStatusType,
+    wallet: ?string,
+    transactions: Array<{
+      id: string,
+      amount: number,
+    }>,
+    orders: Array<{
+      id: string,
+      slug: number,
+      productId: number,
+      quantity: number,
+      price: number,
+    }>,
   },
   invoiceId: ?string,
   checkoutInProcess: boolean,
@@ -113,6 +134,7 @@ class Checkout extends Component<PropsType, StateType> {
           (props.me && `${props.me.firstName} ${props.me.lastName}`) || '',
         receiverPhone: (props.me && props.me.phone) || '',
       },
+      invoice: null, // eslint-disable-line
       invoiceId: null,
       checkoutInProcess: false,
       errors: {},
@@ -295,17 +317,81 @@ class Checkout extends Component<PropsType, StateType> {
     const {
       orderInput: { addressFull, receiverName, receiverPhone },
     } = this.state;
-    console.log(
-      '---addressFull, receiverName, receiverPhone',
-      addressFull,
-      receiverName,
-      receiverPhone,
-    );
 
-    this.setState({
-      invoiceId: 'asdasdasdasdasd',
+    this.setState({ checkoutInProcess: true }, () => {
+      CreateOrdersMutation.commit({
+        input: {
+          clientMutationId: '',
+          addressFull,
+          receiverName,
+          receiverPhone,
+          currency: 'STQ',
+        },
+        environment: this.context.environment,
+        onCompleted: (response: CreateOrdersMutationResponseType, errors) => {
+          if (response && response.createOrders) {
+            this.props.showAlert({
+              type: 'success',
+              text: t.ordersSuccessfullyCreated,
+              link: { text: t.close },
+            });
+            const { invoice } = response.createOrders;
+            this.setState({
+              // $FlowIgnore
+              invoice, // eslint-disable-line
+              invoiceId: response.createOrders.invoice.id,
+              checkoutInProcess: false,
+            });
+            this.handleChangeStep(3);
+
+            if (
+              process.env.BROWSER &&
+              process.env.REACT_APP_RRPARTNERID &&
+              invoice
+            ) {
+              const items = map(
+                item => ({
+                  id: item.productId,
+                  qnt: item.quantity,
+                  price: item.price,
+                }),
+                [...invoice.orders],
+              );
+
+              transactionTracker({
+                transactionId: invoice.id,
+                items,
+              });
+            }
+          } else if (!errors) {
+            this.props.showAlert({
+              type: 'danger',
+              text: t.error,
+              link: { text: t.close },
+            });
+            this.setState({ checkoutInProcess: false });
+          } else {
+            this.props.showAlert({
+              type: 'danger',
+              text: t.error,
+              link: { text: t.close },
+            });
+            this.setState({ checkoutInProcess: false });
+          }
+        },
+        onError: error => {
+          log.error(t.errorInDeleteFromCart);
+          log.error(error);
+          this.props.showAlert({
+            type: 'danger',
+            text: t.somethingWentWrong,
+            link: { text: t.close },
+          });
+          this.setState({ checkoutInProcess: false });
+          this.props.router.push('/checkout');
+        },
+      });
     });
-    this.handleChangeStep(3);
   };
 
   handleCheckout = () => {
@@ -428,6 +514,7 @@ class Checkout extends Component<PropsType, StateType> {
   };
 
   render() {
+    // console.log('---this.props', this.props);
     const { me } = this.props;
     // $FlowIgnore
     const deliveryAddresses = pathOr(
@@ -442,6 +529,8 @@ class Checkout extends Component<PropsType, StateType> {
       saveAsNewAddress,
       orderInput,
       errors,
+      invoiceId,
+      // invoice,
     } = this.state;
     const stores = pipe(
       pathOr([], ['cart', 'stores', 'edges']),
@@ -540,12 +629,23 @@ class Checkout extends Component<PropsType, StateType> {
                           </div>
                         )}
                         {step === 3 &&
-                          this.state.invoiceId && (
+                          invoiceId && (
                             <PaymentInfo
-                              invoiceId={this.state.invoiceId}
+                              invoiceId={invoiceId}
                               me={this.props.me}
                             />
                           )}
+                        {/*
+                          <PaymentInfoFiat
+                            invoice={invoice}
+                            invoiceId={this.state.invoiceId}
+                            me={this.props.me}
+                          />
+                          <PaymentInfo
+                            invoiceId={invoiceId}
+                            me={this.props.me}
+                          />
+                        */}
                       </Col>
                     )}
                     {!emptyCart &&
