@@ -179,6 +179,7 @@ class Menu extends Component<PropsType, StateType> {
                 key={item.id}
                 to={`/profile/${item.id}`}
                 styleName={classNames('item', { isActive })}
+                data-test={item.title}
               >
                 {item.title}
               </Link>
