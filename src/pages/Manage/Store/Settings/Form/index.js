@@ -226,10 +226,7 @@ class Form extends Component<PropsType, StateType> {
           ],
         ],
         longDescription: [
-          [
-            (value: string) => value && value.length > 0,
-            t.longDescriptionMustNotBeEmpty,
-          ],
+          [(value: string) => value && value.length > 0, 'asasas'],
         ],
         slug: [
           [(value: string) => value && value.length > 0, t.slugMustNotBeEmpty],
@@ -308,11 +305,15 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleLongDescription = longDescription => {
-    const { form } = this.state;
+    const { form, formErrors } = this.state;
     this.setState({
       form: {
         ...form,
         longDescription,
+      },
+      formErrors: {
+        ...formErrors,
+        long_description: '',
       },
     });
   };
@@ -413,7 +414,11 @@ class Form extends Component<PropsType, StateType> {
     );
     // $FlowIgnore
     const realSlug = pathOr('', ['store', 'slug'], this.props);
-
+    const longDescriptionError = propOr(
+      null,
+      'long_description',
+      this.state.formErrors,
+    );
     return (
       <div styleName="container">
         <div styleName="form">
@@ -505,6 +510,12 @@ class Form extends Component<PropsType, StateType> {
             onChange={this.handleLongDescription}
             onError={this.handleError}
           />
+
+          {longDescriptionError && (
+            <div styleName="longDescriptionError">
+              {t.longDescriptionLimitError}
+            </div>
+          )}
           <div styleName="buttonsPanel">
             <div styleName="saveButton">
               <Button

@@ -23,6 +23,7 @@ type TranslationDicType = {|
   sendToModeration: string,
   storeIsOnModeration: string,
   storeIsBlocked: string,
+  longDescriptionLimitError: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -46,6 +47,8 @@ const translations: TranslationsBundleType = {
     sendToModeration: 'Send to moderation',
     storeIsOnModeration: 'Store is on moderation',
     storeIsBlocked: 'Store is blocked, contact the support service',
+    longDescriptionLimitError:
+      'Long Description should be less than 8000 characters.',
   },
 };
 
