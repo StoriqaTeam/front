@@ -308,11 +308,15 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleLongDescription = longDescription => {
-    const { form } = this.state;
+    const { form, formErrors } = this.state;
     this.setState({
       form: {
         ...form,
         longDescription,
+      },
+      formErrors: {
+        ...formErrors,
+        long_description: '',
       },
     });
   };
@@ -413,7 +417,11 @@ class Form extends Component<PropsType, StateType> {
     );
     // $FlowIgnore
     const realSlug = pathOr('', ['store', 'slug'], this.props);
-
+    const longDescriptionError = propOr(
+      null,
+      'long_description',
+      this.state.formErrors,
+    );
     return (
       <div styleName="container">
         <div styleName="form">
@@ -498,13 +506,19 @@ class Form extends Component<PropsType, StateType> {
           })}
 
           <h3 styleName="title">
-            <strong>Shop Editor</strong>
+            <strong>{t.shopEditor}</strong>
           </h3>
           <RichEditor
             content={this.state.form.longDescription}
             onChange={this.handleLongDescription}
             onError={this.handleError}
           />
+
+          {longDescriptionError && (
+            <div styleName="longDescriptionError">
+              {t.longDescriptionLimitError}
+            </div>
+          )}
           <div styleName="buttonsPanel">
             <div styleName="saveButton">
               <Button
