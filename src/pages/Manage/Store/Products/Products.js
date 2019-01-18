@@ -12,6 +12,7 @@ import { getNameText, log, fromRelayError } from 'utils';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Button } from 'components/common/Button';
 import { Modal } from 'components/Modal';
+import { Confirmation } from 'components/Confirmation';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
@@ -34,11 +35,13 @@ type PropsType = {
 
 type StateType = {
   showModal: boolean,
+  dataToDelete: ?string,
 };
 
 class Products extends PureComponent<PropsType, StateType> {
   state = {
     showModal: false,
+    dataToDelete: null,
   };
 
   addProduct = () => {
@@ -65,8 +68,7 @@ class Products extends PureComponent<PropsType, StateType> {
     log.info('id', id);
   };
 
-  handleDelete = (id: string, e) => {
-    e.stopPropagation();
+  deleteProduct = (id: string): void => {
     // $FlowIgnoreMe
     const storeId = pathOr(null, ['me', 'myStore', 'id'], this.props);
 
@@ -102,6 +104,7 @@ class Products extends PureComponent<PropsType, StateType> {
           });
           return;
         }
+        this.handleCloseModal();
         this.props.showAlert({
           type: 'success',
           text: t.deleted,
@@ -119,10 +122,19 @@ class Products extends PureComponent<PropsType, StateType> {
     });
   };
 
-  handleDeleteModal = () => {};
+  handleDelete = () => {
+    const { dataToDelete } = this.state;
+    // $FlowIgnoreMe
+    this.deleteProduct(dataToDelete);
+  };
+
+  handleDeleteModal = (id: string, e): void => {
+    e.stopPropagation();
+    this.setState({ showModal: true, dataToDelete: id });
+  };
 
   handleCloseModal = (): void => {
-    this.setState({ showModal: false });
+    this.setState({ showModal: false, dataToDelete: null });
   };
 
   productsRefetch = () => {
@@ -158,9 +170,12 @@ class Products extends PureComponent<PropsType, StateType> {
           showModal={showModal}
           onClose={this.handleCloseModal}
           render={() => (
-            <div>
-              <h1>jasasa</h1>
-            </div>
+            <Confirmation
+              title={t.deleteYourProduct}
+              description={t.confirmationDescription}
+              onCancel={this.handleCloseModal}
+              onConfirm={this.handleDelete}
+            />
           )}
         />
         {isEmpty(products) ? (
@@ -174,7 +189,7 @@ class Products extends PureComponent<PropsType, StateType> {
                 key={item.rawId}
                 item={item}
                 onEdit={this.editProduct}
-                onDelete={this.handleDelete}
+                onDelete={this.handleDeleteModal}
                 onCheckbox={this.handleCheckboxClick}
                 index={(index += 1)}
               />
