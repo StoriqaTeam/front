@@ -49,7 +49,7 @@ import CheckoutHeader from './CheckoutHeader';
 import CheckoutAddress from './CheckoutContent/CheckoutAddress';
 import CheckoutProducts from './CheckoutContent/CheckoutProducts';
 import CheckoutSidebar from './CheckoutSidebar';
-// import { PaymentInfoFiat } from './PaymentInfoFiat';
+import { PaymentInfoFiat } from './PaymentInfoFiat';
 import { PaymentInfo } from './PaymentInfo';
 import CartStore from '../Cart/CartStore';
 import CartEmpty from '../Cart/CartEmpty';
@@ -97,8 +97,11 @@ type StateType = {
       quantity: number,
       price: number,
     }>,
+    paymentIntent: {
+      id: string,
+      clientSecret: string,
+    },
   },
-  invoiceId: ?string,
   checkoutInProcess: boolean,
   errors: { [string]: Array<string> },
   scrollArr: Array<string>,
@@ -134,8 +137,7 @@ class Checkout extends Component<PropsType, StateType> {
           (props.me && `${props.me.firstName} ${props.me.lastName}`) || '',
         receiverPhone: (props.me && props.me.phone) || '',
       },
-      invoice: null, // eslint-disable-line
-      invoiceId: null,
+      invoice: null,
       checkoutInProcess: false,
       errors: {},
       scrollArr: ['receiverName', 'phone', 'deliveryAddress'],
@@ -339,7 +341,6 @@ class Checkout extends Component<PropsType, StateType> {
             this.setState({
               // $FlowIgnore
               invoice, // eslint-disable-line
-              invoiceId: response.createOrders.invoice.id,
               checkoutInProcess: false,
             });
             this.handleChangeStep(3);
@@ -417,7 +418,8 @@ class Checkout extends Component<PropsType, StateType> {
               link: { text: t.close },
             });
             this.setState({
-              invoiceId: response.createOrders.invoice.id,
+              // $FlowIgnore
+              invoice: response.createOrders.invoice,
               checkoutInProcess: false,
             });
             this.handleChangeStep(3);
@@ -529,8 +531,7 @@ class Checkout extends Component<PropsType, StateType> {
       saveAsNewAddress,
       orderInput,
       errors,
-      invoiceId,
-      // invoice,
+      invoice,
     } = this.state;
     const stores = pipe(
       pathOr([], ['cart', 'stores', 'edges']),
@@ -628,24 +629,18 @@ class Checkout extends Component<PropsType, StateType> {
                             </div>
                           </div>
                         )}
-                        {step === 3 &&
-                          invoiceId && (
-                            <PaymentInfo
-                              invoiceId={invoiceId}
-                              me={this.props.me}
-                            />
-                          )}
-                        {/*
+                        {step === 3 && invoice && invoice.paymentIntent && (
                           <PaymentInfoFiat
                             invoice={invoice}
-                            invoiceId={this.state.invoiceId}
                             me={this.props.me}
                           />
+                        )}
+                        {step === 3 && invoice && !invoice.paymentIntent && (
                           <PaymentInfo
-                            invoiceId={invoiceId}
+                            invoiceId={invoice.id}
                             me={this.props.me}
                           />
-                        */}
+                        )}
                       </Col>
                     )}
                     {!emptyCart &&

@@ -419,7 +419,7 @@ class NewProduct extends Component<PropsType, StateType> {
               formErrors={formErrors}
               onSave={this.handleSave}
               allCategories={this.props.allCategories}
-              currencies={directories.currencies}
+              currencies={directories.sellerCurrencies}
               onChangeShipping={this.handleChangeShipping}
               onCreateAttribute={this.handleCreateAttribute}
               onRemoveAttribute={this.handleRemoveAttribute}
@@ -441,7 +441,11 @@ NewProduct.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withRouter(withShowAlert(Page(ManageStore(NewProduct, 'Goods')))),
+  withRouter(withShowAlert(Page(ManageStore({
+    OriginalComponent: NewProduct,
+    active: 'goods',
+    title: 'Goods',
+  })))),
   graphql`
     fragment NewProduct_me on User {
       myStore {

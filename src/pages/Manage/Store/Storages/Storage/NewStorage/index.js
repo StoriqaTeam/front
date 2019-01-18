@@ -152,4 +152,8 @@ NewStorage.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default withShowAlert(Page(ManageStore(NewStorage, 'Storages')));
+export default withShowAlert(Page(ManageStore({
+  OriginalComponent: NewStorage,
+  active: 'storages',
+  title: 'Storages',
+})));

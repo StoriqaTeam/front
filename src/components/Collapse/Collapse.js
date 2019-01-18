@@ -47,6 +47,7 @@ class Collapse extends Component<PropsType, StateType> {
       !isNil(selected) && !isEmpty(`${selected}`)
         ? findIndex(propEq('id', selected))(items)
         : 0;
+    console.log('---index', index);
     return {
       ...nextState,
       index,
@@ -136,6 +137,7 @@ class Collapse extends Component<PropsType, StateType> {
   };
 
   render() {
+    console.log('---this.props', this.props);
     const { items, transparent, grouped } = this.props;
     const { isOpen, index } = this.state;
     return (

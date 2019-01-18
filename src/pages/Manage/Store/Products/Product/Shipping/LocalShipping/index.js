@@ -27,7 +27,6 @@ import t from './i18n';
 type StateType = {
   isSelectedPickup: boolean,
   pickupPrice: number,
-  pickupCurrency: SelectItemType,
   isSelectedWithout: boolean,
   isSelectedFixPrice: boolean,
 };
@@ -55,7 +54,7 @@ type PropsType = {
 class LocalShipping extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    const { pickupShipping, currency, onChangeShippingData, companies } = props;
+    const { pickupShipping, onChangeShippingData, companies } = props;
     const isSelectedPickup = Boolean(pickupShipping && pickupShipping.pickup);
     const isSelectedWithout = isEmpty(companies) && !isSelectedPickup;
 
@@ -69,7 +68,6 @@ class LocalShipping extends Component<PropsType, StateType> {
     this.state = {
       isSelectedPickup,
       pickupPrice: (pickupShipping && pickupShipping.price) || 0,
-      pickupCurrency: currency,
       isSelectedWithout,
       isSelectedFixPrice: !isSelectedWithout,
     };
@@ -124,11 +122,11 @@ class LocalShipping extends Component<PropsType, StateType> {
       onRemoveEditableItem,
       localAvailablePackages,
       error,
+      currency,
     } = this.props;
     const {
       isSelectedPickup,
       pickupPrice,
-      pickupCurrency,
       isSelectedWithout,
       isSelectedFixPrice,
     } = this.state;
@@ -172,7 +170,7 @@ class LocalShipping extends Component<PropsType, StateType> {
               <InputPrice
                 onChangePrice={this.handleOnChangePickupPrice}
                 price={pickupPrice}
-                currency={pickupCurrency}
+                currency={currency}
                 dataTest="shippingPickupPrice"
               />
             </div>
@@ -185,6 +183,7 @@ class LocalShipping extends Component<PropsType, StateType> {
                 })}
               >
                 <FixPriceForm
+                  currency={currency}
                   services={remainingServices}
                   onSaveCompany={onSaveCompany}
                 />
@@ -203,6 +202,7 @@ class LocalShipping extends Component<PropsType, StateType> {
                     {editableItemId === item.id && (
                       <div styleName="editableForm">
                         <FixPriceForm
+                          currency={currency}
                           services={possibleServices}
                           company={item}
                           onSaveCompany={onSaveCompany}

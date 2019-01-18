@@ -18,7 +18,7 @@ type PropsType = {
     lastName: string,
   },
   router: routerShape,
-  invoice: ?{
+  invoice: {
     id: string,
     amount: number,
     currency: string,
@@ -36,6 +36,10 @@ type PropsType = {
       quantity: number,
       price: number,
     }>,
+    paymentIntent: {
+      id: string,
+      clientSecret: string,
+    },
   },
 };
 
@@ -76,6 +80,7 @@ class PaymentInfoFiat extends PureComponent<PropsType, StateType> {
   render() {
     // console.log('---this.props', this.props);
     const { invoice, me } = this.props;
+    const { paymentIntent } = invoice;
     if (!invoice) {
       return (
         <div styleName="container" data-test="PAYMENT_INFO_FAILED">
@@ -84,6 +89,7 @@ class PaymentInfoFiat extends PureComponent<PropsType, StateType> {
             <div styleName="description">{t.yourPaymentWasFailed}</div>
             <div styleName="fiat">
               <Stripe
+                paymentIntent={paymentIntent}
                 amount={100500}
                 currency="USD"
                 email="a.levenec@gmail.com"
@@ -113,6 +119,7 @@ class PaymentInfoFiat extends PureComponent<PropsType, StateType> {
                 <div styleName="description">{t.someDescription}</div>
                 <div styleName="fiat">
                   <Stripe
+                    paymentIntent={paymentIntent}
                     amount={amount}
                     currency={currency}
                     email={me.email}

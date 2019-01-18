@@ -1,0 +1,39 @@
+@import "../../../styles/variables";
+
+.container {
+  //margin: 0 -2rem;
+  //padding: 0 2rem;
+  overflow-x: scroll;
+
+  table {
+    display: table;
+    width: 100%;
+
+    thead {
+      display: table-header-group;
+    }
+
+    tr {
+      display: table-row;
+      outline: none;
+      vertical-align: middle;
+    }
+
+    th, td {
+      display: table-cell;
+      padding: 2rem 7rem 2rem 2rem;
+      border-bottom: 1px solid $color_grey_trivial;
+      text-align: left;
+    }
+
+    th {
+      font-size: 14px;
+      color: $color_grey_minor;
+    }
+
+    td {
+      color: $color_grey;
+    }
+  }
+}
+

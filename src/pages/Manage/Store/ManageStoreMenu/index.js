@@ -273,6 +273,7 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
             onSelected={this.handleClick}
             isDisabled={isNil(storeId)}
           />
+          {console.log('---activeItem', activeItem)}
           <div style={{ margin: '1.05rem 0' }} />
           {activeItem === 'settings' ? (
             <MobileUpload

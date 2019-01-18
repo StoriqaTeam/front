@@ -113,6 +113,7 @@ export class FetcherBase {
         headers,
         data: JSON.stringify({ query: operation.text, variables }),
         withCredentials: true,
+        // timeout: process.env.NODE_ENV !== 'production' ? 30000 : 0,
       });
       log.debug('GraphQL response', { uid, ...response.data });
 

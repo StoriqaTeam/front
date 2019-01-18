@@ -16,20 +16,17 @@ import './CheckoutForm.scss';
 type PropsType = {
   showAlert: (input: AddAlertInputType) => void,
   stripe: {
-    // createSource: ({
-    //   owner: {
-    //     name: string,
-    //     email: string,
-    //   }
-    // }) => Promise,
-    // createToken: (any) => Promise,
-    handleCardPayment: (clientSecret: string, sourceData: any) => Promise<*>,
+    handleCardPayment: (clientSecret: string, cardData: any, sourceData: any) => Promise<*>,
   },
   amount: number,
   currency: string,
   email: string,
   name: string,
   onPaid: () => void,
+  paymentIntent: {
+    id: string,
+    clientSecret: string,
+  },
 };
 
 type StateType = {
@@ -78,14 +75,18 @@ class CheckoutForm extends Component<PropsType, StateType> {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  cardElement: any;
+
   handleSubmit = (e: any) => {
     e.preventDefault();
     this.setState({ isLoading: true });
+    const { paymentIntent } = this.props;
     const { ownerName: name, ownerEmail: email } = this.state;
 
     this.props.stripe
       .handleCardPayment(
-        'pi_18eYalAHEMiOZZp1l9ZTjSU0_secret_NibvRz4PMmJqjfb0sqmT7aq2',
+        paymentIntent.clientSecret,
+        this.cardElement,
         {
           source_data: {
             owner: {
@@ -96,7 +97,6 @@ class CheckoutForm extends Component<PropsType, StateType> {
         },
       )
       .then(payload => {
-        // console.log('---payload', payload);
         if (payload && payload.error) {
           this.props.showAlert({
             type: 'danger',
@@ -155,8 +155,10 @@ class CheckoutForm extends Component<PropsType, StateType> {
     this.setState({ isFocus: true });
   };
 
-  handleReady = () => {
-    // console.log('[ready]');
+  handleReady = (element: any) => {
+    if (element) {
+      this.cardElement = element;
+    }
   };
 
   handleInputChange = (id: string) => (e: any) => {

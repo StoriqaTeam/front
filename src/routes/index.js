@@ -21,6 +21,7 @@ import {
   StorageProducts,
 } from 'pages/Manage/Store/Storages/Storage';
 import { Contacts } from 'pages/Manage/Store/Contacts';
+import { Finances } from 'pages/Manage/Store/Finances';
 import { Wizard } from 'pages/Manage/Wizard';
 import Stores from 'pages/Stores/Stores';
 import { NewProduct, EditProduct } from 'pages/Manage/Store/Products/Product';
@@ -83,6 +84,9 @@ const routes = (
             isoCode
           }
           currencies
+          fiatCurrencies
+          cryptoCurrencies
+          sellerCurrencies
           categories {
             name {
               lang
@@ -555,6 +559,10 @@ const routes = (
                   }
                 }
               `}
+            />
+            <Route
+              path="/finances"
+              Component={Finances}
             />
             <Route
               path="/orders"

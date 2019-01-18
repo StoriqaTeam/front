@@ -41,6 +41,10 @@ const mutation = graphql`
           quantity
           price
         }
+        paymentIntent {
+          id
+          clientSecret
+        }
       }
     }
   }

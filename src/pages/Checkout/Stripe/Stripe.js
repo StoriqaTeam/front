@@ -18,6 +18,10 @@ type PropsType = {
   email: string,
   name: string,
   onPaid: () => void,
+  paymentIntent: {
+    id: string,
+    clientSecret: string,
+  },
 };
 
 class Stripe extends Component<PropsType, StateType> {

@@ -7,6 +7,13 @@
     "dataTest": "store-menu-orders"
   },
   {
+    "id": "finances",
+    "title": "Finances",
+    "link": "/finances",
+    "disabled": false,
+    "dataTest": "store-menu-orders"
+  },
+  {
     "id": "goods",
     "title": "Goods",
     "link": "/products",

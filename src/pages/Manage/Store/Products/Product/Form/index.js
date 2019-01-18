@@ -157,12 +157,13 @@ class Form extends Component<PropsType, StateType> {
       customAttributes,
       onFetchPackages,
     } = props;
-    // $FlowIgnore
-    const currency = pathOr('STQ', ['baseProduct', 'currency'], props);
+    let currency = currencies[0];
     let form = {};
     let variantForForm = null;
 
     if (baseProduct) {
+      // $FlowIgnore
+      ({ currency } = baseProduct);
       const {
         name,
         shortDescription,
@@ -855,7 +856,7 @@ class Form extends Component<PropsType, StateType> {
     } = this.props;
     const {
       category,
-      currencies,
+      currencies,// eslint-disable-line
       currency,
       shippingErrors,
       formErrors,
@@ -966,7 +967,7 @@ class Form extends Component<PropsType, StateType> {
                   forForm
                   label={t.labelCurrency}
                   activeItem={currency}
-                  items={currencies}
+                  items={[{ id: 'STQ', label: 'STQ' }]}
                   onSelect={this.handleOnSelectCurrency}
                   dataTest="productCurrencySelect"
                   fullWidth
@@ -1048,14 +1049,7 @@ class Form extends Component<PropsType, StateType> {
                   label={t.labelPrice}
                   onChangePrice={this.handlePriceChange}
                   price={parseFloat(price) || 0}
-                  currency={
-                    baseProduct
-                      ? {
-                          id: baseProduct.currency,
-                          label: baseProduct.currency,
-                        }
-                      : currency
-                  }
+                  currency={currency}
                   errors={formErrors && formErrors.price}
                   dataTest="variantPriceInput"
                 />

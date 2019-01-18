@@ -296,7 +296,11 @@ class StorageProducts extends Component<PropsType, StateType> {
 }
 
 export default createRefetchContainer(
-  withShowAlert(Page(ManageStore(StorageProducts, 'Storages'))),
+  withShowAlert(Page(ManageStore({
+    OriginalComponent: StorageProducts,
+    active: 'storages',
+    title: 'Storages',
+  }))),
   graphql`
     fragment StorageProducts_me on User
       @argumentDefinitions(

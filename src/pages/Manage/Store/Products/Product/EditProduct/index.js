@@ -571,7 +571,7 @@ class EditProduct extends Component<PropsType, StateType> {
               onSave={this.handleSave}
               formErrors={formErrors}
               allCategories={allCategories}
-              currencies={directories.currencies}
+              currencies={directories.sellerCurrencies}
               isLoading={isLoading}
               availablePackages={availablePackages}
               isLoadingPackages={isLoadingPackages}
@@ -602,7 +602,11 @@ EditProduct.contextTypes = {
 export default createFragmentContainer(
   withShowAlert(
     // $FlowIgnore
-    withErrorBoundary(Page(ManageStore(EditProduct, 'Goods'))),
+    withErrorBoundary(Page(ManageStore({
+      OriginalComponent: EditProduct,
+      active: 'goods',
+      title: 'Goods',
+    }))),
   ),
   graphql`
     fragment EditProduct_me on User

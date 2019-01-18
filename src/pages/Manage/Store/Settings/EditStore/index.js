@@ -177,7 +177,11 @@ class EditStore extends Component<PropsType, StateType> {
 }
 
 export default createFragmentContainer(
-  Page(withShowAlert(ManageStore(EditStore, 'Settings'))),
+  Page(withShowAlert(ManageStore({
+    OriginalComponent: EditStore,
+    active: 'settings',
+    title: 'Settings',
+  }))),
   graphql`
     fragment EditStore_me on User {
       id

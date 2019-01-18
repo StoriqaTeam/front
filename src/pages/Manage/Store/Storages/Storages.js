@@ -161,7 +161,11 @@ Storages.contextTypes = {
 };
 
 export default createFragmentContainer(
-  Page(withShowAlert(withRouter(ManageStore(Storages, 'Storages')))),
+  Page(withShowAlert(withRouter(ManageStore({
+    OriginalComponent: Storages,
+    active: 'storages',
+    title: 'Storages',
+  })))),
   graphql`
     fragment Storages_me on User {
       myStore {
