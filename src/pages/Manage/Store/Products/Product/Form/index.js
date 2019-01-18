@@ -3,6 +3,7 @@
 import React, { Component, Fragment } from 'react';
 import { routerShape, matchShape, withRouter } from 'found';
 import {
+  propOr,
   assocPath,
   isEmpty,
   omit,
@@ -38,6 +39,7 @@ import { Input } from 'components/common/Input';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import ModerationStatus from 'pages/common/ModerationStatus';
 import { Modal } from 'components/Modal';
+import { RichEditor } from 'components/RichEditor';
 
 import {
   getNameText,
@@ -779,6 +781,26 @@ class Form extends Component<PropsType, StateType> {
     this.setState({ isShippingPopup: false });
   };
 
+  handleLongDescription = longDescription => {
+    const { form } = this.state;
+    this.setState({
+      form: {
+        ...form,
+        longDescription,
+      },
+      formErrors: omit(['longDescription'], this.state.formErrors),
+    });
+  };
+
+  handleError = (error: { message: string }): void => {
+    const { showAlert } = this.props;
+    showAlert({
+      type: 'danger',
+      text: error.message,
+      link: { text: t.close },
+    });
+  };
+
   renderInput = (props: {
     id: string,
     label: string,
@@ -912,6 +934,11 @@ class Form extends Component<PropsType, StateType> {
       // metrics,
     } = form;
 
+    const longDescriptionError = propOr(
+      null,
+      'longDescription',
+      this.state.formErrors,
+    );
     return (
       <div styleName="container">
         {!variantForForm && (
@@ -954,12 +981,21 @@ class Form extends Component<PropsType, StateType> {
                   required: true,
                 })}
               </div>
-              <div styleName="formItem textArea">
-                {this.renderTextarea({
-                  id: 'longDescription',
-                  label: t.labelLongDescription,
-                  required: true,
-                })}
+              <div styleName="editor">
+                <span id="longDescription" styleName="label">
+                  {t.labelLongDescription} <span styleName="asterisk">*</span>
+                </span>
+                <RichEditor
+                  content={this.state.form.longDescription}
+                  onChange={this.handleLongDescription}
+                  onError={this.handleError}
+                />
+                {longDescriptionError && (
+                  <div styleName="error">
+                    {/* $FlowIgnoreMe */}
+                    {this.state.formErrors.longDescription[0]}
+                  </div>
+                )}
               </div>
               <div styleName="formItem">
                 <Select

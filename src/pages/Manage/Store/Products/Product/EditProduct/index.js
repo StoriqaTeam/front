@@ -215,7 +215,15 @@ class EditProduct extends Component<PropsType, StateType> {
         // $FlowIgnoreMe
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
         if (!isEmpty(validationErrors)) {
-          this.setState({ formErrors: validationErrors });
+          this.setState({
+            formErrors: renameKeys(
+              {
+                long_description: 'longDescription',
+                short_description: 'shortDescription',
+              },
+              validationErrors,
+            ),
+          });
           return;
         }
 
