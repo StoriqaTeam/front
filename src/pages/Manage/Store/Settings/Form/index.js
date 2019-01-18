@@ -511,9 +511,7 @@ class Form extends Component<PropsType, StateType> {
             onError={this.handleError}
           />
           {longDescriptionError && (
-            <div styleName="error">
-              {longDescriptionError}
-            </div>
+            <div styleName="error">{longDescriptionError}</div>
           )}
           <div styleName="buttonsPanel">
             <div styleName="saveButton">
