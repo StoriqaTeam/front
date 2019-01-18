@@ -511,7 +511,7 @@ class Form extends Component<PropsType, StateType> {
             onError={this.handleError}
           />
           {longDescriptionError && (
-            <div styleName="longDescriptionError">
+            <div styleName="error">
               {/* $FlowIgnoreMe */}
               {this.state.formErrors.longDescription[0]}
             </div>

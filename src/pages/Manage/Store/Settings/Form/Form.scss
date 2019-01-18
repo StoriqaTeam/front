@@ -161,7 +161,8 @@
   color: $color_red;
 }
 
-.longDescriptionError {
+.error {
   margin-top: 2rem;
-  color: $color_pink;
+  color: $color_red;
+  font-size: 12px;
 }
