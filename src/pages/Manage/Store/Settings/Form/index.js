@@ -226,7 +226,10 @@ class Form extends Component<PropsType, StateType> {
           ],
         ],
         longDescription: [
-          [(value: string) => value && value.length > 0, 'asasas'],
+          [
+            (value: string) => value && value.length > 0,
+            t.longDescriptionMustNotBeEmpty,
+          ],
         ],
         slug: [
           [(value: string) => value && value.length > 0, t.slugMustNotBeEmpty],
