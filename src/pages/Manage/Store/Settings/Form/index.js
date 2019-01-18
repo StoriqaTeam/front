@@ -248,7 +248,6 @@ class Form extends Component<PropsType, StateType> {
       this.setState({ formErrors });
       return;
     }
-
     this.setState({ formErrors: {} });
     this.props.onSave({
       form: {
@@ -308,16 +307,13 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleLongDescription = longDescription => {
-    const { form, formErrors } = this.state;
+    const { form } = this.state;
     this.setState({
       form: {
         ...form,
         longDescription,
       },
-      formErrors: {
-        ...formErrors,
-        long_description: '',
-      },
+      formErrors: omit(['longDescription'], this.state.formErrors),
     });
   };
 
@@ -417,9 +413,10 @@ class Form extends Component<PropsType, StateType> {
     );
     // $FlowIgnore
     const realSlug = pathOr('', ['store', 'slug'], this.props);
+
     const longDescriptionError = propOr(
       null,
-      'long_description',
+      'longDescription',
       this.state.formErrors,
     );
     return (
@@ -513,10 +510,10 @@ class Form extends Component<PropsType, StateType> {
             onChange={this.handleLongDescription}
             onError={this.handleError}
           />
-
           {longDescriptionError && (
             <div styleName="longDescriptionError">
-              {t.longDescriptionLimitError}
+              {/* $FlowIgnoreMe */}
+              {this.state.formErrors.longDescription[0]}
             </div>
           )}
           <div styleName="buttonsPanel">

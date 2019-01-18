@@ -39,11 +39,9 @@ class RichEditor extends Component<PropsType> {
     onChange: () => {},
     onError: () => {},
   };
-  // $FlowIgnore
-  handleEditorChange = e => {
+  handleEditorChange = (text: string) => {
     const { onChange } = this.props;
-    const html = e.target.getContent();
-    onChange(html);
+    onChange(text);
   };
 
   render() {
@@ -53,7 +51,7 @@ class RichEditor extends Component<PropsType> {
         <Editor
           apiKey="gk8doqf0fk35w9w8aad4ntw74keuwxza7u2ajewvqlt0up9z"
           initialValue={!isEmpty(content) ? content : '<p>Write something</p>'}
-          onChange={this.handleEditorChange}
+          onEditorChange={this.handleEditorChange}
           init={{
             menubar: false,
             branding: false,
