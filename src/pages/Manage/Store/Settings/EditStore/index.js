@@ -10,7 +10,7 @@ import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
 import { log, fromRelayError } from 'utils';
-
+import { renameKeys } from 'utils/ramda';
 import { UpdateStoreMainMutation } from 'relay/mutations';
 
 import type { MutationParamsType } from 'relay/mutations/UpdateStoreMainMutation';
@@ -52,7 +52,7 @@ class EditStore extends Component<PropsType, StateType> {
       cover,
       slogan,
     } = form;
-    this.setState(() => ({ isLoading: true }));
+    this.setState(() => ({ isLoading: true, serverValidationErrors: {} }));
     // $FlowIgnoreMe
     const id = pathOr(null, ['me', 'myStore', 'id'], this.props);
     const params: MutationParamsType = {
@@ -79,8 +79,17 @@ class EditStore extends Component<PropsType, StateType> {
         this.setState(() => ({ isLoading: false }));
         // $FlowIgnoreMe
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+
         if (!isEmpty(validationErrors)) {
-          this.setState({ serverValidationErrors: validationErrors });
+          this.setState({
+            serverValidationErrors: renameKeys(
+              {
+                long_description: 'longDescription',
+                short_description: 'shortDescription',
+              },
+              validationErrors,
+            ),
+          });
           return;
         }
         // $FlowIgnoreMe

@@ -13,6 +13,7 @@ const setup = editor => {
   editor.on('init', () => {
     /* eslint-disable no-param-reassign */
     editor.getBody().style.fontSize = '16px';
+    editor.getBody().style.color = '#505050';
   });
   // listen for toolbar buttons
   editor.on('ExecCommand', e => {
