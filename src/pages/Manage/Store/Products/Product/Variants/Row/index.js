@@ -3,7 +3,7 @@
 import React, { PureComponent } from 'react';
 import { pathOr, map, addIndex, isEmpty, filter } from 'ramda';
 
-import { Checkbox } from 'components/common/Checkbox';
+// import { Checkbox } from 'components/common/Checkbox';
 import { Icon } from 'components/Icon';
 
 import { log } from 'utils';
@@ -48,7 +48,7 @@ class Row extends PureComponent<PropsType> {
 
   render() {
     const {
-      rawId,
+      // rawId,
       vendorCode,
       price,
       cashback,
@@ -70,9 +70,9 @@ class Row extends PureComponent<PropsType> {
         data-test="toggleOpenVariantButton"
       >
         <div styleName="variant">
-          <div styleName="td tdCheckbox">
+          {/* <div styleName="td tdCheckbox">
             <Checkbox id={rawId} onChange={this.handleCheckboxClick} />
-          </div>
+          </div> */}
           <div styleName="td tdArticle">
             <span styleName="text vendorCodeText">{vendorCode || ''}</span>
           </div>
