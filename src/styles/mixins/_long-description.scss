@@ -1,5 +1,7 @@
 @import '../variables';
 
+$table-cell-padding: .75rem !default;
+
 @mixin long-description() {
   a {
     font-size: 16px;
@@ -24,4 +26,29 @@
       list-style-type: decimal;
     }
   }
+  
+  table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+    background-color: transparent; // Reset for nesting within parents with `background-color`.
+  
+    th,
+    td {
+      padding: $table-cell-padding;
+      vertical-align: top;
+      border-top: 1px solid #dee2e6;
+    }
+  
+    thead th {
+      vertical-align: bottom;
+      border-bottom: (2 * 1px) solid #dee2e6;
+    }
+  
+    tbody + tbody {
+      border-top: (2 * 1px) solid #dee2e6;
+    }
+    
+  }
+  
 }
