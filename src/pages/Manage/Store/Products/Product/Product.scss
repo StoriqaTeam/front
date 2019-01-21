@@ -260,7 +260,8 @@
 }
 
 .editor {
-  margin: 3rem -0;
+  margin: 3rem -0 7rem;
+  position: relative;
 
   span.label {
     display: block;
@@ -271,4 +272,5 @@
   color: $color_red;
   font-size: 12px;
   margin-top: 1rem;
+  position: absolute;
 }
