@@ -11,6 +11,8 @@ type TranslationDicType = {|
   somethingWentWrong: string,
   variantDeleted: string,
   error: string,
+  confirmText: string,
+  cancelText: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -23,6 +25,8 @@ const translations: TranslationsBundleType = {
     somethingWentWrong: 'Something going wrong :(',
     variantDeleted: 'Variant deleted!',
     error: 'Error:',
+    confirmText: 'Yes, delete, please',
+    cancelText: 'Cancel',
   },
 };
 

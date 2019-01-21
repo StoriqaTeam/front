@@ -175,6 +175,8 @@ class Products extends PureComponent<PropsType, StateType> {
               description={t.confirmationDescription}
               onCancel={this.handleCloseModal}
               onConfirm={this.handleDelete}
+              confirmText={t.confirmText}
+              cancelText={t.cancelText}
             />
           )}
         />
