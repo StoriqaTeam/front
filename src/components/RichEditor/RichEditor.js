@@ -56,7 +56,7 @@ class RichEditor extends Component<PropsType> {
     const { content } = this.props;
     return isEmpty(content);
   };
-
+  // $FlowIgnore
   handleInit = e => {
     if (this.isContentEmpty()) {
       const { target } = e;
