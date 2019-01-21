@@ -15,7 +15,7 @@
 }
 
 .header {
-  // height: 5.375rem;
+  font-family: $font_montserrat_regular;
   font-size: 25px;
   font-weight: normal;
   font-style: normal;
@@ -24,9 +24,37 @@
   letter-spacing: normal;
   text-align: center;
   color: $color_grey;
-  margin: 2.3125rem 2.925rem;
+  margin: 2.3125rem 0 2.925rem 0;
+
+  strong {
+    font-family: $font_montserrat_bold;
+  }
 }
 
+.subHeading {
+  height: 15.85rem;
+  text-align: center;
+  font-family: $font_montserrat_regular;
+  font-size: 18px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.33;
+  letter-spacing: normal;
+  text-align: center;
+  margin: 3.75rem 0 5rem 0;
+}
+
+.description {
+  font-size: 18px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.33;
+  letter-spacing: normal;
+  text-align: center;
+  color: $color_grey;
+}
 .item {
   //
 }

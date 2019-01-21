@@ -16,6 +16,8 @@ import { BannersSlider } from 'components/BannersSlider';
 import { BannersRow } from 'components/BannersRow';
 import ImageLoader from 'libs/react-image-loader';
 import BannerLoading from 'components/Banner/BannerLoading';
+import { Row, Col } from 'layout';
+
 import Goods from './Goods';
 
 import type { Start_mainPage as StartMainPage } from './__generated__/Start_mainPage.graphql';
@@ -225,6 +227,32 @@ class Start extends Component<PropsTypes, StateTypes> {
             )}
           </MediaQuery>
         </div>
+        <Row>
+          <Col size={12} sm={12} md={6} lg={4} xl={4}>
+            <div styleName="subHeading">
+              <strong>Fancy Stuff</strong>
+              <p styleName="description">
+                Express yourself with unique handmade items
+              </p>
+            </div>
+          </Col>
+          <Col size={12} sm={12} md={6} lg={4} xl={4}>
+            <div styleName="subHeading">
+              <strong>Unique Sellers</strong>
+              <p styleName="description">
+                Discover exclusive items from any corner of the globe
+              </p>
+            </div>
+          </Col>
+          <Col size={12} sm={12} md={6} lg={4} xl={4}>
+            <div styleName="subHeading">
+              <strong>Variety of Payment Options</strong>
+              <p styleName="description">
+                Choose any payment method, from credit card to cryptocurrencies
+              </p>
+            </div>
+          </Col>
+        </Row>
         <div styleName="item goodsItem">
           {viewedProducts &&
             viewedProducts.length > 0 && (
