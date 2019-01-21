@@ -3,7 +3,7 @@
 .container {
   padding: 4rem 3.5rem;
   background: $color_white;
-  max-width: 37.5rem;
+  max-width: 100%;
  
   @media (min-width: $md) {
     max-width: 82rem;
