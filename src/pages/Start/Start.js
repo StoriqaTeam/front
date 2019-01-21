@@ -171,6 +171,10 @@ class Start extends Component<PropsTypes, StateTypes> {
 
     return (
       <div styleName="container">
+        <div styleName="header">
+          Storiqa brings <strong>unique, custom</strong>, and{' '}
+          <strong>handcrafted</strong> items to your life.
+        </div>
         <div styleName="item bannerSliderItem">
           <MediaQuery maxWidth={575}>
             {isEmpty(this.state.banners.main) ? (
