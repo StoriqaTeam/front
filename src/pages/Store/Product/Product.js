@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { routerShape } from 'found';
 import PropTypes from 'prop-types';
-import xss from 'xss';
 import {
   isNil,
   head,
@@ -25,7 +24,13 @@ import { AppContext, Page } from 'components/App';
 import { Col, Row } from 'layout';
 import { AddInCartMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/Alerts/AlertContext';
-import { extractText, isEmpty, log, convertCountries } from 'utils';
+import {
+  extractText,
+  isEmpty,
+  log,
+  convertCountries,
+  sanitizeHTML,
+} from 'utils';
 import { productViewTracker, addToCartTracker } from 'rrHalper';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
@@ -283,6 +288,8 @@ class Product extends Component<PropsType, StateType> {
       'EN',
       t.noLongDescription,
     ).replace(/\n/g, '<hr />');
+    /* eslint-disable no-underscore-dangle */
+    const __html = sanitizeHTML(modifLongDescription);
     const tabs: Array<TabType> = [
       {
         id: '0',
@@ -292,14 +299,7 @@ class Product extends Component<PropsType, StateType> {
             styleName="longDescription"
             // eslint-disable-next-line
             dangerouslySetInnerHTML={{
-              __html: xss(`${modifLongDescription}`, {
-                whiteList: {
-                  img: ['src', 'style', 'sizes', 'srcset'],
-                  br: [],
-                  hr: [],
-                  div: ['style'],
-                },
-              }),
+              __html,
             }}
           />
         ),
