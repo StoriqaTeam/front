@@ -34,6 +34,14 @@ const menu = {
   tools: { title: 'Tools', items: 'spellchecker code' },
 };
 
+const initialValue = `
+  <p>
+    <span style="font-size: 14px; color: rgb(199, 199, 199);" data-mce-style="font-size: 14px; color: #c7c7c7;">
+      Write something...
+    </span>
+  </p>
+`;
+
 class RichEditor extends Component<PropsType> {
   static defaultProps = {
     onChange: () => {},
@@ -44,14 +52,27 @@ class RichEditor extends Component<PropsType> {
     onChange(text);
   };
 
+  isContentEmpty = (): boolean => {
+    const { content } = this.props;
+    return isEmpty(content);
+  };
+  // $FlowIgnore
+  handleInit = e => {
+    if (this.isContentEmpty()) {
+      const { target } = e;
+      this.handleEditorChange(target.getContent());
+    }
+  };
+
   render() {
     const { content, onError } = this.props;
     return (
       <Fragment>
         <Editor
           apiKey="gk8doqf0fk35w9w8aad4ntw74keuwxza7u2ajewvqlt0up9z"
-          initialValue={!isEmpty(content) ? content : ''}
+          initialValue={!this.isContentEmpty() ? content : initialValue}
           onEditorChange={this.handleEditorChange}
+          onInit={this.handleInit}
           init={{
             menubar: false,
             branding: false,
