@@ -2,8 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
-import xss from 'xss';
-import { addressToString, getNameText } from 'utils';
+import { addressToString, getNameText, sanitizeHTML } from 'utils';
 
 // import ImageLoader from 'libs/react-image-loader';
 // import BannerLoading from 'components/Banner/BannerLoading';
@@ -26,36 +25,7 @@ class About extends PureComponent<PropsType> {
     // $FlowIgnoreMe
     const address = addressToString(shop.addressFull);
     /* eslint-disable no-underscore-dangle */
-    const __html = xss(longDescription, {
-      whiteList: {
-        br: [],
-        hr: [],
-        a: ['class', 'style', 'href', 'target', 'rel'],
-        p: ['class', 'style'],
-        ol: ['class', 'style'],
-        h1: ['class', 'style'],
-        h2: ['class', 'style'],
-        h3: ['class', 'style'],
-        h4: ['class', 'style'],
-        h5: ['class', 'style'],
-        h6: ['class', 'style'],
-        ul: ['class', 'style'],
-        li: ['class', 'style'],
-        em: ['class', 'style'],
-        img: ['class', 'style', 'src', 'sizes', 'srcset', 'width', 'height'],
-        sub: ['class', 'style'],
-        sup: ['class', 'style'],
-        div: ['class', 'style'],
-        span: ['class', 'style'],
-        strong: ['class', 'style'],
-        iframe: ['class', 'style', 'src', 'width', 'height', 'frameborder'],
-        table: ['class', 'style'],
-        tr: ['class', 'style'],
-        td: ['class', 'style'],
-        tbody: ['class', 'style'],
-        thead: ['class', 'style'],
-      },
-    });
+    const __html = sanitizeHTML(longDescription);
     return (
       <div styleName="container">
         <div styleName="title">
