@@ -23,7 +23,14 @@ class Confirmation extends PureComponent<PropsType> {
   };
 
   render() {
-    const { confirmText, cancelText, onCancel, onConfirm, title, description } = this.props;
+    const {
+      confirmText,
+      cancelText,
+      onCancel,
+      onConfirm,
+      title,
+      description,
+    } = this.props;
     return (
       <aside styleName="container">
         <h2 styleName="title">{title}</h2>

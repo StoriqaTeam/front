@@ -1,6 +1,6 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { isEmpty, pathOr, map } from 'ramda';
 import { Environment } from 'relay-runtime';
 
@@ -34,7 +34,7 @@ type StateType = {
   dataToDelete: ?string,
 };
 
-class Variants extends PureComponent<PropsType, StateType> {
+class Variants extends Component<PropsType, StateType> {
   state = {
     showModal: false,
     dataToDelete: null,
