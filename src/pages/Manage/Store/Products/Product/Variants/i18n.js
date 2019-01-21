@@ -5,14 +5,12 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  error: string,
-  somethingGoingWrong: string,
-  close: string,
-  deleted: string,
-  noProducts: string,
-  loadMore: string,
+  deleteVariant: string,
   confirmationDescription: string,
-  deleteYourProduct: string,
+  close: string,
+  somethingWentWrong: string,
+  variantDeleted: string,
+  error: string,
   confirmText: string,
   cancelText: string,
 |};
@@ -20,15 +18,13 @@ type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    error: 'Error: ',
-    somethingGoingWrong: 'Something going wrong',
-    close: 'Close.',
-    deleted: 'Deleted!',
-    noProducts: 'No products',
-    loadMore: 'Load more',
+    deleteVariant: 'Delete this variant?',
     confirmationDescription:
-      'Are you sure you want to delete this listing? All the listing information will be discarded and cannot be retrieved.',
-    deleteYourProduct: 'Delete your product?',
+      'Are you sure you want to delete this variant? All the variant information will be discarded and cannot be retrieved.',
+    close: 'Close.',
+    somethingWentWrong: 'Something going wrong :(',
+    variantDeleted: 'Variant deleted!',
+    error: 'Error:',
     confirmText: 'Yes, delete, please',
     cancelText: 'Cancel',
   },

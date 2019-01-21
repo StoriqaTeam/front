@@ -260,12 +260,14 @@
 }
 
 .editor {
-  margin: 3rem 0;
+  margin: 4rem 0 7rem;
+  position: relative;
 
   span.label {
     display: block;
     font-size: 14px;
-    margin-bottom: 2rem;
+    transform: scale(0.9) translate(0, 0);
+    transform-origin: left top 0;
   }
 
   span.asterisk {
@@ -279,4 +281,5 @@
   color: $color_red;
   font-size: 12px;
   margin-top: 1rem;
+  position: absolute;
 }
