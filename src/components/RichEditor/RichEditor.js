@@ -50,7 +50,7 @@ class RichEditor extends Component<PropsType> {
       <Fragment>
         <Editor
           apiKey="gk8doqf0fk35w9w8aad4ntw74keuwxza7u2ajewvqlt0up9z"
-          initialValue={!isEmpty(content) ? content : '<p>Write something</p>'}
+          initialValue={!isEmpty(content) ? content : ''}
           onEditorChange={this.handleEditorChange}
           init={{
             menubar: false,
