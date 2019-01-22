@@ -40,3 +40,4 @@ export { default as jwt } from './jwt';
 export { default as getQueryRefParams } from './getQueryRefParams';
 export { default as isJson } from './isJson';
 export { default as sanitizeHTML } from './sanitizeHTML';
+export { default as checkCurrencyType } from './checkCurrencyType';

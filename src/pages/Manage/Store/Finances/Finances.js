@@ -5,10 +5,13 @@ import PropTypes from 'prop-types';
 // import { assocPath, pathOr, propOr, pick, isEmpty } from 'ramda';
 import { createFragmentContainer, graphql } from 'react-relay';
 
+import { AppContext, Page } from 'components/App';
 import { withShowAlert } from 'components/Alerts/AlertContext';
-import { Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
 import { Tabs } from 'components/common';
+
+import type { CardBrandType } from 'types';
+
 import { Cards } from './';
 // import { Button, Input } from 'components/common';
 // import { AddressForm } from 'components/AddressAutocomplete';
@@ -31,6 +34,19 @@ type PropsType = {
     firstName: string,
     lastName: string,
     email: string,
+    stripeCustomer: {
+      id: string,
+      cards: {
+        id: string,
+        brand: CardBrandType,
+        country: string,
+        customer: string,
+        expMonth: number,
+        expYear: number,
+        last4: string,
+        name: string,
+      },
+    },
   },
 };
 
@@ -51,28 +67,35 @@ class Finances extends Component<PropsType, StateType> {
 
   render() {
     const { me } = this.props;
-    const { firstName, lastName, email } = me;
+    console.log('---me', me);
+    const { firstName, lastName, email, stripeCustomer } = me;
     const { selectedTab } = this.state;
 
     return (
-      <div styleName="container">
-        <div styleName="wrap">
-          <div styleName="tabs">
-            <Tabs selected={selectedTab} onClick={this.handleClickTab}>
-              <div label="Your cards">
-                <Cards
-                  firstName={firstName}
-                  lastName={lastName}
-                  email={email}
-                />
+      <AppContext.Consumer>
+        {({ environment }) => (
+          <div styleName="container">
+            <div styleName="wrap">
+              <div styleName="tabs">
+                <Tabs selected={selectedTab} onClick={this.handleClickTab}>
+                  <div label="Your cards">
+                    <Cards
+                      firstName={firstName}
+                      lastName={lastName}
+                      email={email}
+                      stripeCustomer={stripeCustomer}
+                      environment={environment}
+                    />
+                  </div>
+                  <div label="Payment account">
+                    This is the Paymnet account panel
+                  </div>
+                </Tabs>
               </div>
-              <div label="Payment account">
-                This is the Paymnet account panel
-              </div>
-            </Tabs>
+            </div>
           </div>
-        </div>
-      </div>
+        )}
+      </AppContext.Consumer>
     );
   }
 }
@@ -94,6 +117,19 @@ export default createFragmentContainer(
       firstName
       lastName
       email
+      stripeCustomer {
+        id
+        cards {
+          id
+          brand
+          country
+          customer
+          expMonth
+          expYear
+          last4
+          name
+        }
+      }
     }
   `,
 );

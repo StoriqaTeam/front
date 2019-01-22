@@ -169,6 +169,7 @@ class App extends Component<PropsType, StateType> {
       relay: { environment },
     } = this.props;
     const { handleLogin } = this;
+    console.log('---me', me);
     const directories = this.makeDirectories();
     return (
       <AppContext.Provider

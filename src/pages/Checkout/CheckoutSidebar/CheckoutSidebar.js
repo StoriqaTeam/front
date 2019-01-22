@@ -179,6 +179,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
           <div styleName="corner tr" />
         </div>
         <div styleName="container">
+          <div styleName="title">{t.paymentMethod}</div>
           <div styleName="title">{t.subtotal}</div>
           <div styleName="totalsContainer">
             <Row>

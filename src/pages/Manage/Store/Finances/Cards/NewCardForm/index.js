@@ -24,8 +24,10 @@ type PropsType = {
       email: string,
     }) => Promise<*>,
   },
+  isCards: boolean,
   onCancel: () => void,
   onSave: (token: any) => void,
+  isLoading: boolean,
 };
 
 type StateType = {
@@ -185,7 +187,7 @@ class NewCardForm extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { onCancel } = this.props;
+    const { onCancel, isCards } = this.props;
     const { isFocus, isLoading, errors } = this.state;
 
     return (
@@ -229,21 +231,23 @@ class NewCardForm extends Component<PropsType, StateType> {
               type="submit"
               fullWidth
               dataTest="payButton"
-              isLoading={isLoading}
+              isLoading={isLoading || this.props.isLoading}
               disabled={this.isDisabledButton()}
             >
               Save
             </Button>
           </div>
-          <div
-            styleName="cancelButton"
-            onClick={onCancel}
-            onKeyDown={() => {}}
-            role="button"
-            tabIndex="0"
-          >
-            Cancel
-          </div>
+          {isCards && (
+            <div
+              styleName="cancelButton"
+              onClick={onCancel}
+              onKeyDown={() => {}}
+              role="button"
+              tabIndex="0"
+            >
+              Cancel
+            </div>
+          )}
         </div>
       </form>
     );

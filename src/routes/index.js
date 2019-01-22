@@ -169,12 +169,19 @@ const routes = (
         path="/cart"
         Component={Cart}
         query={graphql`
-          query routes_Cart_Query {
-            cart {
+          query routes_Cart_Query($currencyType: CurrencyType!) {
+            cart(currencyType: $currencyType) {
               ...Cart_cart
             }
           }
         `}
+        prepareVariables={() => {
+          const currencyType = 'CRYPTO';
+          return { currencyType };
+        }}
+        variables={{
+          pageID: '110798995619330',
+        }}
       />
 
       <Route
