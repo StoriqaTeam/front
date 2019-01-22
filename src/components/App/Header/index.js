@@ -315,6 +315,8 @@ class Header extends Component<PropsType, StateType> {
               <BurgerMenu />
               <HeaderTop
                 userData={userData}
+                cryptoCurrencies={directories.cryptoCurrencies}
+                fiatCurrencies={directories.fiatCurrencies}
                 currencies={map(
                   // $FlowIgnoreMe
                   item => `${item}`,
