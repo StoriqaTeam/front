@@ -2,7 +2,8 @@
 /* eslint-disable no-underscore-dangle */
 
 import React, { Component } from 'react';
-import { createPaginationContainer, graphql } from 'react-relay';
+import { graphql, createRefetchContainer } from 'react-relay';
+import { Environment } from 'relay-runtime';
 import {
   pipe,
   pathOr,
@@ -22,6 +23,7 @@ import { routerShape, withRouter } from 'found';
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
 import { StickyBar } from 'components/StickyBar';
+import { Tabs } from 'components/common';
 
 import CartStore from './CartStore';
 import CartEmpty from './CartEmpty';
@@ -38,6 +40,13 @@ type PropsType = {
   // eslint-disable-next-line
   cart: Cart_cart,
   router: routerShape,
+  route: {
+    prepareVariables: () => void,
+  },
+  relay: {
+    refetch: Function,
+    environment: Environment,
+  },
 };
 
 type Totals = {
@@ -51,6 +60,7 @@ type Totals = {
 type StateType = {
   storesRef: ?Object,
   totals: Totals,
+  selectedTab: number,
 };
 
 /* eslint-disable react/no-array-index-key */
@@ -58,10 +68,12 @@ class Cart extends Component<PropsType, StateType> {
   state = {
     storesRef: null,
     totals: {},
+    selectedTab: 0,
   };
 
   componentDidMount() {
-    window.scroll({ top: 0 });
+    // this.refetchCart();
+    // window.scroll({ top: 0 });
   }
 
   setStoresRef(ref) {
@@ -72,6 +84,18 @@ class Cart extends Component<PropsType, StateType> {
 
   storesRef: any;
   dispose: () => void;
+
+  refetchCart = () => {
+    this.props.relay.refetch(
+      {
+        first: null,
+        after: null,
+      },
+      null,
+      () => {},
+      { force: true },
+    );
+  };
 
   totalsForStore(id: string) {
     return (
@@ -101,7 +125,16 @@ class Cart extends Component<PropsType, StateType> {
     this.props.router.push('/checkout');
   };
 
+  handleClickTab = (selectedTab: number) => {
+    this.setState({ selectedTab }, () => {
+      this.refetchCart();
+    });
+  };
+
   render() {
+    console.log('---this.props', this.props);
+    console.log('---preVar', this.props.route.prepareVariables());
+    const { selectedTab } = this.state;
     const stores = pipe(
       pathOr([], ['cart', 'stores', 'edges']),
       map(path(['node'])),
@@ -117,6 +150,12 @@ class Cart extends Component<PropsType, StateType> {
           <Row withoutGrow>
             <Col size={12}>
               <div styleName="header">{t.myCart}</div>
+              <div styleName="tabs">
+                <Tabs selected={selectedTab} onClick={this.handleClickTab}>
+                  <div label="Fiat">This is the Fiat panel</div>
+                  <div label="Crypto">This is the Crypto panel</div>
+                </Tabs>
+              </div>
               <div ref={ref => this.setStoresRef(ref)}>
                 <Row withoutGrow>
                   {emptyCart ? (
@@ -169,18 +208,20 @@ class Cart extends Component<PropsType, StateType> {
   }
 }
 
-export default createPaginationContainer(
+export default createRefetchContainer(
   withRouter(Page(Cart, { withoutCategories: true })),
   graphql`
     fragment Cart_cart on Cart
       @argumentDefinitions(
         first: { type: "Int", defaultValue: null }
         after: { type: "ID", defaultValue: null }
+        currencyType: { type: "String", defaultValue: "FIAT" }
       ) {
       id
       productsCost
       deliveryCost
       totalCount
+      totalCountAll
       totalCost
       totalCostWithoutDiscounts
       productsCostWithoutDiscounts
@@ -208,19 +249,11 @@ export default createPaginationContainer(
       }
     }
   `,
-  {
-    direction: 'forward',
-    getConnectionFromProps: prop('cart'),
-    getVariables: () => ({
-      first: null,
-      after: null,
-    }),
-    query: graphql`
-      query Cart_cart_Query($first: Int, $after: ID) {
-        cart {
-          ...Cart_cart @arguments(first: $first, after: $after)
-        }
+  graphql`
+    query Cart_cart_Query($first: Int, $after: ID) {
+      cart {
+        ...Cart_cart @arguments(first: $first, after: $after)
       }
-    `,
-  },
+    }
+  `,
 );

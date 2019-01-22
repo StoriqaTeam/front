@@ -142,6 +142,7 @@ class Warehouses extends Component<PropsType, StateType> {
 
   render() {
     const { stocks } = this.props;
+    console.log('---stocks', stocks);
     const { storageFocusId, storageFocusValue } = this.state;
     return (
       <div styleName="container">

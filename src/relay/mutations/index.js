@@ -70,3 +70,6 @@ export {
   default as CreateBaseProductWithVariantsMutation,
 } from './CreateBaseProductWithVariantsMutation';
 export { default as SetCouponInCartMutation } from './SetCouponInCartMutation';
+export {
+  default as CreateCustomerWithSourceMutation,
+} from './CreateCustomerWithSourceMutation';

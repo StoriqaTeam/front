@@ -6,6 +6,7 @@ import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
   subtotal: string,
+  paymentMethod: string,
   total: string,
   delivery: string,
   items: string,
@@ -16,6 +17,7 @@ type TranslationsBundleType = Translation<TranslationDicType>;
 const translations: TranslationsBundleType = {
   en: {
     subtotal: 'Subtotal',
+    paymentMethod: 'Payment method',
     total: 'Total',
     delivery: 'Delivery',
     items: 'items',
