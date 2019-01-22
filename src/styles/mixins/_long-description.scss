@@ -3,6 +3,15 @@
 $table-cell-padding: .75rem !default;
 
 @mixin long-description() {
+  @media (max-width: $md) {
+    p {
+      img: {
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+
   a {
     font-size: 16px;
     color: $color_blue;
@@ -27,7 +36,7 @@ $table-cell-padding: .75rem !default;
     }
   }
   
-  table {
+  .table {
     width: 100%;
     margin-bottom: 1rem;
     color: #212529;
