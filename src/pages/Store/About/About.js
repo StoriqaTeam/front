@@ -2,9 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
-// import xss from 'xss';
-import { addressToString, getNameText } from 'utils';
-import { HTMLEditor } from 'components/HTMLEditor';
+import { addressToString, getNameText, sanitizeHTML } from 'utils';
 
 // import ImageLoader from 'libs/react-image-loader';
 // import BannerLoading from 'components/Banner/BannerLoading';
@@ -24,11 +22,10 @@ class About extends PureComponent<PropsType> {
     const { shop } = this.props;
     const name = getNameText(shop.name, 'EN');
     const longDescription = getNameText(shop.longDescription, 'EN');
-    const modifLongDescription = longDescription
-      ? longDescription.replace(/\n/g, '<hr />')
-      : null;
     // $FlowIgnoreMe
     const address = addressToString(shop.addressFull);
+    /* eslint-disable no-underscore-dangle */
+    const __html = sanitizeHTML(longDescription);
     return (
       <div styleName="container">
         <div styleName="title">
@@ -48,25 +45,16 @@ class About extends PureComponent<PropsType> {
                 <div>{address}</div>
               </div>
             )}
-
-            {modifLongDescription && (
+            {longDescription && (
               <div styleName="item">
                 <div styleName="subtitle">{t.description}</div>
-                {/* <div
+                <div
                   styleName="description"
                   // eslint-disable-next-line
                   dangerouslySetInnerHTML={{
-                    __html: xss(`${modifLongDescription}`, {
-                      whiteList: {
-                        img: ['src', 'style', 'sizes', 'srcset'],
-                        br: [],
-                        hr: [],
-                        div: ['style'],
-                      },
-                    }),
+                    __html,
                   }}
-                /> */}
-                <HTMLEditor noHeight readOnly content={modifLongDescription} />
+                />
               </div>
             )}
           </div>

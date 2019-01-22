@@ -24,7 +24,7 @@ import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import ModerationStatus from 'pages/common/ModerationStatus';
-import { HTMLEditor } from 'components/HTMLEditor';
+import { RichEditor } from 'components/RichEditor';
 
 import { uploadFile, convertSrc } from 'utils';
 
@@ -248,7 +248,6 @@ class Form extends Component<PropsType, StateType> {
       this.setState({ formErrors });
       return;
     }
-
     this.setState({ formErrors: {} });
     this.props.onSave({
       form: {
@@ -294,18 +293,27 @@ class Form extends Component<PropsType, StateType> {
       });
   };
 
+  handleError = (error: { message: string }): void => {
+    const { showAlert } = this.props;
+    showAlert({
+      type: 'danger',
+      text: error.message,
+      link: { text: t.close },
+    });
+  };
+
   handleDeleteCover = () => {
     this.setState(assocPath(['form', 'cover'], '', this.state));
   };
 
-  handleLongDescription = value => {
+  handleLongDescription = longDescription => {
     const { form } = this.state;
-
     this.setState({
       form: {
         ...form,
-        longDescription: JSON.stringify(value),
+        longDescription,
       },
+      formErrors: omit(['longDescription'], this.state.formErrors),
     });
   };
 
@@ -406,6 +414,11 @@ class Form extends Component<PropsType, StateType> {
     // $FlowIgnore
     const realSlug = pathOr('', ['store', 'slug'], this.props);
 
+    const longDescriptionError = propOr(
+      null,
+      'longDescription',
+      this.state.formErrors,
+    );
     return (
       <div styleName="container">
         <div styleName="form">
@@ -490,12 +503,16 @@ class Form extends Component<PropsType, StateType> {
           })}
 
           <h3 styleName="title">
-            <strong>Shop Editor</strong>
+            <strong>{t.shopEditor}</strong>
           </h3>
-          <HTMLEditor
+          <RichEditor
             content={this.state.form.longDescription}
             onChange={this.handleLongDescription}
+            onError={this.handleError}
           />
+          {longDescriptionError && (
+            <div styleName="error">{longDescriptionError}</div>
+          )}
           <div styleName="buttonsPanel">
             <div styleName="saveButton">
               <Button

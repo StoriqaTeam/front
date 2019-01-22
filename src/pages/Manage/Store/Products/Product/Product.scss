@@ -258,3 +258,28 @@
   }
 
 }
+
+.editor {
+  margin: 4rem 0 7rem;
+  position: relative;
+
+  span.label {
+    display: block;
+    font-size: 14px;
+    transform: scale(0.9) translate(0, 0);
+    transform-origin: left top 0;
+  }
+
+  span.asterisk {
+    font-size: 18px;
+    position: relative;
+    top: 2px;
+  }
+}
+
+.error {
+  color: $color_red;
+  font-size: 12px;
+  margin-top: 1rem;
+  position: absolute;
+}
