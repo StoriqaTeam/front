@@ -1,4 +1,5 @@
 @import "../../../styles/variables";
+@import '../../../styles/mixins';
 
 .container {
   margin-top: 2rem;
@@ -52,29 +53,7 @@
 .description {
   // taken from Bootstrap
 
-  a {
-    font-size: 16px;
-    color: $color_blue;
-    &:hover {
-      color: $color_blue_hover
-    }
-  }
-  
-  ul, ol {
-    padding-left: 3rem;
-  }
-
-  ul {
-    li {
-      list-style-type: disc;
-    }
-  }
-
-  ol {
-    li {
-      list-style-type: decimal;
-    }
-  }
+  @include long-description();
 
 }
 
