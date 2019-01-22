@@ -12,6 +12,8 @@ const setup = editor => {
   // set the editor font size
   editor.on('init', () => {
     /* eslint-disable no-param-reassign */
+    editor.getBody().style.fontFamily =
+      '"Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif';
     editor.getBody().style.fontSize = '16px';
     editor.getBody().style.color = '#505050';
   });
