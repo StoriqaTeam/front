@@ -5,7 +5,7 @@ $table-cell-padding: .75rem !default;
 @mixin long-description() {
   @media (max-width: $md) {
     p {
-      img: {
+      img {
         width: 100%;
         height: auto;
       }

@@ -84,7 +84,7 @@ class RichEditor extends Component<PropsType> {
               'undo redo | bold italic underline | styleselect | alignleft aligncenter alignright | numlist bullist | link image media | fontsizeselect forecolor | table',
             setup,
             file_picker_types: 'image',
-            
+
             file_picker_callback: filePickerCallback(onError),
           }}
         />
