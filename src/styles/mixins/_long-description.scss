@@ -36,8 +36,8 @@ $table-cell-padding: .75rem !default;
     }
   }
   
-  .table {
-    width: 100%;
+  table {
+    // width: 100%;
     margin-bottom: 1rem;
     color: #212529;
     background-color: transparent; // Reset for nesting within parents with `background-color`.
