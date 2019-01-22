@@ -44,6 +44,11 @@ export class FetcherBase {
   }
 
   // eslint-disable-next-line
+  getFiatCurrencyCodeFromCookies() {
+    throw new Error('should be implemented in subclasses');
+  }
+
+  // eslint-disable-next-line
   getCorrelationToken() {
     throw new Error('should be implemented in subclasses');
   }
@@ -51,10 +56,12 @@ export class FetcherBase {
   prepareHeaders = (): { [string]: string } => {
     const jwt = this.getJWTFromCookies();
     const currency = this.getCurrencyCodeFromCookies();
+    const fiatCurrency = this.getFiatCurrencyCodeFromCookies();
 
     let headers = {
       'Content-Type': 'application/json',
       Currency: currency || 'STQ',
+      FiatCurrency: fiatCurrency || 'USD',
     };
 
     if (jwt) {
@@ -229,6 +236,7 @@ export class ServerFetcher extends FetcherBase {
   jwt: ?string;
   sessionId: string;
   currencyCode: string;
+  fiatCurrencyCode: string;
   correlationToken: ?string;
   payloads: Array<any>;
   cookiesInstance: CookieType;
@@ -237,6 +245,7 @@ export class ServerFetcher extends FetcherBase {
     url: string,
     sessionId: string,
     currencyCode: string,
+    fiatCurrencyCode: string,
     correlationToken: ?string,
     cookiesInstance: CookieType,
   ) {
@@ -244,6 +253,7 @@ export class ServerFetcher extends FetcherBase {
 
     this.sessionId = sessionId;
     this.currencyCode = currencyCode;
+    this.fiatCurrencyCode = fiatCurrencyCode;
     this.payloads = [];
     this.correlationToken = correlationToken;
     this.cookiesInstance = cookiesInstance;
@@ -263,6 +273,10 @@ export class ServerFetcher extends FetcherBase {
 
   getCurrencyCodeFromCookies() {
     return this.currencyCode;
+  }
+
+  getFiatCurrencyCodeFromCookies() {
+    return this.fiatCurrencyCode;
   }
 
   getCorrelationToken() {
@@ -312,6 +326,12 @@ export class ClientFetcher extends FetcherBase {
     const cookies = new Cookies();
     const currency = cookies.get('CURRENCY');
     return currency || 'STQ';
+  }
+  // eslint-disable-next-line
+  getFiatCurrencyCodeFromCookies() {
+    const cookies = new Cookies();
+    const currency = cookies.get('FIAT_CURRENCY');
+    return currency || 'USD';
   }
 
   // eslint-disable-next-line

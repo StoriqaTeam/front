@@ -137,6 +137,7 @@ class Start extends Component<PropsTypes, StateTypes> {
   );
 
   render() {
+    console.log('this.props', this.props);
     const { mainPage } = this.props;
     const { priceUsd } = this.state;
     // $FlowIgnoreMe
@@ -328,6 +329,10 @@ export default createFragmentContainer(
                   photoMain
                   cashback
                   price
+                  customerPrice {
+                    price
+                    currency
+                  }
                 }
               }
             }
@@ -363,6 +368,10 @@ export default createFragmentContainer(
                   photoMain
                   cashback
                   price
+                  customerPrice {
+                    price
+                    currency
+                  }
                 }
               }
             }

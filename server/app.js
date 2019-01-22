@@ -175,10 +175,12 @@ app.use(
         : process.env.REACT_APP_GRAPHQL_ENDPOINT;
 
     const currency = req.universalCookies.get('CURRENCY') || 'STQ';
+    const fiatCurrency = req.universalCookies.get('FIAT_CURRENCY') || 'USD';
     const fetcher = new ServerFetcher(
       url,
       req.universalCookies.get('SESSION_ID'),
       currency,
+      fiatCurrency,
       req.headers && req.headers['correlation-token'],
       req.universalCookies,
     );

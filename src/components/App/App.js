@@ -145,6 +145,7 @@ class App extends Component<PropsType, StateType> {
       currencyExchange,
       countries,
     } = this.props;
+    console.log('---currencyExchange', currencyExchange);
     return {
       categories,
       languages,
