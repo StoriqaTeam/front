@@ -198,7 +198,7 @@ class CartStore extends Component<PropsType, StateType> {
                       </div>
                     )}
                     <div styleName="store-description">
-                      <div styleName="store-name">
+                      <div styleName="storeName">
                         {getNameText(store.name, 'EN')}
                       </div>
                       <Rating value={store.rating} />

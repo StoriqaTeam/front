@@ -19,11 +19,56 @@
       vertical-align: middle;
     }
 
+    tbody {
+      //cursor: pointer;
+
+      tr {
+        td:first-child {
+          position: relative;
+
+          &:before {
+            content: '';
+            position: absolute;
+            display: block;
+            width: 2px;
+            bottom: 0;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            background-color: $color_blue_hover;
+            transition: $transition_all_ease;
+          }
+        }
+
+        &:hover {
+          td:first-child {
+            &:before {
+              opacity: 1;
+            }
+          }
+        }
+      }
+    }
+
     th, td {
       display: table-cell;
-      padding: 2rem 7rem 2rem 2rem;
+      //padding: 2rem 7rem 2rem 2rem;
+      padding: 2rem 0 2rem 2rem;
       border-bottom: 1px solid $color_grey_trivial;
       text-align: left;
+      vertical-align: middle;
+
+      &:first-child {
+        padding-left: 4rem;
+      }
+
+      &:last-child {
+        padding-right: 4rem;
+      }
+
+      &.byContent {
+        width: 1px;
+      }
     }
 
     th {

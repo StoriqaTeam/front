@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // import { assocPath, pathOr, propOr, pick, isEmpty } from 'ramda';
-// import { createFragmentContainer, graphql } from 'react-relay';
+import { createFragmentContainer, graphql } from 'react-relay';
 
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Page } from 'components/App';
@@ -27,6 +27,11 @@ import './Finances.scss';
 type PropsType = {
   // showAlert: (input: AddAlertInputType) => void,
   // me: ContactsMeType,
+  me: {
+    firstName: string,
+    lastName: string,
+    email: string,
+  },
 };
 
 type StateType = {
@@ -45,20 +50,25 @@ class Finances extends Component<PropsType, StateType> {
   };
 
   render() {
+    const { me } = this.props;
+    const { firstName, lastName, email } = me;
     const { selectedTab } = this.state;
 
     return (
       <div styleName="container">
         <div styleName="wrap">
           <div styleName="tabs">
-            <Tabs
-              selected={selectedTab}
-              onClick={this.handleClickTab}
-            >
+            <Tabs selected={selectedTab} onClick={this.handleClickTab}>
               <div label="Your cards">
-                <Cards />
+                <Cards
+                  firstName={firstName}
+                  lastName={lastName}
+                  email={email}
+                />
               </div>
-              <div label="Paymnets">This is the Paymnets panel</div>
+              <div label="Payment account">
+                This is the Paymnet account panel
+              </div>
             </Tabs>
           </div>
         </div>
@@ -71,8 +81,19 @@ Finances.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default withShowAlert(Page(ManageStore({
-  OriginalComponent: Finances,
-  active: 'finances',
-  title: 'Payment settings',
-})));
+export default createFragmentContainer(
+  Page(
+    ManageStore({
+      OriginalComponent: Finances,
+      active: 'finances',
+      title: 'Payment settings',
+    }),
+  ),
+  graphql`
+    fragment Finances_me on User {
+      firstName
+      lastName
+      email
+    }
+  `,
+);

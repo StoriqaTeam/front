@@ -177,11 +177,17 @@ Products.contextTypes = {
 };
 
 export default createPaginationContainer(
-  withShowAlert(withRouter(Page(ManageStore({
-    OriginalComponent: Products,
-    active: 'goods',
-    title: 'Goods',
-  })))),
+  withShowAlert(
+    withRouter(
+      Page(
+        ManageStore({
+          OriginalComponent: Products,
+          active: 'goods',
+          title: 'Goods',
+        }),
+      ),
+    ),
+  ),
   graphql`
     fragment Products_me on User
       @argumentDefinitions(

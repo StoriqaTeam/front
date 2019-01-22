@@ -146,11 +146,15 @@ EditStorage.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withShowAlert(Page(ManageStore({
-    OriginalComponent: EditStorage,
-    active: 'storages',
-    title: 'Storages',
-  }))),
+  withShowAlert(
+    Page(
+      ManageStore({
+        OriginalComponent: EditStorage,
+        active: 'storages',
+        title: 'Storages',
+      }),
+    ),
+  ),
   graphql`
     fragment EditStorage_me on User
       @argumentDefinitions(storageSlug: { type: "String!" }) {

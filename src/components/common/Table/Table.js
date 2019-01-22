@@ -2,42 +2,56 @@
 
 import * as React from 'react';
 import classNames from 'classnames';
-import { map, addIndex, take, toPairs, findIndex, propEq, head, sortBy, prop, sort } from 'ramda';
+import { map } from 'ramda';
 
 import './Table.scss';
 
 type PropsType = {
-  columns: Array<string>,
-  data: Array<*>,
+  minWidth: number,
+  columns: Array<{
+    id: number | string,
+    title: string,
+  }>,
+  data: Array<{
+    id: number | string,
+    item: Array<{
+      id: number | string,
+      content: *,
+      byContent?: boolean,
+      align?: 'left' | 'right',
+    }>,
+  }>,
 };
 
 class Tabs extends React.Component<PropsType> {
   render() {
-    const { columns, data } = this.props;
-    // const fields = map(item => item.field, columns);
-    // console.log('---fields', fields);
-    console.log('---columns, data', columns, data);
+    const { columns, data, minWidth } = this.props;
     return (
       <div styleName="container">
-        <table>
+        <table style={{ minWidth: `${minWidth / 8}rem` }}>
           <thead>
-          <tr>
-            {map(item => (
-              <th key={item}>{item}</th>
-            ), columns)}
-          </tr>
+            <tr>{map(item => <th key={item.id}>{item.title}</th>, columns)}</tr>
           </thead>
           <tbody>
-            {map(item => (
-              <tr>
-                {map(tdItem => (
-                  <td>
-                    {console.log('---tdItem', tdItem)}
-                    {tdItem}
-                  </td>
-                ), item)}
-              </tr>
-            ), data)}
+            {map(
+              item => (
+                <tr key={item.id}>
+                  {map(
+                    tdItem => (
+                      <td
+                        key={tdItem.id}
+                        styleName={classNames({ byContent: tdItem.byContent })}
+                        style={{ textAlign: tdItem.align || 'left' }}
+                      >
+                        {tdItem.content}
+                      </td>
+                    ),
+                    item.item,
+                  )}
+                </tr>
+              ),
+              data,
+            )}
           </tbody>
         </table>
       </div>

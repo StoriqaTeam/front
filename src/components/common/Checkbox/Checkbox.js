@@ -1,6 +1,7 @@
 // @flow strict
 
 import React, { PureComponent } from 'react';
+import classNames from 'classnames';
 
 import type { Element } from 'react';
 
@@ -12,6 +13,7 @@ type PropsType = {
   isChecked: ?boolean,
   onChange: <T: string>(T) => T | void,
   dataTest?: string,
+  isRadio?: boolean,
 };
 
 class Checkbox extends PureComponent<PropsType> {
@@ -23,13 +25,14 @@ class Checkbox extends PureComponent<PropsType> {
   };
   onChange = (): void => {
     const { id, onChange } = this.props;
+    console.log('---id', id);
     onChange(`${id}`);
   };
   stopPropagation = (e: SyntheticEvent<HTMLDivElement>): void => {
     e.stopPropagation();
   };
   render() {
-    const { id, label, isChecked, dataTest } = this.props;
+    const { id, label, isChecked, dataTest, isRadio } = this.props;
     const dataTestValue = dataTest != null ? dataTest : id;
     return (
       <div
@@ -40,7 +43,7 @@ class Checkbox extends PureComponent<PropsType> {
         tabIndex="0"
       >
         <input
-          styleName="input"
+          styleName={classNames('input', { isRadio })}
           id={id}
           type="checkbox"
           checked={isChecked}

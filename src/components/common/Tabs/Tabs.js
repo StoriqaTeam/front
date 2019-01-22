@@ -23,7 +23,9 @@ class Tabs extends React.Component<PropsType> {
       <button
         key={index}
         styleName={classNames('label', { active: selected === index })}
-        onClick={() => { this.handleClick(index); }}
+        onClick={() => {
+          this.handleClick(index);
+        }}
       >
         <strong>{child.props.label}</strong>
       </button>

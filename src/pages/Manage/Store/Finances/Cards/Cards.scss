@@ -5,9 +5,35 @@
 }
 
 .cards {
-  //
+  position: relative;
 }
 
 .table {
-  margin: 0 -4rem;
+  //margin: 0 -4rem;
+}
+
+.radio {
+
+}
+
+.deleteButton {
+  cursor: pointer;
+
+  svg {
+    fill: $color_grey_minor;
+    transition: $transition_all_ease;
+  }
+
+  &:hover svg {fill: $color_grey;}
+}
+
+.addButton {
+  //display: flex;
+  //justify-content: flex-end;
+  padding-left: 4rem;
+  padding-top: 4rem;
+}
+
+.newCardForm {
+  padding: 4rem;
 }

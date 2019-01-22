@@ -327,7 +327,7 @@ class Checkout extends Component<PropsType, StateType> {
           addressFull,
           receiverName,
           receiverPhone,
-          currency: 'STQ',
+          currency: 'EUR',
         },
         environment: this.context.environment,
         onCompleted: (response: CreateOrdersMutationResponseType, errors) => {
@@ -629,18 +629,22 @@ class Checkout extends Component<PropsType, StateType> {
                             </div>
                           </div>
                         )}
-                        {step === 3 && invoice && invoice.paymentIntent && (
-                          <PaymentInfoFiat
-                            invoice={invoice}
-                            me={this.props.me}
-                          />
-                        )}
-                        {step === 3 && invoice && !invoice.paymentIntent && (
-                          <PaymentInfo
-                            invoiceId={invoice.id}
-                            me={this.props.me}
-                          />
-                        )}
+                        {step === 3 &&
+                          invoice &&
+                          invoice.paymentIntent && (
+                            <PaymentInfoFiat
+                              invoice={invoice}
+                              me={this.props.me}
+                            />
+                          )}
+                        {step === 3 &&
+                          invoice &&
+                          !invoice.paymentIntent && (
+                            <PaymentInfo
+                              invoiceId={invoice.id}
+                              me={this.props.me}
+                            />
+                          )}
                       </Col>
                     )}
                     {!emptyCart &&

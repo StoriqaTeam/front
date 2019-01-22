@@ -441,11 +441,17 @@ NewProduct.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withRouter(withShowAlert(Page(ManageStore({
-    OriginalComponent: NewProduct,
-    active: 'goods',
-    title: 'Goods',
-  })))),
+  withRouter(
+    withShowAlert(
+      Page(
+        ManageStore({
+          OriginalComponent: NewProduct,
+          active: 'goods',
+          title: 'Goods',
+        }),
+      ),
+    ),
+  ),
   graphql`
     fragment NewProduct_me on User {
       myStore {

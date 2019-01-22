@@ -93,6 +93,7 @@ class CartStore extends PureComponent<PropsType> {
       deliveryPackage,
       onPackagesFetched,
     } = this.props;
+
     return (
       <div styleName="container">
         <div>
@@ -128,7 +129,7 @@ class CartStore extends PureComponent<PropsType> {
                       </div>
                     )}
                     <div styleName="store-description">
-                      <div styleName="store-name">
+                      <div styleName="storeName">
                         {getNameText(store.name, 'EN')}
                       </div>
                       <Rating value={store.rating} />

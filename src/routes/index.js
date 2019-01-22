@@ -563,6 +563,13 @@ const routes = (
             <Route
               path="/finances"
               Component={Finances}
+              query={graphql`
+                query routes_Finances_Query {
+                  me {
+                    ...Finances_me
+                  }
+                }
+              `}
             />
             <Route
               path="/orders"

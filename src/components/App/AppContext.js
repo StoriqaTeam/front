@@ -18,6 +18,9 @@ const AppContext = createContext(
         children: [],
       },
       currencies: [],
+      fiatCurrencies: [],
+      cryptoCurrencies: [],
+      sellerCurrencies: [],
       languages: [],
       categories: {
         name: [],

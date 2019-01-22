@@ -162,7 +162,6 @@ class Form extends Component<PropsType, StateType> {
     let variantForForm = null;
 
     if (baseProduct) {
-      // $FlowIgnore
       ({ currency } = baseProduct);
       const {
         name,
@@ -856,7 +855,7 @@ class Form extends Component<PropsType, StateType> {
     } = this.props;
     const {
       category,
-      currencies,// eslint-disable-line
+      currencies, // eslint-disable-line
       currency,
       shippingErrors,
       formErrors,

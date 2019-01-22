@@ -44,11 +44,15 @@ class StoreOrder extends PureComponent<PropsType> {
 }
 
 export default createRefetchContainer(
-  Page(withRouter(ManageStore({
-    OriginalComponent: StoreOrder,
-    active: 'orders',
-    title: 'Orders',
-  }))),
+  Page(
+    withRouter(
+      ManageStore({
+        OriginalComponent: StoreOrder,
+        active: 'orders',
+        title: 'Orders',
+      }),
+    ),
+  ),
   graphql`
     fragment StoreOrder_me on User
       @argumentDefinitions(slug: { type: "Int!", defaultValue: 0 }) {

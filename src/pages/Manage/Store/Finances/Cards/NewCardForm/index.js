@@ -3,34 +3,29 @@
 import React, { Component } from 'react';
 import { assocPath, omit, path, assoc } from 'ramda';
 import classNames from 'classnames';
-import { CardElement, injectStripe } from 'react-stripe-elements';
+import { injectStripe, CardElement } from 'react-stripe-elements';
 
-import { withShowAlert } from 'components/Alerts/AlertContext';
+import { Stripe } from 'pages/common/StripeDecorator';
+// import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Input, Button } from 'components/common';
-import { formatPrice, log } from 'utils';
+import { log } from 'utils';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
-import './CheckoutForm.scss';
+import './NewCardForm.scss';
 
 type PropsType = {
+  name: string,
+  email: string,
   showAlert: (input: AddAlertInputType) => void,
   stripe: {
-    handleCardPayment: (
-      clientSecret: string,
-      cardData: any,
-      sourceData: any,
-    ) => Promise<*>,
+    createToken: ({
+      name: string,
+      email: string,
+    }) => Promise<*>,
   },
-  amount: number,
-  currency: string,
-  email: string,
-  name: string,
-  onPaid: () => void,
-  paymentIntent: {
-    id: string,
-    clientSecret: string,
-  },
+  onCancel: () => void,
+  onSave: (token: any) => void,
 };
 
 type StateType = {
@@ -61,11 +56,11 @@ const cardElementOptional = {
   },
 };
 
-class CheckoutForm extends Component<PropsType, StateType> {
+class NewCardForm extends Component<PropsType, StateType> {
   constructor(props) {
     super(props);
 
-    const { email, name } = props;
+    const { name, email } = props;
 
     this.state = {
       ownerName: name,
@@ -79,53 +74,37 @@ class CheckoutForm extends Component<PropsType, StateType> {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentDidMount() {
+    this.mounted = true;
+  }
+
+  componentWillUnmount() {
+    this.mounted = false;
+  }
+
+  mounted: boolean = false;
   cardElement: any;
 
   handleSubmit = (e: any) => {
     e.preventDefault();
     this.setState({ isLoading: true });
-    const { paymentIntent } = this.props;
     const { ownerName: name, ownerEmail: email } = this.state;
 
     this.props.stripe
-      .handleCardPayment(paymentIntent.clientSecret, this.cardElement, {
-        source_data: {
-          owner: {
-            name,
-            email,
-          },
-        },
+      .createToken({
+        name,
+        email,
       })
-      .then(payload => {
-        if (payload && payload.error) {
-          this.props.showAlert({
-            type: 'danger',
-            text: 'Something going wrong',
-            link: { text: 'Closed.' },
-          });
-          return true;
-        }
-        this.props.onPaid();
+      .then((payload: any) => {
+        this.props.onSave(payload.token);
         return true;
       })
       .finally(() => {
-        this.setState({ isLoading: false });
+        if (this.mounted) {
+          this.setState({ isLoading: false });
+        }
       })
       .catch(log.error);
-
-    // this.props.stripe.createToken({
-    //   name,
-    //   email,
-    // })
-    // .then((payload) => {
-    //   console.log('[source]', payload)
-    // })
-    // .finally(() => {
-    //   console.log('---finally');
-    // })
-    // .catch(() => {
-    //   console.log('---error');
-    // });
   };
 
   handleBlur = () => {
@@ -133,8 +112,7 @@ class CheckoutForm extends Component<PropsType, StateType> {
     this.setState({ isFocus: false });
   };
 
-  handleChange = change => {
-    // console.log('---[change]', change);
+  handleChange = (change: any) => {
     this.setState((prevState: StateType) => ({
       errors: omit(['card'], prevState.errors),
     }));
@@ -207,7 +185,7 @@ class CheckoutForm extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { amount, currency } = this.props;
+    const { onCancel } = this.props;
     const { isFocus, isLoading, errors } = this.state;
 
     return (
@@ -254,11 +232,17 @@ class CheckoutForm extends Component<PropsType, StateType> {
               isLoading={isLoading}
               disabled={this.isDisabledButton()}
             >
-              Pay
+              Save
             </Button>
           </div>
-          <div styleName="amount">
-            {formatPrice(amount)} {currency}
+          <div
+            styleName="cancelButton"
+            onClick={onCancel}
+            onKeyDown={() => {}}
+            role="button"
+            tabIndex="0"
+          >
+            Cancel
           </div>
         </div>
       </form>
@@ -266,4 +250,4 @@ class CheckoutForm extends Component<PropsType, StateType> {
   }
 }
 
-export default withShowAlert(injectStripe(CheckoutForm));
+export default Stripe(injectStripe(NewCardForm));

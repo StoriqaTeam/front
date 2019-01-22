@@ -601,12 +601,16 @@ EditProduct.contextTypes = {
 
 export default createFragmentContainer(
   withShowAlert(
-    // $FlowIgnore
-    withErrorBoundary(Page(ManageStore({
-      OriginalComponent: EditProduct,
-      active: 'goods',
-      title: 'Goods',
-    }))),
+    withErrorBoundary(
+      // $FlowIgnore
+      Page(
+        ManageStore({
+          OriginalComponent: EditProduct,
+          active: 'goods',
+          title: 'Goods',
+        }),
+      ),
+    ),
   ),
   graphql`
     fragment EditProduct_me on User

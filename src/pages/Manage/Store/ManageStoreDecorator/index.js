@@ -111,5 +111,5 @@ export default (props: {
         </AppContext.Consumer>
       );
     }
-  }
+  };
 };

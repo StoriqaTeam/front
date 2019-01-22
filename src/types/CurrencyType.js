@@ -1,6 +1,5 @@
 // @flow strict
 
-type CurrencyEnumType =
-  | 'STQ';
+type CurrencyEnumType = 'STQ';
 
 export type CurrencyType = Array<CurrencyEnumType>;
