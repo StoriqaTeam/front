@@ -12,9 +12,13 @@
 }
 
 .tabs {
-  margin: -1rem -4rem 0;
+  margin-top: -1rem;
+}
 
-  @media (max-width: #{$md - 1px}) {
-    margin: -1rem -2rem 0;
-  }
+.cards {
+  margin: 0 -4rem;
+}
+
+.paymentAccount {
+
 }

@@ -6,7 +6,6 @@ import classNames from 'classnames';
 import { injectStripe, CardElement } from 'react-stripe-elements';
 
 import { Stripe } from 'pages/common/StripeDecorator';
-// import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Input, Button } from 'components/common';
 import { log } from 'utils';
 
@@ -21,7 +20,7 @@ type PropsType = {
   stripe: {
     createToken: ({
       name: string,
-      email: string,
+      email?: string,
     }) => Promise<*>,
   },
   isCards: boolean,
@@ -91,11 +90,11 @@ class NewCardForm extends Component<PropsType, StateType> {
     e.preventDefault();
     this.setState({ isLoading: true });
     const { ownerName: name, ownerEmail: email } = this.state;
+    log.debug(name, email);
 
     this.props.stripe
       .createToken({
         name,
-        email,
       })
       .then((payload: any) => {
         this.props.onSave(payload.token);
@@ -110,7 +109,6 @@ class NewCardForm extends Component<PropsType, StateType> {
   };
 
   handleBlur = () => {
-    // console.log('[blur]');
     this.setState({ isFocus: false });
   };
 
@@ -126,12 +124,9 @@ class NewCardForm extends Component<PropsType, StateType> {
     this.setState({ completeCard: change.complete });
   };
 
-  handleClick = () => {
-    // console.log('[click]');
-  };
+  handleClick = () => {};
 
   handleFocus = () => {
-    // console.log('[focus]');
     this.setState({ isFocus: true });
   };
 
@@ -146,17 +141,6 @@ class NewCardForm extends Component<PropsType, StateType> {
     const { value } = e.target;
     this.setState((prevState: StateType) => assocPath([id], value, prevState));
   };
-
-  // validate = () => {
-  //   const { errors } = validate(
-  //     {
-  //       ownerName: [[val => Boolean(val), 'Name is required']],
-  //       ownerEmail: [[val => Boolean(val), 'Email is required']],
-  //     },
-  //     this.state,
-  //   );
-  //   return errors;
-  // };
 
   isDisabledButton = (): boolean => {
     const { ownerName, ownerEmail, completeCard } = this.state;
@@ -218,13 +202,15 @@ class NewCardForm extends Component<PropsType, StateType> {
             required: true,
           })}
         </div>
-        <div styleName="input">
-          {this.renderInput({
-            id: 'ownerEmail',
-            label: 'Email',
-            required: true,
-          })}
-        </div>
+        {/*
+          <div styleName="input">
+            {this.renderInput({
+              id: 'ownerEmail',
+              label: 'Email',
+              required: true,
+            })}
+          </div>
+        */}
         <div styleName="footer">
           <div styleName="button">
             <Button

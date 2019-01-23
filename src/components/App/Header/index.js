@@ -43,7 +43,7 @@ type PropsType = {
   searchValue: string,
   withoutCategories: ?boolean,
   setLang: (lang: string) => void,
-  totalCount: number,
+  totalCountAll: number,
   userData: ?UserDataType,
   isShopCreated: boolean,
   showAlert: AddAlertInputType => void,
@@ -256,7 +256,7 @@ class Header extends Component<PropsType, StateType> {
     const {
       withoutCategories,
       userData,
-      totalCount,
+      totalCountAll,
       isShopCreated,
       setLang,
     } = this.props;
@@ -327,7 +327,7 @@ class Header extends Component<PropsType, StateType> {
                 userData={userData}
                 searchCategories={searchCategories}
                 searchValue={searchValue}
-                totalCount={totalCount}
+                totalCountAll={totalCountAll}
                 onMobileSearch={this.handleMobileSearch}
                 onOpenModal={this.handleOpenModal}
               />

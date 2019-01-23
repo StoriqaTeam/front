@@ -3,6 +3,8 @@
 import * as React from 'react';
 import classNames from 'classnames';
 
+import { Count } from 'components/Count';
+
 import './Tabs.scss';
 
 type PropsType = {
@@ -19,17 +21,25 @@ class Tabs extends React.Component<PropsType> {
   renderTitles = (): React.Element<any> => {
     const { children, selected } = this.props;
 
-    const buildLabel = (child: any, index: number) => (
-      <button
-        key={index}
-        styleName={classNames('label', { active: selected === index })}
-        onClick={() => {
-          this.handleClick(index);
-        }}
-      >
-        <strong>{child.props.label}</strong>
-      </button>
-    );
+    const buildLabel = (child: any, index: number) => {
+      const { label, amount } = child.props;
+      return (
+        <div
+          key={index}
+          styleName={classNames('label', { active: selected === index })}
+          onClick={() => {
+            this.handleClick(index);
+          }}
+        >
+          <strong>{label}</strong>
+          {amount && (
+            <div styleName="amount">
+              <Count amount={amount} type="blue" />
+            </div>
+          )}
+        </div>
+      );
+    };
     return <div styleName="labels">{children.map(buildLabel)}</div>;
   };
 

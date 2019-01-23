@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { map, isEmpty, pathOr } from 'ramda';
 import { Environment } from 'relay-runtime';
 
-import { Table, Button, Checkbox } from 'components/common';
+import { Table, Checkbox } from 'components/common';
 import { Icon } from 'components/Icon';
 
 // $FlowIgnore
@@ -22,61 +22,8 @@ import './Cards.scss';
 
 import t from './i18n';
 
-const cards = [
-  {
-    id: 'card_1Dtv992eZvKYlo2ChPMWxCDv',
-    object: 'card',
-    address_city: null,
-    address_country: null,
-    address_line1: null,
-    address_line1_check: null,
-    address_line2: null,
-    address_state: null,
-    address_zip: null,
-    address_zip_check: null,
-    brand: 'Visa',
-    country: 'US',
-    customer: 'Aleksey Levenets',
-    cvc_check: null,
-    dynamic_last4: null,
-    exp_month: 8,
-    exp_year: 2020,
-    fingerprint: 'Xt5EWLLDS7FJjR1c',
-    funding: 'credit',
-    last4: '1234',
-    metadata: {},
-    name: null,
-    tokenization_method: null,
-  },
-  {
-    id: 'card_1Dtv992eZvKYlo2ChPMWxHgY',
-    object: 'card',
-    address_city: null,
-    address_country: null,
-    address_line1: null,
-    address_line1_check: null,
-    address_line2: null,
-    address_state: null,
-    address_zip: null,
-    address_zip_check: null,
-    brand: 'MasterCard',
-    country: 'US',
-    customer: 'Aleksey Levenets',
-    cvc_check: null,
-    dynamic_last4: null,
-    exp_month: 11,
-    exp_year: 2021,
-    fingerprint: 'Xt5EWLLDS7FJjR1c',
-    funding: 'credit',
-    last4: '4242',
-    metadata: {},
-    name: null,
-    tokenization_method: null,
-  },
-];
-
 type StateType = {
-  checked: number | string,
+  checked: ?number | ?string,
   isNewCardForm: boolean,
   isLoading: boolean,
 };
@@ -87,7 +34,7 @@ type PropsType = {
   email: string,
   stripeCustomer: {
     id: string,
-    cards: {
+    cards: Array<{
       id: string,
       brand: CardBrandType,
       country: string,
@@ -96,21 +43,43 @@ type PropsType = {
       expYear: number,
       last4: string,
       name: string,
-    },
+    }>,
   },
   showAlert: (input: AddAlertInputType) => void,
   environment: Environment,
 };
 
 class Cards extends Component<PropsType, StateType> {
+  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
+    const { stripeCustomer } = nextProps;
+    const isCards = Boolean(stripeCustomer && !isEmpty(stripeCustomer.cards));
+    let checked = null;
+    if (isCards) {
+      // $FlowIgnore
+      checked = pathOr(null, ['cards', 0, 'id'], stripeCustomer);
+      if (checked !== prevState.checked) {
+        return { checked };
+      }
+    }
+    return null;
+  }
+
   constructor(props: PropsType) {
     super(props);
 
     const { stripeCustomer } = props;
 
+    const isCards = Boolean(stripeCustomer && !isEmpty(stripeCustomer.cards));
+    let checked = null;
+
+    if (isCards) {
+      // $FlowIgnore
+      checked = pathOr(null, ['cards', 0, 'id'], stripeCustomer);
+    }
+
     this.state = {
-      checked: 'card_1Dtv992eZvKYlo2ChPMWxCDv',
-      isNewCardForm: Boolean(!stripeCustomer || isEmpty(stripeCustomer.cards)),
+      checked,
+      isNewCardForm: !isCards,
       isLoading: false,
     };
   }
@@ -133,37 +102,20 @@ class Cards extends Component<PropsType, StateType> {
     });
   };
 
-  handleSaveNewCard = (token: *) => {
-    console.log('---token', token);
+  handleSaveNewCard = (token: { id: string }) => {
     const params: CreateCustomerWithSourceMutationType = {
       input: {
         clientMutationId: '',
         cardToken: token.id,
       },
       environment: this.props.environment,
+      // $FlowIgnore
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         this.setState({ isLoading: false });
         log.debug({ response, errors });
 
         const relayErrors = fromRelayError({ source: { errors } });
         log.debug({ relayErrors });
-
-        // $FlowIgnoreMe
-        const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
-        // if (!isEmpty(validationErrors)) {
-        //   const formErrors = renameKeys(
-        //     {
-        //       long_description: 'longDescription',
-        //       short_description: 'shortDescription',
-        //       seo_title: 'seoTitle',
-        //       seo_description: 'seoDescription',
-        //       vendor_code: 'vendorCode',
-        //     },
-        //     validationErrors,
-        //   );
-        //   this.setState({ formErrors });
-        //   return;
-        // }
 
         // $FlowIgnoreMe
         const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
@@ -200,6 +152,7 @@ class Cards extends Component<PropsType, StateType> {
           text: 'success',
           link: { text: '' },
         });
+        this.setState(() => ({ isNewCardForm: false }));
       },
       onError: (error: Error) => {
         this.setState(() => ({ isLoading: false }));
@@ -212,23 +165,16 @@ class Cards extends Component<PropsType, StateType> {
       },
     };
     CreateCustomerWithSourceMutation.commit(params);
-
-    // console.log('---token', token);
-    //
-    // this.setState({
-    //   isNewCardForm: false,
-    // });
   };
 
   handleDeleteCard = (id: string) => {
-    console.log('---id', id);
+    log.debug(id);
   };
 
   render() {
-    console.log('---this.props', this.props);
     const { firstName, lastName, email, stripeCustomer } = this.props;
     const { checked, isNewCardForm, isLoading } = this.state;
-    const isCards = stripeCustomer && !isEmpty(stripeCustomer.cards);
+    const isCards = Boolean(stripeCustomer && !isEmpty(stripeCustomer.cards));
     return (
       <div styleName="container">
         <div styleName="cards">
@@ -282,11 +228,11 @@ class Cards extends Component<PropsType, StateType> {
                       },
                       {
                         id: 3,
-                        content: `${item.exp_month}/${item.exp_year}`,
+                        content: `${item.expMonth}/${item.expYear}`,
                       },
                       {
                         id: 4,
-                        content: item.customer,
+                        content: item.name,
                       },
                       {
                         id: 5,
@@ -308,12 +254,12 @@ class Cards extends Component<PropsType, StateType> {
                       },
                     ],
                   }),
-                  cards,
+                  stripeCustomer.cards,
                 )}
               />
             </div>
           )}
-          {isCards && (
+          {/* isCards && (
             <div styleName="addButton">
               <Button
                 disabled={isNewCardForm}
@@ -325,7 +271,7 @@ class Cards extends Component<PropsType, StateType> {
                 Add a new card
               </Button>
             </div>
-          )}
+          ) */}
           {isNewCardForm && (
             <div styleName="newCardForm">
               <NewCardForm

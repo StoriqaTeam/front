@@ -53,7 +53,7 @@ type Totals = {
   [storeId: string]: {
     productsCost: number,
     deliveryCost: number,
-    totalCount: number,
+    totalCountAll: number,
   },
 };
 
@@ -102,7 +102,7 @@ class Cart extends Component<PropsType, StateType> {
       this.state.totals[id] || {
         productsCost: 0,
         deliveryCost: 0,
-        totalCount: 0,
+        totalCountAll: 0,
       }
     );
   }
@@ -142,8 +142,8 @@ class Cart extends Component<PropsType, StateType> {
     )(this.props);
 
     // $FlowIgnoreMe
-    const totalCount = pathOr(0, ['cart', 'totalCount'], this.props);
-    const emptyCart = totalCount === 0 && isEmpty(stores);
+    const totalCountAll = pathOr(0, ['cart', 'totalCountAll'], this.props);
+    const emptyCart = totalCountAll === 0 && isEmpty(stores);
     return (
       <div styleName="container">
         <Container withoutGrow>
@@ -152,8 +152,12 @@ class Cart extends Component<PropsType, StateType> {
               <div styleName="header">{t.myCart}</div>
               <div styleName="tabs">
                 <Tabs selected={selectedTab} onClick={this.handleClickTab}>
-                  <div label="Fiat">This is the Fiat panel</div>
-                  <div label="Crypto">This is the Crypto panel</div>
+                  <div label="Fiat" amount={3}>
+                    This is the Fiat panel
+                  </div>
+                  <div label="Crypto" amount={3}>
+                    This is the Crypto panel
+                  </div>
                 </Tabs>
               </div>
               <div ref={ref => this.setStoresRef(ref)}>
@@ -190,7 +194,7 @@ class Cart extends Component<PropsType, StateType> {
                             buttonText="Checkout"
                             onClick={this.handleToCheckout}
                             isReadyToClick={
-                              totalCount > 0 &&
+                              totalCountAll > 0 &&
                               this.isAllSelectedProductsHaveShipping()
                             }
                           />

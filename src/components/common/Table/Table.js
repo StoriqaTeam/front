@@ -1,6 +1,6 @@
 // @flow strict
 
-import * as React from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import { map } from 'ramda';
 
@@ -23,11 +23,11 @@ type PropsType = {
   }>,
 };
 
-class Tabs extends React.Component<PropsType> {
-  render() {
-    const { columns, data, minWidth } = this.props;
-    return (
-      <div styleName="container">
+const Table = (props: PropsType) => {
+  const { columns, data, minWidth } = props;
+  return (
+    <div styleName="container">
+      <div styleName="wrap">
         <table style={{ minWidth: `${minWidth / 8}rem` }}>
           <thead>
             <tr>{map(item => <th key={item.id}>{item.title}</th>, columns)}</tr>
@@ -40,7 +40,9 @@ class Tabs extends React.Component<PropsType> {
                     tdItem => (
                       <td
                         key={tdItem.id}
-                        styleName={classNames({ byContent: tdItem.byContent })}
+                        styleName={classNames({
+                          byContent: tdItem.byContent,
+                        })}
                         style={{ textAlign: tdItem.align || 'left' }}
                       >
                         {tdItem.content}
@@ -55,8 +57,8 @@ class Tabs extends React.Component<PropsType> {
           </tbody>
         </table>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
-export default Tabs;
+export default Table;

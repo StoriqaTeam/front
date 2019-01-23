@@ -90,7 +90,7 @@ export default (
         <AppContext.Consumer>
           {({ environment }) => (
             <UserData environment={environment}>
-              {({ isShopCreated, userData, totalCount }) => (
+              {({ isShopCreated, userData, totalCountAll }) => (
                 <div styleName="container">
                   {process.env.NODE_ENV === 'production' && (
                     <HeaderDisclaimer />
@@ -98,7 +98,7 @@ export default (
                   <Header
                     isShopCreated={isShopCreated}
                     userData={userData}
-                    totalCount={totalCount}
+                    totalCountAll={totalCountAll}
                     searchValue={pathOr(
                       '',
                       ['match', 'location', 'query', 'search'],
