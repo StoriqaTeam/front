@@ -195,6 +195,7 @@ class LocalShipping extends Component<PropsType, StateType> {
                 item => (
                   <Fragment key={item.id}>
                     <CompanyItem
+                      currency={currency}
                       company={item}
                       onRemoveCompany={onRemoveCompany}
                       onSetEditableItem={onSetEditableItem}

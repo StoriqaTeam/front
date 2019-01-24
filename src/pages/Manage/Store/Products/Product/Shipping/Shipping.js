@@ -142,6 +142,7 @@ class Shipping extends Component<PropsType, StateType> {
           error={shippingErrors ? shippingErrors.local : null}
         />
         <InterShipping
+          currency={currency}
           interShipping={interShipping}
           interAvailablePackages={interAvailablePackages}
           onChangeShippingData={this.handleOnChangeShippingData}

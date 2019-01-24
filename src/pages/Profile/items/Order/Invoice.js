@@ -19,6 +19,7 @@ class Invoice extends PureComponent<PropsType> {
   }
 
   render() {
+    console.log('---this.props', this.props);
     // $FlowIgnoreMe
     const invoiceId = pathOr(null, ['order', 'invoice', 'id'], this.props.me);
     if (!invoiceId) {

@@ -14,7 +14,6 @@ import {
   getNameText,
   formatPrice,
   convertSrc,
-  currentCurrency,
   checkCurrencyType,
   getCookie,
 } from 'utils';
@@ -191,7 +190,7 @@ class CardProduct extends PureComponent<PropsType> {
                 <div styleName="undiscountedPrice">
                   {Boolean(discount) && (
                     <span>
-                      {formatPrice(price)} {currentCurrency()}
+                      {formatPrice(price)} {currency}
                     </span>
                   )}
                 </div>

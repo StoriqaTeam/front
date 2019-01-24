@@ -48,12 +48,6 @@ type StateType = {
 };
 
 class PaymentInfoFiat extends PureComponent<PropsType, StateType> {
-  // constructor(props) {
-  //   super(props);
-  //
-  //   console.log('---props', props);
-  // }
-
   state = {
     paidComplete: false,
   };

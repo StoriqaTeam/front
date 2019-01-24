@@ -33,6 +33,7 @@ type PropsType = {
   // eslint-disable-next-line
   ...CartProduct_product,
   withDeliveryCompaniesSelect?: boolean,
+  currencyType: 'FIAT' | 'CRYPTO',
 };
 
 class ProductInfo extends PureComponent<PropsType> {
@@ -98,6 +99,7 @@ class ProductInfo extends PureComponent<PropsType> {
       onChangeComment,
       comment,
       withDeliveryCompaniesSelect,
+      currencyType,
     } = this.props;
 
     const attrs = map(
@@ -171,20 +173,20 @@ class ProductInfo extends PureComponent<PropsType> {
                       title={t.price}
                       value={`${formatPrice(
                         product.subtotalWithoutDiscounts || 0,
-                      )} ${currentCurrency()}`}
+                      )} ${currentCurrency(currencyType)}`}
                     />
                     <CartProductAttribute
                       title={t.delivery}
                       value={`${formatPrice(
                         product.deliveryCost || 0,
-                      )} ${currentCurrency()}`}
+                      )} ${currentCurrency(currencyType)}`}
                     />
                     {product.couponDiscount !== 0 && (
                       <CartProductAttribute
                         title={t.couponDiscount}
                         value={`${formatPrice(
                           product.couponDiscount || 0,
-                        )} ${currentCurrency()}`}
+                        )} ${currentCurrency(currencyType)}`}
                       />
                     )}
                   </div>
@@ -292,20 +294,20 @@ class ProductInfo extends PureComponent<PropsType> {
                   title={t.price}
                   value={`${formatPrice(
                     product.subtotalWithoutDiscounts || 0,
-                  )} ${currentCurrency()}`}
+                  )} ${currentCurrency(currencyType)}`}
                 />
                 <CartProductAttribute
                   title={t.delivery}
                   value={`${formatPrice(
                     product.deliveryCost || 0,
-                  )} ${currentCurrency()}`}
+                  )} ${currentCurrency(currencyType)}`}
                 />
                 {product.couponDiscount !== 0 && (
                   <CartProductAttribute
                     title={t.couponDiscount}
                     value={`−${formatPrice(
                       product.couponDiscount || 0,
-                    )} ${currentCurrency()}`}
+                    )} ${currentCurrency(currencyType)}`}
                   />
                 )}
               </div>

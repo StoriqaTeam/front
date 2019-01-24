@@ -36,6 +36,7 @@ type PropsType = {
   ...CartProduct_product,
   isOpenInfo: ?boolean,
   withDeliveryCompaniesSelect?: boolean,
+  currencyType: 'FIAT' | 'CRYPTO',
 };
 
 type StateType = {
@@ -182,6 +183,7 @@ class CartProduct extends Component<PropsType, StateType> {
       unselectable,
       isOpenInfo,
       withDeliveryCompaniesSelect,
+      currencyType,
     } = this.props;
     if (!product) return null;
     const name: ?string = pipe(
@@ -268,6 +270,7 @@ class CartProduct extends Component<PropsType, StateType> {
                       comment={this.state.comment}
                       isOpen={isOpenInfo}
                       withDeliveryCompaniesSelect={withDeliveryCompaniesSelect}
+                      currencyType={currencyType}
                     />
                   </div>
                 </Col>

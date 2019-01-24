@@ -100,7 +100,7 @@ class CheckoutForm extends Component<PropsType, StateType> {
         if (payload && payload.error) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong',
+            text: payload.error.message || 'Something going wrong',
             link: { text: 'Closed.' },
           });
           return true;

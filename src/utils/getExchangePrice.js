@@ -6,21 +6,25 @@ import { checkCurrencyType, getCookie, formatPrice } from 'utils';
 import type { CurrencyExchangeType } from 'types';
 
 export default (props: {
-  currency: 'STQ' | 'ETH' | 'BTC' | 'USD' | 'EUR',
+  price: number,
+  currency: ?'STQ' | 'ETH' | 'BTC' | 'USD' | 'EUR',
   currencyExchange: CurrencyExchangeType,
   withSymbol: boolean,
 }): ?string => {
-  const { currency, currencyExchange, withSymbol } = props;
+  const { price, currency, currencyExchange, withSymbol } = props;
+  if (!currency) {
+    return null;
+  }
   const currencyType = checkCurrencyType(currency);
 
   if (currencyType === 'crypto') {
     const actualCurrency = getCookie('FIAT_CURRENCY');
-    const currencyExchangeItem = find(propEq('code', currency))(
+    const currencyExchangeItem = find(propEq('code', actualCurrency))(
       currencyExchange,
     );
 
     if (currencyExchangeItem) {
-      const ratesItem = find(propEq('code', actualCurrency))(
+      const ratesItem = find(propEq('code', currency))(
         currencyExchangeItem.rates,
       );
       if (ratesItem) {
@@ -31,9 +35,11 @@ export default (props: {
         if (actualCurrency === 'EUR') {
           actualCurrencySymbol = '€';
         }
-        return `~${withSymbol === true ? actualCurrencySymbol : ''}${formatPrice(
-          ratesItem.value,
-        )} ${withSymbol !== true ? actualCurrency : ''}`;
+        return `~${
+          withSymbol === true ? actualCurrencySymbol : ''
+        }${formatPrice(ratesItem.value * price)} ${
+          withSymbol !== true ? actualCurrency : ''
+        }`;
       }
     }
 

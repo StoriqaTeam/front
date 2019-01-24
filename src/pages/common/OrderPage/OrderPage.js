@@ -253,6 +253,7 @@ class OrderPage extends Component<PropsType, StateType> {
       showAlert,
       showInvoice,
     } = this.props;
+    console.log('---this.props', this.props);
     const { isOpenTicketModalShown } = this.state;
     const order: OrderDTOType = this.getOrderDTO(orderFromProps);
     return (

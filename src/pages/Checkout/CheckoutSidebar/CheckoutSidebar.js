@@ -2,14 +2,11 @@
 
 import React from 'react';
 // $FlowIgnoreMe
-import axios from 'axios';
 import PropTypes from 'prop-types';
-import { head } from 'ramda';
 
-import { formatPrice, currentCurrency, log, getExchangePrice } from 'utils';
+import { formatPrice, getCurrentCurrency, getExchangePrice } from 'utils';
 // import { AppContext } from 'components/App';
 import { ContextDecorator } from 'components/App';
-import { CurrencyPrice } from 'components/common';
 import { Button } from 'components/common/Button';
 import { Row, Col } from 'layout';
 
@@ -35,36 +32,10 @@ type PropsType = {
     couponsDiscounts: number,
   },
   directories: DirectoriesType,
+  currencyType: 'FIAT' | 'CRYPTO',
 };
 
-type StateType = {
-  priceUsd: ?number,
-};
-
-class CheckoutSidebar extends React.Component<PropsType, StateType> {
-  constructor(props: PropsType) {
-    super(props);
-    this.state = {
-      priceUsd: null,
-    };
-  }
-
-  componentDidMount() {
-    this.isMount = true;
-    axios
-      .get('https://api.coinmarketcap.com/v1/ticker/storiqa/')
-      .then(({ data }) => {
-        const dataObj = head(data);
-        if (dataObj && this.isMount) {
-          this.setState({ priceUsd: Number(dataObj.price_usd) });
-        }
-        return true;
-      })
-      .catch(error => {
-        log.debug(error);
-      });
-  }
-
+class CheckoutSidebar extends React.PureComponent<PropsType> {
   // $FlowIgnoreMe
   setRef(ref: ?Object) {
     this.ref = ref;
@@ -93,9 +64,8 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
       goToCheckout,
       step,
       cart,
+      currencyType,
     } = this.props;
-    // console.log('---this.props', this.props);
-    const { priceUsd } = this.state;
     const {
       productsCostWithoutDiscounts,
       deliveryCost,
@@ -113,11 +83,11 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
     const { currencyExchange } = this.props.directories;
 
     const exchangePrice = getExchangePrice({
-      currency: currentCurrency(),
+      price: totalCost,
+      currency: getCurrentCurrency(currencyType) || null,
       currencyExchange,
       withSymbol: true,
     });
-    console.log('---exchangePrice', exchangePrice);
 
     return (
       <div>
@@ -127,7 +97,6 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
           <div styleName="corner tr" />
         </div>
         <div styleName="container">
-          <div styleName="title">{t.paymentMethod}</div>
           <div styleName="title">{t.subtotal}</div>
           <div styleName="totalsContainer">
             <Row>
@@ -138,7 +107,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                     {productsCostWithoutDiscounts &&
                       `${formatPrice(
                         productsCostWithoutDiscounts || 0,
-                      )} ${currentCurrency()}`}
+                      )} ${getCurrentCurrency(currencyType)}`}
                   </div>
                 </div>
               </Col>
@@ -147,7 +116,9 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                   <div styleName="label">{t.delivery}</div>
                   <div styleName="value">
                     {deliveryCost &&
-                      `${formatPrice(deliveryCost || 0)} ${currentCurrency()}`}
+                      `${formatPrice(deliveryCost || 0)} ${getCurrentCurrency(
+                        currencyType,
+                      )}`}
                   </div>
                 </div>
               </Col>
@@ -158,7 +129,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                     <div styleName="value">
                       {`−${formatPrice(
                         couponsDiscounts || 0,
-                      )} ${currentCurrency()}`}
+                      )} ${getCurrentCurrency(currencyType)}`}
                     </div>
                   </div>
                 </Col>
@@ -174,23 +145,12 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                   <div styleName="totalCost">
                     <div styleName="value bold">
                       {totalCost &&
-                        `${formatPrice(totalCost || 0)} ${currentCurrency()}`}
+                        `${formatPrice(totalCost || 0)} ${getCurrentCurrency(
+                          currencyType,
+                        )}`}
                     </div>
-                    {priceUsd != null && (
-                      <div styleName="usdPrice">
-                        <div styleName="slash">/</div>
-                        <CurrencyPrice
-                          withTilda
-                          withSlash
-                          reverse
-                          fontSize={18}
-                          dark
-                          price={totalCost || 0}
-                          currencyPrice={priceUsd}
-                          currencyCode="$"
-                          toFixedValue={2}
-                        />
-                      </div>
+                    {exchangePrice != null && (
+                      <div styleName="exchangePrice">{exchangePrice}</div>
                     )}
                   </div>
                 </div>

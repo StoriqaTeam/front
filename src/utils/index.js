@@ -30,6 +30,7 @@ export {
 } from './convertCurrenciesForSelect';
 export { default as findSelectedFromList } from './findSelectedFromList';
 export { default as currentCurrency } from './currentCurrency';
+export { default as getCurrentCurrency } from './getCurrentCurrency';
 export { default as convertCountries } from './convertCountries';
 export {
   default as convertCountriesForSelect,

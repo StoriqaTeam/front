@@ -22,7 +22,7 @@ import { routerShape, withRouter } from 'found';
 import { validate } from '@storiqa/shared';
 
 import { renameKeys } from 'utils/ramda';
-import { log, fromRelayError, getCookie } from 'utils';
+import { log, fromRelayError, getCookie, setCookie } from 'utils';
 import {
   CreateUserDeliveryAddressFullMutation,
   CreateOrdersMutation,
@@ -102,6 +102,7 @@ type StateType = {
   checkoutInProcess: boolean,
   errors: { [string]: Array<string> },
   scrollArr: Array<string>,
+  currencyType: 'FIAT' | 'CRYPTO',
 };
 
 const emptyAddress = {
@@ -121,7 +122,13 @@ const emptyAddress = {
 class Checkout extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
+
+    const currencyType = getCookie('CURRENCY_TYPE');
+    if (!currencyType) {
+      setCookie('CURRENCY_TYPE', 'FIAT');
+    }
     const { deliveryAddressesFull } = props.me;
+
     this.state = {
       storesRef: null,
       step: 1,
@@ -138,6 +145,7 @@ class Checkout extends Component<PropsType, StateType> {
       checkoutInProcess: false,
       errors: {},
       scrollArr: ['receiverName', 'phone', 'deliveryAddress'],
+      currencyType: currencyType === 'CRYPTO' ? 'CRYPTO' : 'FIAT',
     };
   }
 
@@ -450,11 +458,7 @@ class Checkout extends Component<PropsType, StateType> {
   };
 
   render() {
-    // console.log('---this.props', this.props);
-    // console.log('---getData', this.props.route.getData());
     const { me, cart } = this.props;
-    const actualCart =
-      getCookie('CURRENCY_TYPE') === 'FIAT' ? cart.fiat : cart.crypto;
     // $FlowIgnore
     const deliveryAddresses = pathOr(
       null,
@@ -469,7 +473,13 @@ class Checkout extends Component<PropsType, StateType> {
       orderInput,
       errors,
       invoice,
+      currencyType,
     } = this.state;
+
+    console.log('---currencyType', currencyType);
+
+    const actualCart = currencyType === 'CRYPTO' ? cart.crypto : cart.fiat;
+
     // const stores = pipe(
     //   pathOr([], ['cart', 'stores', 'edges']),
     //   map(path(['node'])),
@@ -567,6 +577,7 @@ class Checkout extends Component<PropsType, StateType> {
                                   store={store}
                                   totals={1000}
                                   withDeliveryCompaniesSelect
+                                  currencyType={currencyType}
                                 />
                               ))}
                             </div>
@@ -602,6 +613,7 @@ class Checkout extends Component<PropsType, StateType> {
                               onCheckout={this.handleCheckout}
                               goToCheckout={this.goToCheckout}
                               cart={actualCart}
+                              currencyType={currencyType}
                             />
                           </StickyBar>
                         </Col>

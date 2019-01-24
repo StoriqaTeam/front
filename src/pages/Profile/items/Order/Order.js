@@ -66,6 +66,7 @@ export default createRefetchContainer(
         product {
           baseProduct {
             rawId
+            currency
             name {
               text
             }

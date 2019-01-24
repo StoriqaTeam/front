@@ -13,7 +13,7 @@ import { Container, Row, Col } from 'layout';
 import {
   formatPrice,
   getNameText,
-  currentCurrency,
+  getCurrentCurrency,
   convertSrc,
   log,
   fromRelayError,
@@ -46,6 +46,7 @@ type PropsType = {
   withDeliveryCompaniesSelect?: boolean,
   relay: Relay,
   showAlert: (input: AddAlertInputType) => void,
+  currencyType: 'FIAT' | 'CRYPTO',
 };
 
 /* eslint-disable react/no-array-index-key */
@@ -152,6 +153,7 @@ class CartStore extends Component<PropsType, StateType> {
       unselectable,
       isOpenInfo,
       withDeliveryCompaniesSelect,
+      currencyType,
     } = this.props;
 
     const {
@@ -177,6 +179,7 @@ class CartStore extends Component<PropsType, StateType> {
               unselectable={unselectable}
               isOpenInfo={isOpenInfo}
               withDeliveryCompaniesSelect={withDeliveryCompaniesSelect}
+              currencyType={currencyType}
             />
           </div>
         ))}
@@ -241,12 +244,13 @@ class CartStore extends Component<PropsType, StateType> {
                       <div styleName="value">
                         <thin styleName="through">
                           {formatPrice(store.totalCostWithoutDiscounts || 0)}{' '}
-                          {currentCurrency()}
+                          {getCurrentCurrency(currencyType)}
                         </thin>
                       </div>
                     )}
                     <div styleName="value">
-                      {formatPrice(store.totalCost || 0)} {currentCurrency()}
+                      {formatPrice(store.totalCost || 0)}{' '}
+                      {getCurrentCurrency(currencyType)}
                     </div>
                   </div>
                 </div>

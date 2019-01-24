@@ -70,6 +70,9 @@ class Cart extends Component<PropsType, StateType> {
   static getDerivedStateFromProps(nextProps: PropsType) {
     const { cart } = nextProps;
     let currencyType = getCookie('CURRENCY_TYPE');
+    if (!currencyType) {
+      setCookie('CURRENCY_TYPE', 'FIAT');
+    }
     let noTabs = false;
     // $FlowIgnoreMe
     const storesFiat = pathOr([], ['fiat', 'stores', 'edges'], cart);
@@ -218,6 +221,9 @@ class Cart extends Component<PropsType, StateType> {
                               store={store}
                               totals={this.totalsForStore(store.__id)}
                               isOpenInfo
+                              currencyType={
+                                selectedTab === 1 ? 'CRYPTO' : 'FIAT'
+                              }
                             />
                           ))}
                         </div>
@@ -236,6 +242,7 @@ class Cart extends Component<PropsType, StateType> {
                               this.isAllSelectedProductsHaveShipping(actualCart)
                             }
                             cart={actualCart}
+                            currencyType={selectedTab === 1 ? 'CRYPTO' : 'FIAT'}
                           />
                         </StickyBar>
                       </div>

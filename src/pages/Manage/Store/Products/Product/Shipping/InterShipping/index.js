@@ -6,6 +6,7 @@ import { isEmpty, map } from 'ramda';
 
 import { RadioButton } from 'components/common/RadioButton';
 
+import type { SelectItemType } from 'types';
 import type {
   CompanyType,
   InterAvailablePackageType,
@@ -30,6 +31,7 @@ type StateType = {
 
 type PropsType = {
   // From Shipping Component
+  currency: SelectItemType,
   interShipping: ShippingType,
   interAvailablePackages: InterAvailablePackageType,
   onChangeShippingData: (data: ShippingChangeDataType) => void,
@@ -97,6 +99,7 @@ class InterShipping extends Component<PropsType, StateType> {
       onSetEditableItem,
       onRemoveEditableItem,
       error,
+      currency,
     } = this.props;
     const { isSelectedWithout, isSelectedFixPrice } = this.state;
 
@@ -136,6 +139,7 @@ class InterShipping extends Component<PropsType, StateType> {
           >
             <FixPriceForm
               inter
+              currency={currency}
               services={remainingServices}
               onSaveCompany={onSaveCompany}
               interAvailablePackages={interAvailablePackages}
@@ -147,6 +151,7 @@ class InterShipping extends Component<PropsType, StateType> {
                 item => (
                   <Fragment key={item.id}>
                     <CompanyItem
+                      currency={currency}
                       company={item}
                       onRemoveCompany={onRemoveCompany}
                       onSetEditableItem={onSetEditableItem}
@@ -155,6 +160,7 @@ class InterShipping extends Component<PropsType, StateType> {
                       <div styleName="editableForm">
                         <FixPriceForm
                           inter
+                          currency={currency}
                           services={possibleServices}
                           company={item}
                           onSaveCompany={onSaveCompany}

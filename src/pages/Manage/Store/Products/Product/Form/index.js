@@ -1253,6 +1253,7 @@ class Form extends Component<PropsType, StateType> {
                           <Variants
                             variants={restVariants}
                             productId={baseProduct.id}
+                            currency={currency}
                             environment={environment}
                             onExpandClick={this.expandClick}
                             showAlert={showAlert}
