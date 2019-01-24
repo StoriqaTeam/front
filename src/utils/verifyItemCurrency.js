@@ -12,7 +12,7 @@ import {
 import { checkCurrencyType, getCookie } from 'utils';
 import { COOKIE_FIAT_CURRENCY, COOKIE_CURRENCY } from 'constants';
 
-import { ItemType } from '../CardProduct';
+import { ItemType } from 'components/CardProduct';
 
 const setCurrency = (item: ItemType): ItemType => {
   const { node } = head(path(['products', 'edges'], item));
@@ -49,4 +49,4 @@ const verifyItemCurrency = item => {
   )(item);
 };
 
-export { setCurrency, verifyItemCurrency };
+export default verifyItemCurrency;

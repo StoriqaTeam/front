@@ -10,11 +10,10 @@ import { Icon } from 'components/Icon';
 import { Rating } from 'components/common/Rating';
 // import { MultiCurrencyDropdown } from 'components/common/MultiCurrencyDropdown';
 import BannerLoading from 'components/Banner/BannerLoading';
-import { getNameText, formatPrice, convertSrc, getExchangePrice } from 'utils';
+import { getNameText, formatPrice, convertSrc, getExchangePrice, verifyItemCurrency } from 'utils';
 import ImageLoader from 'libs/react-image-loader';
 import { ContextDecorator } from 'components/App';
 
-import { verifyItemCurrency } from './utils';
 import { CardProductCashback } from './index';
 
 import './CardProduct.scss';
