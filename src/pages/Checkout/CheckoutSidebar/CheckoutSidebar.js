@@ -4,8 +4,7 @@ import React from 'react';
 // $FlowIgnoreMe
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import { graphql } from 'react-relay';
-import { head, pathOr } from 'ramda';
+import { head } from 'ramda';
 
 import { formatPrice, currentCurrency, log } from 'utils';
 import { CurrencyPrice } from 'components/common';
@@ -24,38 +23,23 @@ type PropsType = {
   checkoutInProcess: boolean,
   goToCheckout: () => void,
   step?: number,
-  cart: any,
+  cart: {
+    productsCostWithoutDiscounts: number,
+    deliveryCost: number,
+    totalCost: number,
+    totalCount: number,
+    couponsDiscounts: number,
+  },
 };
 
 type StateType = {
-  productsCostWithoutDiscounts: number,
-  deliveryCost: number,
-  totalCount: number,
-  totalCost: number,
-  couponsDiscounts: number,
   priceUsd: ?number,
 };
-
-const TOTAL_FRAGMENT = graphql`
-  fragment CheckoutSidebarTotalLocalFragment on Cart {
-    id
-    productsCostWithoutDiscounts
-    deliveryCost
-    totalCount
-    totalCost
-    couponsDiscounts
-  }
-`;
 
 class CheckoutSidebar extends React.Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     this.state = {
-      productsCostWithoutDiscounts: 0,
-      deliveryCost: 0,
-      totalCount: 0,
-      totalCost: 0,
-      couponsDiscounts: 0,
       priceUsd: null,
     };
   }
@@ -74,33 +58,6 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
       .catch(error => {
         log.debug(error);
       });
-
-    const store = this.context.environment.getStore();
-    const cartId = pathOr(
-      null,
-      ['cart', '__ref'],
-      store.getSource().get('client:root'),
-    );
-    const queryNode = TOTAL_FRAGMENT.data();
-    const snapshot = store.lookup({
-      dataID: cartId,
-      node: queryNode,
-    });
-    const { dispose } = store.subscribe(snapshot, s => {
-      this.updateTotal(s.data);
-    });
-    this.updateTotal(snapshot.data);
-    this.dispose = dispose;
-  }
-
-  componentWillUnmount() {
-    if (this.dispose) {
-      this.dispose();
-    }
-    this.isMount = false;
-    if (this.dispose) {
-      this.dispose();
-    }
   }
 
   // $FlowIgnoreMe
@@ -114,32 +71,6 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
   }
 
   isMount = false;
-
-  updateTotal = (data: {
-    productsCostWithoutDiscounts: number,
-    deliveryCost: number,
-    totalCost: number,
-    totalCount: number,
-    couponsDiscounts: number,
-  }) => {
-    const {
-      productsCostWithoutDiscounts,
-      deliveryCost,
-      totalCost,
-      totalCount,
-      couponsDiscounts,
-    } = data;
-    this.setState({
-      productsCostWithoutDiscounts,
-      deliveryCost,
-      totalCost,
-      totalCount,
-      couponsDiscounts,
-    });
-  };
-
-  // $FlowIgnoreMe
-  dispose: Function;
   ref: ?{ className: string };
   // $FlowIgnoreMe
   wrapperRef: any;
@@ -158,14 +89,13 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
       step,
       cart,
     } = this.props;
-    console.log('---cart', cart);
+    const { priceUsd } = this.state;
     const {
       productsCostWithoutDiscounts,
       deliveryCost,
       totalCost,
       totalCount,
       couponsDiscounts,
-      priceUsd,
     } = cart;
 
     let onClickFunction = onClick;
@@ -206,7 +136,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                   </div>
                 </div>
               </Col>
-              {couponsDiscounts !== 0 && (
+              {Boolean(couponsDiscounts) && (
                 <Col size={12} sm={4} lg={12}>
                   <div styleName="attributeContainer">
                     <div styleName="label">{t.couponsDiscount}</div>

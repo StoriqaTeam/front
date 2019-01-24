@@ -2,8 +2,8 @@
 /* eslint-disable no-underscore-dangle */
 
 import React, { Component } from 'react';
-import { graphql, createRefetchContainer } from 'react-relay';
-import { Environment } from 'relay-runtime';
+import { graphql, createFragmentContainer } from 'react-relay';
+// import { Environment } from 'relay-runtime';
 import {
   pipe,
   pathOr,
@@ -31,7 +31,7 @@ import CartEmpty from './CartEmpty';
 import CheckoutSidebar from '../Checkout/CheckoutSidebar';
 
 // eslint-disable-next-line
-import type { Cart_cart } from './__generated__/Cart_cart.graphql';
+import type { Cart_cart as CartType } from './__generated__/Cart_cart.graphql';
 
 import './Cart.scss';
 
@@ -39,15 +39,15 @@ import t from './i18n';
 
 type PropsType = {
   // eslint-disable-next-line
-  cart: Cart_cart,
+  cart: CartType,
   router: routerShape,
-  route: {
-    prepareVariables: () => void,
-  },
-  relay: {
-    refetch: Function,
-    environment: Environment,
-  },
+  // route: {
+  //   prepareVariables: () => void,
+  // },
+  // relay: {
+  //   refetch: Function,
+  //   environment: Environment,
+  // },
 };
 
 type Totals = {
@@ -62,35 +62,46 @@ type StateType = {
   storesRef: ?Object,
   totals: Totals,
   selectedTab: number,
+  noTabs: boolean,
 };
 
 /* eslint-disable react/no-array-index-key */
 class Cart extends Component<PropsType, StateType> {
   constructor(props) {
     super(props);
-    // console.log('---props', props);
-    const prepareVariables = props.route.prepareVariables();
-    const cartType = pathOr('FIAT', ['currencyType'], prepareVariables);
 
-    // const currencyType = getCookie('CURRENCY_TYPE');
+    let currencyType = getCookie('CURRENCY_TYPE');
+    let noTabs = false;
+    const { cart } = props;
+    // $FlowIgnoreMe
+    const totalCountFiat = pathOr(0, ['fiat', 'totalCount'], cart);
+    // $FlowIgnoreMe
+    const totalCountCrypto = pathOr(0, ['crypto', 'totalCount'], cart);
+
+    if (cart.totalCount) {
+      if (!totalCountFiat) {
+        currencyType = 'CRYPTO';
+        noTabs = false;
+      }
+      if (!totalCountCrypto) {
+        currencyType = 'FIAT';
+        noTabs = false;
+      }
+    }
 
     this.state = {
       storesRef: null,
       totals: {},
-      selectedTab: cartType === 'CRYPTO' ? 1 : 0,
+      selectedTab: currencyType === 'CRYPTO' ? 1 : 0,
+      noTabs,
     };
   }
 
-  // componentDidMount() {
-  //   console.log('---selectedTab', this.state.selectedTab);
-  //   this.refetchCart(this.state.selectedTab);
-  // }
-
-  componentDidUpdate(prevProps: PropsType, prevState: StateType) {
-    // console.log('---this.props', this.props);
-    // console.log('---prevProps', prevProps);
-    // console.log('---prevState', prevState);
-    // debugger;
+  componentDidUpdate(prevProps: PropsType) {
+    const { cart } = this.props;
+    if (cart.totalCount !== prevProps.cart.totalCount) {
+      //
+    }
   }
 
   setStoresRef(ref) {
@@ -102,23 +113,23 @@ class Cart extends Component<PropsType, StateType> {
   storesRef: any;
   dispose: () => void;
 
-  refetchCart = (selectedTab: number) => {
-    this.props.relay.refetch(
-      {
-        currencyType: selectedTab === 1 ? 'CRYPTO' : 'FIAT',
-      },
-      null,
-      () => {
-        this.setState({ selectedTab }, () => {
-          setCookie(
-            'CURRENCY_TYPE',
-            this.state.selectedTab === 1 ? 'CRYPTO' : 'FIAT',
-          );
-        });
-      },
-      { force: true },
-    );
-  };
+  // refetchCart = (selectedTab: number) => {
+  //   this.props.relay.refetch(
+  //     {
+  //       currencyType: selectedTab === 1 ? 'CRYPTO' : 'FIAT',
+  //     },
+  //     null,
+  //     () => {
+  //       this.setState({ selectedTab }, () => {
+  //         setCookie(
+  //           'CURRENCY_TYPE',
+  //           this.state.selectedTab === 1 ? 'CRYPTO' : 'FIAT',
+  //         );
+  //       });
+  //     },
+  //     { force: true },
+  //   );
+  // };
 
   handleClickTab = (selectedTab: number) => {
     if (selectedTab === this.state.selectedTab) {
@@ -143,8 +154,9 @@ class Cart extends Component<PropsType, StateType> {
     );
   }
 
-  isAllSelectedProductsHaveShipping = (): boolean => {
-    const storeEdges = this.props.cart ? this.props.cart.stores.edges : [];
+  isAllSelectedProductsHaveShipping = (cart: any): boolean => {
+    // $FlowIgnoreMe
+    const storeEdges = pathOr([], ['stores', 'edges'], cart);
     const stores = map(prop('node'), [...storeEdges]);
     // $FlowIgnoreMe
     const products = flatten(map(prop('products'), stores));
@@ -162,56 +174,40 @@ class Cart extends Component<PropsType, StateType> {
   };
 
   render() {
-    console.log('---this.props', this.props);
-    const { selectedTab } = this.state;
-    // console.log('---selectedTab', selectedTab);
-    // const stores = pipe(
-    //     //   pathOr([], ['cart', 'stores', 'edges']),
-    //     //   map(path(['node'])),
-    //     //   // $FlowIgnoreMe
-    //     // )(this.props);
-
-    // const cryptoStores = pipe(
-    //   pathOr([], ['cart', 'crypto', 'stores', 'edges']),
-    //   map(path(['node'])),
-    //   // $FlowIgnoreMe
-    // )(this.props);
-    //
-    // const stores = selectedTab === 0 ? fiatStores : cryptoStores;
-
+    // console.log('---this.props', this.props);
     const { cart } = this.props;
+    const { selectedTab, noTabs } = this.state;
     const actualCart = selectedTab === 0 ? cart.fiat : cart.crypto;
-
-    console.log('---selectedTab', selectedTab);
-
     const stores = pipe(
       pathOr([], ['stores', 'edges']),
       map(path(['node'])),
       // $FlowIgnoreMe
     )(actualCart);
-
-    console.log('---stores', stores);
-
-    const { totalCount } = cart;
-    const emptyCart = totalCount === 0 && isEmpty(stores);
+    // $FlowIgnoreMe
+    const totalCountFiat = pathOr(0, ['fiat', 'totalCount'], cart);
+    // $FlowIgnoreMe
+    const totalCountCrypto = pathOr(0, ['crypto', 'totalCount'], cart);
+    const { totalCount } = actualCart;
+    const emptyCart = cart.totalCount === 0 && isEmpty(stores);
     return (
       <div styleName="container">
         <Container withoutGrow>
           <Row withoutGrow>
             <Col size={12}>
               <div styleName="header">{t.myCart}</div>
-              {!emptyCart && (
-                <div styleName="tabs">
-                  <Tabs selected={selectedTab} onClick={this.handleClickTab}>
-                    <div label="Fiat" amount={2}>
-                      This is the Fiat panel
-                    </div>
-                    <div label="Crypto" amount={2}>
-                      This is the Crypto panel
-                    </div>
-                  </Tabs>
-                </div>
-              )}
+              {!emptyCart &&
+                !noTabs && (
+                  <div styleName="tabs">
+                    <Tabs selected={selectedTab} onClick={this.handleClickTab}>
+                      <div label="Fiat" amount={totalCountFiat}>
+                        This is the Fiat panel
+                      </div>
+                      <div label="Crypto" amount={totalCountCrypto}>
+                        This is the Crypto panel
+                      </div>
+                    </Tabs>
+                  </div>
+                )}
               <div ref={ref => this.setStoresRef(ref)}>
                 <Row withoutGrow>
                   {emptyCart ? (
@@ -247,7 +243,7 @@ class Cart extends Component<PropsType, StateType> {
                             onClick={this.handleToCheckout}
                             isReadyToClick={
                               totalCount > 0 &&
-                              this.isAllSelectedProductsHaveShipping()
+                              this.isAllSelectedProductsHaveShipping(actualCart)
                             }
                             cart={actualCart}
                           />
@@ -265,43 +261,12 @@ class Cart extends Component<PropsType, StateType> {
   }
 }
 
-export default createRefetchContainer(
+export default createFragmentContainer(
   withRouter(Page(Cart, { withoutCategories: true })),
   graphql`
-    fragment Cart_cart on Cart
-      @argumentDefinitions(
-        first: { type: "Int", defaultValue: null }
-        after: { type: "ID", defaultValue: null }
-      ) {
+    fragment Cart_cart on Cart {
       id
-      productsCost
-      deliveryCost
       totalCount
-      totalCost
-      totalCostWithoutDiscounts
-      productsCostWithoutDiscounts
-      couponsDiscounts
-      stores(first: $first, after: $after) @connection(key: "Cart_stores") {
-        edges {
-          node {
-            id
-            ...CartStore_store
-            productsCost
-            deliveryCost
-            totalCost
-            totalCount
-            products {
-              id
-              selected
-              baseProduct(visibility: "active") {
-                id
-                isShippingAvailable
-              }
-              quantity
-            }
-          }
-        }
-      }
       fiat {
         id
         productsCost
@@ -311,7 +276,7 @@ export default createRefetchContainer(
         totalCostWithoutDiscounts
         productsCostWithoutDiscounts
         couponsDiscounts
-        stores(first: $first, after: $after) @connection(key: "Cart_stores") {
+        stores {
           edges {
             node {
               id
@@ -342,7 +307,7 @@ export default createRefetchContainer(
         totalCostWithoutDiscounts
         productsCostWithoutDiscounts
         couponsDiscounts
-        stores(first: $first, after: $after) @connection(key: "Cart_stores") {
+        stores {
           edges {
             node {
               id
@@ -363,13 +328,6 @@ export default createRefetchContainer(
             }
           }
         }
-      }
-    }
-  `,
-  graphql`
-    query Cart_cart_Query($first: Int, $after: ID) {
-      cart {
-        ...Cart_cart @arguments(first: $first, after: $after)
       }
     }
   `,
