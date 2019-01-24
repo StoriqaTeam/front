@@ -210,15 +210,21 @@ class CartProduct extends Component<PropsType, StateType> {
                         />
                       </div>
                     )}
-                    <div
-                      styleName="picture"
-                      style={{
-                        backgroundImage: `url(${convertSrc(
-                          photoMain,
-                          'medium',
-                        )})`,
-                      }}
-                    />
+                    {photoMain ? (
+                      <div
+                        styleName="picture"
+                        style={{
+                          backgroundImage: `url(${convertSrc(
+                            photoMain,
+                            'medium',
+                          )})`,
+                        }}
+                      />
+                    ) : (
+                      <div styleName="noLogo">
+                        <Icon type="camera" size={40} />
+                      </div>
+                    )}
                   </div>
                 </Col>
                 <Col size={6} smHidden>
