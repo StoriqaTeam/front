@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import type { AddressFullType, SelectItemType } from 'types';
+import type { AddressFullType, SelectItemType, CurrenciesType } from 'types';
 
 export type TranslationType = {
   lang: string,
@@ -75,6 +75,7 @@ export type StoreType = {
 export type ProductType = {
   id: string,
   rawId: number,
+  currency: CurrenciesType,
   name: Array<TranslationType>,
   shortDescription: Array<TranslationType>,
   longDescription: Array<TranslationType>,

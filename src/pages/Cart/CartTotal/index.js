@@ -18,7 +18,7 @@ type Totals = {
   [storeId: string]: {
     productsCost: number,
     deliveryCost: number,
-    totalCountAll: number,
+    totalCount: number,
   },
 };
 
@@ -119,12 +119,12 @@ class CartTotal extends Component<PropsType, StateType> {
         (acc, elem) => ({
           productsCost: acc.productsCost + elem.productsCost,
           deliveryCost: acc.deliveryCost + elem.deliveryCost,
-          totalCountAll: acc.totalCountAll + elem.totalCountAll,
+          totalCount: acc.totalCount + elem.totalCount,
         }),
-        { productsCost: 0, deliveryCost: 0, totalCountAll: 0 },
+        { productsCost: 0, deliveryCost: 0, totalCount: 0 },
       ),
     )(this.props.totals);
-    const { productsCost, deliveryCost, totalCountAll } = totals;
+    const { productsCost, deliveryCost, totalCount } = totals;
     return (
       <div className="top" ref={ref => this.setRef(ref)}>
         <div styleName="container">
@@ -218,7 +218,7 @@ class CartTotal extends Component<PropsType, StateType> {
                 <div>
                   <span>{t.total}</span>
                   <span style={{ color: '#8fb62c' }}>
-                    {` (${totalCountAll} items)`}
+                    {` (${totalCount} items)`}
                   </span>
                 </div>
               }
@@ -226,7 +226,7 @@ class CartTotal extends Component<PropsType, StateType> {
             />
           </div>
           <div styleName="checkout">
-            <Button id="cartTotalCheckout" disabled={!totalCountAll} big>
+            <Button id="cartTotalCheckout" disabled={!totalCount} big>
               {t.checkout}
             </Button>
           </div>

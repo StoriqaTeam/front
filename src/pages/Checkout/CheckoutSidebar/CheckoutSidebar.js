@@ -24,6 +24,7 @@ type PropsType = {
   checkoutInProcess: boolean,
   goToCheckout: () => void,
   step?: number,
+  cart: any,
 };
 
 type StateType = {
@@ -155,7 +156,9 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
       checkoutInProcess,
       goToCheckout,
       step,
+      cart,
     } = this.props;
+    console.log('---cart', cart);
     const {
       productsCostWithoutDiscounts,
       deliveryCost,
@@ -163,7 +166,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
       totalCount,
       couponsDiscounts,
       priceUsd,
-    } = this.state;
+    } = cart;
 
     let onClickFunction = onClick;
 

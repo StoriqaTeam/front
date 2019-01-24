@@ -13,7 +13,7 @@ import type UserDataType from './__generated__/UserData_me.graphql';
 const TOTAL_FRAGMENT = graphql`
   fragment UserDataTotalLocalFragment on Cart {
     id
-    totalCountAll
+    totalCount
   }
 `;
 
@@ -36,12 +36,12 @@ type StoreType = { getSource: () => { get: (val: string) => {} } };
 
 type SnapshotType = {
   data: {
-    totalCountAll: number,
+    totalCount: number,
   },
 };
 
 type StateType = {
-  totalCountAll: number,
+  totalCount: number,
   userData: ?UserDataType,
   isShopCreated: boolean,
 };
@@ -55,7 +55,7 @@ class UserData extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     this.state = {
-      totalCountAll: 0,
+      totalCount: 0,
       userData: null,
       isShopCreated: false,
     };
@@ -74,11 +74,11 @@ class UserData extends Component<PropsType, StateType> {
       setWindowTag('cartCount', newTotalCount);
       // end tmp code
     });
-    const totalCountAll = this.getTotalCount(snapshot);
+    const totalCount = this.getTotalCount(snapshot);
     this.dispose = dispose;
-    this.state.totalCountAll = totalCountAll;
+    this.state.totalCount = totalCount;
     // tmp code
-    setWindowTag('cartCount', totalCountAll);
+    setWindowTag('cartCount', totalCount);
     // end tmp code
     const meId = getStoreData('me');
     if (!meId) {
@@ -118,10 +118,10 @@ class UserData extends Component<PropsType, StateType> {
 
   getTotalCount = (snapshot: SnapshotType): number =>
     // $FlowIgnoreMe
-    pathOr(0, ['data', 'totalCountAll'], snapshot);
+    pathOr(0, ['data', 'totalCount'], snapshot);
 
-  setTotalCount = (totalCountAll: number): void => {
-    this.setState({ totalCountAll });
+  setTotalCount = (totalCount: number): void => {
+    this.setState({ totalCount });
   };
 
   setUserData = (userData: ?UserDataType): void => {
@@ -140,10 +140,10 @@ class UserData extends Component<PropsType, StateType> {
   disposeUser: () => void;
 
   render() {
-    const { userData, totalCountAll, isShopCreated } = this.state;
+    const { userData, totalCount, isShopCreated } = this.state;
     return this.props.children({
       userData,
-      totalCountAll,
+      totalCount,
       isShopCreated,
     });
   }

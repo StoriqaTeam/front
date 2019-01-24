@@ -32,7 +32,7 @@ class Tabs extends React.Component<PropsType> {
           }}
         >
           <strong>{label}</strong>
-          {amount && (
+          {Boolean(amount) && (
             <div styleName="amount">
               <Count amount={amount} type="blue" />
             </div>

@@ -3,6 +3,7 @@
 export type { CategoryChildrenType } from './CategoryChildrenType';
 export type { CategoryType } from './CategoryType';
 export type { CollapseItemType } from './CollapseItemType';
+export type { CurrenciesType } from './CurrenciesType';
 export type { CurrencyType } from './CurrencyType';
 export type { FiatCurrencyType } from './FiatCurrencyType';
 export type { CryptoCurrencyType } from './CryptoCurrencyType';

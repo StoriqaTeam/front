@@ -19,6 +19,7 @@ import {
   anyPass,
 } from 'ramda';
 import { routerShape, withRouter } from 'found';
+import { setCookie, getCookie } from 'utils';
 
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
@@ -53,7 +54,7 @@ type Totals = {
   [storeId: string]: {
     productsCost: number,
     deliveryCost: number,
-    totalCountAll: number,
+    totalCount: number,
   },
 };
 
@@ -65,15 +66,31 @@ type StateType = {
 
 /* eslint-disable react/no-array-index-key */
 class Cart extends Component<PropsType, StateType> {
-  state = {
-    storesRef: null,
-    totals: {},
-    selectedTab: 0,
-  };
+  constructor(props) {
+    super(props);
+    // console.log('---props', props);
+    const prepareVariables = props.route.prepareVariables();
+    const cartType = pathOr('FIAT', ['currencyType'], prepareVariables);
 
-  componentDidMount() {
-    // this.refetchCart();
-    // window.scroll({ top: 0 });
+    // const currencyType = getCookie('CURRENCY_TYPE');
+
+    this.state = {
+      storesRef: null,
+      totals: {},
+      selectedTab: cartType === 'CRYPTO' ? 1 : 0,
+    };
+  }
+
+  // componentDidMount() {
+  //   console.log('---selectedTab', this.state.selectedTab);
+  //   this.refetchCart(this.state.selectedTab);
+  // }
+
+  componentDidUpdate(prevProps: PropsType, prevState: StateType) {
+    // console.log('---this.props', this.props);
+    // console.log('---prevProps', prevProps);
+    // console.log('---prevState', prevState);
+    // debugger;
   }
 
   setStoresRef(ref) {
@@ -85,16 +102,35 @@ class Cart extends Component<PropsType, StateType> {
   storesRef: any;
   dispose: () => void;
 
-  refetchCart = () => {
+  refetchCart = (selectedTab: number) => {
     this.props.relay.refetch(
       {
-        first: null,
-        after: null,
+        currencyType: selectedTab === 1 ? 'CRYPTO' : 'FIAT',
       },
       null,
-      () => {},
+      () => {
+        this.setState({ selectedTab }, () => {
+          setCookie(
+            'CURRENCY_TYPE',
+            this.state.selectedTab === 1 ? 'CRYPTO' : 'FIAT',
+          );
+        });
+      },
       { force: true },
     );
+  };
+
+  handleClickTab = (selectedTab: number) => {
+    if (selectedTab === this.state.selectedTab) {
+      return;
+    }
+    this.setState({ selectedTab }, () => {
+      setCookie(
+        'CURRENCY_TYPE',
+        this.state.selectedTab === 1 ? 'CRYPTO' : 'FIAT',
+      );
+    });
+    // this.refetchCart(selectedTab);
   };
 
   totalsForStore(id: string) {
@@ -102,7 +138,7 @@ class Cart extends Component<PropsType, StateType> {
       this.state.totals[id] || {
         productsCost: 0,
         deliveryCost: 0,
-        totalCountAll: 0,
+        totalCount: 0,
       }
     );
   }
@@ -125,41 +161,57 @@ class Cart extends Component<PropsType, StateType> {
     this.props.router.push('/checkout');
   };
 
-  handleClickTab = (selectedTab: number) => {
-    this.setState({ selectedTab }, () => {
-      this.refetchCart();
-    });
-  };
-
   render() {
     console.log('---this.props', this.props);
-    console.log('---preVar', this.props.route.prepareVariables());
     const { selectedTab } = this.state;
+    // console.log('---selectedTab', selectedTab);
+    // const stores = pipe(
+    //     //   pathOr([], ['cart', 'stores', 'edges']),
+    //     //   map(path(['node'])),
+    //     //   // $FlowIgnoreMe
+    //     // )(this.props);
+
+    // const cryptoStores = pipe(
+    //   pathOr([], ['cart', 'crypto', 'stores', 'edges']),
+    //   map(path(['node'])),
+    //   // $FlowIgnoreMe
+    // )(this.props);
+    //
+    // const stores = selectedTab === 0 ? fiatStores : cryptoStores;
+
+    const { cart } = this.props;
+    const actualCart = selectedTab === 0 ? cart.fiat : cart.crypto;
+
+    console.log('---selectedTab', selectedTab);
+
     const stores = pipe(
-      pathOr([], ['cart', 'stores', 'edges']),
+      pathOr([], ['stores', 'edges']),
       map(path(['node'])),
       // $FlowIgnoreMe
-    )(this.props);
+    )(actualCart);
 
-    // $FlowIgnoreMe
-    const totalCountAll = pathOr(0, ['cart', 'totalCountAll'], this.props);
-    const emptyCart = totalCountAll === 0 && isEmpty(stores);
+    console.log('---stores', stores);
+
+    const { totalCount } = cart;
+    const emptyCart = totalCount === 0 && isEmpty(stores);
     return (
       <div styleName="container">
         <Container withoutGrow>
           <Row withoutGrow>
             <Col size={12}>
               <div styleName="header">{t.myCart}</div>
-              <div styleName="tabs">
-                <Tabs selected={selectedTab} onClick={this.handleClickTab}>
-                  <div label="Fiat" amount={3}>
-                    This is the Fiat panel
-                  </div>
-                  <div label="Crypto" amount={3}>
-                    This is the Crypto panel
-                  </div>
-                </Tabs>
-              </div>
+              {!emptyCart && (
+                <div styleName="tabs">
+                  <Tabs selected={selectedTab} onClick={this.handleClickTab}>
+                    <div label="Fiat" amount={2}>
+                      This is the Fiat panel
+                    </div>
+                    <div label="Crypto" amount={2}>
+                      This is the Crypto panel
+                    </div>
+                  </Tabs>
+                </div>
+              )}
               <div ref={ref => this.setStoresRef(ref)}>
                 <Row withoutGrow>
                   {emptyCart ? (
@@ -194,9 +246,10 @@ class Cart extends Component<PropsType, StateType> {
                             buttonText="Checkout"
                             onClick={this.handleToCheckout}
                             isReadyToClick={
-                              totalCountAll > 0 &&
+                              totalCount > 0 &&
                               this.isAllSelectedProductsHaveShipping()
                             }
+                            cart={actualCart}
                           />
                         </StickyBar>
                       </div>
@@ -219,13 +272,11 @@ export default createRefetchContainer(
       @argumentDefinitions(
         first: { type: "Int", defaultValue: null }
         after: { type: "ID", defaultValue: null }
-        currencyType: { type: "String", defaultValue: "FIAT" }
       ) {
       id
       productsCost
       deliveryCost
       totalCount
-      totalCountAll
       totalCost
       totalCostWithoutDiscounts
       productsCostWithoutDiscounts
@@ -247,6 +298,68 @@ export default createRefetchContainer(
                 isShippingAvailable
               }
               quantity
+            }
+          }
+        }
+      }
+      fiat {
+        id
+        productsCost
+        deliveryCost
+        totalCount
+        totalCost
+        totalCostWithoutDiscounts
+        productsCostWithoutDiscounts
+        couponsDiscounts
+        stores(first: $first, after: $after) @connection(key: "Cart_stores") {
+          edges {
+            node {
+              id
+              ...CartStore_store
+              productsCost
+              deliveryCost
+              totalCost
+              totalCount
+              products {
+                id
+                selected
+                baseProduct(visibility: "active") {
+                  id
+                  isShippingAvailable
+                }
+                quantity
+              }
+            }
+          }
+        }
+      }
+      crypto {
+        id
+        productsCost
+        deliveryCost
+        totalCount
+        totalCost
+        totalCostWithoutDiscounts
+        productsCostWithoutDiscounts
+        couponsDiscounts
+        stores(first: $first, after: $after) @connection(key: "Cart_stores") {
+          edges {
+            node {
+              id
+              ...CartStore_store
+              productsCost
+              deliveryCost
+              totalCost
+              totalCount
+              products {
+                id
+                selected
+                baseProduct(visibility: "active") {
+                  id
+                  isShippingAvailable
+                }
+                quantity
+              }
             }
           }
         }

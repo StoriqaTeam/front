@@ -1,7 +1,11 @@
 // @flow
 
 import React, { Component } from 'react';
-import { createPaginationContainer, graphql } from 'react-relay';
+import {
+  createPaginationContainer,
+  graphql,
+  createRefetchContainer,
+} from 'react-relay';
 import PropTypes from 'prop-types';
 import {
   pipe,
@@ -23,7 +27,7 @@ import { routerShape, withRouter } from 'found';
 import { validate } from '@storiqa/shared';
 
 import { renameKeys } from 'utils/ramda';
-import { log, fromRelayError } from 'utils';
+import { log, fromRelayError, getCookie } from 'utils';
 import {
   CreateUserDeliveryAddressFullMutation,
   CreateOrdersMutation,
@@ -517,7 +521,10 @@ class Checkout extends Component<PropsType, StateType> {
 
   render() {
     // console.log('---this.props', this.props);
-    const { me } = this.props;
+    // console.log('---getData', this.props.route.getData());
+    const { me, cart } = this.props;
+    const actualCart =
+      getCookie('CURRENCY_TYPE') === 'FIAT' ? cart.fiat : cart.crypto;
     // $FlowIgnore
     const deliveryAddresses = pathOr(
       null,
@@ -533,11 +540,17 @@ class Checkout extends Component<PropsType, StateType> {
       errors,
       invoice,
     } = this.state;
+    // const stores = pipe(
+    //   pathOr([], ['cart', 'stores', 'edges']),
+    //   map(path(['node'])),
+    //   // $FlowIgnore
+    // )(this.props);
+
     const stores = pipe(
-      pathOr([], ['cart', 'stores', 'edges']),
+      pathOr([], ['stores', 'edges']),
       map(path(['node'])),
-      // $FlowIgnore
-    )(this.props);
+      // $FlowIgnoreMe
+    )(actualCart);
 
     const emptyCart = stores.length === 0;
     return (
@@ -658,6 +671,7 @@ class Checkout extends Component<PropsType, StateType> {
                               checkoutInProcess={this.state.checkoutInProcess}
                               onCheckout={this.handleCheckoutFiat}
                               goToCheckout={this.goToCheckout}
+                              cart={actualCart}
                             />
                           </StickyBar>
                         </Col>
@@ -673,7 +687,7 @@ class Checkout extends Component<PropsType, StateType> {
   }
 }
 
-export default createPaginationContainer(
+export default createRefetchContainer(
   Page(withShowAlert(withRouter(Checkout)), { withoutCategories: true }),
   graphql`
     fragment Checkout_me on User {
@@ -735,23 +749,77 @@ export default createPaginationContainer(
           }
         }
       }
-    }
-  `,
-  {
-    direction: 'forward',
-    getConnectionFromProps: prop('cart'),
-    getVariables: () => ({
-      first: null,
-      after: null,
-    }),
-    query: graphql`
-      query Checkout_cart_Query($first: Int, $after: ID) {
-        cart {
-          ...Cart_cart @arguments(first: $first, after: $after)
+      fiat {
+        id
+        productsCost
+        deliveryCost
+        totalCost
+        totalCount
+        stores(first: $first, after: $after) @connection(key: "Cart_stores") {
+          edges {
+            node {
+              id
+              productsCost
+              deliveryCost
+              totalCost
+              totalCount
+              ...CartStore_store
+              products {
+                id
+                companyPackage {
+                  id
+                  rawId
+                }
+                selectPackage {
+                  id
+                  shippingId
+                }
+                selected
+              }
+            }
+          }
         }
       }
-    `,
-  },
+      crypto {
+        id
+        productsCost
+        deliveryCost
+        totalCost
+        totalCount
+        stores(first: $first, after: $after) @connection(key: "Cart_stores") {
+          edges {
+            node {
+              id
+              productsCost
+              deliveryCost
+              totalCost
+              totalCount
+              ...CartStore_store
+              products {
+                id
+                companyPackage {
+                  id
+                  rawId
+                }
+                selectPackage {
+                  id
+                  shippingId
+                }
+                selected
+              }
+            }
+          }
+        }
+      }
+    }
+  `,
+  graphql`
+    query Checkout_cart_Query($first: Int, $after: ID) {
+      cart {
+        ...Checkout_cart @arguments(first: $first, after: $after)
+      }
+    }
+  `,
 );
 
 Checkout.contextTypes = {

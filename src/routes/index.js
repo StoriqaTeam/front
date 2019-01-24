@@ -5,7 +5,7 @@ import { Route, RedirectException, Redirect } from 'found';
 import { graphql } from 'react-relay';
 import { find, pathEq, pathOr, last, isNil, pick } from 'ramda';
 
-import { log, jwt as JWT } from 'utils';
+import { log, jwt as JWT, getCookie } from 'utils';
 import { urlToInput } from 'utils/search';
 import { App } from 'components/App';
 import { Authorization, OAuthCallback } from 'components/Authorization';
@@ -66,7 +66,8 @@ const routes = (
           }
           cart {
             id
-            ...Cart_cart
+            ...CheckoutSidebarTotalLocalFragment
+            ...UserDataTotalLocalFragment
           }
           mainPage {
             ...Start_mainPage
@@ -151,6 +152,7 @@ const routes = (
       `}
       render={args => {
         const { error, Component, props } = args;
+        console.log('---props', props);
         if (error) {
           log.error({ error });
           const errors = pathOr([], ['source', 'errors'], error);
@@ -169,18 +171,20 @@ const routes = (
         path="/cart"
         Component={Cart}
         query={graphql`
-          query routes_Cart_Query($currencyType: CurrencyType!) {
-            cart(currencyType: $currencyType) {
+          query routes_Cart_Query {
+            cart {
               ...Cart_cart
             }
           }
         `}
         prepareVariables={() => {
-          const currencyType = 'CRYPTO';
-          return { currencyType };
-        }}
-        variables={{
-          pageID: '110798995619330',
+          const currencyType = getCookie('CURRENCY_TYPE');
+          return {
+            currencyType:
+              currencyType === 'FIAT' || currencyType === 'CRYPTO'
+                ? currencyType
+                : 'FIAT',
+          };
         }}
       />
 

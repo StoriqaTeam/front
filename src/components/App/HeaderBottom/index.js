@@ -18,7 +18,7 @@ import './HeaderBottom.scss';
 type PropsType = {
   searchCategories: ?MobileCategoryType,
   searchValue: string,
-  totalCountAll: number,
+  totalCount: number,
   userData: UserDataType,
   onMobileSearch: () => void,
   onOpenModal: () => void,
@@ -27,7 +27,7 @@ type PropsType = {
 const HeaderBottom = ({
   searchCategories,
   searchValue,
-  totalCountAll,
+  totalCount,
   userData,
   onMobileSearch,
   onOpenModal,
@@ -74,7 +74,7 @@ const HeaderBottom = ({
               isUserLoggedIn: userData,
             })}
           >
-            <CartButton href="/cart" amount={totalCountAll} />
+            <CartButton href="/cart" amount={totalCount} />
           </div>
         </div>
       </Col>
