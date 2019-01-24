@@ -67,33 +67,42 @@ type StateType = {
 
 /* eslint-disable react/no-array-index-key */
 class Cart extends Component<PropsType, StateType> {
+  static getDerivedStateFromProps(nextProps: PropsType) {
+    const { cart } = nextProps;
+    let currencyType = getCookie('CURRENCY_TYPE');
+    let noTabs = false;
+    // $FlowIgnoreMe
+    const storesFiat = pathOr([], ['fiat', 'stores', 'edges'], cart);
+    // $FlowIgnoreMe
+    const storesCrypto = pathOr([], ['crypto', 'stores', 'edges'], cart);
+
+    if (isEmpty(storesFiat) || isEmpty(storesCrypto)) {
+      noTabs = true;
+    }
+    if (isEmpty(storesFiat)) {
+      setCookie('CURRENCY_TYPE', 'CRYPTO');
+      currencyType = 'CRYPTO';
+    }
+    if (isEmpty(storesCrypto)) {
+      setCookie('CURRENCY_TYPE', 'FIAT');
+      currencyType = 'FIAT';
+    }
+    return {
+      selectedTab: currencyType === 'CRYPTO' ? 1 : 0,
+      noTabs,
+    };
+  }
+
   constructor(props) {
     super(props);
 
-    let currencyType = getCookie('CURRENCY_TYPE');
-    let noTabs = false;
-    const { cart } = props;
-    // $FlowIgnoreMe
-    const totalCountFiat = pathOr(0, ['fiat', 'totalCount'], cart);
-    // $FlowIgnoreMe
-    const totalCountCrypto = pathOr(0, ['crypto', 'totalCount'], cart);
-
-    if (cart.totalCount) {
-      if (!totalCountFiat) {
-        currencyType = 'CRYPTO';
-        noTabs = false;
-      }
-      if (!totalCountCrypto) {
-        currencyType = 'FIAT';
-        noTabs = false;
-      }
-    }
+    const currencyType = getCookie('CURRENCY_TYPE');
 
     this.state = {
       storesRef: null,
       totals: {},
       selectedTab: currencyType === 'CRYPTO' ? 1 : 0,
-      noTabs,
+      noTabs: false,
     };
   }
 
@@ -113,24 +122,6 @@ class Cart extends Component<PropsType, StateType> {
   storesRef: any;
   dispose: () => void;
 
-  // refetchCart = (selectedTab: number) => {
-  //   this.props.relay.refetch(
-  //     {
-  //       currencyType: selectedTab === 1 ? 'CRYPTO' : 'FIAT',
-  //     },
-  //     null,
-  //     () => {
-  //       this.setState({ selectedTab }, () => {
-  //         setCookie(
-  //           'CURRENCY_TYPE',
-  //           this.state.selectedTab === 1 ? 'CRYPTO' : 'FIAT',
-  //         );
-  //       });
-  //     },
-  //     { force: true },
-  //   );
-  // };
-
   handleClickTab = (selectedTab: number) => {
     if (selectedTab === this.state.selectedTab) {
       return;
@@ -141,7 +132,6 @@ class Cart extends Component<PropsType, StateType> {
         this.state.selectedTab === 1 ? 'CRYPTO' : 'FIAT',
       );
     });
-    // this.refetchCart(selectedTab);
   };
 
   totalsForStore(id: string) {
@@ -174,8 +164,8 @@ class Cart extends Component<PropsType, StateType> {
   };
 
   render() {
-    // console.log('---this.props', this.props);
     const { cart } = this.props;
+    console.log('---cart', cart);
     const { selectedTab, noTabs } = this.state;
     const actualCart = selectedTab === 0 ? cart.fiat : cart.crypto;
     const stores = pipe(

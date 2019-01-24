@@ -9,6 +9,7 @@ import type {
   LanguageType,
   OrderStatusesType,
   CountriesDefaultType,
+  CurrencyExchangeType,
 } from './index';
 
 export type DirectoriesType = {
@@ -20,4 +21,5 @@ export type DirectoriesType = {
   languages: Array<LanguageType>,
   orderStatuses: OrderStatusesType,
   countries: CountriesDefaultType,
+  currencyExchange: CurrencyExchangeType,
 };

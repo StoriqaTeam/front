@@ -6,10 +6,14 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import { head } from 'ramda';
 
-import { formatPrice, currentCurrency, log } from 'utils';
+import { formatPrice, currentCurrency, log, getExchangePrice } from 'utils';
+// import { AppContext } from 'components/App';
+import { ContextDecorator } from 'components/App';
 import { CurrencyPrice } from 'components/common';
 import { Button } from 'components/common/Button';
 import { Row, Col } from 'layout';
+
+import type { DirectoriesType } from 'types';
 
 import './CheckoutSidebar.scss';
 
@@ -30,6 +34,7 @@ type PropsType = {
     totalCount: number,
     couponsDiscounts: number,
   },
+  directories: DirectoriesType,
 };
 
 type StateType = {
@@ -89,6 +94,7 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
       step,
       cart,
     } = this.props;
+    // console.log('---this.props', this.props);
     const { priceUsd } = this.state;
     const {
       productsCostWithoutDiscounts,
@@ -103,6 +109,15 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
     if (step != null) {
       onClickFunction = step === 1 ? goToCheckout : onCheckout;
     }
+
+    const { currencyExchange } = this.props.directories;
+
+    const exchangePrice = getExchangePrice({
+      currency: currentCurrency(),
+      currencyExchange,
+      withSymbol: true,
+    });
+    console.log('---exchangePrice', exchangePrice);
 
     return (
       <div>
@@ -209,4 +224,4 @@ CheckoutSidebar.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default CheckoutSidebar;
+export default ContextDecorator(CheckoutSidebar);

@@ -25,3 +25,4 @@ export type { AddressFullType } from './AddressFullType';
 export type { ModerationStatusType } from './ModerationStatusType';
 export type { OrderStatusType } from './OrderStatusType';
 export type { CardBrandType } from './CardBrandType';
+export type { CurrencyExchangeType } from './CurrencyExchangeType';

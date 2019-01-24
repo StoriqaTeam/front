@@ -41,3 +41,4 @@ export { default as getQueryRefParams } from './getQueryRefParams';
 export { default as isJson } from './isJson';
 export { default as sanitizeHTML } from './sanitizeHTML';
 export { default as checkCurrencyType } from './checkCurrencyType';
+export { default as getExchangePrice } from './getExchangePrice';
