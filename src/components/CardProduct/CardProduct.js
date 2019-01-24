@@ -19,8 +19,8 @@ import {
   getCookie,
 } from 'utils';
 import ImageLoader from 'libs/react-image-loader';
-
 import { COOKIE_FIAT_CURRENCY, COOKIE_CURRENCY } from 'constants';
+import { ContextDecorator } from 'components/App';
 
 import { CardProductCashback } from './index';
 
@@ -62,9 +62,20 @@ type ItemType = {
   priceUsd: ?number,
 };
 
+type CurrencyExhangeType = {
+  code: string,
+  rates: Array<{
+    code: string,
+    value: number,
+  }>,
+};
+
 type PropsType = {
   item: ItemType,
   isSearchPage: boolean,
+  directories: {
+    currencyExchange: Array<CurrencyExhangeType>,
+  }
 };
 
 const setCurrency = (item: ItemType): ItemType => {
@@ -113,7 +124,7 @@ class CardProduct extends PureComponent<PropsType> {
   };
 
   render() {
-    const { item, isSearchPage } = this.props;
+    const { item, isSearchPage, directories } = this.props;
     const {
       rawId,
       storeId,
@@ -224,4 +235,4 @@ class CardProduct extends PureComponent<PropsType> {
   }
 }
 
-export default CardProduct;
+export default ContextDecorator(CardProduct);
