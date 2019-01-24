@@ -2,13 +2,13 @@
 
 import React, { PureComponent } from 'react';
 import { Link } from 'found';
-import { head, path, assocPath } from 'ramda';
+import { head, path, assocPath, ifElse } from 'ramda';
 import classNames from 'classnames';
 
 import { CurrencyPrice } from 'components/common';
 import { Icon } from 'components/Icon';
 import { Rating } from 'components/common/Rating';
-import { MultiCurrencyDropdown } from 'components/common/MultiCurrencyDropdown';
+// import { MultiCurrencyDropdown } from 'components/common/MultiCurrencyDropdown';
 import BannerLoading from 'components/Banner/BannerLoading';
 import {
   getNameText,
@@ -20,7 +20,9 @@ import {
 } from 'utils';
 import ImageLoader from 'libs/react-image-loader';
 
-import { CardProductCashback, CardProductDropdown } from './index';
+import { COOKIE_FIAT_CURRENCY, COOKIE_CURRENCY } from 'constants';
+
+import { CardProductCashback } from './index';
 
 import './CardProduct.scss';
 
@@ -37,67 +39,77 @@ type VariantType = {
   },
 };
 
-type PropsType = {
-  item: {
-    rawId: number,
-    storeId: number,
-    currency: string,
+type ItemType = {
+  rawId: number,
+  storeId: number,
+  currency: string,
+  name: Array<{
+    lang: string,
+    text: string,
+  }>,
+  products: {
+    edges: Array<{
+      node: VariantType,
+    }>,
+  },
+  rating: number,
+  store: {
     name: Array<{
       lang: string,
       text: string,
     }>,
-    products: {
-      edges: Array<{
-        node: VariantType,
-      }>,
-    },
-    rating: number,
-    store: {
-      name: Array<{
-        lang: string,
-        text: string,
-      }>,
-    },
-    priceUsd: ?number,
   },
+  priceUsd: ?number,
+};
+
+type PropsType = {
+  item: ItemType,
   isSearchPage: boolean,
+};
+
+const setCurrency = (item: ItemType): ItemType => {
+  const { node } = head(path(['products', 'edges'], item));
+  const itemWithCurrency = assocPath(
+    ['products', 'edges'],
+    [
+      {
+        node: {
+          ...node,
+          price: node.customerPrice.price,
+        },
+      },
+    ],
+    item,
+  );
+
+  return {
+    ...itemWithCurrency,
+    currency: node.customerPrice.currency,
+  };
 };
 
 class CardProduct extends PureComponent<PropsType> {
   applyCurrency = item => {
-    if (checkCurrencyType(item.currency) === 'fiat') {
-      const cookie = getCookie('FIAT_CURRENCY');
-
-      if (item.currency !== cookie) {
-        const { node } = head(path(['products', 'edges'], item));
-        const itemWithCurrency = assocPath(
-          ['products', 'edges'],
-          [
-            {
-              node: {
-                ...node,
-                price: node.customerPrice.price,
-              },
-            },
-          ],
-          item,
-        );
-
-        item = itemWithCurrency;
+    const handleFiat = currentItem => {
+      const cookieFiat = getCookie(COOKIE_FIAT_CURRENCY);
+      if (currentItem.currency !== cookieFiat) {
+        return setCurrency(currentItem);
       }
-    } else {
-      const cookie = getCookie('CURRENCY');
-      if (item.currency !== cookie) {
+      return currentItem;
+    };
+
+    const handleCrypto = currentItem => {
+      const cookieCrypto = getCookie(COOKIE_CURRENCY);
+      if (currentItem.currency !== cookieCrypto) {
+        return setCurrency(currentItem);
       }
-    }
-    // const handleFiat = () => {
+      return currentItem;
+    };
 
-    // };
-    // const handleCrypto = () => {
+    const verifyItemCurrency = currentItem =>
+      checkCurrencyType(currentItem.currency) === 'fiat';
 
-    // };
-
-    return item;
+    return ifElse(verifyItemCurrency, handleFiat, handleCrypto)(item);
   };
 
   render() {
@@ -117,7 +129,6 @@ class CardProduct extends PureComponent<PropsType> {
     let cashback = null;
     let price = null;
     const product = head(products.edges);
-    console.log('product', product);
     if (product) {
       ({ discount, photoMain, cashback, price } = product.node);
     }
@@ -129,8 +140,6 @@ class CardProduct extends PureComponent<PropsType> {
     const discountedPrice = discount ? price * (1 - discount) : price;
     const discountValue = discount ? (discount * 100).toFixed(0) : null;
     const cashbackValue = cashback ? (cashback * 100).toFixed(0) : null;
-
-    this.applyCurrency(currency);
     //
     return (
       <div styleName="container">
@@ -186,48 +195,26 @@ class CardProduct extends PureComponent<PropsType> {
                     </span>
                   )}
                 </div>
-                <MultiCurrencyDropdown
-                  currencyCode={item.currency}
-                  elementStyleName="priceDropdown"
-                  price={discountedPrice}
-                  renderPrice={(priceItem: {
-                    price: number,
-                    currencyCode: string,
-                  }) => (
-                    <div styleName="priceDropdown">
-                      <div styleName="actualPrice">
-                        {discountedPrice === 0
-                          ? 'FREE'
-                          : `${formatPrice(priceItem.price)} ${
-                              priceItem.currencyCode
-                            }`}
-                      </div>
-                      {priceUsd && (
-                        <CurrencyPrice
-                          reverse
-                          dark
-                          withTilda
-                          withSlash={priceUsd != null}
-                          price={priceItem.price || 0}
-                          fontSize={16}
-                          currencyPrice={priceUsd}
-                          currencyCode="$"
-                          toFixedValue={2}
-                        />
-                      )}
-                    </div>
-                  )}
-                  renderDropdown={(
-                    rates: Array<{ currencyCode: string, value: number }>,
-                  ) => <CardProductDropdown rates={rates} />}
-                  renderDropdownToggle={(isDropdownOpened: boolean) => (
-                    <button
-                      styleName={`toggleRatesDropdown${
-                        isDropdownOpened ? 'Closed' : 'Opened'
-                      }`}
+                <div styleName="priceDropdown">
+                  <div styleName="actualPrice">
+                    {discountedPrice === 0
+                      ? 'FREE'
+                      : `${formatPrice(discountedPrice)} ${currency}`}
+                  </div>
+                  {priceUsd && (
+                    <CurrencyPrice
+                      reverse
+                      dark
+                      withTilda
+                      withSlash={priceUsd != null}
+                      price={priceUsd || 0}
+                      fontSize={16}
+                      currencyPrice={priceUsd}
+                      currencyCode="$"
+                      toFixedValue={2}
                     />
                   )}
-                />
+                </div>
               </div>
             </div>
           </div>
