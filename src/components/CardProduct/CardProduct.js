@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import { Link } from 'found';
-import { head } from 'ramda';
+import { head, path, assocPath } from 'ramda';
 import classNames from 'classnames';
 
 import { CurrencyPrice } from 'components/common';
@@ -10,7 +10,14 @@ import { Icon } from 'components/Icon';
 import { Rating } from 'components/common/Rating';
 import { MultiCurrencyDropdown } from 'components/common/MultiCurrencyDropdown';
 import BannerLoading from 'components/Banner/BannerLoading';
-import { getNameText, formatPrice, convertSrc, currentCurrency } from 'utils';
+import {
+  getNameText,
+  formatPrice,
+  convertSrc,
+  currentCurrency,
+  checkCurrencyType,
+  getCookie,
+} from 'utils';
 import ImageLoader from 'libs/react-image-loader';
 
 import { CardProductCashback, CardProductDropdown } from './index';
@@ -24,6 +31,10 @@ type VariantType = {
   photoMain: ?string,
   price: ?number,
   rawId: ?number,
+  customerPrice: {
+    price: number,
+    currency: string,
+  },
 };
 
 type PropsType = {
@@ -53,25 +64,60 @@ type PropsType = {
 };
 
 class CardProduct extends PureComponent<PropsType> {
+  applyCurrency = item => {
+    if (checkCurrencyType(item.currency) === 'fiat') {
+      const cookie = getCookie('FIAT_CURRENCY');
+
+      if (item.currency !== cookie) {
+        const { node } = head(path(['products', 'edges'], item));
+        const itemWithCurrency = assocPath(
+          ['products', 'edges'],
+          [
+            {
+              node: {
+                ...node,
+                price: node.customerPrice.price,
+              },
+            },
+          ],
+          item,
+        );
+
+        item = itemWithCurrency;
+      }
+    } else {
+      const cookie = getCookie('CURRENCY');
+      if (item.currency !== cookie) {
+      }
+    }
+    // const handleFiat = () => {
+
+    // };
+    // const handleCrypto = () => {
+
+    // };
+
+    return item;
+  };
+
   render() {
+    const { item, isSearchPage } = this.props;
     const {
-      item: {
-        rawId,
-        storeId,
-        name,
-        products,
-        currency,
-        rating,
-        store,
-        priceUsd,
-      },
-      isSearchPage,
-    } = this.props;
+      rawId,
+      storeId,
+      name,
+      products,
+      currency,
+      rating,
+      store,
+      priceUsd,
+    } = this.applyCurrency(item);
     let discount = null;
     let photoMain = null;
     let cashback = null;
     let price = null;
     const product = head(products.edges);
+    console.log('product', product);
     if (product) {
       ({ discount, photoMain, cashback, price } = product.node);
     }
@@ -83,6 +129,8 @@ class CardProduct extends PureComponent<PropsType> {
     const discountedPrice = discount ? price * (1 - discount) : price;
     const discountValue = discount ? (discount * 100).toFixed(0) : null;
     const cashbackValue = cashback ? (cashback * 100).toFixed(0) : null;
+
+    this.applyCurrency(currency);
     //
     return (
       <div styleName="container">
@@ -139,6 +187,7 @@ class CardProduct extends PureComponent<PropsType> {
                   )}
                 </div>
                 <MultiCurrencyDropdown
+                  currencyCode={item.currency}
                   elementStyleName="priceDropdown"
                   price={discountedPrice}
                   renderPrice={(priceItem: {
