@@ -75,7 +75,7 @@ type PropsType = {
   isSearchPage: boolean,
   directories: {
     currencyExchange: Array<CurrencyExhangeType>,
-  }
+  },
 };
 
 const setCurrency = (item: ItemType): ItemType => {
@@ -101,17 +101,15 @@ const setCurrency = (item: ItemType): ItemType => {
 
 class CardProduct extends PureComponent<PropsType> {
   applyCurrency = item => {
-    const handleFiat = currentItem => {
-      const cookieFiat = getCookie(COOKIE_FIAT_CURRENCY);
-      if (currentItem.currency !== cookieFiat) {
+    const handleFiat = (cookie: string) => currentItem => {
+      if (currentItem.currency !== cookie) {
         return setCurrency(currentItem);
       }
       return currentItem;
     };
 
-    const handleCrypto = currentItem => {
-      const cookieCrypto = getCookie(COOKIE_CURRENCY);
-      if (currentItem.currency !== cookieCrypto) {
+    const handleCrypto = (cookie: string) => currentItem => {
+      if (currentItem.currency !== cookie) {
         return setCurrency(currentItem);
       }
       return currentItem;
@@ -119,8 +117,11 @@ class CardProduct extends PureComponent<PropsType> {
 
     const verifyItemCurrency = currentItem =>
       checkCurrencyType(currentItem.currency) === 'fiat';
-
-    return ifElse(verifyItemCurrency, handleFiat, handleCrypto)(item);
+    return ifElse(
+      verifyItemCurrency,
+      handleFiat(getCookie(COOKIE_FIAT_CURRENCY)),
+      handleCrypto(getCookie(COOKIE_CURRENCY)),
+    )(item);
   };
 
   render() {

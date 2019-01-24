@@ -8,7 +8,11 @@ import { AppContext } from 'components/App';
 export default (OriginalComponent: ComponentType<*>) => (props: {}) => (
   <AppContext.Consumer>
     {({ environment, directories }) => (
-      <OriginalComponent {...props} environment={environment} directories={directories} />
+      <OriginalComponent
+        {...props}
+        environment={environment}
+        directories={directories}
+      />
     )}
   </AppContext.Consumer>
 );
