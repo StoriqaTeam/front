@@ -313,7 +313,24 @@ class Checkout extends Component<PropsType, StateType> {
   };
 
   handleCheckout = () => {
-    // const currencyType = getCookie('CURRENCY_TYPE');
+    const currencyType = getCookie('CURRENCY_TYPE');
+    let actualCurrency = null;
+    if (currencyType === 'FIAT') {
+      actualCurrency = getCookie('FIAT_CURRENCY');
+    }
+    if (currencyType === 'CRYPTO') {
+      actualCurrency = getCookie('CURRENCY');
+    }
+
+    if (!actualCurrency) {
+      this.props.showAlert({
+        type: 'danger',
+        text: t.error,
+        link: { text: t.close },
+      });
+      return;
+    }
+
     const {
       orderInput: { addressFull, receiverName, receiverPhone },
     } = this.state;
@@ -325,7 +342,7 @@ class Checkout extends Component<PropsType, StateType> {
           addressFull,
           receiverName,
           receiverPhone,
-          currency: 'EUR',
+          currency: actualCurrency,
         },
         environment: this.context.environment,
         onCompleted: (response: CreateOrdersMutationResponseType, errors) => {

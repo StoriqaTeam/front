@@ -28,6 +28,7 @@ const AppContext = createContext(
       },
       // $FlowIgnoreMe
       orderStatuses: '',
+      currencyExchange: [],
     },
     environment: null,
     handleLogin: () => {},
