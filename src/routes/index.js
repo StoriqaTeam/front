@@ -44,6 +44,7 @@ import {
   DeviceConfirmed,
   PasswordResetDeny,
 } from 'pages/Wallet';
+import SpinnerPage from 'pages/SpinnerPage';
 
 const routes = (
   <Route>
@@ -66,7 +67,6 @@ const routes = (
           }
           cart {
             id
-            ...CheckoutSidebarTotalLocalFragment
             ...UserDataTotalLocalFragment
           }
           mainPage {
@@ -152,7 +152,6 @@ const routes = (
       `}
       render={args => {
         const { error, Component, props } = args;
-        console.log('---props', props);
         if (error) {
           log.error({ error });
           const errors = pathOr([], ['source', 'errors'], error);
@@ -199,7 +198,7 @@ const routes = (
             JWT.clearJWT();
             throw new RedirectException(`/login?from=${pathname}`);
           } else if (!props) {
-            return null;
+            return <SpinnerPage />;
           } else {
             return <Component {...props} />;
           }

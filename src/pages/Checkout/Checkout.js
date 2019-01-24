@@ -1,18 +1,13 @@
 // @flow
 
 import React, { Component } from 'react';
-import {
-  createPaginationContainer,
-  graphql,
-  createRefetchContainer,
-} from 'react-relay';
+import { graphql, createFragmentContainer } from 'react-relay';
 import PropTypes from 'prop-types';
 import {
   pipe,
   pathOr,
   path,
   map,
-  prop,
   isEmpty,
   flatten,
   find,
@@ -46,8 +41,6 @@ import type { OrderStatusType } from 'types';
 
 // eslint-disable-next-line
 import type Cart_cart from '../Cart/__generated__/Cart_cart.graphql';
-// eslint-disable-next-line
-import type Checkout_me from './__generated__/Checkout_me.graphql';
 
 import CheckoutHeader from './CheckoutHeader';
 import CheckoutAddress from './CheckoutContent/CheckoutAddress';
@@ -319,7 +312,8 @@ class Checkout extends Component<PropsType, StateType> {
     }));
   };
 
-  handleCheckoutFiat = () => {
+  handleCheckout = () => {
+    // const currencyType = getCookie('CURRENCY_TYPE');
     const {
       orderInput: { addressFull, receiverName, receiverPhone },
     } = this.state;
@@ -348,87 +342,6 @@ class Checkout extends Component<PropsType, StateType> {
               checkoutInProcess: false,
             });
             this.handleChangeStep(3);
-
-            if (
-              process.env.BROWSER &&
-              process.env.REACT_APP_RRPARTNERID &&
-              invoice
-            ) {
-              const items = map(
-                item => ({
-                  id: item.productId,
-                  qnt: item.quantity,
-                  price: item.price,
-                }),
-                [...invoice.orders],
-              );
-
-              transactionTracker({
-                transactionId: invoice.id,
-                items,
-              });
-            }
-          } else if (!errors) {
-            this.props.showAlert({
-              type: 'danger',
-              text: t.error,
-              link: { text: t.close },
-            });
-            this.setState({ checkoutInProcess: false });
-          } else {
-            this.props.showAlert({
-              type: 'danger',
-              text: t.error,
-              link: { text: t.close },
-            });
-            this.setState({ checkoutInProcess: false });
-          }
-        },
-        onError: error => {
-          log.error(t.errorInDeleteFromCart);
-          log.error(error);
-          this.props.showAlert({
-            type: 'danger',
-            text: t.somethingWentWrong,
-            link: { text: t.close },
-          });
-          this.setState({ checkoutInProcess: false });
-          this.props.router.push('/checkout');
-        },
-      });
-    });
-  };
-
-  handleCheckout = () => {
-    const {
-      orderInput: { addressFull, receiverName, receiverPhone },
-    } = this.state;
-
-    this.setState({ checkoutInProcess: true }, () => {
-      CreateOrdersMutation.commit({
-        input: {
-          clientMutationId: '',
-          addressFull,
-          receiverName,
-          receiverPhone,
-          currency: 'STQ',
-        },
-        environment: this.context.environment,
-        onCompleted: (response: CreateOrdersMutationResponseType, errors) => {
-          if (response && response.createOrders) {
-            this.props.showAlert({
-              type: 'success',
-              text: t.ordersSuccessfullyCreated,
-              link: { text: t.close },
-            });
-            this.setState({
-              // $FlowIgnore
-              invoice: response.createOrders.invoice,
-              checkoutInProcess: false,
-            });
-            this.handleChangeStep(3);
-
-            const { invoice } = response.createOrders;
 
             if (
               process.env.BROWSER &&
@@ -669,7 +582,7 @@ class Checkout extends Component<PropsType, StateType> {
                               buttonText={step === 1 ? t.next : t.checkout}
                               isReadyToClick={this.checkReadyToCheckout()}
                               checkoutInProcess={this.state.checkoutInProcess}
-                              onCheckout={this.handleCheckoutFiat}
+                              onCheckout={this.handleCheckout}
                               goToCheckout={this.goToCheckout}
                               cart={actualCart}
                             />
@@ -687,7 +600,7 @@ class Checkout extends Component<PropsType, StateType> {
   }
 }
 
-export default createRefetchContainer(
+export default createFragmentContainer(
   Page(withShowAlert(withRouter(Checkout)), { withoutCategories: true }),
   graphql`
     fragment Checkout_me on User {
@@ -715,47 +628,18 @@ export default createRefetchContainer(
       }
     }
 
-    fragment Checkout_cart on Cart
-      @argumentDefinitions(
-        first: { type: "Int", defaultValue: null }
-        after: { type: "ID", defaultValue: null }
-      ) {
+    fragment Checkout_cart on Cart {
       id
-      productsCost
-      deliveryCost
-      totalCost
-      totalCount
-      stores(first: $first, after: $after) @connection(key: "Cart_stores") {
-        edges {
-          node {
-            id
-            productsCost
-            deliveryCost
-            totalCost
-            totalCount
-            ...CartStore_store
-            products {
-              id
-              companyPackage {
-                id
-                rawId
-              }
-              selectPackage {
-                id
-                shippingId
-              }
-              selected
-            }
-          }
-        }
-      }
       fiat {
         id
         productsCost
         deliveryCost
-        totalCost
         totalCount
-        stores(first: $first, after: $after) @connection(key: "Cart_stores") {
+        totalCost
+        totalCostWithoutDiscounts
+        productsCostWithoutDiscounts
+        couponsDiscounts
+        stores {
           edges {
             node {
               id
@@ -784,9 +668,12 @@ export default createRefetchContainer(
         id
         productsCost
         deliveryCost
-        totalCost
         totalCount
-        stores(first: $first, after: $after) @connection(key: "Cart_stores") {
+        totalCost
+        totalCostWithoutDiscounts
+        productsCostWithoutDiscounts
+        couponsDiscounts
+        stores {
           edges {
             node {
               id
@@ -810,13 +697,6 @@ export default createRefetchContainer(
             }
           }
         }
-      }
-    }
-  `,
-  graphql`
-    query Checkout_cart_Query($first: Int, $after: ID) {
-      cart {
-        ...Checkout_cart @arguments(first: $first, after: $after)
       }
     }
   `,
