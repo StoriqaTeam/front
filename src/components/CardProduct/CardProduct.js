@@ -2,26 +2,19 @@
 
 import React, { PureComponent } from 'react';
 import { Link } from 'found';
-import { head, path, assocPath, ifElse } from 'ramda';
+import { head } from 'ramda';
 import classNames from 'classnames';
 
-import { CurrencyPrice } from 'components/common';
+// import { CurrencyPrice } from 'components/common';
 import { Icon } from 'components/Icon';
 import { Rating } from 'components/common/Rating';
 // import { MultiCurrencyDropdown } from 'components/common/MultiCurrencyDropdown';
 import BannerLoading from 'components/Banner/BannerLoading';
-import {
-  getNameText,
-  formatPrice,
-  convertSrc,
-  currentCurrency,
-  checkCurrencyType,
-  getCookie,
-} from 'utils';
+import { getNameText, formatPrice, convertSrc, getExchangePrice } from 'utils';
 import ImageLoader from 'libs/react-image-loader';
-import { COOKIE_FIAT_CURRENCY, COOKIE_CURRENCY } from 'constants';
 import { ContextDecorator } from 'components/App';
 
+import { verifyItemCurrency } from './utils';
 import { CardProductCashback } from './index';
 
 import './CardProduct.scss';
@@ -39,7 +32,7 @@ type VariantType = {
   },
 };
 
-type ItemType = {
+export type ItemType = {
   rawId: number,
   storeId: number,
   currency: string,
@@ -78,52 +71,7 @@ type PropsType = {
   },
 };
 
-const setCurrency = (item: ItemType): ItemType => {
-  const { node } = head(path(['products', 'edges'], item));
-  const itemWithCurrency = assocPath(
-    ['products', 'edges'],
-    [
-      {
-        node: {
-          ...node,
-          price: node.customerPrice.price,
-        },
-      },
-    ],
-    item,
-  );
-
-  return {
-    ...itemWithCurrency,
-    currency: node.customerPrice.currency,
-  };
-};
-
 class CardProduct extends PureComponent<PropsType> {
-  applyCurrency = item => {
-    const handleFiat = (cookie: string) => currentItem => {
-      if (currentItem.currency !== cookie) {
-        return setCurrency(currentItem);
-      }
-      return currentItem;
-    };
-
-    const handleCrypto = (cookie: string) => currentItem => {
-      if (currentItem.currency !== cookie) {
-        return setCurrency(currentItem);
-      }
-      return currentItem;
-    };
-
-    const verifyItemCurrency = currentItem =>
-      checkCurrencyType(currentItem.currency) === 'fiat';
-    return ifElse(
-      verifyItemCurrency,
-      handleFiat(getCookie(COOKIE_FIAT_CURRENCY)),
-      handleCrypto(getCookie(COOKIE_CURRENCY)),
-    )(item);
-  };
-
   render() {
     const { item, isSearchPage, directories } = this.props;
     const {
@@ -134,8 +82,7 @@ class CardProduct extends PureComponent<PropsType> {
       currency,
       rating,
       store,
-      priceUsd,
-    } = this.applyCurrency(item);
+    } = verifyItemCurrency(item);
     let discount = null;
     let photoMain = null;
     let cashback = null;
@@ -153,6 +100,13 @@ class CardProduct extends PureComponent<PropsType> {
     const discountValue = discount ? (discount * 100).toFixed(0) : null;
     const cashbackValue = cashback ? (cashback * 100).toFixed(0) : null;
     //
+    const priceExchanged = getExchangePrice({
+      price,
+      currency,
+      currencyExchange: directories.currencyExchange,
+      withSymbol: true,
+    });
+
     return (
       <div styleName="container">
         <Link to={productLink} styleName="body" data-test={rawId}>
@@ -203,7 +157,7 @@ class CardProduct extends PureComponent<PropsType> {
                 <div styleName="undiscountedPrice">
                   {Boolean(discount) && (
                     <span>
-                      {formatPrice(price)} {currentCurrency()}
+                      {formatPrice(price)} {currency}
                     </span>
                   )}
                 </div>
@@ -213,18 +167,8 @@ class CardProduct extends PureComponent<PropsType> {
                       ? 'FREE'
                       : `${formatPrice(discountedPrice)} ${currency}`}
                   </div>
-                  {priceUsd && (
-                    <CurrencyPrice
-                      reverse
-                      dark
-                      withTilda
-                      withSlash={priceUsd != null}
-                      price={priceUsd || 0}
-                      fontSize={16}
-                      currencyPrice={priceUsd}
-                      currencyCode="$"
-                      toFixedValue={2}
-                    />
+                  {priceExchanged && (
+                    <span styleName="priceExchanged">{priceExchanged}</span>
                   )}
                 </div>
               </div>
