@@ -148,10 +148,8 @@ class Cart extends Component<PropsType, StateType> {
   }
 
   isAllSelectedProductsHaveShipping = (cart: any): boolean => {
-    // $FlowIgnoreMe
     const storeEdges = pathOr([], ['stores', 'edges'], cart);
     const stores = map(prop('node'), [...storeEdges]);
-    // $FlowIgnoreMe
     const products = flatten(map(prop('products'), stores));
     const selectedProducts = filter(whereEq({ selected: true }), products);
     const productsWithoutShipping = find(
@@ -168,7 +166,6 @@ class Cart extends Component<PropsType, StateType> {
 
   render() {
     const { cart } = this.props;
-    // console.log('---cart', cart);
     const { selectedTab, noTabs } = this.state;
     const actualCart = selectedTab === 0 ? cart.fiat : cart.crypto;
     const stores = pipe(

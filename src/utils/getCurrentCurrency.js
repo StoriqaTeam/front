@@ -2,7 +2,7 @@
 
 import { getCookie } from 'utils';
 
-const getCurrentCurrency = (currencyType?: ?'FIAT' | ?'CRYPTO'): string => {
+const getCurrentCurrency = (currencyType?: ?'FIAT' | ?'CRYPTO') => {
   if (currencyType === 'FIAT') {
     return getCookie('FIAT_CURRENCY') || '';
   }

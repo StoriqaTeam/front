@@ -24,7 +24,7 @@ class Tabs extends React.Component<PropsType> {
     const buildLabel = (child: any, index: number) => {
       const { label, amount } = child.props;
       return (
-        <div
+        <button
           key={index}
           styleName={classNames('label', { active: selected === index })}
           onClick={() => {
@@ -37,7 +37,7 @@ class Tabs extends React.Component<PropsType> {
               <Count amount={amount} type="blue" />
             </div>
           )}
-        </div>
+        </button>
       );
     };
     return <div styleName="labels">{children.map(buildLabel)}</div>;

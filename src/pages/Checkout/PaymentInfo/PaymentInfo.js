@@ -40,17 +40,38 @@ type PropsType = {
 };
 
 type StateType = {
+  priceReservedDueDateTime: ?string,
   timerValue: string,
   isFirstRefetch: boolean,
   isNotificationActive: boolean,
 };
 
 class PaymentInfo extends PureComponent<PropsType, StateType> {
-  state = {
-    timerValue: '',
-    isFirstRefetch: true,
-    isNotificationActive: true,
-  };
+  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
+    // $FlowIgnoreMe
+    const priceReservedDueDateTime = pathOr(
+      null,
+      ['invoice', 'priceReservedDueDateTime'],
+      nextProps.me,
+    );
+
+    if (priceReservedDueDateTime && !prevState.priceReservedDueDateTime) {
+      return { priceReservedDueDateTime };
+    }
+
+    return null;
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      priceReservedDueDateTime: null,
+      timerValue: '',
+      isFirstRefetch: true,
+      isNotificationActive: true,
+    };
+  }
 
   componentDidMount() {
     this.unmounted = false;
@@ -126,12 +147,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
   };
 
   updateCountdown = () => {
-    // $FlowIgnoreMe
-    const priceReservedDueDateTime = pathOr(
-      null,
-      ['invoice', 'priceReservedDueDateTime'],
-      this.props.me,
-    );
+    const { priceReservedDueDateTime } = this.state;
 
     if (this.unmounted) {
       return;
@@ -183,6 +199,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
     const { isFirstRefetch, isNotificationActive } = this.state;
     if (isFirstRefetch) {
       return (
+
         <div styleName="container">
           <div styleName="title">Payment</div>
           <div styleName="description">
@@ -232,8 +249,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
 
     if (invoice) {
       ({ wallet, amount, transactions } = invoice);
-      // eslint-disable-next-line
-      state = invoice.state;
+      ({ state } = invoice);
     }
 
     const dataTest =
@@ -262,7 +278,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
                 <div styleName="paymentInfoWrapper">
                   <div styleName="qr">
                     <QRCode
-                      value={`ethereum:${wallet}?amount=${amount}`}
+                      value={`${invoice.currency === 'BTC' ? 'bitcoin' : 'ethereum'}:${wallet}?amount=${amount}`}
                       renderAs="svg"
                       size={165}
                     />
@@ -271,7 +287,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
                     <div styleName="addressTitle">Address</div>
                     <div styleName="address">{wallet}</div>
                     <div styleName="amountTitle">Amount</div>
-                    <div styleName="amount">{formatPrice(amount)} STQ</div>
+                    <div styleName="amount">{`${formatPrice(amount)} ${invoice.currency}`}</div>
                     {
                       <div styleName="reserveInfo">
                         Current price reserved for{' '}
@@ -380,6 +396,7 @@ export default createRefetchContainer(
           id
           amount
         }
+        currency
       }
     }
   `,

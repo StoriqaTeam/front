@@ -478,16 +478,9 @@ class Checkout extends Component<PropsType, StateType> {
 
     const actualCart = currencyType === 'CRYPTO' ? cart.crypto : cart.fiat;
 
-    // const stores = pipe(
-    //   pathOr([], ['cart', 'stores', 'edges']),
-    //   map(path(['node'])),
-    //   // $FlowIgnore
-    // )(this.props);
-
     const stores = pipe(
       pathOr([], ['stores', 'edges']),
       map(path(['node'])),
-      // $FlowIgnoreMe
     )(actualCart);
 
     const emptyCart = stores.length === 0;

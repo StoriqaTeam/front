@@ -1,7 +1,6 @@
 // @flow strict
 
 import React from 'react';
-// $FlowIgnoreMe
 import PropTypes from 'prop-types';
 
 import { formatPrice, getCurrentCurrency, getExchangePrice } from 'utils';
@@ -82,9 +81,11 @@ class CheckoutSidebar extends React.PureComponent<PropsType> {
 
     const { currencyExchange } = this.props.directories;
 
-    const exchangePrice = getExchangePrice({
+    const currentCurrency = getCurrentCurrency(currencyType);
+
+    const exchangePrice = currentCurrency === '' ? '' : getExchangePrice({
       price: totalCost,
-      currency: getCurrentCurrency(currencyType) || null,
+      currency: currentCurrency,
       currencyExchange,
       withSymbol: true,
     });

@@ -1,7 +1,7 @@
 // @flow strict
 
 import React, { PureComponent } from 'react';
-import { join, length, take, pathOr } from 'ramda';
+import { join, length, take } from 'ramda';
 
 import { Icon } from 'components/Icon';
 

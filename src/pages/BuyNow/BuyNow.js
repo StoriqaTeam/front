@@ -131,8 +131,8 @@ class BuyNow extends Component<PropsType, StateType> {
 
     const { me, calculateBuyNow, baseProduct } = props;
     const { currency } = baseProduct;
-    // $FlowIgnore
     const currencyType =
+      // $FlowIgnore
       checkCurrencyType(currency) === 'crypto' ? 'CRYPTO' : 'FIAT';
     const {
       couponsDiscounts,

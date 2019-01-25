@@ -2,16 +2,16 @@
 
 import React from 'react';
 
-import { Checkbox } from 'components/common/Checkbox';
+// import { Checkbox } from 'components/common/Checkbox';
 import { Icon } from 'components/Icon';
 
 import './Header.scss';
 
-type PropsType = {
-  onSelectAllClick: () => void,
-};
+// type PropsType = {
+//   onSelectAllClick: () => void,
+// };
 
-const Header = (props: PropsType) => (
+const Header = () => (
   <div styleName="header">
     {/*
       <div styleName="headerItem tdCheckbox">

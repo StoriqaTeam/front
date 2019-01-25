@@ -5,6 +5,9 @@ import classNames from 'classnames';
 import { head, assoc, isEmpty, find, propEq } from 'ramda';
 
 import { InputPrice, Button } from 'components/common';
+
+import type { SelectItemType } from 'types';
+
 import Countries from '../Countries';
 import ShippingLocalSelect from '../ShippingLocalSelect';
 import ShippingInterSelect from '../ShippingInterSelect';
@@ -13,7 +16,6 @@ import {
   convertCountriesToStringLabels,
 } from '../utils';
 
-import type { SelectItemType } from 'types';
 import type {
   ServiceType,
   CompanyType,
