@@ -3,13 +3,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { formatPrice, getCurrentCurrency, getExchangePrice } from 'utils';
-// import { AppContext } from 'components/App';
+import { formatPrice, getExchangePrice } from 'utils';
 import { ContextDecorator } from 'components/App';
 import { Button } from 'components/common/Button';
 import { Row, Col } from 'layout';
 
-import type { DirectoriesType } from 'types';
+import type { DirectoriesType, AllCurrenciesType } from 'types';
 
 import './CheckoutSidebar.scss';
 
@@ -31,7 +30,7 @@ type PropsType = {
     couponsDiscounts: number,
   },
   directories: DirectoriesType,
-  currencyType: 'FIAT' | 'CRYPTO',
+  currency: AllCurrenciesType,
 };
 
 class CheckoutSidebar extends React.PureComponent<PropsType> {
@@ -63,7 +62,7 @@ class CheckoutSidebar extends React.PureComponent<PropsType> {
       goToCheckout,
       step,
       cart,
-      currencyType,
+      currency,
     } = this.props;
     const {
       productsCostWithoutDiscounts,
@@ -81,14 +80,17 @@ class CheckoutSidebar extends React.PureComponent<PropsType> {
 
     const { currencyExchange } = this.props.directories;
 
-    const currentCurrency = getCurrentCurrency(currencyType);
+    const currentCurrency = currency;
 
-    const exchangePrice = currentCurrency === '' ? '' : getExchangePrice({
-      price: totalCost,
-      currency: currentCurrency,
-      currencyExchange,
-      withSymbol: true,
-    });
+    const exchangePrice =
+      currentCurrency === ''
+        ? ''
+        : getExchangePrice({
+            price: totalCost,
+            currency: currentCurrency,
+            currencyExchange,
+            withSymbol: true,
+          });
 
     return (
       <div>
@@ -108,7 +110,7 @@ class CheckoutSidebar extends React.PureComponent<PropsType> {
                     {productsCostWithoutDiscounts &&
                       `${formatPrice(
                         productsCostWithoutDiscounts || 0,
-                      )} ${getCurrentCurrency(currencyType)}`}
+                      )} ${currency || ''}`}
                   </div>
                 </div>
               </Col>
@@ -117,9 +119,7 @@ class CheckoutSidebar extends React.PureComponent<PropsType> {
                   <div styleName="label">{t.delivery}</div>
                   <div styleName="value">
                     {deliveryCost &&
-                      `${formatPrice(deliveryCost || 0)} ${getCurrentCurrency(
-                        currencyType,
-                      )}`}
+                      `${formatPrice(deliveryCost || 0)} ${currency || ''}`}
                   </div>
                 </div>
               </Col>
@@ -128,9 +128,8 @@ class CheckoutSidebar extends React.PureComponent<PropsType> {
                   <div styleName="attributeContainer">
                     <div styleName="label">{t.couponsDiscount}</div>
                     <div styleName="value">
-                      {`−${formatPrice(
-                        couponsDiscounts || 0,
-                      )} ${getCurrentCurrency(currencyType)}`}
+                      {`−${formatPrice(couponsDiscounts || 0)} ${currency ||
+                        ''}`}
                     </div>
                   </div>
                 </Col>
@@ -146,9 +145,7 @@ class CheckoutSidebar extends React.PureComponent<PropsType> {
                   <div styleName="totalCost">
                     <div styleName="value bold">
                       {totalCost &&
-                        `${formatPrice(totalCost || 0)} ${getCurrentCurrency(
-                          currencyType,
-                        )}`}
+                        `${formatPrice(totalCost || 0)} ${currency || ''}`}
                     </div>
                     {exchangePrice != null && (
                       <div styleName="exchangePrice">{exchangePrice}</div>

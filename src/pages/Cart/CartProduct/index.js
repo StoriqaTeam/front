@@ -19,6 +19,7 @@ import {
 import { log, convertSrc } from 'utils';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
+import type { AllCurrenciesType } from 'types';
 
 import ProductInfo from '../ProductInfo';
 
@@ -36,7 +37,7 @@ type PropsType = {
   ...CartProduct_product,
   isOpenInfo: ?boolean,
   withDeliveryCompaniesSelect?: boolean,
-  currencyType: 'FIAT' | 'CRYPTO',
+  currency: AllCurrenciesType,
 };
 
 type StateType = {
@@ -183,7 +184,7 @@ class CartProduct extends Component<PropsType, StateType> {
       unselectable,
       isOpenInfo,
       withDeliveryCompaniesSelect,
-      currencyType,
+      currency,
     } = this.props;
     if (!product) return null;
     const name: ?string = pipe(
@@ -270,7 +271,7 @@ class CartProduct extends Component<PropsType, StateType> {
                       comment={this.state.comment}
                       isOpen={isOpenInfo}
                       withDeliveryCompaniesSelect={withDeliveryCompaniesSelect}
-                      currencyType={currencyType}
+                      currency={currency}
                     />
                   </div>
                 </Col>

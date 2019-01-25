@@ -199,7 +199,6 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
     const { isFirstRefetch, isNotificationActive } = this.state;
     if (isFirstRefetch) {
       return (
-
         <div styleName="container">
           <div styleName="title">Payment</div>
           <div styleName="description">
@@ -278,7 +277,9 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
                 <div styleName="paymentInfoWrapper">
                   <div styleName="qr">
                     <QRCode
-                      value={`${invoice.currency === 'BTC' ? 'bitcoin' : 'ethereum'}:${wallet}?amount=${amount}`}
+                      value={`${
+                        invoice.currency === 'BTC' ? 'bitcoin' : 'ethereum'
+                      }:${wallet}?amount=${amount}`}
                       renderAs="svg"
                       size={165}
                     />
@@ -287,7 +288,9 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
                     <div styleName="addressTitle">Address</div>
                     <div styleName="address">{wallet}</div>
                     <div styleName="amountTitle">Amount</div>
-                    <div styleName="amount">{`${formatPrice(amount)} ${invoice.currency}`}</div>
+                    <div styleName="amount">{`${formatPrice(amount)} ${
+                      invoice.currency
+                    }`}</div>
                     {
                       <div styleName="reserveInfo">
                         Current price reserved for{' '}

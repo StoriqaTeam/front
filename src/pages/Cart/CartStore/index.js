@@ -13,7 +13,6 @@ import { Container, Row, Col } from 'layout';
 import {
   formatPrice,
   getNameText,
-  getCurrentCurrency,
   convertSrc,
   log,
   fromRelayError,
@@ -23,6 +22,7 @@ import { SetCouponInCartMutation } from 'relay/mutations';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { MutationParamsType as SetCouponInCartMutationType } from 'relay/mutations/SetCouponInCartMutation';
+import type { AllCurrenciesType } from 'types';
 
 import CartProduct from '../CartProduct';
 
@@ -46,7 +46,7 @@ type PropsType = {
   withDeliveryCompaniesSelect?: boolean,
   relay: Relay,
   showAlert: (input: AddAlertInputType) => void,
-  currencyType: 'FIAT' | 'CRYPTO',
+  currency: AllCurrenciesType,
 };
 
 /* eslint-disable react/no-array-index-key */
@@ -153,7 +153,7 @@ class CartStore extends Component<PropsType, StateType> {
       unselectable,
       isOpenInfo,
       withDeliveryCompaniesSelect,
-      currencyType,
+      currency,
     } = this.props;
 
     const {
@@ -179,7 +179,7 @@ class CartStore extends Component<PropsType, StateType> {
               unselectable={unselectable}
               isOpenInfo={isOpenInfo}
               withDeliveryCompaniesSelect={withDeliveryCompaniesSelect}
-              currencyType={currencyType}
+              currency={currency}
             />
           </div>
         ))}
@@ -243,14 +243,14 @@ class CartStore extends Component<PropsType, StateType> {
                     {Boolean(store.couponsDiscount) && (
                       <div styleName="value">
                         <thin styleName="through">
-                          {formatPrice(store.totalCostWithoutDiscounts || 0)}{' '}
-                          {getCurrentCurrency(currencyType)}
+                          {`${formatPrice(
+                            store.totalCostWithoutDiscounts || 0,
+                          )} ${currency || ''}`}
                         </thin>
                       </div>
                     )}
                     <div styleName="value">
-                      {formatPrice(store.totalCost || 0)}{' '}
-                      {getCurrentCurrency(currencyType)}
+                      {`${formatPrice(store.totalCost || 0)} ${currency || ''}`}
                     </div>
                   </div>
                 </div>

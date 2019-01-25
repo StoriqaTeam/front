@@ -9,6 +9,7 @@ import { Container, Col, Row } from 'layout';
 import { convertSrc } from 'utils';
 
 import type { AvailableDeliveryPackageType } from 'relay/queries/fetchAvailableShippingForUser';
+import type { AllCurrenciesType } from 'types';
 
 import ProductInfo from './ProductInfo';
 
@@ -33,6 +34,7 @@ type PropsType = {
   onChangeDelivery: (pkg: ?AvailableDeliveryPackageType) => Promise<boolean>,
   deliveryPackage: ?AvailableDeliveryPackageType,
   onPackagesFetched: (packages: Array<AvailableDeliveryPackageType>) => void,
+  currency: AllCurrenciesType,
 };
 
 class CartProduct extends Component<PropsType, StateType> {
@@ -53,6 +55,7 @@ class CartProduct extends Component<PropsType, StateType> {
       onChangeDelivery,
       deliveryPackage,
       onPackagesFetched,
+      currency,
     } = this.props;
     if (!product) return null;
     const { photoMain } = product;
@@ -126,6 +129,7 @@ class CartProduct extends Component<PropsType, StateType> {
                       onChangeDelivery={onChangeDelivery}
                       deliveryPackage={deliveryPackage}
                       onPackagesFetched={onPackagesFetched}
+                      currency={currency}
                     />
                   </div>
                 </Col>

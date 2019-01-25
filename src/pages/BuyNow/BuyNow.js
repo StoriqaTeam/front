@@ -993,6 +993,7 @@ class BuyNow extends Component<PropsType, StateType> {
                         onChangeDelivery={this.handleChangeDelivery}
                         deliveryPackage={deliveryPackage}
                         onPackagesFetched={this.handlePackagesFetched}
+                        currency={currency}
                       />
                     </div>
                   </div>

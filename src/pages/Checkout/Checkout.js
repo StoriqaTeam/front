@@ -22,7 +22,13 @@ import { routerShape, withRouter } from 'found';
 import { validate } from '@storiqa/shared';
 
 import { renameKeys } from 'utils/ramda';
-import { log, fromRelayError, getCookie, setCookie } from 'utils';
+import {
+  log,
+  fromRelayError,
+  getCookie,
+  setCookie,
+  getCurrentCurrency,
+} from 'utils';
 import {
   CreateUserDeliveryAddressFullMutation,
   CreateOrdersMutation,
@@ -478,10 +484,9 @@ class Checkout extends Component<PropsType, StateType> {
 
     const actualCart = currencyType === 'CRYPTO' ? cart.crypto : cart.fiat;
 
-    const stores = pipe(
-      pathOr([], ['stores', 'edges']),
-      map(path(['node'])),
-    )(actualCart);
+    const stores = pipe(pathOr([], ['stores', 'edges']), map(path(['node'])))(
+      actualCart,
+    );
 
     const emptyCart = stores.length === 0;
     return (
@@ -568,7 +573,7 @@ class Checkout extends Component<PropsType, StateType> {
                                   store={store}
                                   totals={1000}
                                   withDeliveryCompaniesSelect
-                                  currencyType={currencyType}
+                                  currency={getCurrentCurrency(currencyType)}
                                 />
                               ))}
                             </div>
@@ -604,7 +609,7 @@ class Checkout extends Component<PropsType, StateType> {
                               onCheckout={this.handleCheckout}
                               goToCheckout={this.goToCheckout}
                               cart={actualCart}
-                              currencyType={currencyType}
+                              currency={getCurrentCurrency(currencyType)}
                             />
                           </StickyBar>
                         </Col>

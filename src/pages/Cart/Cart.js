@@ -19,7 +19,7 @@ import {
   anyPass,
 } from 'ramda';
 import { routerShape, withRouter } from 'found';
-import { setCookie, getCookie } from 'utils';
+import { setCookie, getCookie, getCurrentCurrency } from 'utils';
 
 import { Page } from 'components/App';
 import { Container, Row, Col } from 'layout';
@@ -218,9 +218,9 @@ class Cart extends Component<PropsType, StateType> {
                               store={store}
                               totals={this.totalsForStore(store.__id)}
                               isOpenInfo
-                              currencyType={
-                                selectedTab === 1 ? 'CRYPTO' : 'FIAT'
-                              }
+                              currency={getCurrentCurrency(
+                                selectedTab === 1 ? 'CRYPTO' : 'FIAT',
+                              )}
                             />
                           ))}
                         </div>
@@ -239,7 +239,9 @@ class Cart extends Component<PropsType, StateType> {
                               this.isAllSelectedProductsHaveShipping(actualCart)
                             }
                             cart={actualCart}
-                            currencyType={selectedTab === 1 ? 'CRYPTO' : 'FIAT'}
+                            currency={getCurrentCurrency(
+                              selectedTab === 1 ? 'CRYPTO' : 'FIAT',
+                            )}
                           />
                         </StickyBar>
                       </div>
