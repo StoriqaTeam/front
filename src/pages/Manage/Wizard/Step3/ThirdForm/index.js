@@ -1,8 +1,8 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { map, pathOr, whereEq, filter, isEmpty } from 'ramda';
+import { map, pathOr, whereEq, filter, isEmpty, find } from 'ramda';
 
 import { findCategory } from 'utils';
 import { InputPrice, Input, Button, Select } from 'components/common';
@@ -11,6 +11,7 @@ import { CategorySelector } from 'components/CategorySelector';
 import { Icon } from 'components/Icon';
 import { Container, Col, Row } from 'layout';
 import Photos from 'pages/Manage/Store/Products/Product/Photos';
+import { ContextDecorator } from 'components/App';
 
 import AttributesForm from '../AttributesForm';
 
@@ -39,6 +40,13 @@ type PropsType = {
   onClose: () => void,
   isSavingInProgress: boolean,
   allCategories: CategoriesTreeType,
+  directories: {
+    sellerCurrencies: Array<string>
+  }
+};
+
+type StateType = {
+  selectedCurrency: { label: string, id: string, }
 };
 
 const photoIcons = [
@@ -72,7 +80,21 @@ const photoIcons = [
   },
 ];
 
-class ThirdForm extends PureComponent<PropsType> {
+const toItem = (currency: string): Array<{id: string, label: string}> => ({
+  id: currency,
+  label: currency,
+});
+
+class ThirdForm extends Component<PropsType, StateType> {
+  constructor(props: PropsType) {
+    super(props);
+    const { sellerCurrencies } = this.props.directories;
+    const currencies = map(toItem, sellerCurrencies);
+    const selectedCurrency = find(item => item.label === 'STQ', currencies);
+    this.state = {
+      selectedCurrency,
+    };
+  }
   handleChangeBaseProductState = (e: any) => {
     const { data } = this.props;
     const {
@@ -124,6 +146,21 @@ class ThirdForm extends PureComponent<PropsType> {
         price,
       },
     });
+  };
+
+  handleChangeCurrency = (selectedCurrency: { label: string, id: string}) => {
+    console.log('selectedCurrency', selectedCurrency);
+    const { data } = this.props;
+    this.setState({
+      selectedCurrency
+    })
+    // this.props.onChange({
+    //   ...data,
+    //   product: {
+    //     ...data.product,
+    //     // price,
+    //   },
+    // });
   };
 
   handleAttributesChange = (attrs: Array<AttrValueType>) => {
@@ -211,9 +248,12 @@ class ThirdForm extends PureComponent<PropsType> {
       onClose,
       isSavingInProgress,
       allCategories,
+      directories,
     } = this.props;
+    const { selectedCurrency } = this.state;
     // $FlowIgnoreMe
     const categoryId = pathOr(null, ['data', 'categoryId'], this.props);
+    const sellerCurrencies = map(toItem, directories.sellerCurrencies)
     return (
       <div styleName="wrapper">
         <div styleName="formWrapper">
@@ -325,15 +365,15 @@ class ThirdForm extends PureComponent<PropsType> {
                           <Col size={12} md={6}>
                             <div styleName="formItem">
                               <Select
-                                items={[{ id: '1', label: 'STQ' }]}
-                                activeItem={{ id: '1', label: 'STQ' }}
+                                items={sellerCurrencies}
+                                activeItem={selectedCurrency}
                                 label="Currency"
                                 forForm
                                 containerStyle={{
                                   marginTop: '3rem',
                                   width: '100%',
                                 }}
-                                onSelect={() => {}}
+                                onSelect={this.handleChangeCurrency}
                                 dataTest="step3Currency"
                               />
                             </div>
@@ -435,7 +475,7 @@ class ThirdForm extends PureComponent<PropsType> {
 }
 
 export default createFragmentContainer(
-  ThirdForm,
+  ContextDecorator(ThirdForm),
   graphql`
     fragment ThirdForm_allCategories on Category {
       name {
