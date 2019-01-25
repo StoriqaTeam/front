@@ -41,12 +41,12 @@ type PropsType = {
   isSavingInProgress: boolean,
   allCategories: CategoriesTreeType,
   directories: {
-    sellerCurrencies: Array<string>
-  }
+    sellerCurrencies: Array<string>,
+  },
 };
 
 type StateType = {
-  selectedCurrency: { label: string, id: string, }
+  selectedCurrency: { label: string, id: string },
 };
 
 const photoIcons = [
@@ -80,7 +80,7 @@ const photoIcons = [
   },
 ];
 
-const toItem = (currency: string): Array<{id: string, label: string}> => ({
+const toItem = (currency: string): Array<{ id: string, label: string }> => ({
   id: currency,
   label: currency,
 });
@@ -148,19 +148,16 @@ class ThirdForm extends Component<PropsType, StateType> {
     });
   };
 
-  handleChangeCurrency = (selectedCurrency: { label: string, id: string}) => {
-    console.log('selectedCurrency', selectedCurrency);
+  handleChangeCurrency = (selectedCurrency: { label: string, id: string }) => {
     const { data } = this.props;
     this.setState({
-      selectedCurrency
-    })
-    // this.props.onChange({
-    //   ...data,
-    //   product: {
-    //     ...data.product,
-    //     // price,
-    //   },
-    // });
+      selectedCurrency,
+    }, () => {
+      this.props.onChange({
+        ...data,
+        currency: selectedCurrency.label
+      });
+    });
   };
 
   handleAttributesChange = (attrs: Array<AttrValueType>) => {
@@ -253,7 +250,7 @@ class ThirdForm extends Component<PropsType, StateType> {
     const { selectedCurrency } = this.state;
     // $FlowIgnoreMe
     const categoryId = pathOr(null, ['data', 'categoryId'], this.props);
-    const sellerCurrencies = map(toItem, directories.sellerCurrencies)
+    const sellerCurrencies = map(toItem, directories.sellerCurrencies);
     return (
       <div styleName="wrapper">
         <div styleName="formWrapper">

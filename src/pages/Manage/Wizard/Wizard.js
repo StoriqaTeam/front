@@ -1178,6 +1178,10 @@ export default createFragmentContainer(
                       vendorCode
                       cashback
                       price
+                      customerPrice {
+                        price,
+                        currency
+                      }
                       attributes {
                         attrId
                         value
