@@ -11,9 +11,8 @@ import './StripeDecorator.scss';
 type StateType = {
   stripe: ?any,
 };
-
+// eslint-disable-next-line
 export default (OriginalComponent: ComponentType<*>) => {
-  // eslint-disable-line
   return class Stripe extends Component<{}, StateType> {
     state = { stripe: null };
 
