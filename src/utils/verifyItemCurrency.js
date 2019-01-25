@@ -8,6 +8,7 @@ import {
   identity,
   propEq,
   has,
+  isNil,
 } from 'ramda';
 
 import { checkCurrencyType, getCookie } from 'utils';
@@ -18,28 +19,35 @@ import { ItemType } from 'components/CardProduct';
 const setCurrency = (item: ItemType): ItemType => {
   if (has('products', item)) {
     const { node } = head(path(['products', 'edges'], item));
-    const itemWithCurrency = assocPath(
-      ['products', 'edges'],
-      [
-        {
-          node: {
-            ...node,
-            price: node.customerPrice.price,
+    if (!isNil(node.customerPrice)) {
+      const itemWithCurrency = assocPath(
+        ['products', 'edges'],
+        [
+          {
+            node: {
+              ...node,
+              price: node.customerPrice.price,
+            },
           },
-        },
-      ],
-      item,
-    );
+        ],
+        item,
+      );
+      return {
+        ...itemWithCurrency,
+        currency: node.customerPrice.currency,
+      };
+    }
+  }
+
+  if (!isNil(item.customerPrice)) {
     return {
-      ...itemWithCurrency,
-      currency: node.customerPrice.currency,
+      ...item,
+      currency: item.customerPrice.currency,
+      price: item.customerPrice.price,
     };
   }
-  return {
-    ...item,
-    currency: item.customerPrice.currency,
-    price: item.customerPrice.price,
-  };
+
+  return item;
 };
 
 const verifyItemCurrency = (item: ItemType) => {
