@@ -25,6 +25,9 @@ class Tabs extends React.Component<PropsType> {
       const { label, amount } = child.props;
       return (
         <div
+          tabIndex="-1"
+          role="tab"
+          onKeyPress={() => {}}
           key={index}
           styleName={classNames('label', { active: selected === index })}
           onClick={() => {

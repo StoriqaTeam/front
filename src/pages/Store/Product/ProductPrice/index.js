@@ -18,7 +18,7 @@ type CurrencyExhangeType = {
 };
 
 type PropsType = {
-  currency?: string,
+  currency?: 'STQ' | 'ETH' | 'BTC' | 'USD' | 'EUR',
   price: number,
   cashback: number,
   discount: number,
@@ -41,6 +41,7 @@ const ProductPrice = ({
   // const cashbackValue = cashback ? (cashback * 100).toFixed(0) : null;
   const priceExchanged = getExchangePrice({
     price,
+    // $FlowIgnore
     currency,
     currencyExchange: directories.currencyExchange,
     withSymbol: true,
@@ -57,16 +58,16 @@ const ProductPrice = ({
           </thin>
         </div>
       ) : null}
-      <div styleName="stq"> 
+      <div styleName="stq">
         <div styleName="title">
-            <strong>{t.discountPrice}</strong>
-            </div>
-          <div styleName="discountPrice">
-            <b styleName="basePrice">{discountedPrice} {currency}</b>
-            <div styleName="currencyPrice">
-              {priceExchanged}
-            </div>
-          </div>
+          <strong>{t.discountPrice}</strong>
+        </div>
+        <div styleName="discountPrice">
+          <b styleName="basePrice">
+            {discountedPrice} {currency}
+          </b>
+          <div styleName="currencyPrice">{priceExchanged}</div>
+        </div>
         {Boolean(cashback) && (
           <div styleName={classNames('cashback', { noCashback: !cashback })}>
             {buttonText} {`${cashback ? (cashback * 100).toFixed(0) : 0}%`}
@@ -75,7 +76,7 @@ const ProductPrice = ({
       </div>
     </div>
   );
-}
+};
 
 ProductPrice.defaultProps = {
   currency: currentCurrency() || 'STQ',

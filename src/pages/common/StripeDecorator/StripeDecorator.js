@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import type { ComponentType } from 'react';
-import { Elements, StripeProvider, injectStripe } from 'react-stripe-elements';
+import { Elements, StripeProvider, injectStripe } from 'react-stripe-elements'; // eslint-disable-line
 
 import { SpinnerCircle } from 'components/common';
 
@@ -13,6 +13,7 @@ type StateType = {
 };
 
 export default (OriginalComponent: ComponentType<*>) => {
+  // eslint-disable-line
   return class Stripe extends Component<{}, StateType> {
     state = { stripe: null };
 

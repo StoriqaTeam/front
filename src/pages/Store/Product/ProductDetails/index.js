@@ -187,7 +187,10 @@ class ProductDetails extends Component<PropsType, StateType> {
             <div styleName="rating">
               <Rating value={rating} />
             </div>
-            <ProductPrice {...verifyItemCurrency(productVariant)} priceUsd={priceUsd} />
+            <ProductPrice
+              {...verifyItemCurrency(productVariant)}
+              priceUsd={priceUsd}
+            />
             <p styleName="productDescription">{productDescription}</p>
             <Delivery
               userAddress={userAddress}

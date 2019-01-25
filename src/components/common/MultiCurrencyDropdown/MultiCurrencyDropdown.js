@@ -36,7 +36,6 @@ class MultiCurrencyDropdown extends Component<PropsType, StateType> {
     const { currencyCode } = this.props;
     return (
       <AppContext.Consumer>
-        {/* $FlowIgnoreMe */}
         {({ directories: { currencyExchange } }) => {
           // const currentCurrency = getCookie('CURRENCY');
           const currentCurrency = currencyCode;

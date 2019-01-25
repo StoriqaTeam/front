@@ -64,6 +64,7 @@ class CartProduct extends Component<PropsType, StateType> {
               <Row>
                 <Col size={4} sm={12}>
                   <div styleName="left-container">
+                    {/* $FlowIgnore */}
                     {photoMain ? (
                       <div
                         styleName="picture"

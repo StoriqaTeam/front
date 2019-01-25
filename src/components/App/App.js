@@ -25,6 +25,7 @@ import type {
   SellerCurrencyType,
   OrderStatusesType,
   DirectoriesType,
+  CurrencyExchangeType,
 } from 'types';
 
 import { AppContext } from './index';
@@ -46,7 +47,7 @@ type PropsType = {
   sellerCurrencies: Array<SellerCurrencyType>,
   categories: CategoryType,
   orderStatuses: OrderStatusesType,
-  currencyExchange: Object,
+  currencyExchange: CurrencyExchangeType,
   children: any,
   relay: {
     environment: Environment,

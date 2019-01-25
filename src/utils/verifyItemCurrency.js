@@ -12,7 +12,7 @@ import {
 
 import { checkCurrencyType, getCookie } from 'utils';
 import { COOKIE_FIAT_CURRENCY, COOKIE_CURRENCY } from 'constants';
-
+// $FlowIgnore
 import { ItemType } from 'components/CardProduct';
 
 const setCurrency = (item: ItemType): ItemType => {
@@ -31,10 +31,10 @@ const setCurrency = (item: ItemType): ItemType => {
       item,
     );
     return {
-    ...itemWithCurrency,
+      ...itemWithCurrency,
       currency: node.customerPrice.currency,
     };
-  } 
+  }
   return {
     ...item,
     currency: item.customerPrice.currency,
@@ -42,7 +42,7 @@ const setCurrency = (item: ItemType): ItemType => {
   };
 };
 
-const verifyItemCurrency = item => {
+const verifyItemCurrency = (item: ItemType) => {
   const checkItemCurrency = (cookie: string) =>
     ifElse(complement(propEq('currency', cookie)), setCurrency, identity);
 

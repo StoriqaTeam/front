@@ -1,5 +1,4 @@
-// @flow strict
-const price = (number: number, decimals: number = 8) =>
+const price = (number, decimals = 8) =>
   number
     .toFixed(decimals)
     .replace(/(\d)(?=(\d{3})+\.)/g, '$1,')

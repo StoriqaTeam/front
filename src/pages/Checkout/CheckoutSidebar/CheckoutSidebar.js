@@ -111,13 +111,13 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
     }
 
     const { currencyExchange } = this.props.directories;
-
+    /* eslint-disable no-unused-vars */
+    // $FlowIgnore
     const exchangePrice = getExchangePrice({
       currency: currentCurrency(),
       currencyExchange,
       withSymbol: true,
     });
-    console.log('---exchangePrice', exchangePrice);
 
     return (
       <div>

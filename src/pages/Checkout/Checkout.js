@@ -473,14 +473,12 @@ class Checkout extends Component<PropsType, StateType> {
     // const stores = pipe(
     //   pathOr([], ['cart', 'stores', 'edges']),
     //   map(path(['node'])),
-    //   // $FlowIgnore
+    //
     // )(this.props);
 
-    const stores = pipe(
-      pathOr([], ['stores', 'edges']),
-      map(path(['node'])),
-      // $FlowIgnoreMe
-    )(actualCart);
+    const stores = pipe(pathOr([], ['stores', 'edges']), map(path(['node'])))(
+      actualCart,
+    );
 
     const emptyCart = stores.length === 0;
     return (
