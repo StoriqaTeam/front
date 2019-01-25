@@ -7,6 +7,7 @@ import {
   complement,
   identity,
   propEq,
+  has,
 } from 'ramda';
 
 import { checkCurrencyType, getCookie } from 'utils';
@@ -15,23 +16,29 @@ import { COOKIE_FIAT_CURRENCY, COOKIE_CURRENCY } from 'constants';
 import { ItemType } from 'components/CardProduct';
 
 const setCurrency = (item: ItemType): ItemType => {
-  const { node } = head(path(['products', 'edges'], item));
-  const itemWithCurrency = assocPath(
-    ['products', 'edges'],
-    [
-      {
-        node: {
-          ...node,
-          price: node.customerPrice.price,
+  if (has('products', item)) {
+    const { node } = head(path(['products', 'edges'], item));
+    const itemWithCurrency = assocPath(
+      ['products', 'edges'],
+      [
+        {
+          node: {
+            ...node,
+            price: node.customerPrice.price,
+          },
         },
-      },
-    ],
-    item,
-  );
-
-  return {
+      ],
+      item,
+    );
+    return {
     ...itemWithCurrency,
-    currency: node.customerPrice.currency,
+      currency: node.customerPrice.currency,
+    };
+  } 
+  return {
+    ...item,
+    currency: item.customerPrice.currency,
+    price: item.customerPrice.price,
   };
 };
 
