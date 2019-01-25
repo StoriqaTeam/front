@@ -539,6 +539,7 @@ export default createFragmentContainer(
           photoMain
           additionalPhotos
           price
+          currency
           customerPrice {
             price
             currency

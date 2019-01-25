@@ -6,31 +6,19 @@ import moment from 'moment';
 
 import { Select } from 'components/common/Select';
 import { getCookie, setCookie } from 'utils';
-// import { COOKIE_FIAT_CURRENCY, COOKIE_CURRENCY } from 'constants';
 
 import languages from 'translation/languages.json';
-
-import type { FiatCurrencyType, CryptoCurrencyType } from 'types';
 
 import './HeaderTop.scss';
 import t from './i18n';
 
 type PropsType = {
   setLang: (lang: string) => void,
-  /* eslint-disable react/no-unused-prop-types */
-  cryptoCurrencies: Array<CryptoCurrencyType>,
-  /* eslint-disable react/no-unused-prop-types */
-  fiatCurrencies: Array<FiatCurrencyType>,
   isShopCreated: boolean,
 };
 
 const currencyCookieName = 'CURRENCY';
 const fiatCurrencyCookieName = 'FIAT_CURRENCY';
-
-// type CurrencyType = {
-//   key: number,
-//   code: string,
-// };
 
 class HeaderTop extends PureComponent<PropsType> {
   constructor(props: PropsType) {

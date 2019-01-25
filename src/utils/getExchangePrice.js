@@ -37,7 +37,7 @@ export default (props: {
         }
         return `~${
           withSymbol === true ? actualCurrencySymbol : ''
-        }${formatPrice(ratesItem.value * price)} ${
+        }${formatPrice(ratesItem.value * price, 2)} ${
           withSymbol !== true ? actualCurrency : ''
         }`;
       }

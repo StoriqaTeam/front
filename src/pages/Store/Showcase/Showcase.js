@@ -127,6 +127,10 @@ export default createFragmentContainer(
                   photoMain
                   cashback
                   price
+                  customerPrice {
+                    price
+                    currency
+                  }
                 }
               }
             }
@@ -162,6 +166,10 @@ export default createFragmentContainer(
                   photoMain
                   cashback
                   price
+                  customerPrice {
+                    price
+                    currency
+                  }
                 }
               }
             }

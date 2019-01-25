@@ -5,7 +5,7 @@ import type { Node } from 'react';
 import { propOr, prop, head } from 'ramda';
 import axios from 'axios';
 
-import { log } from 'utils';
+import { log, verifyItemCurrency } from 'utils';
 
 import { Rating } from 'components/common/Rating';
 
@@ -187,7 +187,10 @@ class ProductDetails extends Component<PropsType, StateType> {
             <div styleName="rating">
               <Rating value={rating} />
             </div>
-            <ProductPrice {...productVariant} priceUsd={priceUsd} />
+            <ProductPrice
+              {...verifyItemCurrency(productVariant)}
+              priceUsd={priceUsd}
+            />
             <p styleName="productDescription">{productDescription}</p>
             <Delivery
               userAddress={userAddress}
