@@ -41,6 +41,7 @@ type PropsType = {
       clientSecret: string,
     },
   },
+  orderSlug?: number,
 };
 
 type StateType = {
@@ -66,13 +67,17 @@ class PaymentInfoFiat extends PureComponent<PropsType, StateType> {
         clearTimeout(this.paidTimer);
       }
       this.paidTimer = setTimeout(() => {
-        this.props.router.push('/profile/orders');
+        const { orderSlug } = this.props;
+        this.props.router.push(
+          orderSlug != null
+            ? `/profile/orders/${orderSlug}`
+            : '/profile/orders',
+        );
       }, 2000);
     });
   };
 
   render() {
-    // console.log('---this.props', this.props);
     const { invoice, me } = this.props;
     const { paymentIntent } = invoice;
     if (!invoice) {
@@ -81,16 +86,6 @@ class PaymentInfoFiat extends PureComponent<PropsType, StateType> {
           <div styleName="wrap">
             <div styleName="title">{t.error}</div>
             <div styleName="description">{t.yourPaymentWasFailed}</div>
-            <div styleName="fiat">
-              <Stripe
-                paymentIntent={paymentIntent}
-                amount={100500}
-                currency="USD"
-                email="a.levenec@gmail.com"
-                name="Aleksey Levenets"
-                onPaid={() => {}}
-              />
-            </div>
           </div>
         </div>
       );

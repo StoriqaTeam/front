@@ -163,7 +163,7 @@ class Product extends Component<PropsType, StateType> {
   }
 
   componentDidMount() {
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
     const { baseProduct } = this.props;
     if (
       process.env.BROWSER &&
@@ -389,7 +389,6 @@ class Product extends Component<PropsType, StateType> {
   };
 
   render() {
-    console.log('---this.props', this.props);
     const { me, baseProduct, router } = this.props;
     const { unselectedAttr } = this.state;
     if (isNil(baseProduct)) {

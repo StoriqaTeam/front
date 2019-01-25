@@ -6,6 +6,7 @@ import { pathOr } from 'ramda';
 
 import { Page } from 'components/App';
 import { PaymentInfo } from 'pages/Checkout/PaymentInfo';
+import { PaymentInfoFiat } from 'pages/Checkout/PaymentInfoFiat';
 
 import type { Invoice_me as InvoiceMeType } from './__generated__/Invoice_me.graphql';
 
@@ -19,13 +20,30 @@ class Invoice extends PureComponent<PropsType> {
   }
 
   render() {
-    console.log('---this.props', this.props);
+    const { me } = this.props;
     // $FlowIgnoreMe
-    const invoiceId = pathOr(null, ['order', 'invoice', 'id'], this.props.me);
-    if (!invoiceId) {
+    const invoice = pathOr(null, ['order', 'invoice'], me);
+    // $FlowIgnoreMe
+    const currency = pathOr(null, ['order', 'currency'], me);
+
+    if (!invoice.id || !currency) {
       return null;
     }
-    return <PaymentInfo invoiceId={invoiceId} me={this.props.me} />;
+
+    // $FlowIgnoreMe
+    const orderSlug = pathOr(null, ['order', 'slug'], me);
+    // $FlowIgnoreMe
+    const paymentIntent = pathOr(
+      null,
+      ['order', 'invoice', 'paymentIntent'],
+      me,
+    );
+
+    return paymentIntent ? (
+      <PaymentInfoFiat invoice={invoice} me={me} orderSlug={orderSlug} />
+    ) : (
+      <PaymentInfo invoiceId={invoice.id} me={me} />
+    );
   }
 }
 
@@ -35,9 +53,20 @@ export default createFragmentContainer(
     fragment Invoice_me on User
       @argumentDefinitions(slug: { type: "Int!", defaultValue: 0 }) {
       ...PaymentInfo_me
+      email
+      firstName
+      lastName
       order(slug: $slug) {
+        slug
+        currency
         invoice {
           id
+          amount
+          currency
+          paymentIntent {
+            id
+            clientSecret
+          }
         }
       }
     }

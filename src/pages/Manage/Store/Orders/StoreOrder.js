@@ -60,6 +60,7 @@ export default createRefetchContainer(
         rawId
         order(slug: $slug) {
           id
+          currency
           slug
           deliveryCompany
           storeId

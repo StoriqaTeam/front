@@ -180,7 +180,6 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
   };
 
   render() {
-    console.log('---this.props', this.props);
     const { isFirstRefetch, isNotificationActive } = this.state;
     if (isFirstRefetch) {
       return (
@@ -349,7 +348,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
         {isNotificationActive ? (
           <div styleName="notification">
             <NotificationBlock
-              type="danger"
+              type="warning"
               title={t.attention}
               longText
               text={t.exchangeNotification}
@@ -364,31 +363,31 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
   }
 }
 
-export default createRefetchContainer;
+// export default createRefetchContainer;
 
-// export default createRefetchContainer(
-//   withRouter(PaymentInfo),
-//   graphql`
-//     fragment PaymentInfo_me on User
-//       @argumentDefinitions(id: { type: "String!", defaultValue: "" }) {
-//       invoice(id: $id) {
-//         id
-//         amount
-//         priceReservedDueDateTime
-//         state
-//         wallet
-//         transactions {
-//           id
-//           amount
-//         }
-//       }
-//     }
-//   `,
-//   graphql`
-//     query PaymentInfo_Query($id: String!) {
-//       me {
-//         ...PaymentInfo_me @arguments(id: $id)
-//       }
-//     }
-//   `,
-// );
+export default createRefetchContainer(
+  withRouter(PaymentInfo),
+  graphql`
+    fragment PaymentInfo_me on User
+      @argumentDefinitions(id: { type: "String!", defaultValue: "" }) {
+      invoice(id: $id) {
+        id
+        amount
+        priceReservedDueDateTime
+        state
+        wallet
+        transactions {
+          id
+          amount
+        }
+      }
+    }
+  `,
+  graphql`
+    query PaymentInfo_Query($id: String!) {
+      me {
+        ...PaymentInfo_me @arguments(id: $id)
+      }
+    }
+  `,
+);

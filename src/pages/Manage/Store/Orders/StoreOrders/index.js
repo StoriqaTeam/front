@@ -103,6 +103,7 @@ class StoreOrders extends Component<PropsType, StateType> {
       status: order.state,
       subtotal: order.subtotal,
       totalAmount: order.totalAmount,
+      currency: order.currency,
     };
     return result;
   };
@@ -200,6 +201,7 @@ export default createRefetchContainer(
             node {
               slug
               id
+              currency
               state
               price
               quantity

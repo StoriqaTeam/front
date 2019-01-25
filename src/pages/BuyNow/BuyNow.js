@@ -26,7 +26,13 @@ import { Container, Row, Col } from 'layout';
 import { Input, RadioButton, Select, Checkbox } from 'components/common';
 import { AddressForm } from 'components/AddressAutocomplete';
 import { StickyBar } from 'components/StickyBar';
-import { log, getNameText, currentCurrency, fromRelayError } from 'utils';
+import {
+  log,
+  getNameText,
+  fromRelayError,
+  checkCurrencyType,
+  getCurrentCurrency,
+} from 'utils';
 import smoothscroll from 'libs/smoothscroll';
 import {
   BuyNowMutation,
@@ -34,7 +40,7 @@ import {
 } from 'relay/mutations';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
-import type { AddressFullType, SelectItemType } from 'types';
+import type { AddressFullType, SelectItemType, AllCurrenciesType } from 'types';
 import type { MutationParamsType as CreateMutationParamsType } from 'relay/mutations/CreateUserDeliveryAddressFullMutation';
 import type { MutationParamsType as BuyNowMutationParamsType } from 'relay/mutations/BuyNowMutation';
 import type { AvailableDeliveryPackageType } from 'relay/queries/fetchAvailableShippingForUser';
@@ -100,6 +106,7 @@ type StateType = {
   errors: { [string]: Array<string> },
   scrollArr: Array<string>,
   deliveryPackage: ?AvailableDeliveryPackageType,
+  currency: AllCurrenciesType,
 };
 
 type PropsType = {
@@ -122,7 +129,11 @@ class BuyNow extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
 
-    const { me, calculateBuyNow } = props;
+    const { me, calculateBuyNow, baseProduct } = props;
+    const { currency } = baseProduct;
+    // $FlowIgnore
+    const currencyType =
+      checkCurrencyType(currency) === 'crypto' ? 'CRYPTO' : 'FIAT';
     const {
       couponsDiscounts,
       totalCost,
@@ -160,6 +171,8 @@ class BuyNow extends Component<PropsType, StateType> {
       errors: {},
       scrollArr: ['receiverName', 'phone', 'deliveryAddress'],
       deliveryPackage: null,
+      // $FlowIgnore
+      currency: getCurrentCurrency(currencyType),
     };
   }
 
@@ -458,6 +471,7 @@ class BuyNow extends Component<PropsType, StateType> {
       phone,
       successCouponCodeValue,
       deliveryPackage,
+      currency,
     } = this.state;
     // $FlowIgnore
     const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
@@ -468,7 +482,7 @@ class BuyNow extends Component<PropsType, StateType> {
       addressFull: deliveryAddress,
       receiverName,
       receiverPhone: phone,
-      currency: currentCurrency(),
+      currency,
       shippingId: deliveryPackage ? deliveryPackage.shippingId : null,
     };
     if (successCouponCodeValue) {
@@ -789,6 +803,7 @@ class BuyNow extends Component<PropsType, StateType> {
       isLoadingCheckout,
       errors,
       deliveryPackage,
+      currency,
     } = this.state;
     // $FlowIgnore
     const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
@@ -995,6 +1010,7 @@ class BuyNow extends Component<PropsType, StateType> {
                   shippingId={
                     deliveryPackage ? deliveryPackage.shippingId : null
                   }
+                  currency={currency}
                 />
               </StickyBar>
             </Col>
@@ -1035,6 +1051,7 @@ export default createFragmentContainer(
         logo
       }
       rating
+      currency
       variants {
         all {
           id

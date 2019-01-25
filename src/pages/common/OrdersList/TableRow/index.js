@@ -27,6 +27,7 @@ export type TableItemType = {
   totalAmount: number,
   payment: string,
   status: string,
+  currency: string,
 };
 
 type PropsType = {
@@ -99,7 +100,7 @@ class TableRow extends PureComponent<PropsType> {
           </Col>
           <Col md={2} lg={2} xl={1} mdVisible>
             <span styleName="price">
-              {formatPrice(rowItem.totalAmount)} <b>STQ</b>
+              {`${formatPrice(rowItem.totalAmount)} ${rowItem.currency}`}
             </span>
           </Col>
           <Col md={2} lg={3} xl={2} lgVisible>

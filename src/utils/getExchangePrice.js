@@ -3,13 +3,13 @@
 import { find, propEq } from 'ramda';
 
 import { checkCurrencyType, getCookie, formatPrice } from 'utils';
-import type { CurrencyExchangeType } from 'types';
+import type { CurrencyExchangeType, AllCurrenciesType } from 'types';
 
 export default (props: {
   price: number,
-  currency: ?'STQ' | 'ETH' | 'BTC' | 'USD' | 'EUR',
+  currency: ?AllCurrenciesType,
   currencyExchange: CurrencyExchangeType,
-  withSymbol: boolean,
+  withSymbol?: boolean,
 }): ?string => {
   const { price, currency, currencyExchange, withSymbol } = props;
   if (!currency) {

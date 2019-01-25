@@ -25,7 +25,6 @@ class Checkbox extends PureComponent<PropsType> {
   };
   onChange = (): void => {
     const { id, onChange } = this.props;
-    console.log('---id', id);
     onChange(`${id}`);
   };
   stopPropagation = (e: SyntheticEvent<HTMLDivElement>): void => {

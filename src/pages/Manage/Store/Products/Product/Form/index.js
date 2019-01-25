@@ -112,8 +112,7 @@ type PropsType = {
 type StateType = {
   activeTab: string,
   category: ?ProductCategoryType,
-  currencies: Array<SelectItemType>,
-  currency: ?SelectItemType,
+  currency: SelectItemType,
   form: FormType,
   formErrors: FormErrorsType,
   scrollArr: Array<string>,
@@ -256,7 +255,6 @@ class Form extends Component<PropsType, StateType> {
       form,
       formErrors: {},
       category: null,
-      currencies: convertCurrenciesForSelect(currencies),
       currency: { id: currency, label: currency },
       shippingErrors: null,
       scrollArr: [
@@ -600,7 +598,7 @@ class Form extends Component<PropsType, StateType> {
     );
   };
 
-  handleOnSelectCurrency = (currency: ?SelectItemType) => {
+  handleOnSelectCurrency = (currency: SelectItemType) => {
     this.setState({ currency });
   };
 
@@ -874,10 +872,10 @@ class Form extends Component<PropsType, StateType> {
       environment,
       isLoadingShipping,
       showAlert,
+      currencies,
     } = this.props;
     const {
       category,
-      currencies, // eslint-disable-line
       currency,
       shippingErrors,
       formErrors,
@@ -1001,7 +999,7 @@ class Form extends Component<PropsType, StateType> {
                   forForm
                   label={t.labelCurrency}
                   activeItem={currency}
-                  items={[{ id: 'STQ', label: 'STQ' }]}
+                  items={convertCurrenciesForSelect(currencies)}
                   onSelect={this.handleOnSelectCurrency}
                   dataTest="productCurrencySelect"
                   fullWidth

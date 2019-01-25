@@ -112,29 +112,13 @@ class CheckoutForm extends Component<PropsType, StateType> {
         this.setState({ isLoading: false });
       })
       .catch(log.error);
-
-    // this.props.stripe.createToken({
-    //   name,
-    //   email,
-    // })
-    // .then((payload) => {
-    //   console.log('[source]', payload)
-    // })
-    // .finally(() => {
-    //   console.log('---finally');
-    // })
-    // .catch(() => {
-    //   console.log('---error');
-    // });
   };
 
   handleBlur = () => {
-    // console.log('[blur]');
     this.setState({ isFocus: false });
   };
 
   handleChange = change => {
-    // console.log('---[change]', change);
     this.setState((prevState: StateType) => ({
       errors: omit(['card'], prevState.errors),
     }));
@@ -146,12 +130,9 @@ class CheckoutForm extends Component<PropsType, StateType> {
     this.setState({ completeCard: change.complete });
   };
 
-  handleClick = () => {
-    // console.log('[click]');
-  };
+  handleClick = () => {};
 
   handleFocus = () => {
-    // console.log('[focus]');
     this.setState({ isFocus: true });
   };
 
@@ -166,17 +147,6 @@ class CheckoutForm extends Component<PropsType, StateType> {
     const { value } = e.target;
     this.setState((prevState: StateType) => assocPath([id], value, prevState));
   };
-
-  // validate = () => {
-  //   const { errors } = validate(
-  //     {
-  //       ownerName: [[val => Boolean(val), 'Name is required']],
-  //       ownerEmail: [[val => Boolean(val), 'Email is required']],
-  //     },
-  //     this.state,
-  //   );
-  //   return errors;
-  // };
 
   isDisabledButton = (): boolean => {
     const { ownerName, ownerEmail, completeCard } = this.state;

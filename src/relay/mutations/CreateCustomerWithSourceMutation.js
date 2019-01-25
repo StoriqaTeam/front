@@ -50,9 +50,7 @@ const commit = (params: CreateCustomerWithSourceMutationType) =>
       const createCustomerWithSource = relayStore.getRootField(
         'createCustomerWithSource',
       );
-      console.log('---createCustomerWithSource', createCustomerWithSource);
       const me = relayStore.getRoot().getLinkedRecord('me');
-      console.log('---me', me);
       me.setLinkedRecord(createCustomerWithSource, 'stripeCustomer');
     },
   });

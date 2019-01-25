@@ -168,7 +168,7 @@ class Cart extends Component<PropsType, StateType> {
 
   render() {
     const { cart } = this.props;
-    console.log('---cart', cart);
+    // console.log('---cart', cart);
     const { selectedTab, noTabs } = this.state;
     const actualCart = selectedTab === 0 ? cart.fiat : cart.crypto;
     const stores = pipe(

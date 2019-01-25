@@ -476,8 +476,6 @@ class Checkout extends Component<PropsType, StateType> {
       currencyType,
     } = this.state;
 
-    console.log('---currencyType', currencyType);
-
     const actualCart = currencyType === 'CRYPTO' ? cart.crypto : cart.fiat;
 
     // const stores = pipe(
