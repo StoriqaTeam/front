@@ -21,8 +21,6 @@ import { CategoriesMenu } from 'components/CategoriesMenu';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { urlToInput, inputToUrl } from 'utils';
 
-import { Container } from 'layout';
-
 import type {
   DirectoriesType,
   UserDataType,
@@ -311,7 +309,7 @@ class Header extends Component<PropsType, StateType> {
               isOpen={isMenuToggled}
               onClose={this.handleMobileMenu}
             />
-            <Container>
+            <div>
               <BurgerMenu />
               <HeaderTop
                 userData={userData}
@@ -339,7 +337,7 @@ class Header extends Component<PropsType, StateType> {
                     categories={this.makeCategories(directories)}
                   />
                 )}
-            </Container>
+            </div>
             <Modal
               showModal={showModal}
               onClose={this.handleCloseModal}
