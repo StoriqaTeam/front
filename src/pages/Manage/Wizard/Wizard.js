@@ -1179,7 +1179,7 @@ export default createFragmentContainer(
                       cashback
                       price
                       customerPrice {
-                        price,
+                        price
                         currency
                       }
                       attributes {

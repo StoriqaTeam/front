@@ -90,7 +90,10 @@ class ThirdForm extends Component<PropsType, StateType> {
     super(props);
     const { sellerCurrencies } = this.props.directories;
     const currencies = map(toItem, sellerCurrencies);
-    const selectedCurrency = find(item => item.label === 'STQ', currencies);
+    const selectedCurrency = find(
+      item => item.label === this.props.data.currency,
+      currencies,
+    );
     this.state = {
       selectedCurrency,
     };
@@ -150,14 +153,17 @@ class ThirdForm extends Component<PropsType, StateType> {
 
   handleChangeCurrency = (selectedCurrency: { label: string, id: string }) => {
     const { data } = this.props;
-    this.setState({
-      selectedCurrency,
-    }, () => {
-      this.props.onChange({
-        ...data,
-        currency: selectedCurrency.label
-      });
-    });
+    this.setState(
+      {
+        selectedCurrency,
+      },
+      () => {
+        this.props.onChange({
+          ...data,
+          currency: selectedCurrency.label,
+        });
+      },
+    );
   };
 
   handleAttributesChange = (attrs: Array<AttrValueType>) => {
