@@ -12,19 +12,20 @@
 
 .label {
   position: relative;
-  color: $color_grey_minor;
-  font-size: 14px;
-  letter-spacing: 1px;
   padding: 0 2rem 2rem;
   margin-bottom: -0.25rem;
   cursor: pointer;
   //text-transform: uppercase;
+
+  .labelText {
+    color: $color_grey_minor;
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
 }
 
 .active {
-  color: $color_blue;
-
-  &:after {
+    &:after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -32,6 +33,10 @@
     right: 0;
     height: 0.25rem;
     background-color: $color_blue;
+  }
+
+  .labelText {
+    color: $color_blue;
   }
 }
 
@@ -41,6 +46,7 @@
 
 .amount {
   position: absolute;
-  top: -1.5rem;
+  top: -1rem;
   right: -0.5rem;
+  margin-right: 1%;
 }

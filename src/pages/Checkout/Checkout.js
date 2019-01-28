@@ -580,8 +580,7 @@ class Checkout extends Component<PropsType, StateType> {
                           </div>
                         )}
                         {step === 3 &&
-                          invoice &&
-                          invoice.paymentIntent && (
+                          currencyType === 'FIAT' && (
                             <PaymentInfoFiat
                               invoice={invoice}
                               me={this.props.me}
@@ -589,7 +588,7 @@ class Checkout extends Component<PropsType, StateType> {
                           )}
                         {step === 3 &&
                           invoice &&
-                          !invoice.paymentIntent && (
+                          currencyType === 'CRYPTO' && (
                             <PaymentInfo
                               invoiceId={invoice.id}
                               me={this.props.me}

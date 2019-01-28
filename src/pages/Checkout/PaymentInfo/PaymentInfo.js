@@ -195,6 +195,31 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
     this.setState({ isNotificationActive: false });
   };
 
+  renderLinks = () => (
+    <div styleName="links">
+      <div>
+        You can pay with{' '}
+        <a
+          href="https://turewallet.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Storiqa Wallet
+        </a>
+      </div>
+      <div>
+        Don’t you have one yet?{' '}
+        <a
+          href="https://itunes.apple.com/ru/app/ture/id1448865994?mt=8"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Download
+        </a>
+      </div>
+    </div>
+  );
+
   render() {
     const { isFirstRefetch, isNotificationActive } = this.state;
     if (isFirstRefetch) {
@@ -208,14 +233,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
             <div styleName="loader" />
           </div>
           <div styleName="separator" />
-          <div styleName="links">
-            <div>
-              You can pay with <span>Storiqa Wallet</span>
-            </div>
-            <div>
-              Don’t you have one yet? <span>Download</span>
-            </div>
-          </div>
+          {this.renderLinks()}
         </div>
       );
     }
@@ -229,14 +247,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
             <div styleName="description">Your payment was failed :(</div>
           </div>
           <div styleName="separator" />
-          <div styleName="links">
-            <div>
-              You can pay with <span>Storiqa Wallet</span>
-            </div>
-            <div>
-              Don’t you have one yet? <span>Download</span>
-            </div>
-          </div>
+          {this.renderLinks()}
         </div>
       );
     }
@@ -356,14 +367,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
           )}
         </div>
         <div styleName="separator" />
-        <div styleName="links">
-          <div>
-            You can pay with <span>Storiqa Wallet</span>
-          </div>
-          <div>
-            Don’t you have one yet? <span>Download</span>
-          </div>
-        </div>
+        {this.renderLinks()}
         {isNotificationActive ? (
           <div styleName="notification">
             <NotificationBlock

@@ -70,7 +70,10 @@ const mutation = graphql`
             additionalPhotos
             vendorCode
             cashback
-            price
+            customerPrice {
+              price
+              currency
+            }
             attributes {
               value
               metaField

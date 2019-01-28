@@ -31,7 +31,7 @@ class Tabs extends React.Component<PropsType> {
             this.handleClick(index);
           }}
         >
-          <strong>{label}</strong>
+          <strong styleName="labelText">{label}</strong>
           {Boolean(amount) && (
             <div styleName="amount">
               <Count amount={amount} type="blue" />

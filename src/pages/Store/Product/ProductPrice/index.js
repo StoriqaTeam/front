@@ -2,7 +2,7 @@
 
 import React from 'react';
 import classNames from 'classnames';
-import { formatPrice, currentCurrency, getExchangePrice } from 'utils';
+import { formatPrice, getExchangePrice, checkCurrencyType } from 'utils';
 import { ContextDecorator } from 'components/App';
 
 import './ProductPrice.scss';
@@ -18,7 +18,7 @@ type CurrencyExhangeType = {
 };
 
 type PropsType = {
-  currency?: 'STQ' | 'ETH' | 'BTC' | 'USD' | 'EUR',
+  currency: 'STQ' | 'ETH' | 'BTC' | 'USD' | 'EUR',
   price: number,
   cashback: number,
   discount: number,
@@ -65,7 +65,11 @@ const ProductPrice = ({
         </div>
         <div styleName="discountPrice">
           <b styleName="basePrice">
-            {discountedPrice} {currency}
+            {formatPrice(
+              discountedPrice,
+              checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+            )}{' '}
+            {currency}
           </b>
           <div styleName="currencyPrice">{priceExchanged}</div>
         </div>
@@ -80,7 +84,6 @@ const ProductPrice = ({
 };
 
 ProductPrice.defaultProps = {
-  currency: currentCurrency() || 'STQ',
   buttonText: t.cashback,
 };
 
