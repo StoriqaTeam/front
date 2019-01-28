@@ -17,8 +17,7 @@ type PropsType = {
   shop: ShowcaseShopType,
 };
 
-class Showcase extends PureComponent<PropsType, StateType> {
-
+class Showcase extends PureComponent<PropsType> {
   render() {
     const { shop } = this.props;
     // $FlowIgnoreMe
@@ -37,10 +36,7 @@ class Showcase extends PureComponent<PropsType, StateType> {
       item => ({ ...item.node }),
       mostDiscountProducts,
     );
-    const viewedProducts = map(
-      item => ({ ...item.node }),
-      mostViewedProducts,
-    );
+    const viewedProducts = map(item => ({ ...item.node }), mostViewedProducts);
     return (
       <div styleName="container">
         {viewedProducts &&
