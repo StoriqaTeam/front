@@ -59,7 +59,6 @@ const BannerPlaceholder = () => (
 
 class Start extends Component<PropsTypes, StateTypes> {
   state = {
-    priceUsd: null,
     banners: {
       main: [],
       middle: [],
@@ -69,18 +68,6 @@ class Start extends Component<PropsTypes, StateTypes> {
 
   componentDidMount() {
     this.isMount = true;
-    axios
-      .get('https://api.coinmarketcap.com/v1/ticker/storiqa/')
-      .then(({ data }) => {
-        const dataObj = head(data);
-        if (dataObj && this.isMount) {
-          this.setState({ priceUsd: Number(dataObj.price_usd) });
-        }
-        return true;
-      })
-      .catch(error => {
-        log.debug(error);
-      });
 
     axios
       .get(
@@ -138,7 +125,6 @@ class Start extends Component<PropsTypes, StateTypes> {
 
   render() {
     const { mainPage } = this.props;
-    const { priceUsd } = this.state;
     // $FlowIgnoreMe
     const mostViewedProducts = pathOr(
       [],
@@ -153,11 +139,11 @@ class Start extends Component<PropsTypes, StateTypes> {
     );
 
     const discountProducts = map(
-      item => ({ ...item.node, priceUsd }),
+      item => ({ ...item.node }),
       mostDiscountProducts,
     );
     const viewedProducts = map(
-      item => ({ ...item.node, priceUsd }),
+      item => ({ ...item.node }),
       mostViewedProducts,
     );
     // $FlowIgnoreMe

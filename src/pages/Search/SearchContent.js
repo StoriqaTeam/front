@@ -29,7 +29,6 @@ type PropsType = {
 };
 
 class SearchContent extends Component<PropsType, StateType> {
-
   productsRefetch = (): void => {
     const { relay, productsPerRequest } = this.props;
     relay.loadMore(productsPerRequest);

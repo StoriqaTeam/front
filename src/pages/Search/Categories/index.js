@@ -194,7 +194,7 @@ export default createPaginationContainer(
                   price
                   customerPrice {
                     price
-                    currency              
+                    currency
                   }
                   attributes {
                     attribute {
