@@ -3,7 +3,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { pathOr, map, head, isEmpty } from 'ramda';
+import { pathOr, map, isEmpty } from 'ramda';
 import axios from 'axios';
 import { Link } from 'found';
 
@@ -33,7 +33,6 @@ opaque type BannerRecordType = {
 };
 
 type StateTypes = {
-  priceUsd: ?number,
   banners: {
     main: Array<BannerRecordType>,
     middle: Array<BannerRecordType>,
@@ -142,10 +141,7 @@ class Start extends Component<PropsTypes, StateTypes> {
       item => ({ ...item.node }),
       mostDiscountProducts,
     );
-    const viewedProducts = map(
-      item => ({ ...item.node }),
-      mostViewedProducts,
-    );
+    const viewedProducts = map(item => ({ ...item.node }), mostViewedProducts);
     // $FlowIgnoreMe
     const isCompletedWizardStore = pathOr(
       false,

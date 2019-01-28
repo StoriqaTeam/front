@@ -1,13 +1,12 @@
 // @flow
 
 import React, { Component } from 'react';
-import { map, pathOr, isEmpty, head } from 'ramda';
+import { map, pathOr, isEmpty } from 'ramda';
 import classNames from 'classnames';
 import { withRouter, routerShape } from 'found';
 import { Relay } from 'react-relay';
-import axios from 'axios';
 
-import { flattenFunc, getNameText, searchPathByParent, log } from 'utils';
+import { flattenFunc, getNameText, searchPathByParent } from 'utils';
 import { Button } from 'components/common/Button';
 import { CardProduct } from 'components/CardProduct';
 import { Icon } from 'components/Icon';
@@ -28,7 +27,7 @@ type PropsType = {
   onFilterMenu: () => void,
 };
 
-class SearchContent extends Component<PropsType, StateType> {
+class SearchContent extends Component<PropsType> {
   productsRefetch = (): void => {
     const { relay, productsPerRequest } = this.props;
     relay.loadMore(productsPerRequest);
