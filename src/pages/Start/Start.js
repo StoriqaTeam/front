@@ -40,6 +40,7 @@ type StateTypes = {
     middle: Array<BannerRecordType>,
     bottom: Array<BannerRecordType>,
   },
+  header: Array<{ title: string, description: string}>
 };
 
 type PropsTypes = {
@@ -65,6 +66,20 @@ class Start extends Component<PropsTypes, StateTypes> {
       middle: [],
       bottom: [],
     },
+    header: [
+      {
+        title: 'Fancy Stuf',
+        description: 'Express yourself with unique handmade items',
+      },
+      {
+        title: 'Unique Sellers',
+        description: 'Discover exclusive items from any corner of the globe',
+      },
+      {
+        title: 'Variety of Payment Options',
+        description: 'Choose any payment method, from credit card to cryptocurrencies',
+      },
+    ]
   };
 
   componentDidMount() {
@@ -126,6 +141,7 @@ class Start extends Component<PropsTypes, StateTypes> {
 
   render() {
     const { mainPage } = this.props;
+    const { header } = this.state;
     // $FlowIgnoreMe
     const mostViewedProducts = pathOr(
       [],
@@ -210,30 +226,16 @@ class Start extends Component<PropsTypes, StateTypes> {
           </MediaQuery>
         </div>
         <Row>
-          <Col size={12} sm={12} md={6} lg={4} xl={4}>
-            <div styleName="subHeading">
-              <strong>Fancy Stuff</strong>
-              <p styleName="description">
-                Express yourself with unique handmade items
-              </p>
-            </div>
-          </Col>
-          <Col size={12} sm={12} md={6} lg={4} xl={4}>
-            <div styleName="subHeading">
-              <strong>Unique Sellers</strong>
-              <p styleName="description">
-                Discover exclusive items from any corner of the globe
-              </p>
-            </div>
-          </Col>
-          <Col size={12} sm={12} md={6} lg={4} xl={4}>
-            <div styleName="subHeading">
-              <strong>Variety of Payment Options</strong>
-              <p styleName="description">
-                Choose any payment method, from credit card to cryptocurrencies
-              </p>
-            </div>
-          </Col>
+          {header.map(({ title, description}) => (
+            <Col key={title} size={12} sm={12} md={12} lg={4} xl={4}>
+              <div styleName="subHeading">
+                <strong>{title}</strong>
+                <p styleName="description">
+                  {description}
+                </p>
+              </div>
+            </Col>
+          ))}
         </Row>
         <div styleName="item goodsItem">
           {viewedProducts &&
