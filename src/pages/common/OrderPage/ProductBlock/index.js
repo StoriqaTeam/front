@@ -29,6 +29,7 @@ export type ProductDTOType = {
 
 type PropsType = {
   product: ProductDTOType,
+  currency: string,
 };
 
 class ProductBlock extends PureComponent<PropsType> {
@@ -59,7 +60,7 @@ class ProductBlock extends PureComponent<PropsType> {
   );
 
   render() {
-    const { product } = this.props;
+    const { product, currency } = this.props;
     const attributes = slice(0, 3, product.attributes);
     return (
       <div styleName="container">
@@ -88,7 +89,7 @@ class ProductBlock extends PureComponent<PropsType> {
             </Link>
           </div>
           <div styleName="productPrice">
-            {formatPrice(product.price)} <strong>STQ</strong>
+            {`${formatPrice(product.price)} ${currency}`}
           </div>
         </div>
         {!isEmpty(attributes) && this.renderAttributes(attributes)}

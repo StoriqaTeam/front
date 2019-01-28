@@ -101,3 +101,19 @@
     }
   }
 }
+
+.noLogo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: $color_grey_trivial;
+  vertical-align: middle;
+  border-radius: 0.5rem;
+
+  &:before {
+    content: "";
+    display: block;
+    padding-top: 100%;
+  }
+}

@@ -15,6 +15,11 @@ $burger_menu_size: 7rem;
     padding-bottom: 0;
   }
 
+  @media (max-width: #{$lg - 1px}) {
+    margin-top: 3rem;
+    border-top: 1px solid $color_grey_light;
+  }
+
   &.expanded {
     padding-bottom: 0;
   }

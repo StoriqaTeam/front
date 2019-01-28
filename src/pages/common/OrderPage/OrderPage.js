@@ -69,6 +69,7 @@ type OrderDTOType = {
   customerAddress: string,
   deliveryPrice: number,
   couponPrice: ?number,
+  currency: string,
 };
 
 class OrderPage extends Component<PropsType, StateType> {
@@ -149,6 +150,7 @@ class OrderPage extends Component<PropsType, StateType> {
       totalAmount: order.totalAmount,
       deliveryPrice: order.deliveryPrice,
       couponPrice: order.couponDiscount,
+      currency: order.currency,
       status: order.state,
       paymentStatus: order.paymentStatus ? t.paid : t.notPaid,
       statusHistory: map(historyEdge => {
@@ -325,7 +327,10 @@ class OrderPage extends Component<PropsType, StateType> {
                 ) : null}
               </div>
               {order.product.name ? (
-                <ProductBlock product={order.product} />
+                <ProductBlock
+                  product={order.product}
+                  currency={order.currency}
+                />
               ) : (
                 <div styleName="noProduct">{t.theProductWasDeleted}</div>
               )}
@@ -396,7 +401,9 @@ class OrderPage extends Component<PropsType, StateType> {
                     <Col size={12} lg={7}>
                       <TextWithLabel
                         label={t.labelDeliveryPrice}
-                        text={`${formatPrice(order.deliveryPrice)} STQ`}
+                        text={`${formatPrice(order.deliveryPrice)} ${
+                          order.currency
+                        }`}
                       />
                     </Col>
                   </Row>
@@ -424,7 +431,9 @@ class OrderPage extends Component<PropsType, StateType> {
                         label={t.labelCouponDiscount}
                         text={
                           order.couponPrice
-                            ? `−${formatPrice(order.couponPrice)} STQ`
+                            ? `−${formatPrice(order.couponPrice)} ${
+                                order.currency
+                              }`
                             : '—'
                         }
                       />
@@ -432,7 +441,9 @@ class OrderPage extends Component<PropsType, StateType> {
                     <Col size={12} lg={7}>
                       <TextWithLabel
                         label={t.labelSubtotal}
-                        text={`${formatPrice(order.totalAmount)} STQ`}
+                        text={`${formatPrice(order.totalAmount)} ${
+                          order.currency
+                        }`}
                       />
                     </Col>
                   </Row>

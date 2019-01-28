@@ -55,6 +55,7 @@ export default createRefetchContainer(
       email
       order(slug: $slug) {
         id
+        currency
         slug
         deliveryCompany
         storeId
@@ -66,6 +67,7 @@ export default createRefetchContainer(
         product {
           baseProduct {
             rawId
+            currency
             name {
               text
             }

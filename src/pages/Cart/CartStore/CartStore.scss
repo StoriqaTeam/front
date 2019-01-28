@@ -88,10 +88,9 @@
   }
 }
 
-.store-name {
+.storeName {
   font-family: $font_regular;
   color: $color_black;
-  margin-bottom: 0.5rem;
 }
 
 .store-total-header {
@@ -124,10 +123,11 @@
 }
 
 .noLogo {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 5.25rem;
   height: 5.25rem;
   background-color: $color_grey_trivial;
+  vertical-align: middle;
 }

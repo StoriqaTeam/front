@@ -105,6 +105,11 @@
 .currencyPrice {
   display: flex;
   align-items: baseline;
+  margin-top: 0.5rem;
+  line-height: 1.5rem;
+  color: $color_grey_minor;
+  font-weight: normal;
+  font-family: $font_light;
 
   //@media (max-width: #{$md - 1px}) {
   //  margin-left: 0;

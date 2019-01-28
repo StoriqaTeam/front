@@ -9,11 +9,13 @@ import { Icon } from 'components/Icon';
 import { log } from 'utils';
 
 import type { ProductType } from 'pages/Manage/Store/Products/types';
+import type { SelectItemType } from 'types';
 
 import './Row.scss';
 
 type PropsType = {
   variant: ProductType,
+  currency: SelectItemType,
   handleDeleteVariant: (id: string) => void,
   onExpandClick: (id: number) => void,
   onCopyVariant: (variant: ProductType) => void,
@@ -47,6 +49,7 @@ class Row extends PureComponent<PropsType> {
   };
 
   render() {
+    const { currency, variant } = this.props;
     const {
       // rawId,
       vendorCode,
@@ -55,7 +58,7 @@ class Row extends PureComponent<PropsType> {
       discount,
       attributes: attrs,
       stocks,
-    } = this.props.variant;
+    } = variant;
     let filteredStocks = [];
     if (stocks) {
       filteredStocks = filter(item => item.quantity > 0, stocks);
@@ -77,7 +80,9 @@ class Row extends PureComponent<PropsType> {
             <span styleName="text vendorCodeText">{vendorCode || ''}</span>
           </div>
           <div styleName="td tdPrice">
-            <span styleName="text priceText">{`${price} STQ`}</span>
+            <span styleName="text priceText">{`${price} ${
+              currency.label
+            }`}</span>
           </div>
           <div styleName="td tdCashback">
             <span styleName="text cashbackText">

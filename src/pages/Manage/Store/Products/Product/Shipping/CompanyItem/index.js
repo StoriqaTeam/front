@@ -1,11 +1,13 @@
 // @flow strict
 
 import React, { PureComponent } from 'react';
-import { join, length, take, pathOr } from 'ramda';
+import { join, length, take } from 'ramda';
 
 import { Icon } from 'components/Icon';
 
 import { formatPrice } from 'utils';
+
+import type { SelectItemType } from 'types';
 
 import { convertCountriesToArrLabels } from '../utils';
 
@@ -14,6 +16,7 @@ import type { FilledCompanyType } from '../types';
 import './CompanyItem.scss';
 
 type PropsType = {
+  currency: SelectItemType,
   company: FilledCompanyType,
   onRemoveCompany: (company: FilledCompanyType) => void,
   onSetEditableItem: (company: FilledCompanyType) => void,
@@ -21,13 +24,16 @@ type PropsType = {
 
 class CompanyItem extends PureComponent<PropsType> {
   render() {
-    const { company, onRemoveCompany, onSetEditableItem } = this.props;
+    const {
+      company,
+      onRemoveCompany,
+      onSetEditableItem,
+      currency,
+    } = this.props;
     const countriesLabels = convertCountriesToArrLabels(company.countries);
     const countriesText = join(', ', take(10, countriesLabels));
     const countriesLength = length(countriesLabels);
     const imgAlt = company.service ? company.service.label : '';
-    // $FlowIgnore
-    const currencyLabel = pathOr('', ['service', 'currency', 'label'], company);
     return (
       <div styleName="container">
         <div styleName="logo">
@@ -39,7 +45,7 @@ class CompanyItem extends PureComponent<PropsType> {
               <div styleName="name">{imgAlt}</div>
               <div styleName="price">
                 <div styleName="amount">{formatPrice(company.price)}</div>
-                <div styleName="currency">{currencyLabel}</div>
+                <div styleName="currency">{currency.label}</div>
               </div>
             </div>
             <div styleName="td tdCountry">

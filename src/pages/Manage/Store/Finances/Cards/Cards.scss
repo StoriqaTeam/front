@@ -1,0 +1,37 @@
+@import "../../../../../styles/variables";
+
+.container {
+  //
+}
+
+.cards {
+  position: relative;
+}
+
+.table {
+  //
+}
+
+.radio {
+  //
+}
+
+.deleteButton {
+  cursor: pointer;
+
+  svg {
+    fill: $color_grey_minor;
+    transition: $transition_all_ease;
+  }
+
+  &:hover svg {fill: $color_grey;}
+}
+
+.addButton {
+  padding-left: 4rem;
+  padding-top: 4rem;
+}
+
+.newCardForm {
+  padding: 4rem;
+}

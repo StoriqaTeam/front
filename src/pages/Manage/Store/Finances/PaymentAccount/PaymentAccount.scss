@@ -1,0 +1,18 @@
+@import "../../../../../styles/variables";
+
+.container {
+  //
+}
+
+.checkboxes {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox {
+  margin-right: 2rem;
+}
+
+.asterisk {
+  color: $color_red;
+}

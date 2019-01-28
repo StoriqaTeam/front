@@ -9,6 +9,7 @@ import { Container, Col, Row } from 'layout';
 import { convertSrc } from 'utils';
 
 import type { AvailableDeliveryPackageType } from 'relay/queries/fetchAvailableShippingForUser';
+import type { AllCurrenciesType } from 'types';
 
 import ProductInfo from './ProductInfo';
 
@@ -33,6 +34,7 @@ type PropsType = {
   onChangeDelivery: (pkg: ?AvailableDeliveryPackageType) => Promise<boolean>,
   deliveryPackage: ?AvailableDeliveryPackageType,
   onPackagesFetched: (packages: Array<AvailableDeliveryPackageType>) => void,
+  currency: AllCurrenciesType,
 };
 
 class CartProduct extends Component<PropsType, StateType> {
@@ -53,6 +55,7 @@ class CartProduct extends Component<PropsType, StateType> {
       onChangeDelivery,
       deliveryPackage,
       onPackagesFetched,
+      currency,
     } = this.props;
     if (!product) return null;
     const { photoMain } = product;
@@ -64,15 +67,21 @@ class CartProduct extends Component<PropsType, StateType> {
               <Row>
                 <Col size={4} sm={12}>
                   <div styleName="left-container">
-                    <div
-                      styleName="picture"
-                      style={{
-                        backgroundImage: `url(${convertSrc(
-                          photoMain,
-                          'medium',
-                        )})`,
-                      }}
-                    />
+                    {photoMain != null ? (
+                      <div
+                        styleName="picture"
+                        style={{
+                          backgroundImage: `url(${convertSrc(
+                            photoMain,
+                            'medium',
+                          )})`,
+                        }}
+                      />
+                    ) : (
+                      <div styleName="noLogo">
+                        <Icon type="camera" size={40} />
+                      </div>
+                    )}
                   </div>
                 </Col>
                 <Col size={6} smHidden>
@@ -120,6 +129,7 @@ class CartProduct extends Component<PropsType, StateType> {
                       onChangeDelivery={onChangeDelivery}
                       deliveryPackage={deliveryPackage}
                       onPackagesFetched={onPackagesFetched}
+                      currency={currency}
                     />
                   </div>
                 </Col>

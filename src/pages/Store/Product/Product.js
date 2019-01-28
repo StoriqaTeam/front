@@ -14,6 +14,7 @@ import {
   has,
   pathOr,
   find,
+  toUpper,
 } from 'ramda';
 import { Environment } from 'relay-runtime';
 import smoothscroll from 'libs/smoothscroll';
@@ -30,6 +31,8 @@ import {
   log,
   convertCountries,
   sanitizeHTML,
+  checkCurrencyType,
+  setCookie,
 } from 'utils';
 import { productViewTracker, addToCartTracker } from 'rrHalper';
 
@@ -160,7 +163,7 @@ class Product extends Component<PropsType, StateType> {
   }
 
   componentDidMount() {
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
     const { baseProduct } = this.props;
     if (
       process.env.BROWSER &&
@@ -194,6 +197,9 @@ class Product extends Component<PropsType, StateType> {
     );
 
     if (isEmpty(widgets) || !unselectedAttr) {
+      const { baseProduct } = this.props;
+      const sellerCurreny = baseProduct.currency;
+      const sellerCurrenyType = checkCurrencyType(sellerCurreny);
       const shippingId = deliveryData.deliveryPackage
         ? deliveryData.deliveryPackage.shippingId
         : null;
@@ -220,7 +226,9 @@ class Product extends Component<PropsType, StateType> {
               text: t.productAddedToCart,
               link: { text: '' },
             });
-            this.setState({ isAddToCart: true });
+            this.setState({ isAddToCart: true }, () => {
+              setCookie('CURRENCY_TYPE', toUpper(sellerCurrenyType));
+            });
           }
         },
         onError: error => {
@@ -496,6 +504,7 @@ export default createFragmentContainer(
       isShippingAvailable
       id
       rawId
+      currency
       categoryId
       name {
         text
@@ -530,6 +539,11 @@ export default createFragmentContainer(
           photoMain
           additionalPhotos
           price
+          currency
+          customerPrice {
+            price
+            currency
+          }
           preOrder
           preOrderDays
           cashback
