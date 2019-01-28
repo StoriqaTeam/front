@@ -4,12 +4,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { omit, pathOr, head, map, addIndex, isEmpty, filter } from 'ramda';
 import { Col, Row } from 'layout';
-import axios from 'axios';
 
 import { Icon } from 'components/Icon';
 import { CardProduct } from 'components/CardProduct';
 import { Button } from 'components/common/Button';
-import { getNameText, log } from 'utils';
+import { getNameText } from 'utils';
 import { Modal } from 'components/Modal';
 
 import ProductLayer from '../ProductLayer';
@@ -81,28 +80,6 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
     deleteId: null,
     priceUsd: null,
   };
-
-  componentDidMount() {
-    this.isMount = true;
-    axios
-      .get('https://api.coinmarketcap.com/v1/ticker/storiqa/')
-      .then(({ data }) => {
-        const dataObj = head(data);
-        if (dataObj && this.isMount) {
-          this.setState({ priceUsd: Number(dataObj.price_usd) });
-        }
-        return true;
-      })
-      .catch(error => {
-        log.debug(error);
-      });
-  }
-
-  componentWillUnmount() {
-    this.isMount = false;
-  }
-
-  isMount = false;
 
   prepareAttributesValues = (
     attributes: Array<{
@@ -189,7 +166,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
       >
         <div styleName="productContent">
           <Icon type="cameraPlus" size={56} />
-          <span styleName="buttonLabel">Add new product</span>
+          <span styleName="buttonLabel">{t.addNewProduct}</span>
         </div>
       </div>
     );
@@ -294,10 +271,9 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
           >
             <div styleName="deleteWrapper">
               <div styleName="deleteContent">
-                <div styleName="title">Delete your product?</div>
+                <div styleName="title">{t.deleteYourProduct}</div>
                 <div styleName="description">
-                  Are you sure you want to delete this listing? All the listing
-                  information will be discarded and cannot be retrieved.
+                 {t.areYouSure}
                 </div>
                 <div styleName="buttonsContainer">
                   <Button
@@ -306,7 +282,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
                     wireframe
                     big
                   >
-                    <span>Cancel</span>
+                    <span>{t.cancel}</span>
                   </Button>
                   <div styleName="deleteButton">
                     <Button
@@ -315,7 +291,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
                       big
                       pink
                     >
-                      <span>Yes, delete, please</span>
+                      <span>{t.yesDeletePlease}</span>
                     </Button>
                   </div>
                 </div>
