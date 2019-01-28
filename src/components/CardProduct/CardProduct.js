@@ -160,7 +160,11 @@ class CardProduct extends PureComponent<PropsType> {
                 <div styleName="undiscountedPrice">
                   {Boolean(discount) && (
                     <span>
-                      {formatPrice(price)} {currency}
+                      {formatPrice(
+                        price,
+                        checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                      )}{' '}
+                      {currency}
                     </span>
                   )}
                 </div>

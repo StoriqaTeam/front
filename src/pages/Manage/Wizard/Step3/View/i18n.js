@@ -9,6 +9,11 @@ type TranslationDicType = {|
   pleaseAddTheProduct: string,
   currentlyYouHaveNoProducts: string,
   addFirstProduct: string,
+  addNewProduct: string,
+  deleteYourProduct: string,
+  areYouSure: string,
+  cancel: string,
+  yesDeletePlease: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -20,6 +25,12 @@ const translations: TranslationsBundleType = {
     currentlyYouHaveNoProducts:
       'Currently you have no products in your store. Click ‘Add’ to start filling your store with products.',
     addFirstProduct: 'Add first product',
+    addNewProduct: 'Add new product',
+    deleteYourProduct: 'Delete your product?',
+    areYouSure:
+      ' Are you sure you want to delete this listing? All the listing information will be discarded and cannot be retrieved.',
+    cancel: 'Cancel',
+    yesDeletePlease: 'Yes, delete, please',
   },
 };
 

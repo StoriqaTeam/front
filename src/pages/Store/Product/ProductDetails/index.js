@@ -1,11 +1,10 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import type { Node } from 'react';
-import { propOr, prop, head } from 'ramda';
-import axios from 'axios';
+import { propOr, prop } from 'ramda';
 
-import { log, verifyItemCurrency } from 'utils';
+import { verifyItemCurrency } from 'utils';
 
 import { Rating } from 'components/common/Rating';
 
@@ -31,10 +30,6 @@ import { sortByProp } from '../utils';
 
 import './ProductDetails.scss';
 
-type StateType = {
-  priceUsd: ?number,
-};
-
 type PropsType = {
   children: Node,
   onWidgetClick: Function,
@@ -56,33 +51,7 @@ type PropsType = {
   productVariant: ProductVariantType,
 };
 
-class ProductDetails extends Component<PropsType, StateType> {
-  state = {
-    priceUsd: null,
-  };
-
-  componentDidMount() {
-    this.isMount = true;
-    axios
-      .get('https://api.coinmarketcap.com/v1/ticker/storiqa/')
-      .then(({ data }) => {
-        const dataObj = head(data);
-        if (dataObj && this.isMount) {
-          this.setState({ priceUsd: Number(dataObj.price_usd) });
-        }
-        return true;
-      })
-      .catch(error => {
-        log.debug(error);
-      });
-  }
-
-  componentWillUnmount() {
-    this.isMount = false;
-  }
-
-  isMount = false;
-
+class ProductDetails extends PureComponent<PropsType> {
   generateWidget = (widget: WidgetType, index: number): Node => {
     const { unselectedAttr, productVariant } = this.props;
     let WidgetComponent;
@@ -178,7 +147,6 @@ class ProductDetails extends Component<PropsType, StateType> {
       onChangeDeliveryData,
       deliveryData,
     } = this.props;
-    const { priceUsd } = this.state;
     return (
       <ProductContext.Consumer>
         {({ productVariant, rating }) => (
@@ -187,10 +155,7 @@ class ProductDetails extends Component<PropsType, StateType> {
             <div styleName="rating">
               <Rating value={rating} />
             </div>
-            <ProductPrice
-              {...verifyItemCurrency(productVariant)}
-              priceUsd={priceUsd}
-            />
+            <ProductPrice {...verifyItemCurrency(productVariant)} />
             <p styleName="productDescription">{productDescription}</p>
             <Delivery
               userAddress={userAddress}
