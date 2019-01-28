@@ -23,17 +23,16 @@
   line-height: 1.44;
   letter-spacing: normal;
   text-align: center;
-  color: $color_grey;
+  color: $color_black;
   margin: 2.3125rem 0 2.925rem 0;
 
   strong {
+    color: $color_black;
     font-family: $font_montserrat_bold;
   }
 }
 
 .subHeading {
-  height: 15.85rem;
-  text-align: center;
   font-family: $font_montserrat_regular;
   font-size: 18px;
   font-weight: normal;
@@ -42,7 +41,12 @@
   line-height: 1.33;
   letter-spacing: normal;
   text-align: center;
-  margin: 3.75rem 0 5rem 0;
+  padding: 0 3rem;
+  margin: 3.75rem 0 2rem 0;
+  strong {
+    color: $color_black !important;
+    font-family: $font_montserrat_bold !important;
+  }
 }
 
 .description {
