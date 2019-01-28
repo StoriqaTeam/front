@@ -16,7 +16,7 @@ import { BannersSlider } from 'components/BannersSlider';
 import { BannersRow } from 'components/BannersRow';
 import ImageLoader from 'libs/react-image-loader';
 import BannerLoading from 'components/Banner/BannerLoading';
-import { Row, Col } from 'layout';
+import { Container, Row, Col } from 'layout';
 
 import Goods from './Goods';
 
@@ -40,7 +40,8 @@ type StateTypes = {
     middle: Array<BannerRecordType>,
     bottom: Array<BannerRecordType>,
   },
-  header: Array<{ title: string, description: string}>
+  header: Array<{ title: string, description: string }>,
+  about: Array<{ title: string, description: string }>,
 };
 
 type PropsTypes = {
@@ -77,9 +78,27 @@ class Start extends Component<PropsTypes, StateTypes> {
       },
       {
         title: 'Variety of Payment Options',
-        description: 'Choose any payment method, from credit card to cryptocurrencies',
+        description:
+          'Choose any payment method, from credit card to cryptocurrencies',
       },
-    ]
+    ],
+    about: [
+      {
+        title: 'A marketplace for self-expression',
+        description:
+          'Storiqa is a place for unique items which allow expressing your soul. Here people come to find unique gifts or treat themselves with fancy stuff.',
+      },
+      {
+        title: 'Worldwide community',
+        description:
+          'Storiqa is an online marketplace which global on every side. We have an international community and support that help you buy and sell craft items.',
+      },
+      {
+        title: 'Cryptopayment option',
+        description:
+          'Along with traditional payments, you can finally try out paying for goods with cryptocurrencies—it’s now real with Storiqa.',
+      },
+    ],
   };
 
   componentDidMount() {
@@ -141,7 +160,7 @@ class Start extends Component<PropsTypes, StateTypes> {
 
   render() {
     const { mainPage } = this.props;
-    const { header } = this.state;
+    const { header, about } = this.state;
     // $FlowIgnoreMe
     const mostViewedProducts = pathOr(
       [],
@@ -226,13 +245,11 @@ class Start extends Component<PropsTypes, StateTypes> {
           </MediaQuery>
         </div>
         <Row>
-          {header.map(({ title, description}) => (
+          {header.map(({ title, description }) => (
             <Col key={title} size={12} sm={12} md={12} lg={4} xl={4}>
               <div styleName="subHeading">
                 <strong>{title}</strong>
-                <p styleName="description">
-                  {description}
-                </p>
+                <p styleName="description">{description}</p>
               </div>
             </Col>
           ))}
@@ -268,6 +285,30 @@ class Start extends Component<PropsTypes, StateTypes> {
               />
             )}
         </div>
+        <div styleName="item goodsItem">
+          <div styleName="aboutStoriqa">
+            <div styleName="aboutHeading">
+              We all have inner spirit. We are all individuals. Stand out with
+              Storiqa.
+            </div>
+            <a styleName="readmoreAboutStoriqa" href="www.storiqa.com">
+              Read more about Storiqa
+            </a>
+            <Container>
+              <Row>
+                {about.map(({ title, description }) => (
+                  <Col key={title} size={12} sm={12} md={12} lg={4} xl={4}>
+                    <div styleName="subHeading">
+                      <div styleName="aboutTitle">{title}</div>
+                      <p styleName="aboutDescription">{description}</p>
+                    </div>
+                  </Col>
+                ))}
+              </Row>
+            </Container>
+          </div>
+        </div>
+
         {this.state.banners.bottom instanceof Array &&
           !isEmpty(this.state.banners.bottom) && (
             <div styleName="item bannersItem">
