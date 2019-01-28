@@ -9,7 +9,7 @@ import { Tabs } from 'components/common';
 
 import type { CardBrandType } from 'types';
 
-import { Cards } from './';
+import { Cards, PaymentAccount } from './';
 
 import './Finances.scss';
 
@@ -22,7 +22,7 @@ type PropsType = {
     email: string,
     stripeCustomer: {
       id: string,
-      cards: {
+      cards: Array<{
         id: string,
         brand: CardBrandType,
         country: string,
@@ -31,7 +31,7 @@ type PropsType = {
         expYear: number,
         last4: string,
         name: string,
-      },
+      }>,
     },
   },
 };
@@ -51,7 +51,6 @@ class Finances extends Component<PropsType, StateType> {
 
   render() {
     const { me } = this.props;
-    const { firstName, lastName, email, stripeCustomer } = me;
     const { selectedTab } = this.state;
 
     return (
@@ -62,16 +61,10 @@ class Finances extends Component<PropsType, StateType> {
               <div styleName="tabs">
                 <Tabs selected={selectedTab} onClick={this.handleClickTab}>
                   <div label={t.yourCards} styleName="cards">
-                    <Cards
-                      firstName={firstName}
-                      lastName={lastName}
-                      email={email}
-                      stripeCustomer={stripeCustomer}
-                      environment={environment}
-                    />
+                    <Cards me={me} environment={environment} />
                   </div>
                   <div label={t.paymentAccount} styleName="paymentAccount">
-                    This is the Paymnet account panel
+                    <PaymentAccount me={me} environment={environment} />
                   </div>
                 </Tabs>
               </div>
@@ -93,22 +86,8 @@ export default createFragmentContainer(
   ),
   graphql`
     fragment Finances_me on User {
-      firstName
-      lastName
-      email
-      stripeCustomer {
-        id
-        cards {
-          id
-          brand
-          country
-          customer
-          expMonth
-          expYear
-          last4
-          name
-        }
-      }
+      ...Cards_me
+      ...PaymentAccount_me
     }
   `,
 );

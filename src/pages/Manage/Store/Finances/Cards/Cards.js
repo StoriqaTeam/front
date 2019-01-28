@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { map, isEmpty, pathOr } from 'ramda';
 import { Environment } from 'relay-runtime';
+import { createFragmentContainer, graphql } from 'react-relay';
 
 import { Table, Checkbox } from 'components/common';
 import { Icon } from 'components/Icon';
@@ -29,21 +30,23 @@ type StateType = {
 };
 
 type PropsType = {
-  firstName: string,
-  lastName: string,
-  email: string,
-  stripeCustomer: {
-    id: string,
-    cards: Array<{
+  me: {
+    firstName: string,
+    lastName: string,
+    email: string,
+    stripeCustomer: {
       id: string,
-      brand: CardBrandType,
-      country: string,
-      customer: string,
-      expMonth: number,
-      expYear: number,
-      last4: string,
-      name: string,
-    }>,
+      cards: Array<{
+        id: string,
+        brand: CardBrandType,
+        country: string,
+        customer: string,
+        expMonth: number,
+        expYear: number,
+        last4: string,
+        name: string,
+      }>,
+    },
   },
   showAlert: (input: AddAlertInputType) => void,
   environment: Environment,
@@ -51,7 +54,7 @@ type PropsType = {
 
 class Cards extends Component<PropsType, StateType> {
   static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
-    const { stripeCustomer } = nextProps;
+    const { stripeCustomer } = nextProps.me;
     const isCards = Boolean(stripeCustomer && !isEmpty(stripeCustomer.cards));
     let checked = null;
     if (isCards) {
@@ -67,7 +70,7 @@ class Cards extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
 
-    const { stripeCustomer } = props;
+    const { stripeCustomer } = props.me;
 
     const isCards = Boolean(stripeCustomer && !isEmpty(stripeCustomer.cards));
     let checked = null;
@@ -103,6 +106,7 @@ class Cards extends Component<PropsType, StateType> {
   };
 
   handleSaveNewCard = (token: { id: string }) => {
+    this.setState({ isLoading: true });
     const params: CreateCustomerWithSourceMutationType = {
       input: {
         clientMutationId: '',
@@ -172,7 +176,7 @@ class Cards extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { firstName, lastName, email, stripeCustomer } = this.props;
+    const { firstName, lastName, email, stripeCustomer } = this.props.me;
     const { checked, isNewCardForm, isLoading } = this.state;
     const isCards = Boolean(stripeCustomer && !isEmpty(stripeCustomer.cards));
     return (
@@ -290,4 +294,26 @@ class Cards extends Component<PropsType, StateType> {
   }
 }
 
-export default withShowAlert(Cards);
+export default createFragmentContainer(
+  withShowAlert(Cards),
+  graphql`
+    fragment Cards_me on User {
+      firstName
+      lastName
+      email
+      stripeCustomer {
+        id
+        cards {
+          id
+          brand
+          country
+          customer
+          expMonth
+          expYear
+          last4
+          name
+        }
+      }
+    }
+  `,
+);

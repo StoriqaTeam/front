@@ -73,3 +73,16 @@ export { default as SetCouponInCartMutation } from './SetCouponInCartMutation';
 export {
   default as CreateCustomerWithSourceMutation,
 } from './CreateCustomerWithSourceMutation';
+
+export {
+  default as CreateInternationalBillingInfoMutation,
+} from './CreateInternationalBillingInfoMutation';
+export {
+  default as CreateRussiaBillingInfoMutation,
+} from './CreateRussiaBillingInfoMutation';
+export {
+  default as UpdateInternationalBillingInfoMutation,
+} from './UpdateInternationalBillingInfoMutation';
+export {
+  default as UpdateRussiaBillingInfoMutation,
+} from './UpdateRussiaBillingInfoMutation';
