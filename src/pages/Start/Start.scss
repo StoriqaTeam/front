@@ -47,6 +47,7 @@
     font-size: 23px;
     color: $color_black !important;
     font-family: $font_montserrat_bold !important;
+    margin: 2rem;
   }
 }
 
@@ -59,6 +60,8 @@
   letter-spacing: normal;
   text-align: center;
   color: $color_grey;
+  width: 83%;
+  margin: 0 auto;
 }
 .item {
   //
