@@ -1,4 +1,5 @@
 @import '../../../styles/variables';
+@import '../../../styles/mixins';
 
 .container {
   margin: 0 2rem;
@@ -65,11 +66,13 @@
 }
 
 .longDescription {
-  width: 70%;
+  // width: 70%;
 
   & hr {
     display: block;
     margin-bottom: 2rem;
     border: 0;
   }
+
+  @include long-description();
 }
