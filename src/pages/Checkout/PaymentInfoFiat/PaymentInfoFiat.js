@@ -80,7 +80,7 @@ class PaymentInfoFiat extends PureComponent<PropsType, StateType> {
   render() {
     const { invoice, me } = this.props;
     const { paymentIntent } = invoice;
-    if (!invoice) {
+    if (!invoice || !paymentIntent) {
       return (
         <div styleName="container" data-test="PAYMENT_INFO_FAILED">
           <div styleName="wrap">

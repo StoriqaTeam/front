@@ -7,6 +7,7 @@ import { pathOr } from 'ramda';
 import { Page } from 'components/App';
 import { PaymentInfo } from 'pages/Checkout/PaymentInfo';
 import { PaymentInfoFiat } from 'pages/Checkout/PaymentInfoFiat';
+import { checkCurrencyType } from 'utils';
 
 import type { Invoice_me as InvoiceMeType } from './__generated__/Invoice_me.graphql';
 
@@ -32,14 +33,8 @@ class Invoice extends PureComponent<PropsType> {
 
     // $FlowIgnoreMe
     const orderSlug = pathOr(null, ['order', 'slug'], me);
-    // $FlowIgnoreMe
-    const paymentIntent = pathOr(
-      null,
-      ['order', 'invoice', 'paymentIntent'],
-      me,
-    );
 
-    return paymentIntent ? (
+    return checkCurrencyType(currency) === 'fiat' ? (
       <PaymentInfoFiat invoice={invoice} me={me} orderSlug={orderSlug} />
     ) : (
       <PaymentInfo invoiceId={invoice.id} me={me} />

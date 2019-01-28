@@ -5,10 +5,8 @@ import { Link } from 'found';
 import { head } from 'ramda';
 import classNames from 'classnames';
 
-// import { CurrencyPrice } from 'components/common';
 import { Icon } from 'components/Icon';
 import { Rating } from 'components/common/Rating';
-// import { MultiCurrencyDropdown } from 'components/common/MultiCurrencyDropdown';
 import BannerLoading from 'components/Banner/BannerLoading';
 import {
   getNameText,
@@ -16,6 +14,7 @@ import {
   convertSrc,
   getExchangePrice,
   verifyItemCurrency,
+  checkCurrencyType,
 } from 'utils';
 import ImageLoader from 'libs/react-image-loader';
 import { ContextDecorator } from 'components/App';
@@ -104,7 +103,6 @@ class CardProduct extends PureComponent<PropsType> {
     const discountedPrice = discount ? price * (1 - discount) : price;
     const discountValue = discount ? (discount * 100).toFixed(0) : null;
     const cashbackValue = cashback ? (cashback * 100).toFixed(0) : null;
-    //
     const priceExchanged = getExchangePrice({
       price,
       currency,
@@ -170,7 +168,12 @@ class CardProduct extends PureComponent<PropsType> {
                   <div styleName="actualPrice">
                     {discountedPrice === 0
                       ? 'FREE'
-                      : `${formatPrice(discountedPrice)} ${currency}`}
+                      : `${formatPrice(
+                          discountedPrice,
+                          checkCurrencyType(currency) === 'fiat'
+                            ? 2
+                            : undefined,
+                        )} ${currency}`}
                   </div>
                   {priceExchanged && (
                     <span styleName="priceExchanged">{priceExchanged}</span>

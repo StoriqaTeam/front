@@ -16,6 +16,10 @@
 
 .wrap {
   min-width: 70.5rem;
+
+  @media (max-width: #{$sm - 1px}) {
+    min-width: 100%;
+  }
 }
 
 .title {
