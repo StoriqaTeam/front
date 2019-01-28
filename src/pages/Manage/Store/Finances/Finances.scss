@@ -1,0 +1,24 @@
+@import "../../../../styles/variables";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.wrap {
+  position: relative;
+  height: 100%;
+}
+
+.tabs {
+  margin-top: -1rem;
+}
+
+.cards {
+  margin: 0 -4rem;
+}
+
+.paymentAccount {
+
+}

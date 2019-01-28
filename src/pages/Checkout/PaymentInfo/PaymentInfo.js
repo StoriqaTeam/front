@@ -40,17 +40,38 @@ type PropsType = {
 };
 
 type StateType = {
+  priceReservedDueDateTime: ?string,
   timerValue: string,
   isFirstRefetch: boolean,
   isNotificationActive: boolean,
 };
 
 class PaymentInfo extends PureComponent<PropsType, StateType> {
-  state = {
-    timerValue: '',
-    isFirstRefetch: true,
-    isNotificationActive: true,
-  };
+  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
+    // $FlowIgnoreMe
+    const priceReservedDueDateTime = pathOr(
+      null,
+      ['invoice', 'priceReservedDueDateTime'],
+      nextProps.me,
+    );
+
+    if (priceReservedDueDateTime && !prevState.priceReservedDueDateTime) {
+      return { priceReservedDueDateTime };
+    }
+
+    return null;
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      priceReservedDueDateTime: null,
+      timerValue: '',
+      isFirstRefetch: true,
+      isNotificationActive: true,
+    };
+  }
 
   componentDidMount() {
     this.unmounted = false;
@@ -126,12 +147,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
   };
 
   updateCountdown = () => {
-    // $FlowIgnoreMe
-    const priceReservedDueDateTime = pathOr(
-      null,
-      ['invoice', 'priceReservedDueDateTime'],
-      this.props.me,
-    );
+    const { priceReservedDueDateTime } = this.state;
 
     if (this.unmounted) {
       return;
@@ -179,6 +195,31 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
     this.setState({ isNotificationActive: false });
   };
 
+  renderLinks = () => (
+    <div styleName="links">
+      <div>
+        You can pay with{' '}
+        <a
+          href="https://turewallet.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Storiqa Wallet
+        </a>
+      </div>
+      <div>
+        Don’t you have one yet?{' '}
+        <a
+          href="https://itunes.apple.com/ru/app/ture/id1448865994?mt=8"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Download
+        </a>
+      </div>
+    </div>
+  );
+
   render() {
     const { isFirstRefetch, isNotificationActive } = this.state;
     if (isFirstRefetch) {
@@ -192,14 +233,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
             <div styleName="loader" />
           </div>
           <div styleName="separator" />
-          <div styleName="links">
-            <div>
-              You can pay with <span>Storiqa Wallet</span>
-            </div>
-            <div>
-              Don’t you have one yet? <span>Download</span>
-            </div>
-          </div>
+          {this.renderLinks()}
         </div>
       );
     }
@@ -213,14 +247,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
             <div styleName="description">Your payment was failed :(</div>
           </div>
           <div styleName="separator" />
-          <div styleName="links">
-            <div>
-              You can pay with <span>Storiqa Wallet</span>
-            </div>
-            <div>
-              Don’t you have one yet? <span>Download</span>
-            </div>
-          </div>
+          {this.renderLinks()}
         </div>
       );
     }
@@ -232,8 +259,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
 
     if (invoice) {
       ({ wallet, amount, transactions } = invoice);
-      // eslint-disable-next-line
-      state = invoice.state;
+      ({ state } = invoice);
     }
 
     const dataTest =
@@ -262,7 +288,9 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
                 <div styleName="paymentInfoWrapper">
                   <div styleName="qr">
                     <QRCode
-                      value={`ethereum:${wallet}?amount=${amount}`}
+                      value={`${
+                        invoice.currency === 'BTC' ? 'bitcoin' : 'ethereum'
+                      }:${wallet}?amount=${amount}`}
                       renderAs="svg"
                       size={165}
                     />
@@ -271,7 +299,9 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
                     <div styleName="addressTitle">Address</div>
                     <div styleName="address">{wallet}</div>
                     <div styleName="amountTitle">Amount</div>
-                    <div styleName="amount">{formatPrice(amount)} STQ</div>
+                    <div styleName="amount">{`${formatPrice(amount)} ${
+                      invoice.currency
+                    }`}</div>
                     {
                       <div styleName="reserveInfo">
                         Current price reserved for{' '}
@@ -337,18 +367,11 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
           )}
         </div>
         <div styleName="separator" />
-        <div styleName="links">
-          <div>
-            You can pay with <span>Storiqa Wallet</span>
-          </div>
-          <div>
-            Don’t you have one yet? <span>Download</span>
-          </div>
-        </div>
+        {this.renderLinks()}
         {isNotificationActive ? (
           <div styleName="notification">
             <NotificationBlock
-              type="danger"
+              type="warning"
               title={t.attention}
               longText
               text={t.exchangeNotification}
@@ -362,6 +385,8 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
     );
   }
 }
+
+// export default createRefetchContainer;
 
 export default createRefetchContainer(
   withRouter(PaymentInfo),
@@ -378,6 +403,7 @@ export default createRefetchContainer(
           id
           amount
         }
+        currency
       }
     }
   `,

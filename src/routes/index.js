@@ -5,7 +5,7 @@ import { Route, RedirectException, Redirect } from 'found';
 import { graphql } from 'react-relay';
 import { find, pathEq, pathOr, last, isNil, pick } from 'ramda';
 
-import { log, jwt as JWT } from 'utils';
+import { log, jwt as JWT, getCookie } from 'utils';
 import { urlToInput } from 'utils/search';
 import { App } from 'components/App';
 import { Authorization, OAuthCallback } from 'components/Authorization';
@@ -21,6 +21,7 @@ import {
   StorageProducts,
 } from 'pages/Manage/Store/Storages/Storage';
 import { Contacts } from 'pages/Manage/Store/Contacts';
+import { Finances } from 'pages/Manage/Store/Finances';
 import { Wizard } from 'pages/Manage/Wizard';
 import Stores from 'pages/Stores/Stores';
 import { NewProduct, EditProduct } from 'pages/Manage/Store/Products/Product';
@@ -43,6 +44,7 @@ import {
   DeviceConfirmed,
   PasswordResetDeny,
 } from 'pages/Wallet';
+import SpinnerPage from 'pages/SpinnerPage';
 
 const routes = (
   <Route>
@@ -65,7 +67,7 @@ const routes = (
           }
           cart {
             id
-            ...Cart_cart
+            ...UserDataTotalLocalFragment
           }
           mainPage {
             ...Start_mainPage
@@ -83,6 +85,9 @@ const routes = (
             isoCode
           }
           currencies
+          fiatCurrencies
+          cryptoCurrencies
+          sellerCurrencies
           categories {
             name {
               lang
@@ -171,6 +176,15 @@ const routes = (
             }
           }
         `}
+        prepareVariables={() => {
+          const currencyType = getCookie('CURRENCY_TYPE');
+          return {
+            currencyType:
+              currencyType === 'FIAT' || currencyType === 'CRYPTO'
+                ? currencyType
+                : 'FIAT',
+          };
+        }}
       />
 
       <Route
@@ -184,7 +198,7 @@ const routes = (
             JWT.clearJWT();
             throw new RedirectException(`/login?from=${pathname}`);
           } else if (!props) {
-            return null;
+            return <SpinnerPage />;
           } else {
             return <Component {...props} />;
           }
@@ -552,6 +566,17 @@ const routes = (
                 query routes_Contacts_Query {
                   me {
                     ...Contacts_me
+                  }
+                }
+              `}
+            />
+            <Route
+              path="/finances"
+              Component={Finances}
+              query={graphql`
+                query routes_Finances_Query {
+                  me {
+                    ...Finances_me
                   }
                 }
               `}

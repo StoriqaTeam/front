@@ -1,0 +1,52 @@
+@import "../../../styles/variables";
+
+.container {
+  //padding: 3rem;
+}
+
+.labels {
+  border-bottom: 0.25rem solid $color_grey_trivial;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.label {
+  position: relative;
+  padding: 0 2rem 2rem;
+  margin-bottom: -0.25rem;
+  cursor: pointer;
+  //text-transform: uppercase;
+
+  .labelText {
+    color: $color_grey_minor;
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+}
+
+.active {
+    &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 0.25rem;
+    background-color: $color_blue;
+  }
+
+  .labelText {
+    color: $color_blue;
+  }
+}
+
+.panel {
+  padding-top: 3rem;
+}
+
+.amount {
+  position: absolute;
+  top: -1rem;
+  right: -0.5rem;
+  margin-right: 1%;
+}

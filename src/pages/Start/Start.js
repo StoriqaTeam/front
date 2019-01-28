@@ -3,7 +3,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { pathOr, map, head, isEmpty } from 'ramda';
+import { pathOr, map, isEmpty } from 'ramda';
 import axios from 'axios';
 import { Link } from 'found';
 
@@ -33,7 +33,6 @@ opaque type BannerRecordType = {
 };
 
 type StateTypes = {
-  priceUsd: ?number,
   banners: {
     main: Array<BannerRecordType>,
     middle: Array<BannerRecordType>,
@@ -59,7 +58,6 @@ const BannerPlaceholder = () => (
 
 class Start extends Component<PropsTypes, StateTypes> {
   state = {
-    priceUsd: null,
     banners: {
       main: [],
       middle: [],
@@ -69,18 +67,6 @@ class Start extends Component<PropsTypes, StateTypes> {
 
   componentDidMount() {
     this.isMount = true;
-    axios
-      .get('https://api.coinmarketcap.com/v1/ticker/storiqa/')
-      .then(({ data }) => {
-        const dataObj = head(data);
-        if (dataObj && this.isMount) {
-          this.setState({ priceUsd: Number(dataObj.price_usd) });
-        }
-        return true;
-      })
-      .catch(error => {
-        log.debug(error);
-      });
 
     axios
       .get(
@@ -138,7 +124,6 @@ class Start extends Component<PropsTypes, StateTypes> {
 
   render() {
     const { mainPage } = this.props;
-    const { priceUsd } = this.state;
     // $FlowIgnoreMe
     const mostViewedProducts = pathOr(
       [],
@@ -153,13 +138,10 @@ class Start extends Component<PropsTypes, StateTypes> {
     );
 
     const discountProducts = map(
-      item => ({ ...item.node, priceUsd }),
+      item => ({ ...item.node }),
       mostDiscountProducts,
     );
-    const viewedProducts = map(
-      item => ({ ...item.node, priceUsd }),
-      mostViewedProducts,
-    );
+    const viewedProducts = map(item => ({ ...item.node }), mostViewedProducts);
     // $FlowIgnoreMe
     const isCompletedWizardStore = pathOr(
       false,
@@ -328,6 +310,10 @@ export default createFragmentContainer(
                   photoMain
                   cashback
                   price
+                  customerPrice {
+                    price
+                    currency
+                  }
                 }
               }
             }
@@ -363,6 +349,10 @@ export default createFragmentContainer(
                   photoMain
                   cashback
                   price
+                  customerPrice {
+                    price
+                    currency
+                  }
                 }
               }
             }

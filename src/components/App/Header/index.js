@@ -20,7 +20,6 @@ import { SearchInput } from 'components/SearchInput';
 import { CategoriesMenu } from 'components/CategoriesMenu';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { urlToInput, inputToUrl } from 'utils';
-
 import { Container } from 'layout';
 
 import type {
@@ -315,6 +314,8 @@ class Header extends Component<PropsType, StateType> {
               <BurgerMenu />
               <HeaderTop
                 userData={userData}
+                cryptoCurrencies={directories.cryptoCurrencies}
+                fiatCurrencies={directories.fiatCurrencies}
                 currencies={map(
                   // $FlowIgnoreMe
                   item => `${item}`,

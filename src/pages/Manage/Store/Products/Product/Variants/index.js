@@ -12,8 +12,9 @@ import { Confirmation } from 'components/Confirmation';
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { ProductType } from 'pages/Manage/Store/Products/types';
 import type { MutationParamsType } from 'relay/mutations/DeactivateProductMutation';
+import type { SelectItemType } from 'types';
 
-// import Header from './Header';
+import Header from './Header';
 import Row from './Row';
 
 import './Variants.scss';
@@ -21,6 +22,7 @@ import './Variants.scss';
 import t from './i18n';
 
 type PropsType = {
+  currency: SelectItemType,
   variants: Array<ProductType>,
   productId: string,
   environment: Environment,
@@ -109,17 +111,18 @@ class Variants extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { variants, onCopyVariant } = this.props;
+    const { variants, onCopyVariant, currency } = this.props;
     const { showModal } = this.state;
     return (
       <div styleName="container">
-        {/* <Header onSelectAllClick={() => {}} /> */}
+        <Header onSelectAllClick={() => {}} />
         <div>
           {map(
             item => (
               <Row
                 key={item.rawId}
                 variant={item}
+                currency={currency}
                 handleDeleteVariant={this.handleDeleteModal}
                 onExpandClick={this.expandClick}
                 onCopyVariant={onCopyVariant}

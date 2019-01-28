@@ -94,3 +94,12 @@ ul {
 li {
   list-style-type: none;
 }
+
+table {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+table, thead, tr, th, tbody, td {
+  font-weight: normal;
+}

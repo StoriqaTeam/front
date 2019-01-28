@@ -13,7 +13,6 @@ import { Container, Row, Col } from 'layout';
 import {
   formatPrice,
   getNameText,
-  currentCurrency,
   convertSrc,
   log,
   fromRelayError,
@@ -23,6 +22,7 @@ import { SetCouponInCartMutation } from 'relay/mutations';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { MutationParamsType as SetCouponInCartMutationType } from 'relay/mutations/SetCouponInCartMutation';
+import type { AllCurrenciesType } from 'types';
 
 import CartProduct from '../CartProduct';
 
@@ -46,6 +46,7 @@ type PropsType = {
   withDeliveryCompaniesSelect?: boolean,
   relay: Relay,
   showAlert: (input: AddAlertInputType) => void,
+  currency: AllCurrenciesType,
 };
 
 /* eslint-disable react/no-array-index-key */
@@ -152,6 +153,7 @@ class CartStore extends Component<PropsType, StateType> {
       unselectable,
       isOpenInfo,
       withDeliveryCompaniesSelect,
+      currency,
     } = this.props;
 
     const {
@@ -177,6 +179,7 @@ class CartStore extends Component<PropsType, StateType> {
               unselectable={unselectable}
               isOpenInfo={isOpenInfo}
               withDeliveryCompaniesSelect={withDeliveryCompaniesSelect}
+              currency={currency}
             />
           </div>
         ))}
@@ -198,7 +201,7 @@ class CartStore extends Component<PropsType, StateType> {
                       </div>
                     )}
                     <div styleName="store-description">
-                      <div styleName="store-name">
+                      <div styleName="storeName">
                         {getNameText(store.name, 'EN')}
                       </div>
                       <Rating value={store.rating} />
@@ -240,13 +243,14 @@ class CartStore extends Component<PropsType, StateType> {
                     {Boolean(store.couponsDiscount) && (
                       <div styleName="value">
                         <thin styleName="through">
-                          {formatPrice(store.totalCostWithoutDiscounts || 0)}{' '}
-                          {currentCurrency()}
+                          {`${formatPrice(
+                            store.totalCostWithoutDiscounts || 0,
+                          )} ${currency || ''}`}
                         </thin>
                       </div>
                     )}
                     <div styleName="value">
-                      {formatPrice(store.totalCost || 0)} {currentCurrency()}
+                      {`${formatPrice(store.totalCost || 0)} ${currency || ''}`}
                     </div>
                   </div>
                 </div>

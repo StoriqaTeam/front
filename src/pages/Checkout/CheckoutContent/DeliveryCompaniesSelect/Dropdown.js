@@ -8,10 +8,12 @@ import { Checkbox } from 'components/common/Checkbox';
 import { Button } from 'components/common';
 
 import type { AvailableDeliveryPackageType } from 'relay/queries/fetchAvailableShippingForUser';
+import type { AllCurrenciesType } from 'types';
 
 import './Dropdown.scss';
 
 type PropsType = {
+  currency: AllCurrenciesType,
   isOpen: boolean,
   isLoading: boolean,
   isError: boolean,
@@ -62,6 +64,7 @@ class Dropdown extends React.Component<PropsType, StateType> {
       toggleExpand,
       packages,
       onAccept,
+      currency,
     } = this.props;
     return (
       <div styleName="dropdown">
@@ -98,7 +101,7 @@ class Dropdown extends React.Component<PropsType, StateType> {
                       </div>
                     </div>
                     <span styleName="price">
-                      {item.price} {item.currency}
+                      {`${item.price} ${currency || ''}`}
                     </span>
                   </div>
                 ),

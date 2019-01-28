@@ -18,6 +18,9 @@ const AppContext = createContext(
         children: [],
       },
       currencies: [],
+      fiatCurrencies: [],
+      cryptoCurrencies: [],
+      sellerCurrencies: [],
       languages: [],
       categories: {
         name: [],
@@ -25,6 +28,7 @@ const AppContext = createContext(
       },
       // $FlowIgnoreMe
       orderStatuses: '',
+      currencyExchange: [],
     },
     environment: null,
     handleLogin: () => {},

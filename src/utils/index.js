@@ -30,6 +30,7 @@ export {
 } from './convertCurrenciesForSelect';
 export { default as findSelectedFromList } from './findSelectedFromList';
 export { default as currentCurrency } from './currentCurrency';
+export { default as getCurrentCurrency } from './getCurrentCurrency';
 export { default as convertCountries } from './convertCountries';
 export {
   default as convertCountriesForSelect,
@@ -40,3 +41,6 @@ export { default as jwt } from './jwt';
 export { default as getQueryRefParams } from './getQueryRefParams';
 export { default as isJson } from './isJson';
 export { default as sanitizeHTML } from './sanitizeHTML';
+export { default as checkCurrencyType } from './checkCurrencyType';
+export { default as getExchangePrice } from './getExchangePrice';
+export { default as verifyItemCurrency } from './verifyItemCurrency';
