@@ -1,11 +1,8 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { head, isEmpty, map, pathOr } from 'ramda';
-import axios from 'axios';
-
-import { log } from 'utils';
+import { isEmpty, map, pathOr } from 'ramda';
 
 import { SearchNoResults } from 'components/SearchNoResults';
 import Goods from 'pages/Start/Goods';
@@ -16,44 +13,14 @@ import './Showcase.scss';
 
 import t from './i18n';
 
-type StateType = {
-  priceUsd: ?number,
-};
-
 type PropsType = {
   shop: ShowcaseShopType,
 };
 
-class Showcase extends Component<PropsType, StateType> {
-  state = {
-    priceUsd: null,
-  };
-
-  componentDidMount() {
-    this.isMount = true;
-    axios
-      .get('https://api.coinmarketcap.com/v1/ticker/storiqa/')
-      .then(({ data }) => {
-        const dataObj = head(data);
-        if (dataObj && this.isMount) {
-          this.setState({ priceUsd: Number(dataObj.price_usd) });
-        }
-        return true;
-      })
-      .catch(error => {
-        log.debug(error);
-      });
-  }
-
-  componentWillUnmount() {
-    this.isMount = false;
-  }
-
-  isMount = false;
+class Showcase extends PureComponent<PropsType, StateType> {
 
   render() {
     const { shop } = this.props;
-    const { priceUsd } = this.state;
     // $FlowIgnoreMe
     const mostViewedProducts = pathOr(
       [],
@@ -67,11 +34,11 @@ class Showcase extends Component<PropsType, StateType> {
       shop,
     );
     const discountProducts = map(
-      item => ({ ...item.node, priceUsd }),
+      item => ({ ...item.node }),
       mostDiscountProducts,
     );
     const viewedProducts = map(
-      item => ({ ...item.node, priceUsd }),
+      item => ({ ...item.node }),
       mostViewedProducts,
     );
     return (
