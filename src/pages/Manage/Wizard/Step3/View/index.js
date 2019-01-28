@@ -272,9 +272,7 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
             <div styleName="deleteWrapper">
               <div styleName="deleteContent">
                 <div styleName="title">{t.deleteYourProduct}</div>
-                <div styleName="description">
-                 {t.areYouSure}
-                </div>
+                <div styleName="description">{t.areYouSure}</div>
                 <div styleName="buttonsContainer">
                   <Button
                     onClick={this.handleOnCloseDelete}

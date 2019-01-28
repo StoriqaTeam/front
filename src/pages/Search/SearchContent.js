@@ -28,36 +28,7 @@ type PropsType = {
   onFilterMenu: () => void,
 };
 
-type StateType = {
-  priceUsd: ?number,
-};
-
 class SearchContent extends Component<PropsType, StateType> {
-  state = {
-    priceUsd: null,
-  };
-
-  componentDidMount() {
-    this.isMount = true;
-    axios
-      .get('https://api.coinmarketcap.com/v1/ticker/storiqa/')
-      .then(({ data }) => {
-        const dataObj = head(data);
-        if (dataObj && this.isMount) {
-          this.setState({ priceUsd: Number(dataObj.price_usd) });
-        }
-        return true;
-      })
-      .catch(error => {
-        log.debug(error);
-      });
-  }
-
-  componentWillUnmount() {
-    this.isMount = false;
-  }
-
-  isMount = false;
 
   productsRefetch = (): void => {
     const { relay, productsPerRequest } = this.props;
@@ -136,7 +107,6 @@ class SearchContent extends Component<PropsType, StateType> {
   };
   render() {
     const { relay, onFilterMenu } = this.props;
-    const { priceUsd } = this.state;
     // $FlowIgnoreMe
     const products = pathOr([], ['search', 'findProduct', 'edges'], this.props);
     const productsWithVariants = map(item => item.node, products);
@@ -160,7 +130,7 @@ class SearchContent extends Component<PropsType, StateType> {
             map(
               item => (
                 <div key={item.id} styleName="cardWrapper">
-                  <CardProduct item={{ ...item, priceUsd }} isSearchPage />
+                  <CardProduct item={{ ...item }} isSearchPage />
                 </div>
               ),
               productsWithVariants,

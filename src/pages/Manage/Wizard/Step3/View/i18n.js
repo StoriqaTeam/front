@@ -27,7 +27,8 @@ const translations: TranslationsBundleType = {
     addFirstProduct: 'Add first product',
     addNewProduct: 'Add new product',
     deleteYourProduct: 'Delete your product?',
-    areYouSure: ' Are you sure you want to delete this listing? All the listing information will be discarded and cannot be retrieved.',
+    areYouSure:
+      ' Are you sure you want to delete this listing? All the listing information will be discarded and cannot be retrieved.',
     cancel: 'Cancel',
     yesDeletePlease: 'Yes, delete, please',
   },
