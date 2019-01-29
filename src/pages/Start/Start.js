@@ -298,7 +298,7 @@ class Start extends Component<PropsTypes, StateTypes> {
               <Row>
                 {about.map(({ title, description }) => (
                   <Col key={title} size={12} sm={12} md={12} lg={4} xl={4}>
-                    <div styleName="subHeading">
+                    <div styleName="subHeading short">
                       <div styleName="aboutTitle">{title}</div>
                       <p styleName="aboutDescription">{description}</p>
                     </div>
