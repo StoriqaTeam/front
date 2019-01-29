@@ -8,6 +8,7 @@ import uidGenerator from 'gen-uid';
 import isTokenExpired from 'utils/token';
 import { log, removeCookie, jwt as JWT } from 'utils';
 import grayLogger from 'utils/graylog';
+import { COOKIE_CURRENCY, COOKIE_FIAT_CURRENCY } from 'constants';
 
 import type { CookieType } from 'utils/cookiesOp';
 
@@ -324,13 +325,13 @@ export class ClientFetcher extends FetcherBase {
   // eslint-disable-next-line
   getCurrencyCodeFromCookies() {
     const cookies = new Cookies();
-    const currency = cookies.get('CURRENCY');
+    const currency = cookies.get(COOKIE_CURRENCY);
     return currency || 'STQ';
   }
   // eslint-disable-next-line
   getFiatCurrencyCodeFromCookies() {
     const cookies = new Cookies();
-    const currency = cookies.get('FIAT_CURRENCY');
+    const currency = cookies.get(COOKIE_FIAT_CURRENCY);
     return currency || 'USD';
   }
 

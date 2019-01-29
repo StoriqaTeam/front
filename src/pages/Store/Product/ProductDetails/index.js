@@ -149,34 +149,38 @@ class ProductDetails extends PureComponent<PropsType> {
     } = this.props;
     return (
       <ProductContext.Consumer>
-        {({ productVariant, rating }) => (
-          <div styleName="container">
-            <h2>{productTitle}</h2>
-            <div styleName="rating">
-              <Rating value={rating} />
+        {({ productVariant, rating }) => {
+          const verifiedVariant = verifyItemCurrency(productVariant);
+          return (
+            <div styleName="container">
+              <h2>{productTitle}</h2>
+              <div styleName="rating">
+                <Rating value={rating} />
+              </div>
+              <ProductPrice {...verifiedVariant} />
+              <p styleName="productDescription">{productDescription}</p>
+              <Delivery
+                currency={verifiedVariant.currency}
+                userAddress={userAddress}
+                baseProductRawId={baseProductRawId}
+                countries={countries}
+                onChangeDeliveryData={onChangeDeliveryData}
+                deliveryData={deliveryData}
+              />
+              <div styleName="widgets">
+                {sortByProp('id')(widgets).map(this.generateWidget)}
+              </div>
+              <ProductQuantity
+                quantity={productVariant.quantity}
+                preOrder={productVariant.preOrder}
+                preOrderDays={productVariant.preOrderDays}
+                onChangeQuantity={onChangeQuantity}
+                cartQuantity={cartQuantity}
+              />
+              {children}
             </div>
-            <ProductPrice {...verifyItemCurrency(productVariant)} />
-            <p styleName="productDescription">{productDescription}</p>
-            <Delivery
-              userAddress={userAddress}
-              baseProductRawId={baseProductRawId}
-              countries={countries}
-              onChangeDeliveryData={onChangeDeliveryData}
-              deliveryData={deliveryData}
-            />
-            <div styleName="widgets">
-              {sortByProp('id')(widgets).map(this.generateWidget)}
-            </div>
-            <ProductQuantity
-              quantity={productVariant.quantity}
-              preOrder={productVariant.preOrder}
-              preOrderDays={productVariant.preOrderDays}
-              onChangeQuantity={onChangeQuantity}
-              cartQuantity={cartQuantity}
-            />
-            {children}
-          </div>
-        )}
+          );
+        }}
       </ProductContext.Consumer>
     );
   }

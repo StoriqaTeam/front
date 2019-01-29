@@ -39,6 +39,7 @@ type PropsType = {
   countries: Array<CountryType>,
   onChangeDeliveryData: (deliveryData: DeliveryDataType) => void,
   deliveryData: DeliveryDataType,
+  currency: string,
 };
 
 class Delivery extends Component<PropsType, StateType> {
@@ -169,6 +170,7 @@ class Delivery extends Component<PropsType, StateType> {
   };
 
   render() {
+    const { currency } = this.props;
     log.debug(this.state);
 
     const {
@@ -288,7 +290,7 @@ class Delivery extends Component<PropsType, StateType> {
                                     selected: isChecked,
                                   })}
                                 >
-                                  {`${formatPrice(pkgType.price)} STQ`}
+                                  {`${formatPrice(pkgType.price)} ${currency}`}
                                 </div>
                               </div>
                             </div>
@@ -318,7 +320,7 @@ class Delivery extends Component<PropsType, StateType> {
               <div styleName="textWrapper">
                 <div styleName="pkgName">{t.price}</div>
                 <div styleName="pkgPrice">
-                  {formatPrice(deliveryPackage.price)} STQ
+                  {formatPrice(deliveryPackage.price)} {currency}
                 </div>
               </div>
             </div>
