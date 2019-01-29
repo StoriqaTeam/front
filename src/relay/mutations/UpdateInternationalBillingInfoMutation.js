@@ -14,11 +14,11 @@ const mutation = graphql`
   ) {
     updateInternationalBillingInfo(input: $input) {
       id
-      storeId
-      swiftBic
-      bankName
-      fullName
-      iban
+      # storeId
+      # swiftBic
+      # bankName
+      # fullName
+      # iban
     }
   }
 `;

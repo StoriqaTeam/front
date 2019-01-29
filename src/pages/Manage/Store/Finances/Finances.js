@@ -87,7 +87,7 @@ export default createFragmentContainer(
   graphql`
     fragment Finances_me on User {
       ...Cards_me
-      ...PaymentAccount_me
+      # ...PaymentAccount_me
     }
   `,
 );

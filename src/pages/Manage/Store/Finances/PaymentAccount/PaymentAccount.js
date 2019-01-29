@@ -251,33 +251,35 @@ class PaymentAccount extends Component<PropsType, StateType> {
   }
 }
 
-export default createFragmentContainer(
-  withShowAlert(PaymentAccount),
-  graphql`
-    fragment PaymentAccount_me on User {
-      myStore {
-        warehouses {
-          addressFull {
-            countryCode
-          }
-        }
-        russiaBillingInfo {
-          id
-          storeId
-          kpp
-          bic
-          inn
-          fullName
-        }
-        internationalBillingInfo {
-          id
-          storeId
-          swiftBic
-          bankName
-          fullName
-          iban
-        }
-      }
-    }
-  `,
-);
+export default PaymentAccount;
+
+// export default createFragmentContainer(
+//   withShowAlert(PaymentAccount),
+//   graphql`
+//     fragment PaymentAccount_me on User {
+//       myStore {
+//         warehouses {
+//           addressFull {
+//             countryCode
+//           }
+//         }
+//         russiaBillingInfo {
+//           id
+//           storeId
+//           kpp
+//           bic
+//           inn
+//           fullName
+//         }
+//         internationalBillingInfo {
+//           id
+//           storeId
+//           swiftBic
+//           bankName
+//           fullName
+//           iban
+//         }
+//       }
+//     }
+//   `,
+// );

@@ -14,11 +14,11 @@ const mutation = graphql`
   ) {
     updateRussiaBillingInfo(input: $input) {
       id
-      storeId
-      kpp
-      bic
-      inn
-      fullName
+      # storeId
+      # kpp
+      # bic
+      # inn
+      # fullName
     }
   }
 `;
