@@ -2,12 +2,12 @@
 
 import React, { Component, Fragment } from 'react';
 import { pathOr } from 'ramda';
-import { createFragmentContainer, graphql } from 'react-relay';
+// import { createFragmentContainer, graphql } from 'react-relay';
 
 import { Checkbox } from 'components/common';
 // import { Icon } from 'components/Icon';
 
-import { withShowAlert } from 'components/Alerts/AlertContext';
+// import { withShowAlert } from 'components/Alerts/AlertContext';
 
 import './PaymentAccount.scss';
 
@@ -51,6 +51,7 @@ type PropsType = {
   //     name: string,
   //   }>,
   // },
+  // $FlowIgnore
   me: {
     myStore: {
       warehouses: {
@@ -103,7 +104,7 @@ class PaymentAccount extends Component<PropsType, StateType> {
   //       cardToken: token.id,
   //     },
   //     environment: this.props.environment,
-  //     // $FlowIgnore
+  //
   //     onCompleted: (response: ?Object, errors: ?Array<any>) => {
   //       this.setState({ isLoading: false });
   //       log.debug({ response, errors });
@@ -111,7 +112,7 @@ class PaymentAccount extends Component<PropsType, StateType> {
   //       const relayErrors = fromRelayError({ source: { errors } });
   //       log.debug({ relayErrors });
   //
-  //       // $FlowIgnoreMe
+  //
   //       const statusError: string = pathOr({}, ['100', 'status'], relayErrors);
   //       if (!isEmpty(statusError)) {
   //         this.props.showAlert({
@@ -122,7 +123,7 @@ class PaymentAccount extends Component<PropsType, StateType> {
   //         return;
   //       }
   //
-  //       // $FlowIgnoreMe
+  //
   //       const parsingError = pathOr(null, ['300', 'message'], relayErrors);
   //       if (parsingError) {
   //         log.debug('parsingError:', { parsingError });

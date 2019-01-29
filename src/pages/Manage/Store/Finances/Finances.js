@@ -14,7 +14,7 @@ import { Cards, PaymentAccount } from './';
 import './Finances.scss';
 
 import t from './i18n';
-
+//
 type PropsType = {
   me: {
     firstName: string,
