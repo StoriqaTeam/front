@@ -443,7 +443,6 @@ class Product extends Component<PropsType, StateType> {
           head(deliveryAddressesFull);
       }
     }
-    console.log('widgets', widgets);
     return (
       <AppContext.Consumer>
         {({ categories, directories }) => (
