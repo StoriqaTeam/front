@@ -74,6 +74,7 @@ export { default as SetCouponInCartMutation } from './SetCouponInCartMutation';
 export {
   default as CreateCustomerWithSourceMutation,
 } from './CreateCustomerWithSourceMutation';
+export { default as UpdateCustomerMutation } from './UpdateCustomerMutation';
 
 export {
   default as CreateInternationalBillingInfoMutation,

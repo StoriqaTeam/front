@@ -196,6 +196,7 @@ class PaymentAccount extends Component<PropsType, StateType> {
       });
       return;
     }
+    this.setState({ isLoading: true });
 
     let input = {
       clientMutationId: '',
@@ -258,7 +259,10 @@ class PaymentAccount extends Component<PropsType, StateType> {
         this.setState({ isOpenForm: false });
       },
       onError: (error: Error) => {
-        this.setState(() => ({ isLoading: false }));
+        this.setState(() => ({
+          isLoading: false,
+          isOpenForm: false,
+        }));
         log.error(error);
         this.props.showAlert({
           type: 'danger',
@@ -292,6 +296,8 @@ class PaymentAccount extends Component<PropsType, StateType> {
       });
       return;
     }
+
+    this.setState({ isLoading: true });
 
     let input = {
       clientMutationId: '',
@@ -355,7 +361,10 @@ class PaymentAccount extends Component<PropsType, StateType> {
         this.setState({ isOpenForm: false });
       },
       onError: (error: Error) => {
-        this.setState(() => ({ isLoading: false }));
+        this.setState(() => ({
+          isLoading: false,
+          isOpenForm: false,
+        }));
         log.error(error);
         this.props.showAlert({
           type: 'danger',
@@ -719,7 +728,7 @@ class PaymentAccount extends Component<PropsType, StateType> {
           <div styleName="checkbox">
             <Checkbox
               id="internationalPaymentAccountCheckbox"
-              label="International"
+              label={t.international}
               isRadio
               isChecked={paymentAccountType !== 'russian'}
               onChange={this.handleChangePaymentAccountType}
@@ -728,7 +737,7 @@ class PaymentAccount extends Component<PropsType, StateType> {
           <div styleName="checkbox">
             <Checkbox
               id="russianPaymentAccountCheckbox"
-              label="Russian"
+              label={t.russian}
               isRadio
               isChecked={paymentAccountType === 'russian'}
               onChange={this.handleChangePaymentAccountType}
@@ -759,7 +768,7 @@ class PaymentAccount extends Component<PropsType, StateType> {
                       : this.handleSaveRussiaBillingInfo
                   }
                 >
-                  Save
+                  {t.save}
                 </Button>
               </div>
               {!isNilData && (
@@ -767,7 +776,7 @@ class PaymentAccount extends Component<PropsType, StateType> {
                   styleName="cancelButton"
                   onClick={this.handleClosedEditForm}
                 >
-                  Cancel
+                  {t.cancel}
                 </button>
               )}
             </div>
@@ -780,10 +789,9 @@ class PaymentAccount extends Component<PropsType, StateType> {
                 <Button
                   fullWidth
                   dataTest="editPaymentAccountButton"
-                  isLoading={isLoading}
                   onClick={this.handleOpenEditForm}
                 >
-                  Edit
+                  {t.edit}
                 </Button>
               </div>
             </div>
