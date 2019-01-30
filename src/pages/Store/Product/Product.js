@@ -179,7 +179,9 @@ class Product extends Component<PropsType, StateType> {
     const selectedAttributes = {};
 
     // eslint-disable-next-line
-    attributes.map(({ value, attribute }) => {
+    attributes.map(attr => {
+      // $FlowIgnore
+      const { value, attribute } = attr;
       const result = find(propEq('id', attribute.id))(widgets);
 
       if (isNil(result)) {
