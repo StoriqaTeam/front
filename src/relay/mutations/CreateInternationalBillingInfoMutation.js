@@ -15,10 +15,15 @@ const mutation = graphql`
     createInternationalBillingInfo(input: $input) {
       id
       storeId
-      swiftBic
-      bankName
-      fullName
-      iban
+      account
+      currency
+      name
+      bank
+      swift
+      bankAddress
+      country
+      city
+      recipientAddress
     }
   }
 `;
@@ -41,13 +46,20 @@ const commit = (params: CreateInternationalBillingInfoMutationType) =>
     },
     onCompleted: params.onCompleted,
     onError: params.onError,
-    // updater: relayStore => {
-    //   const createCustomerWithSource = relayStore.getRootField(
-    //     'createCustomerWithSource',
-    //   );
-    //   const me = relayStore.getRoot().getLinkedRecord('me');
-    //   me.setLinkedRecord(createCustomerWithSource, 'stripeCustomer');
-    // },
+    updater: relayStore => {
+      const createInternationalBillingInfo = relayStore.getRootField(
+        'createInternationalBillingInfo',
+      );
+      const me = relayStore.getRoot().getLinkedRecord('me');
+      const myStore = me.getLinkedRecord('myStore');
+      const russiaBillingInfo = myStore.getLinkedRecord('russiaBillingInfo');
+      const russiaBillingInfoId = russiaBillingInfo.getValue('id');
+      relayStore.delete(russiaBillingInfoId);
+      myStore.setLinkedRecord(
+        createInternationalBillingInfo,
+        'internationalBillingInfo',
+      );
+    },
   });
 
 export default { commit };

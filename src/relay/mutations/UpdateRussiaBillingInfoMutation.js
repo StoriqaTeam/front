@@ -15,10 +15,14 @@ const mutation = graphql`
     updateRussiaBillingInfo(input: $input) {
       id
       storeId
-      kpp
-      bic
-      inn
-      fullName
+      bankName
+      branchName
+      swiftBic
+      taxId
+      correspondentAccount
+      currentAccount
+      personalAccount
+      beneficiaryFullName
     }
   }
 `;
@@ -41,13 +45,14 @@ const commit = (params: UpdateRussiaBillingInfoMutationType) =>
     },
     onCompleted: params.onCompleted,
     onError: params.onError,
-    // updater: relayStore => {
-    //   const createCustomerWithSource = relayStore.getRootField(
-    //     'createCustomerWithSource',
-    //   );
-    //   const me = relayStore.getRoot().getLinkedRecord('me');
-    //   me.setLinkedRecord(createCustomerWithSource, 'stripeCustomer');
-    // },
+    updater: relayStore => {
+      const updateRussiaBillingInfo = relayStore.getRootField(
+        'updateRussiaBillingInfo',
+      );
+      const me = relayStore.getRoot().getLinkedRecord('me');
+      const myStore = me.getLinkedRecord('myStore');
+      myStore.setLinkedRecord(updateRussiaBillingInfo, 'russiaBillingInfo');
+    },
   });
 
 export default { commit };

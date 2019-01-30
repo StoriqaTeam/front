@@ -13,6 +13,7 @@ type TranslationDicType = {|
   labelComment: string,
   sendOrder: string,
   sendNow: string,
+  confirmOrder: string,
   cancelOrder: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
@@ -28,6 +29,7 @@ const translations: TranslationsBundleType = {
     labelComment: 'Comment',
     sendOrder: 'Send Order',
     sendNow: 'Send Now',
+    confirmOrder: 'Confirm order',
     cancelOrder: 'Cancel Order',
   },
 };
