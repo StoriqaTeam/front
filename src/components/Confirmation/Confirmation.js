@@ -32,7 +32,7 @@ class Confirmation extends PureComponent<PropsType> {
       description,
     } = this.props;
     return (
-      <aside styleName="container">
+      <aside styleName="container" data-test="confirmationPopup">
         <h2 styleName="title">{title}</h2>
         <p styleName="description">{description}</p>
         <div styleName="buttons">
