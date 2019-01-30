@@ -10,6 +10,8 @@ import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Checkbox } from 'components/Checkbox';
 import { Icon } from 'components/Icon';
 import { Container, Col, Row } from 'layout';
+import { Modal } from 'components/Modal';
+import { Confirmation } from 'components/Confirmation';
 import {
   SetQuantityInCartMutation,
   SetSelectionInCartMutation,
@@ -42,6 +44,7 @@ type PropsType = {
 
 type StateType = {
   comment: string,
+  showModal: boolean,
 };
 
 class CartProduct extends Component<PropsType, StateType> {
@@ -53,10 +56,11 @@ class CartProduct extends Component<PropsType, StateType> {
     super(props);
     this.state = {
       comment: props.product && props.product.comment,
+      showModal: false,
     };
   }
 
-  handleDelete() {
+  handleDelete = () => {
     const id = this.props.product.rawId;
     DeleteFromCartMutation.commit({
       input: { clientMutationId: '', productId: id },
@@ -80,7 +84,7 @@ class CartProduct extends Component<PropsType, StateType> {
         });
       },
     });
-  }
+  };
 
   handleSelectChange() {
     const { rawId: productId, id: nodeId } = this.props.product;
@@ -178,6 +182,14 @@ class CartProduct extends Component<PropsType, StateType> {
     }
   }, 250);
 
+  handleDeleteModal = (): void => {
+    this.setState({ showModal: true });
+  };
+
+  handleCloseModal = (): void => {
+    this.setState({ showModal: false });
+  };
+
   render() {
     const {
       product,
@@ -195,9 +207,24 @@ class CartProduct extends Component<PropsType, StateType> {
     )(product);
     log.debug('CartProduct', this.props);
     const { photoMain, selected } = product;
+    const { showModal } = this.state;
     return (
       <div styleName="container">
         <Container correct>
+          <Modal
+            showModal={showModal}
+            onClose={this.handleCloseModal}
+            render={() => (
+              <Confirmation
+                title={t.deleteYourProduct}
+                description={t.confirmationDescription}
+                onCancel={this.handleCloseModal}
+                onConfirm={this.handleDelete}
+                confirmText={t.confirmText}
+                cancelText={t.cancelText}
+              />
+            )}
+          />
           <Row>
             <Col size={12} sm={3}>
               <Row>
@@ -237,7 +264,7 @@ class CartProduct extends Component<PropsType, StateType> {
                   <div styleName="recycleContainer">
                     <button
                       styleName="recycle"
-                      onClick={() => this.handleDelete()}
+                      onClick={() => this.handleDeleteModal()}
                       data-test="cartProductDeleteButton"
                     >
                       <Icon type="basket" size={32} />
@@ -255,7 +282,7 @@ class CartProduct extends Component<PropsType, StateType> {
                   <div styleName="recycleContainer">
                     <button
                       styleName="recycle"
-                      onClick={() => this.handleDelete()}
+                      onClick={() => this.handleDeleteModal()}
                       data-test="cartProductDeleteButton"
                     >
                       <Icon type="basket" size={32} />
