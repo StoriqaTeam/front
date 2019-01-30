@@ -14,9 +14,120 @@
   }
 }
 
+.header {
+  font-family: $font_montserrat_regular;
+  font-size: 25px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.44;
+  letter-spacing: normal;
+  text-align: center;
+  color: $color_black;
+  margin: 2.3125rem 0 2.925rem 0;
+
+  strong {
+    color: $color_black;
+    font-family: $font_montserrat_bold;
+  }
+}
+
+.subHeading {
+  font-family: $font_montserrat_regular;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  
+  letter-spacing: normal;
+  text-align: center;
+  padding: 0 3rem;
+  margin: 3.75rem 0 2rem 0;
+  &.short {
+    padding: 0;
+  }
+  strong {
+    line-height: 26px;
+    font-size: 23px;
+    color: $color_black !important;
+    font-family: $font_montserrat_bold !important;
+    margin: 2rem;
+    display: block;
+  }
+}
+
+.description {
+  font-size: 18px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 24px;
+  letter-spacing: normal;
+  text-align: center;
+  color: $color_grey;
+  width: 83%;
+  margin: 0 auto;
+}
 .item {
   //
 }
+
+.aboutStoriqa {
+  padding: 8rem 0 6rem 0;
+  background: #e9ecf4;
+  margin-bottom: 1rem;
+}
+
+.aboutHeading {
+  font-family: $font_montserrat_bold;
+  text-align: center;
+  font-size: 28px;
+  line-height: 36px;
+  color: $color_black;
+  font-weight: bolder;
+  width: 56%;
+  margin: 0 auto;
+}
+
+.readmoreAboutStoriqa {
+  width: 224px;
+  height: 32px;
+  font-family: Roboto;
+  font-size: 18px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.94;
+  letter-spacing: normal;
+  text-align: center;
+  color: $color_black;
+  margin: 0 auto;
+  display: block;
+  text-decoration: underline;
+  margin-top: 4rem;
+  margin-bottom: 3rem; 
+}
+
+.aboutTitle {
+  font-family: $font_montserrat_bold;
+  text-align: center;
+  font-size: 21px;
+  line-height: 35px;
+  color: $color_black;
+  font-weight: bolder;
+  margin-bottom: 2rem;
+}
+
+.aboutDescription {
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 24px;
+  letter-spacing: normal;
+  text-align: center;
+  color: $color_grey;
+}
+
 
 .bannerSliderItem {
   min-height: 22rem;

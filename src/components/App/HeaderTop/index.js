@@ -8,6 +8,7 @@ import { Select } from 'components/common/Select';
 import { getCookie, setCookie } from 'utils';
 
 import languages from 'translation/languages.json';
+import { COOKIE_CURRENCY, COOKIE_FIAT_CURRENCY } from 'constants';
 
 import './HeaderTop.scss';
 import t from './i18n';
@@ -16,9 +17,6 @@ type PropsType = {
   setLang: (lang: string) => void,
   isShopCreated: boolean,
 };
-
-const currencyCookieName = 'CURRENCY';
-const fiatCurrencyCookieName = 'FIAT_CURRENCY';
 
 class HeaderTop extends PureComponent<PropsType> {
   constructor(props: PropsType) {
@@ -29,16 +27,16 @@ class HeaderTop extends PureComponent<PropsType> {
   }
 
   setCrypto = () => {
-    const actualCurrency = getCookie('CURRENCY');
+    const actualCurrency = getCookie(COOKIE_CURRENCY);
     if (!actualCurrency) {
-      setCookie('CURRENCY', 'STQ');
+      setCookie(COOKIE_CURRENCY, 'STQ');
     }
   };
 
   setFiat = () => {
-    const actualCurrency = getCookie('FIAT_CURRENCY');
+    const actualCurrency = getCookie(COOKIE_FIAT_CURRENCY);
     if (!actualCurrency) {
-      setCookie('FIAT_CURRENCY', 'USD');
+      setCookie(COOKIE_FIAT_CURRENCY, 'USD');
     }
   };
 
@@ -58,8 +56,7 @@ class HeaderTop extends PureComponent<PropsType> {
   getCurrentCurrencyAsItem = (
     prefix: string = 'crypto',
   ): ?{ id: string, label: string } => {
-    const cookie =
-      prefix === 'crypto' ? currencyCookieName : fiatCurrencyCookieName;
+    const cookie = prefix === 'crypto' ? COOKIE_CURRENCY : COOKIE_FIAT_CURRENCY;
     const currencyProp = `${prefix}Currencies`;
     const currency = getCookie(cookie);
     if (currency) {
@@ -80,7 +77,7 @@ class HeaderTop extends PureComponent<PropsType> {
   };
 
   getCookieName = (prefix: string): string =>
-    prefix === 'crypto' ? currencyCookieName : fiatCurrencyCookieName;
+    prefix === 'crypto' ? COOKIE_CURRENCY : COOKIE_FIAT_CURRENCY;
 
   handleChangeLocale = (item: { id: string, label: string }) => {
     if (item && item.id) {

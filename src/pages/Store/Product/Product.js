@@ -165,6 +165,8 @@ class Product extends Component<PropsType, StateType> {
   componentDidMount() {
     // window.scrollTo(0, 0);
     const { baseProduct } = this.props;
+    const { productVariant, widgets } = this.state;
+    const { attributes } = productVariant;
     if (
       process.env.BROWSER &&
       process.env.REACT_APP_RRPARTNERID &&
@@ -173,6 +175,24 @@ class Product extends Component<PropsType, StateType> {
     ) {
       productViewTracker(baseProduct.rawId);
     }
+
+    const selectedAttributes = {};
+
+    // eslint-disable-next-line
+    attributes.map(attr => {
+      // $FlowIgnore
+      const { value, attribute } = attr;
+      const result = find(propEq('id', attribute.id))(widgets);
+
+      if (isNil(result)) {
+        // eslint-disable-next-line
+        return;
+      }
+
+      selectedAttributes[attribute.id] = value;
+    });
+    // eslint-disable-next-line
+    this.setState({ selectedAttributes });
   }
 
   handleChangeQuantity = (quantity: number) => {

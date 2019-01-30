@@ -14,7 +14,7 @@ import { Cards, PaymentAccount } from './';
 import './Finances.scss';
 
 import t from './i18n';
-
+//
 type PropsType = {
   me: {
     firstName: string,
@@ -87,7 +87,7 @@ export default createFragmentContainer(
   graphql`
     fragment Finances_me on User {
       ...Cards_me
-      ...PaymentAccount_me
+      # ...PaymentAccount_me
     }
   `,
 );
