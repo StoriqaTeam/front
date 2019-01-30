@@ -244,16 +244,20 @@ class Start extends Component<PropsTypes, StateTypes> {
             )}
           </MediaQuery>
         </div>
-        <Row>
-          {header.map(({ title, description }) => (
-            <Col key={title} size={12} sm={12} md={12} lg={4} xl={4}>
-              <div styleName="subHeading">
-                <strong>{title}</strong>
-                <p styleName="description">{description}</p>
-              </div>
-            </Col>
-          ))}
-        </Row>
+        <div>
+          <Container>
+            <Row>
+              {header.map(({ title, description }) => (
+                <Col key={title} size={12} sm={12} md={12} lg={4} xl={4}>
+                  <div styleName="subHeading">
+                    <strong>{title}</strong>
+                    <p styleName="description">{description}</p>
+                  </div>
+                </Col>
+              ))}
+            </Row>
+          </Container>
+        </div>
         <div styleName="item goodsItem">
           {viewedProducts &&
             viewedProducts.length > 0 && (
