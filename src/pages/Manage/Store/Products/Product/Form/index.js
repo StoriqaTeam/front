@@ -945,7 +945,7 @@ class Form extends Component<PropsType, StateType> {
               <div styleName="status">
                 <ModerationStatus
                   status={baseProduct.status}
-                  dataTest="productStatus"
+                  dataTest={`productStatus_${baseProduct.status}`}
                 />
               </div>
             )}
