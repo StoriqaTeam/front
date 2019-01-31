@@ -4,7 +4,7 @@ import React, { PureComponent, Fragment } from 'react';
 import { createRefetchContainer, graphql } from 'react-relay';
 import { Environment } from 'relay-runtime';
 import QRCode from 'qrcode.react';
-import moment from 'moment';
+// import moment from 'moment';
 import { map, pathOr } from 'ramda';
 import classNames from 'classnames';
 import { routerShape, withRouter } from 'found';
@@ -40,34 +40,33 @@ type PropsType = {
 };
 
 type StateType = {
-  priceReservedDueDateTime: ?string,
-  timerValue: string,
+  // priceReservedDueDateTime: ?string,
+  // timerValue: string,
   isFirstRefetch: boolean,
   isNotificationActive: boolean,
 };
 
 class PaymentInfo extends PureComponent<PropsType, StateType> {
-  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
-    // $FlowIgnoreMe
-    const priceReservedDueDateTime = pathOr(
-      null,
-      ['invoice', 'priceReservedDueDateTime'],
-      nextProps.me,
-    );
-
-    if (priceReservedDueDateTime && !prevState.priceReservedDueDateTime) {
-      return { priceReservedDueDateTime };
-    }
-
-    return null;
-  }
+  // static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
+  //   const priceReservedDueDateTime = pathOr(
+  //     null,
+  //     ['invoice', 'priceReservedDueDateTime'],
+  //     nextProps.me,
+  //   );
+  //
+  //   if (priceReservedDueDateTime && !prevState.priceReservedDueDateTime) {
+  //     return { priceReservedDueDateTime };
+  //   }
+  //
+  //   return null;
+  // }
 
   constructor(props) {
     super(props);
 
     this.state = {
-      priceReservedDueDateTime: null,
-      timerValue: '',
+      // priceReservedDueDateTime: null,
+      // timerValue: '',
       isFirstRefetch: true,
       isNotificationActive: true,
     };
@@ -75,7 +74,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
 
   componentDidMount() {
     this.unmounted = false;
-    this.updateCountdown();
+    // this.updateCountdown();
     this.refetchInvoice();
   }
 
@@ -146,39 +145,39 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
     RecalcInvoiceAmountMutation.commit(params);
   };
 
-  updateCountdown = () => {
-    const { priceReservedDueDateTime } = this.state;
-
-    if (this.unmounted) {
-      return;
-    }
-
-    if (!priceReservedDueDateTime) {
-      this.setState({ timerValue: '-' }, () => {
-        setTimeout(this.updateCountdown, 1000);
-      });
-      return;
-    }
-
-    const diff = moment(priceReservedDueDateTime)
-      .utc()
-      .diff(moment().utc(), 's');
-    if (!diff || diff < 0) {
-      this.setState({ timerValue: '-' }, () => {
-        setTimeout(this.updateCountdown, 1000);
-      });
-      return;
-    }
-
-    const minutes = parseInt(diff / 60, 10); // JS, I hate you
-    const seconds = diff - minutes * 60;
-    this.setState(
-      { timerValue: `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}` },
-      () => {
-        setTimeout(this.updateCountdown, 1000);
-      },
-    );
-  };
+  // updateCountdown = () => {
+  //   const { priceReservedDueDateTime } = this.state;
+  //
+  //   if (this.unmounted) {
+  //     return;
+  //   }
+  //
+  //   if (!priceReservedDueDateTime) {
+  //     this.setState({ timerValue: '-' }, () => {
+  //       setTimeout(this.updateCountdown, 1000);
+  //     });
+  //     return;
+  //   }
+  //
+  //   const diff = moment(priceReservedDueDateTime)
+  //     .utc()
+  //     .diff(moment().utc(), 's');
+  //   if (!diff || diff < 0) {
+  //     this.setState({ timerValue: '-' }, () => {
+  //       setTimeout(this.updateCountdown, 1000);
+  //     });
+  //     return;
+  //   }
+  //
+  //   const minutes = parseInt(diff / 60, 10); // JS, I hate you
+  //   const seconds = diff - minutes * 60;
+  //   this.setState(
+  //     { timerValue: `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}` },
+  //     () => {
+  //       setTimeout(this.updateCountdown, 1000);
+  //     },
+  //   );
+  // };
 
   stateToString = (state: OrderStateType): string => {
     switch (state) {
@@ -226,9 +225,6 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
       return (
         <div styleName="container">
           <div styleName="title">Payment</div>
-          <div styleName="description">
-            Please wait until payment data<br />will be uploaded
-          </div>
           <div styleName="info">
             <div styleName="loader" />
           </div>
@@ -268,14 +264,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
         : '';
     return (
       <div styleName="container" data-test={`PAYMENT_INFO_${dataTest}`}>
-        {state !== 'PAID' && (
-          <Fragment>
-            <div styleName="title">Payment</div>
-            <div styleName="description">
-              Please wait until payment data<br />will be uploaded
-            </div>
-          </Fragment>
-        )}
+        {state !== 'PAID' && <div styleName="title">Payment</div>}
         <div styleName="info">
           {(state === 'NEW' || state === 'AMOUNT_EXPIRED') && (
             <div styleName="loader" />
@@ -304,8 +293,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
                     }`}</div>
                     {
                       <div styleName="reserveInfo">
-                        Current price reserved for{' '}
-                        <span styleName="timer">{this.state.timerValue}</span>
+                        The order must be paid in three days after creation.
                       </div>
                     }
                   </div>

@@ -24,6 +24,7 @@ type PropsType = {
   step?: number,
   cart: {
     productsCostWithoutDiscounts: number,
+    productsCost: number,
     deliveryCost: number,
     totalCost: number,
     totalCount: number,
@@ -65,13 +66,12 @@ class CheckoutSidebar extends React.PureComponent<PropsType> {
       currency,
     } = this.props;
     const {
-      productsCostWithoutDiscounts,
+      productsCost,
       deliveryCost,
       totalCost,
       totalCount,
       couponsDiscounts,
     } = cart;
-
     let onClickFunction = onClick;
 
     if (step != null) {
@@ -107,10 +107,8 @@ class CheckoutSidebar extends React.PureComponent<PropsType> {
                 <div styleName="attributeContainer">
                   <div styleName="label">{t.subtotal}</div>
                   <div styleName="value">
-                    {productsCostWithoutDiscounts &&
-                      `${formatPrice(
-                        productsCostWithoutDiscounts || 0,
-                      )} ${currency || ''}`}
+                    {productsCost &&
+                      `${formatPrice(productsCost || 0)} ${currency || ''}`}
                   </div>
                 </div>
               </Col>

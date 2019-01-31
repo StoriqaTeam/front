@@ -460,7 +460,7 @@ class OrderPage extends Component<PropsType, StateType> {
                     </Col>
                     <Col size={12} lg={7}>
                       <TextWithLabel
-                        label={t.labelSubtotal}
+                        label={t.labelTotalAmount}
                         text={`${formatPrice(order.totalAmount)} ${
                           order.currency
                         }`}

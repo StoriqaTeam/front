@@ -8,7 +8,7 @@ import ShowMore from 'components/ShowMore';
 import Stepper from 'components/Stepper';
 import { Input } from 'components/common/Input';
 import { Container, Col, Row } from 'layout';
-import { formatPrice, convertCountries } from 'utils';
+import { formatPrice, convertCountries, checkCurrencyType } from 'utils';
 import { AppContext } from 'components/App';
 
 import type { AvailableDeliveryPackageType } from 'relay/queries/fetchAvailableShippingForUser';
@@ -295,13 +295,15 @@ class ProductInfo extends PureComponent<PropsType> {
                 <CartProductAttribute
                   title={t.price}
                   value={`${formatPrice(
-                    product.subtotalWithoutDiscounts || 0,
+                    product.subtotal || 0,
+                    checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
                   )} ${currency || ''}`}
                 />
                 <CartProductAttribute
                   title={t.delivery}
                   value={`${formatPrice(
                     product.deliveryCost || 0,
+                    checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
                   )} ${currency || ''}`}
                 />
                 {product.couponDiscount !== 0 && (
@@ -309,6 +311,7 @@ class ProductInfo extends PureComponent<PropsType> {
                     title={t.couponDiscount}
                     value={`−${formatPrice(
                       product.couponDiscount || 0,
+                      checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
                     )} ${currency || ''}`}
                   />
                 )}

@@ -59,9 +59,7 @@ class CheckoutSidebar extends PureComponent<PropsType> {
                 <div styleName="attributeContainer">
                   <div styleName="label">Subtotal</div>
                   <div styleName="value">
-                    {`${formatPrice(
-                      buyNowData.subtotalWithoutDiscounts || 0,
-                    )} ${currency}`}
+                    {`${formatPrice(buyNowData.subtotal || 0)} ${currency}`}
                   </div>
                 </div>
               </Col>

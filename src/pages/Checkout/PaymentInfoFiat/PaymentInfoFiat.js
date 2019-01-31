@@ -105,7 +105,6 @@ class PaymentInfoFiat extends PureComponent<PropsType, StateType> {
             {!paidComplete ? (
               <Fragment>
                 <div styleName="title">{t.payment}</div>
-                <div styleName="description">{t.someDescription}</div>
                 <div styleName="fiat">
                   <Stripe
                     paymentIntent={paymentIntent}

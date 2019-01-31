@@ -31,7 +31,7 @@ type TranslationDicType = {|
   labelDeliveryPrice: string,
   labelTrackID: string,
   labelQuantity: string,
-  labelSubtotal: string,
+  labelTotalAmount: string,
   labelCouponDiscount: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
@@ -64,7 +64,7 @@ const translations: TranslationsBundleType = {
     labelDeliveryPrice: 'Delivery price',
     labelTrackID: 'Track ID',
     labelQuantity: 'Quantity',
-    labelSubtotal: 'Subtotal',
+    labelTotalAmount: 'Total amount',
     labelCouponDiscount: 'Coupon discount',
   },
 };

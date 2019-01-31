@@ -16,6 +16,7 @@ import {
   convertSrc,
   log,
   fromRelayError,
+  checkCurrencyType,
 } from 'utils';
 
 import { SetCouponInCartMutation } from 'relay/mutations';
@@ -245,6 +246,9 @@ class CartStore extends Component<PropsType, StateType> {
                         <thin styleName="through">
                           {`${formatPrice(
                             store.totalCostWithoutDiscounts || 0,
+                            checkCurrencyType(currency) === 'fiat'
+                              ? 2
+                              : undefined,
                           )} ${currency || ''}`}
                         </thin>
                       </div>

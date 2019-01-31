@@ -11,6 +11,7 @@ type PropsType = {
   selected: number,
   children: Array<React.Node>,
   onClick: (selected: number) => void,
+  withoutPanel?: boolean,
 };
 
 class Tabs extends React.Component<PropsType> {
@@ -44,11 +45,13 @@ class Tabs extends React.Component<PropsType> {
   };
 
   render() {
-    const { selected } = this.props;
+    const { selected, withoutPanel } = this.props;
     return (
       <div styleName="container">
         {this.renderTitles()}
-        <div styleName="panel">{this.props.children[selected]}</div>
+        {!withoutPanel && (
+          <div styleName="panel">{this.props.children[selected]}</div>
+        )}
       </div>
     );
   }
