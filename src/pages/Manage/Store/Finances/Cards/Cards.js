@@ -5,11 +5,15 @@ import { map, isEmpty, pathOr } from 'ramda';
 import { Environment } from 'relay-runtime';
 import { createFragmentContainer, graphql } from 'react-relay';
 
-import { Table, Checkbox } from 'components/common';
+import { Table, Checkbox, Button } from 'components/common';
 import { Icon } from 'components/Icon';
 
-// $FlowIgnore
-import { CreateCustomerWithSourceMutation } from 'relay/mutations';
+import {
+  // $FlowIgnore
+  CreateCustomerWithSourceMutation,
+  // $FlowIgnore
+  UpdateCustomerMutation,
+} from 'relay/mutations';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { log, fromRelayError } from 'utils';
 
@@ -106,6 +110,8 @@ class Cards extends Component<PropsType, StateType> {
   };
 
   handleSaveNewCard = (token: { id: string }) => {
+    const { stripeCustomer } = this.props.me;
+    const isCards = Boolean(stripeCustomer && !isEmpty(stripeCustomer.cards));
     this.setState({ isLoading: true });
     const params: CreateCustomerWithSourceMutationType = {
       input: {
@@ -168,6 +174,10 @@ class Cards extends Component<PropsType, StateType> {
         });
       },
     };
+    if (isCards) {
+      UpdateCustomerMutation.commit(params);
+      return;
+    }
     CreateCustomerWithSourceMutation.commit(params);
   };
 
@@ -193,15 +203,15 @@ class Cards extends Component<PropsType, StateType> {
                   },
                   {
                     id: 2,
-                    title: 'Card type & number',
+                    title: t.tableColumns.cardTypeNumber,
                   },
                   {
                     id: 3,
-                    title: 'Expiration date',
+                    title: t.tableColumns.expirationDate,
                   },
                   {
                     id: 4,
-                    title: 'Cardholder name',
+                    title: t.tableColumns.cardholderName,
                   },
                   {
                     id: 5,
@@ -263,7 +273,7 @@ class Cards extends Component<PropsType, StateType> {
               />
             </div>
           )}
-          {/* isCards && (
+          {isCards && (
             <div styleName="addButton">
               <Button
                 disabled={isNewCardForm}
@@ -272,10 +282,10 @@ class Cards extends Component<PropsType, StateType> {
                 onClick={this.handleOpenNewCardForm}
                 dataTest="addCardButton"
               >
-                Add a new card
+                {t.addAnotherCard}
               </Button>
             </div>
-          ) */}
+          )}
           {isNewCardForm && (
             <div styleName="newCardForm">
               <NewCardForm

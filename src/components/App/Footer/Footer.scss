@@ -125,6 +125,10 @@
   text-align: right;
   color: $color_grey_minor;
   margin-top: 3rem;
+
+  @media (max-width: #{$lg - 1px}) {
+    text-align: center;
+  }
 }
 
 .startSellingButton {
