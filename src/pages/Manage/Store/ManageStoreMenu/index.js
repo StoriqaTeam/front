@@ -61,6 +61,7 @@ type StateType = {
       rawId: number,
       name: TranslationType,
       logo: string,
+      status: string,
     },
   },
 };
@@ -75,6 +76,7 @@ const MANAGE_STORE_MENU_FRAGMENT = graphql`
         text
       }
       logo
+      status
     }
   }
 `;
@@ -122,6 +124,16 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
   disposeUser: () => void;
 
   handleOnUpload = (e: SyntheticInputEvent<HTMLInputElement>) => {
+    const { storeData } = this.state;
+    if (storeData && storeData.myStore.status === 'MODERATION') {
+      this.props.showAlert({
+        type: 'danger',
+        text: `${t.error}${t.statusModerationCannotBeChanged}`,
+        link: { text: t.close },
+      });
+      return;
+    }
+
     e.preventDefault();
     this.setState({ isMainPhotoUploading: true });
     uploadFile(e.target.files[0])
@@ -239,6 +251,15 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
   };
 
   deleteAvatar = (): void => {
+    const { storeData } = this.state;
+    if (storeData && storeData.myStore.status === 'MODERATION') {
+      this.props.showAlert({
+        type: 'danger',
+        text: `${t.error}${t.statusModerationCannotBeChanged}`,
+        link: { text: t.close },
+      });
+      return;
+    }
     this.handleLogoUpload('');
   };
 
