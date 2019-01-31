@@ -188,6 +188,26 @@ class OrderPage extends Component<PropsType, StateType> {
     }
   };
 
+  handleOrderConfirm = (success: boolean): void => {
+    if (success) {
+      this.props.showAlert({
+        type: 'success',
+        text: t.orderWasSuccessfullyConfirm,
+        link: {
+          text: t.ok,
+        },
+      });
+    } else {
+      this.props.showAlert({
+        type: 'danger',
+        text: t.somethingIsGoingWrong,
+        link: {
+          text: t.ok,
+        },
+      });
+    }
+  };
+
   handleOrderCanceled = (success: boolean): void => {
     if (success) {
       this.props.showAlert({
@@ -450,14 +470,17 @@ class OrderPage extends Component<PropsType, StateType> {
                 </div>
               </div>
               {this.props.isAbleToManageOrder &&
-                orderFromProps.state === 'PAID' && (
+                (orderFromProps.state === 'PAID' ||
+                  orderFromProps.state === 'IN_PROCESSING') && (
                   <div styleName="manageBlock">
                     <ManageOrderBlock
                       environment={environment}
-                      isAbleToSend={orderFromProps.state === 'PAID'}
+                      isAbleToConfirm={orderFromProps.state === 'PAID'}
+                      isAbleToSend={orderFromProps.state === 'IN_PROCESSING'}
                       isAbleToCancel={false}
                       orderSlug={parseInt(order.number, 10)}
                       onOrderSend={this.handleOrderSent}
+                      onOrderConfirm={this.handleOrderConfirm}
                       onOrderCancel={this.handleOrderCanceled}
                     />
                   </div>
