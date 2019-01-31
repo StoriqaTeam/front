@@ -36,8 +36,8 @@ const HeaderBottom = ({
     <Row>
       <Col size={6} sm={4} md={6} lg={3} xl={3}>
         <div styleName="logo">
-          <div styleName="logoIcon">
-            <Link to="/" data-test="logoLink">
+          <div styleName="logoIcon" data-test="logoLink">
+            <Link to="/">
               <Icon type="logo" dataTest="storiqaIcon" />
             </Link>
           </div>
