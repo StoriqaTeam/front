@@ -38,7 +38,7 @@ const HeaderBottom = ({
         <div styleName="logo">
           <div styleName="logoIcon">
             <Link to="/" data-test="logoLink">
-              <Icon type="logo" />
+              <Icon type="logo" dataTest="storiqaIcon" />
             </Link>
           </div>
         </div>

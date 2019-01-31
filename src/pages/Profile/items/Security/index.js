@@ -85,6 +85,7 @@ class Security extends Component<PropsType, StateType> {
       length: false,
     },
     newPasswordFocus: false,
+    showModal: false,
   };
 
   handleSave = () => {
