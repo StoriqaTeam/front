@@ -321,7 +321,7 @@ class SearchInput extends Component<PropsType, StateType> {
     const { items: searchItems, inputValue, arrowItem } = this.state;
     return (
       <div styleName="container">
-        <div styleName="searchCategorySelect">
+        <div styleName="searchCategorySelect" data-test="searchInputSelectWrap">
           <Select
             isMobile={isMobile}
             onClick={onDropDown}
