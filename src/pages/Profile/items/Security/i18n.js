@@ -18,6 +18,11 @@ type TranslationDicType = {|
   labelNewPassword: string,
   labelRepeatPassword: string,
   save: string,
+  //
+  confirmationDescription: string,
+  resetPassword: string,
+  confirmText: string,
+  cancelText: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -35,7 +40,11 @@ const translations: TranslationsBundleType = {
     labelCurrentPassword: 'Current password',
     labelNewPassword: 'New password',
     labelRepeatPassword: 'Repeat new password',
-    save: 'Save',
+    save: 'Save', //
+    confirmationDescription: 'Are you sure you want to reset?',
+    resetPassword: 'Reset Password',
+    confirmText: 'Yes, please',
+    cancelText: 'Cancel',
   },
 };
 
