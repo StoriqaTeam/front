@@ -127,8 +127,11 @@ class Goods extends Component<PropsType, StateType> {
         <MediaQuery maxWidth={767} minWidth={576}>
           {this.renderGoods(4)}
         </MediaQuery>
-        <MediaQuery maxWidth={1199} minWidth={768}>
+        <MediaQuery maxWidth={991} minWidth={768}>
           {this.renderGoods(6)}
+        </MediaQuery>
+        <MediaQuery maxWidth={1199} minWidth={992}>
+          {this.renderGoods(8)}
         </MediaQuery>
         <MediaQuery minWidth={1200}>{this.renderGoods(10)}</MediaQuery>
       </div>

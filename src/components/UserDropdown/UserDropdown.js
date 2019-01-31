@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { toUpper, pathOr } from 'ramda';
+import { pathOr } from 'ramda';
 
 import { convertSrc } from 'utils';
 
@@ -64,9 +64,7 @@ class UserDropdown extends PureComponent<PropsTypes> {
                 )}
               </div>
               {(firstName || lastName) && (
-                <div styleName="greeting">
-                  {`Hi, ${firstName} ${toUpper(lastName.charAt(0))}.`}
-                </div>
+                <div styleName="greeting">{`Hi, ${firstName} `}</div>
               )}
             </div>
           </trigger>

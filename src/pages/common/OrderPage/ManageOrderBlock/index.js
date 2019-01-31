@@ -7,7 +7,11 @@ import { Environment } from 'relay-runtime';
 import { Input } from 'components/common/Input';
 import { Button } from 'components/common/Button';
 import { Modal } from 'components/Modal';
-import { CancelOrderMutation, SendOrderMutation } from 'relay/mutations';
+import {
+  CancelOrderMutation,
+  SendOrderMutation,
+  ConfirmOrderMutation,
+} from 'relay/mutations';
 
 import type {
   MutationParamsType as CancelOrderMutationParamsType,
@@ -19,6 +23,11 @@ import type {
   SendOrderMutationResponseType,
 } from 'relay/mutations/SendOrderMutation';
 
+import type {
+  MutationParamsType as ConfirmOrderMutationParamsType,
+  ConfirmOrderMutationResponseType,
+} from 'relay/mutations/ConfirmOrderMutation';
+
 import './ManageOrderBlock.scss';
 
 import t from './i18n';
@@ -27,7 +36,9 @@ type PropsType = {
   environment: Environment,
   isAbleToSend: boolean,
   isAbleToCancel: boolean,
+  isAbleToConfirm: boolean,
   onOrderSend: (success: boolean) => void,
+  onOrderConfirm: (success: boolean) => void,
   onOrderCancel: (success: boolean) => void,
   orderSlug: number,
 };
@@ -93,6 +104,29 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
       },
     };
     SendOrderMutation.commit(params);
+  };
+
+  confirmOrder = () => {
+    this.setState({ isSendInProgress: true });
+    const params: ConfirmOrderMutationParamsType = {
+      input: {
+        clientMutationId: '',
+        orderSlug: this.props.orderSlug,
+      },
+      environment: this.props.environment,
+      onCompleted: (
+        response: ?ConfirmOrderMutationResponseType,
+        errors: ?Array<Error>,
+      ) => {
+        this.setState({ isSendInProgress: false });
+        this.props.onOrderConfirm(!errors);
+      },
+      onError: () => {
+        this.setState({ isSendInProgress: false });
+        this.props.onOrderConfirm(false);
+      },
+    };
+    ConfirmOrderMutation.commit(params);
   };
 
   cancelOrder = () => {
@@ -174,6 +208,17 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
               onClick={() => this.setState({ isSendOrderModalShown: true })}
             >
               {t.sendNow}
+            </Button>
+          </div>
+        )}
+        {this.props.isAbleToConfirm && (
+          <div styleName="sendButtonWrapper">
+            <Button
+              big
+              onClick={this.confirmOrder}
+              isLoading={isSendInProgress}
+            >
+              {t.confirmOrder}
             </Button>
           </div>
         )}

@@ -35,6 +35,7 @@ type StateType = {
   slideWidth: number,
   isClick: boolean,
   previewLength: number,
+  counterNum: number,
 };
 
 export default (OriginalComponent: any) =>
@@ -49,6 +50,7 @@ export default (OriginalComponent: any) =>
       slideWidth: 0,
       isClick: false,
       previewLength: 3,
+      counterNum: 1,
     };
 
     componentDidMount() {
@@ -267,6 +269,7 @@ export default (OriginalComponent: any) =>
         slideWidth,
         isTransition,
         totalSlidesAmount,
+        counterNum,
       } = this.state;
       if (isTransition) {
         return;
@@ -284,8 +287,21 @@ export default (OriginalComponent: any) =>
           ? slidesOffset - slideWidth
           : slidesOffset + slideWidth;
       this.startAnimation();
+
+      let newCounterNum =
+        direction === 'next' ? counterNum + 1 : counterNum - 1;
+
+      if (newCounterNum > totalSlidesAmount) {
+        newCounterNum = 1;
+      }
+
+      if (newCounterNum === 0) {
+        newCounterNum = totalSlidesAmount;
+      }
+
       this.setState(
         {
+          counterNum: newCounterNum,
           slidesOffset: newSlidesOffset,
         },
         () => {
