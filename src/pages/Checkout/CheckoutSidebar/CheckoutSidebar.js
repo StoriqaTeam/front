@@ -3,7 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { formatPrice, getExchangePrice } from 'utils';
+import { formatPrice, getExchangePrice, checkCurrencyType } from 'utils';
 import { ContextDecorator } from 'components/App';
 import { Button } from 'components/common/Button';
 import { Row, Col } from 'layout';
@@ -108,7 +108,10 @@ class CheckoutSidebar extends React.PureComponent<PropsType> {
                   <div styleName="label">{t.subtotal}</div>
                   <div styleName="value">
                     {productsCost &&
-                      `${formatPrice(productsCost || 0)} ${currency || ''}`}
+                      `${formatPrice(
+                        productsCost || 0,
+                        checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                      )} ${currency || ''}`}
                   </div>
                 </div>
               </Col>
@@ -117,7 +120,10 @@ class CheckoutSidebar extends React.PureComponent<PropsType> {
                   <div styleName="label">{t.delivery}</div>
                   <div styleName="value">
                     {deliveryCost &&
-                      `${formatPrice(deliveryCost || 0)} ${currency || ''}`}
+                      `${formatPrice(
+                        deliveryCost || 0,
+                        checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                      )} ${currency || ''}`}
                   </div>
                 </div>
               </Col>
@@ -126,8 +132,10 @@ class CheckoutSidebar extends React.PureComponent<PropsType> {
                   <div styleName="attributeContainer">
                     <div styleName="label">{t.couponsDiscount}</div>
                     <div styleName="value">
-                      {`−${formatPrice(couponsDiscounts || 0)} ${currency ||
-                        ''}`}
+                      {`−${formatPrice(
+                        couponsDiscounts || 0,
+                        checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                      )} ${currency || ''}`}
                     </div>
                   </div>
                 </Col>
@@ -143,7 +151,12 @@ class CheckoutSidebar extends React.PureComponent<PropsType> {
                   <div styleName="totalCost">
                     <div styleName="value bold">
                       {totalCost &&
-                        `${formatPrice(totalCost || 0)} ${currency || ''}`}
+                        `${formatPrice(
+                          totalCost || 0,
+                          checkCurrencyType(currency) === 'fiat'
+                            ? 2
+                            : undefined,
+                        )} ${currency || ''}`}
                     </div>
                     {exchangePrice != null && (
                       <div styleName="exchangePrice">{exchangePrice}</div>

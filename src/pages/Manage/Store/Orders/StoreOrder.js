@@ -129,6 +129,14 @@ export default createRefetchContainer(
               }
             }
           }
+          fee {
+            id
+            orderId
+            amount
+            status
+            currency
+            chargeId
+          }
         }
       }
     }

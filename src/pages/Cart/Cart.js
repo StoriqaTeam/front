@@ -204,9 +204,9 @@ class Cart extends Component<PropsType, StateType> {
                             onClick={this.handleClickTab}
                             withoutPanel
                           >
-                            <div label="CART" amount={totalCountFiat} />
+                            <div label={t.cart} amount={totalCountFiat} />
                             <div
-                              label="CRYPTO CART"
+                              label={t.cryptoCart}
                               amount={totalCountCrypto}
                             />
                           </Tabs>

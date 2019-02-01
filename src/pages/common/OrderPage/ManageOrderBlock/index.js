@@ -1,18 +1,24 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+import classNames from 'classnames';
 import { pathOr, isNil } from 'ramda';
 import { Environment } from 'relay-runtime';
 
 import { Input } from 'components/common/Input';
 import { Button } from 'components/common/Button';
 import { Modal } from 'components/Modal';
+import { Confirmation } from 'components/Confirmation';
+import { Row, Col } from 'layout';
+import { formatPrice } from 'utils';
 import {
   CancelOrderMutation,
   SendOrderMutation,
   ConfirmOrderMutation,
+  ChargeFeeMutation,
 } from 'relay/mutations';
 
+import type { AllCurrenciesType } from 'types';
 import type {
   MutationParamsType as CancelOrderMutationParamsType,
   CancelOrderMutationResponseType,
@@ -28,6 +34,14 @@ import type {
   ConfirmOrderMutationResponseType,
 } from 'relay/mutations/ConfirmOrderMutation';
 
+import type {
+  MutationParamsType as ChargeFeeMutationParamsType,
+  ChargeFeeMutationResponseType,
+} from 'relay/mutations/ChargeFeeMutation';
+
+import TextWithLabel from '../TextWithLabel';
+import { getStatusStringFromEnum } from '../utils';
+
 import './ManageOrderBlock.scss';
 
 import t from './i18n';
@@ -35,18 +49,31 @@ import t from './i18n';
 type PropsType = {
   environment: Environment,
   isAbleToSend: boolean,
-  isAbleToCancel: boolean,
+  // isAbleToCancel: boolean,
   isAbleToConfirm: boolean,
   onOrderSend: (success: boolean) => void,
   onOrderConfirm: (success: boolean) => void,
   onOrderCancel: (success: boolean) => void,
+  onChargeFee: (success: boolean) => void,
   orderSlug: number,
+  orderFee: ?{
+    id: string,
+    orderId: string,
+    amount: number,
+    status: string,
+    currency: AllCurrenciesType,
+    chargeId: string,
+  },
+  orderId: string,
 };
 
 type StateType = {
   isSendInProgress: boolean,
   isCancelInProgress: boolean,
+  isChargeFeeInProgress: boolean,
   isSendOrderModalShown: boolean,
+  isCancelOrderModalShown: boolean,
+  isChargeFeeModalShown: boolean,
   trackNumber: ?string,
   comment: ?string,
 };
@@ -55,7 +82,10 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
   state: StateType = {
     isSendInProgress: false,
     isCancelInProgress: false,
+    isChargeFeeInProgress: false,
     isSendOrderModalShown: false,
+    isCancelOrderModalShown: false,
+    isChargeFeeModalShown: false,
     trackNumber: null,
     comment: null,
   };
@@ -76,6 +106,14 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
 
   handleSendOrderModalClose = () => {
     this.setState({ isSendOrderModalShown: false });
+  };
+
+  handleCancelOrderModalClose = () => {
+    this.setState({ isCancelOrderModalShown: false });
+  };
+
+  handleChargeFeeModalClose = () => {
+    this.setState({ isChargeFeeModalShown: false });
   };
 
   sendOrder = () => {
@@ -130,15 +168,12 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
   };
 
   cancelOrder = () => {
-    // eslint-disable-next-line
-    const isConfirmed = confirm(t.areYouSureToCancelOrder);
-    if (!isConfirmed) {
-      return;
-    }
-
-    this.setState({ isCancelInProgress: true });
+    this.setState({
+      isCancelInProgress: true,
+      isCancelOrderModalShown: false,
+    });
     const params: CancelOrderMutationParamsType = {
-      environment: this.context.environment,
+      environment: this.props.environment,
       input: {
         clientMutationId: '',
         orderSlug: this.props.orderSlug,
@@ -159,8 +194,42 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
     CancelOrderMutation.commit(params);
   };
 
+  chargeFee = () => {
+    this.setState({
+      isChargeFeeInProgress: true,
+      isChargeFeeModalShown: false,
+    });
+    const params: ChargeFeeMutationParamsType = {
+      environment: this.props.environment,
+      input: {
+        clientMutationId: '',
+        orderId: this.props.orderId,
+      },
+      onCompleted: (
+        response: ?ChargeFeeMutationResponseType,
+        errors: ?Array<Error>,
+      ) => {
+        this.setState({ isChargeFeeInProgress: false });
+        this.props.onChargeFee(!errors);
+      },
+      onError: () => {
+        this.setState({ isCancelInProgress: false });
+        this.props.onChargeFee(false);
+      },
+    };
+    ChargeFeeMutation.commit(params);
+  };
+
   render() {
-    const { isSendInProgress, isCancelInProgress } = this.state;
+    const { orderFee, isAbleToSend, isAbleToConfirm } = this.props;
+
+    const {
+      isSendInProgress,
+      isCancelInProgress,
+      isCancelOrderModalShown,
+      isChargeFeeModalShown,
+      isChargeFeeInProgress,
+    } = this.state;
     return (
       <div styleName="container">
         <Modal
@@ -201,37 +270,120 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
             </div>
           </div>
         </Modal>
-        {this.props.isAbleToSend && (
-          <div styleName="sendButtonWrapper">
-            <Button
-              big
-              onClick={() => this.setState({ isSendOrderModalShown: true })}
-            >
-              {t.sendNow}
-            </Button>
-          </div>
+        <Modal
+          showModal={isCancelOrderModalShown}
+          onClose={this.handleCancelOrderModalClose}
+          render={() => (
+            <Confirmation
+              title={t.cancelOrderTitle}
+              description={t.cancelOrderDescription}
+              onCancel={this.handleCancelOrderModalClose}
+              onConfirm={this.cancelOrder}
+              confirmText={t.cancelOrderConfirmText}
+              cancelText={t.cancelOrderCancelText}
+            />
+          )}
+        />
+        {(isAbleToSend || isAbleToConfirm) && (
+          <Fragment>
+            <div styleName="title">
+              <strong>{t.manage}</strong>
+            </div>
+            <div styleName="buttons">
+              {isAbleToSend && (
+                <div styleName="sendButtonWrapper">
+                  <Button
+                    big
+                    onClick={() =>
+                      this.setState({ isSendOrderModalShown: true })
+                    }
+                  >
+                    {t.sendNow}
+                  </Button>
+                </div>
+              )}
+              {isAbleToConfirm && (
+                <div styleName="sendButtonWrapper">
+                  <Button
+                    big
+                    onClick={this.confirmOrder}
+                    isLoading={isSendInProgress}
+                  >
+                    {t.confirmOrder}
+                  </Button>
+                </div>
+              )}
+              {isAbleToConfirm && (
+                <div styleName="cancelButtonWrapper">
+                  <Button
+                    wireframe
+                    big
+                    isLoading={isCancelInProgress}
+                    onClick={() => {
+                      this.setState({ isCancelOrderModalShown: true });
+                    }}
+                  >
+                    {t.cancelOrder}
+                  </Button>
+                </div>
+              )}
+            </div>
+          </Fragment>
         )}
-        {this.props.isAbleToConfirm && (
-          <div styleName="sendButtonWrapper">
-            <Button
-              big
-              onClick={this.confirmOrder}
-              isLoading={isSendInProgress}
-            >
-              {t.confirmOrder}
-            </Button>
-          </div>
-        )}
-        {this.props.isAbleToCancel && (
-          <div styleName="cancelButtonWrapper">
-            <Button
-              wireframe
-              big
-              isLoading={isCancelInProgress}
-              onClick={this.cancelOrder}
-            >
-              {t.cancelOrder}
-            </Button>
+        {orderFee && (
+          <div
+            styleName={classNames('orderFee', {
+              alone: !isAbleToSend && !isAbleToConfirm,
+            })}
+          >
+            <Modal
+              showModal={isChargeFeeModalShown}
+              onClose={this.handleChargeFeeModalClose}
+              render={() => (
+                <Confirmation
+                  title={t.areYouSureToPayChargeFee}
+                  description={t.pleaseCheckCard}
+                  onCancel={this.handleChargeFeeModalClose}
+                  onConfirm={this.chargeFee}
+                  confirmText={t.payFee}
+                  cancelText={t.cancel}
+                />
+              )}
+            />
+            <div styleName="title">
+              <strong>{t.chargeFee}</strong>
+            </div>
+            <div styleName="desc">
+              <Row>
+                <Col size={12} lg={5}>
+                  <TextWithLabel
+                    label={t.amount}
+                    text={`${formatPrice(orderFee.amount)} ${
+                      orderFee.currency
+                    }`}
+                  />
+                </Col>
+                <Col size={12} lg={7}>
+                  <TextWithLabel
+                    label={t.status}
+                    text={getStatusStringFromEnum(orderFee.status)}
+                  />
+                </Col>
+              </Row>
+            </div>
+            {orderFee.status === 'NOT_PAID' && (
+              <div styleName="cancelButtonWrapper">
+                <Button
+                  big
+                  isLoading={isChargeFeeInProgress}
+                  onClick={() => {
+                    this.setState({ isChargeFeeModalShown: true });
+                  }}
+                >
+                  {t.payFee}
+                </Button>
+              </div>
+            )}
           </div>
         )}
       </div>

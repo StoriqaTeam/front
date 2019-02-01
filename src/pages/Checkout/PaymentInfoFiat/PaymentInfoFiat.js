@@ -3,6 +3,8 @@
 import React, { PureComponent, Fragment } from 'react';
 import { routerShape, withRouter } from 'found';
 
+import CartRest from 'pages/common/CartRest';
+
 import type { OrderStatusType } from 'types';
 
 import { Stripe } from '../Stripe';
@@ -42,6 +44,7 @@ type PropsType = {
     },
   },
   orderSlug?: number,
+  restCartCount?: number,
 };
 
 type StateType = {
@@ -78,7 +81,7 @@ class PaymentInfoFiat extends PureComponent<PropsType, StateType> {
   };
 
   render() {
-    const { invoice, me } = this.props;
+    const { invoice, me, restCartCount } = this.props;
     const { paymentIntent } = invoice;
     if (!invoice || !paymentIntent) {
       return (
@@ -115,6 +118,12 @@ class PaymentInfoFiat extends PureComponent<PropsType, StateType> {
                     onPaid={this.handlePaid}
                   />
                 </div>
+                {restCartCount &&
+                  restCartCount !== 0 && (
+                    <div styleName="restCartInfo">
+                      <CartRest count={restCartCount} cartType="crypto" />
+                    </div>
+                  )}
               </Fragment>
             ) : (
               <div>

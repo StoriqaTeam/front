@@ -270,7 +270,6 @@
         position: absolute;
         top: 0;
         left: 0;
-        width: 6rem;
         height: 100%;
         width: 15rem;
         background: linear-gradient(to right, $color_grey_trivial, transparent);
@@ -294,4 +293,8 @@
   top: 0;
   left: 0;
   width: 100%;
+}
+
+.restCartInfo {
+  margin-top: 6rem;
 }

@@ -13,6 +13,7 @@ import { formatPrice } from 'utils';
 import { RecalcInvoiceAmountMutation } from 'relay/mutations';
 
 import { NotificationBlock } from 'components/NotificationBlock';
+import CartRest from 'pages/common/CartRest';
 
 import type {
   RecalcInvoiceAmountMutationVariablesType,
@@ -37,6 +38,7 @@ type PropsType = {
     environment: Environment,
   },
   router: routerShape,
+  restCartCount?: number,
 };
 
 type StateType = {
@@ -220,6 +222,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
   );
 
   render() {
+    const { restCartCount } = this.props;
     const { isFirstRefetch, isNotificationActive } = this.state;
     if (isFirstRefetch) {
       return (
@@ -343,6 +346,12 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
                       </div>
                     )}
                 </div>
+                {restCartCount &&
+                  restCartCount !== 0 && (
+                    <div styleName="restCartInfo">
+                      <CartRest count={restCartCount} cartType="fiat" />
+                    </div>
+                  )}
               </Fragment>
             )}
           {state === 'PAID' && (
