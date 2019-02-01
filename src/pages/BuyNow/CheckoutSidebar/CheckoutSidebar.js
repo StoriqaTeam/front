@@ -3,7 +3,7 @@
 import React, { PureComponent } from 'react';
 
 import { ContextDecorator } from 'components/App';
-import { formatPrice, getExchangePrice } from 'utils';
+import { formatPrice, getExchangePrice, checkCurrencyType } from 'utils';
 import { Button } from 'components/common/Button';
 import { Row, Col } from 'layout';
 
@@ -60,7 +60,8 @@ class CheckoutSidebar extends PureComponent<PropsType> {
                   <div styleName="label">Subtotal</div>
                   <div styleName="value">
                     {`${formatPrice(
-                      buyNowData.subtotalWithoutDiscounts || 0,
+                      buyNowData.subtotal || 0,
+                      checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
                     )} ${currency}`}
                   </div>
                 </div>
@@ -69,7 +70,10 @@ class CheckoutSidebar extends PureComponent<PropsType> {
                 <div styleName="attributeContainer">
                   <div styleName="label">Delivery</div>
                   <div styleName="value">
-                    {`${formatPrice(buyNowData.deliveryCost || 0)} ${currency}`}
+                    {`${formatPrice(
+                      buyNowData.deliveryCost || 0,
+                      checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                    )} ${currency}`}
                   </div>
                 </div>
               </Col>
@@ -80,6 +84,7 @@ class CheckoutSidebar extends PureComponent<PropsType> {
                     <div styleName="value">
                       {`−${formatPrice(
                         buyNowData.couponsDiscounts || 0,
+                        checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
                       )} ${currency}`}
                     </div>
                   </div>
@@ -95,7 +100,10 @@ class CheckoutSidebar extends PureComponent<PropsType> {
                   </div>
                   <div styleName="totalCost">
                     <div styleName="value bold">
-                      {`${formatPrice(buyNowData.totalCost || 0)} ${currency}`}
+                      {`${formatPrice(
+                        buyNowData.totalCost || 0,
+                        checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                      )} ${currency}`}
                     </div>
                     {exchangePrice != null && (
                       <div styleName="exchangePrice">{exchangePrice}</div>

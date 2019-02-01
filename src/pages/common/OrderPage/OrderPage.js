@@ -248,6 +248,26 @@ class OrderPage extends Component<PropsType, StateType> {
     }
   };
 
+  handleChargeFee = (success: boolean): void => {
+    if (success) {
+      this.props.showAlert({
+        type: 'success',
+        text: t.chargeFeefullyComplete,
+        link: {
+          text: 'Ok',
+        },
+      });
+    } else {
+      this.props.showAlert({
+        type: 'danger',
+        text: t.somethingIsGoingWrong,
+        link: {
+          text: 'Ok',
+        },
+      });
+    }
+  };
+
   invoice = (): void => {
     const {
       match: {
@@ -460,7 +480,7 @@ class OrderPage extends Component<PropsType, StateType> {
                     </Col>
                     <Col size={12} lg={7}>
                       <TextWithLabel
-                        label={t.labelSubtotal}
+                        label={t.labelTotalAmount}
                         text={`${formatPrice(order.totalAmount)} ${
                           order.currency
                         }`}
@@ -471,7 +491,8 @@ class OrderPage extends Component<PropsType, StateType> {
               </div>
               {this.props.isAbleToManageOrder &&
                 (orderFromProps.state === 'PAID' ||
-                  orderFromProps.state === 'IN_PROCESSING') && (
+                  orderFromProps.state === 'IN_PROCESSING' ||
+                  orderFromProps.fee) && (
                   <div styleName="manageBlock">
                     <ManageOrderBlock
                       environment={environment}
@@ -482,6 +503,9 @@ class OrderPage extends Component<PropsType, StateType> {
                       onOrderSend={this.handleOrderSent}
                       onOrderConfirm={this.handleOrderConfirm}
                       onOrderCancel={this.handleOrderCanceled}
+                      onChargeFee={this.handleChargeFee}
+                      orderFee={orderFromProps.fee || null}
+                      orderId={orderFromProps.id}
                     />
                   </div>
                 )}

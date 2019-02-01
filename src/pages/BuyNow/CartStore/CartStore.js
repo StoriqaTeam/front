@@ -7,7 +7,7 @@ import { Input, Button, Rating } from 'components/common';
 import { Icon } from 'components/Icon';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Container, Row, Col } from 'layout';
-import { formatPrice, getNameText, convertSrc } from 'utils';
+import { formatPrice, getNameText, convertSrc, checkCurrencyType } from 'utils';
 
 import type { AvailableDeliveryPackageType } from 'relay/queries/fetchAvailableShippingForUser';
 import type { AllCurrenciesType } from 'types';
@@ -177,13 +177,18 @@ class CartStore extends PureComponent<PropsType> {
                         <thin styleName="through">
                           {`${formatPrice(
                             buyNowData.totalCostWithoutDiscounts || 0,
+                            checkCurrencyType(currency) === 'fiat'
+                              ? 2
+                              : undefined,
                           )} ${currency || ''}`}
                         </thin>
                       </div>
                     )}
                     <div styleName="value">
-                      {`${formatPrice(buyNowData.totalCost || 0)} ${currency ||
-                        ''}`}
+                      {`${formatPrice(
+                        buyNowData.totalCost || 0,
+                        checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                      )} ${currency || ''}`}
                     </div>
                   </div>
                 </div>

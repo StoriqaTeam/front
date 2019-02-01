@@ -86,6 +86,7 @@ export type CalculateBuyNowType = {
   totalCount: number, // количество
   deliveryCost: number, // цена доставки
   subtotalWithoutDiscounts: number, // цена всех продуктов без доставки и без скидки
+  subtotal: number, // цена всех продуктов без доставки
 };
 
 type StateType = {
@@ -141,6 +142,7 @@ class BuyNow extends Component<PropsType, StateType> {
       totalCount,
       deliveryCost,
       subtotalWithoutDiscounts,
+      subtotal,
     } = calculateBuyNow;
     const { deliveryAddressesFull } = me;
     const addresses = addressesToSelect(deliveryAddressesFull);
@@ -161,6 +163,7 @@ class BuyNow extends Component<PropsType, StateType> {
         totalCount,
         deliveryCost,
         subtotalWithoutDiscounts,
+        subtotal,
       },
       changeCountLoading: false,
       couponCodeValue: '',
@@ -367,6 +370,7 @@ class BuyNow extends Component<PropsType, StateType> {
             totalCount,
             deliveryCost,
             subtotalWithoutDiscounts,
+            subtotal,
           } = calculateBuyNow;
           this.setState({
             step: 2,
@@ -378,6 +382,7 @@ class BuyNow extends Component<PropsType, StateType> {
               totalCount,
               deliveryCost,
               subtotalWithoutDiscounts,
+              subtotal,
             },
           });
           return true;
@@ -599,6 +604,7 @@ class BuyNow extends Component<PropsType, StateType> {
           totalCount,
           deliveryCost,
           subtotalWithoutDiscounts,
+          subtotal,
         } = calculateBuyNow;
         this.setState(
           {
@@ -609,6 +615,7 @@ class BuyNow extends Component<PropsType, StateType> {
               totalCount,
               deliveryCost,
               subtotalWithoutDiscounts,
+              subtotal,
             },
             changeCountLoading: false,
           },
@@ -673,6 +680,7 @@ class BuyNow extends Component<PropsType, StateType> {
           totalCount,
           deliveryCost,
           subtotalWithoutDiscounts,
+          subtotal,
         } = calculateBuyNow;
         this.setState(
           {
@@ -683,6 +691,7 @@ class BuyNow extends Component<PropsType, StateType> {
               totalCount,
               deliveryCost,
               subtotalWithoutDiscounts,
+              subtotal,
             },
             successCouponCodeValue: couponCodeValue,
             isLoadingCouponButton: false,
@@ -742,6 +751,7 @@ class BuyNow extends Component<PropsType, StateType> {
           totalCount,
           deliveryCost,
           subtotalWithoutDiscounts,
+          subtotal,
         } = calculateBuyNow;
         this.setState(
           {
@@ -752,6 +762,7 @@ class BuyNow extends Component<PropsType, StateType> {
               totalCount,
               deliveryCost,
               subtotalWithoutDiscounts,
+              subtotal,
             },
             deliveryPackage: pkg,
           },

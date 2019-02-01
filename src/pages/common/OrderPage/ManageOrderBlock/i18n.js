@@ -5,7 +5,6 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  areYouSureToCancelOrder: string,
   sendYourProduct: string,
   toCustomer: string,
   doNotForgetToAttach: string,
@@ -15,12 +14,23 @@ type TranslationDicType = {|
   sendNow: string,
   confirmOrder: string,
   cancelOrder: string,
+  cancelOrderTitle: string,
+  cancelOrderDescription: string,
+  cancelOrderConfirmText: string,
+  cancelOrderCancelText: string,
+  manage: string,
+  amount: string,
+  chargeFee: string,
+  status: string,
+  areYouSureToPayChargeFee: string,
+  pleaseCheckCard: string,
+  cancel: string,
+  payFee: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    areYouSureToCancelOrder: 'Are you sure to cancel order?',
     sendYourProduct: 'Send your Product',
     toCustomer: 'to customer',
     doNotForgetToAttach:
@@ -30,7 +40,20 @@ const translations: TranslationsBundleType = {
     sendOrder: 'Send Order',
     sendNow: 'Send Now',
     confirmOrder: 'Confirm order',
-    cancelOrder: 'Cancel Order',
+    cancelOrder: 'Cancel order',
+    cancelOrderTitle: 'Are you sure to cancel order?',
+    cancelOrderDescription: '',
+    cancelOrderConfirmText: 'Cancel order',
+    cancelOrderCancelText: 'No',
+    manage: 'Manage',
+    amount: 'Amount',
+    chargeFee: 'Charge fee',
+    status: 'Status',
+    areYouSureToPayChargeFee: 'Are you sure to pay charge fee?',
+    pleaseCheckCard:
+      'Please, check that you have connected payments card to your account in finances section and you have enough funds on it',
+    cancel: 'Cancel',
+    payFee: 'Pay fee',
   },
 };
 

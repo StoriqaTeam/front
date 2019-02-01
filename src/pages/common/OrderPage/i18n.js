@@ -12,6 +12,7 @@ type TranslationDicType = {|
   somethingIsGoingWrong: string,
   orderSuccessfullyCanceled: string,
   orderSuccessfullyComplete: string,
+  chargeFeefullyComplete: string,
   ok: string,
   order: string,
   orderStatusInfo: string,
@@ -31,7 +32,7 @@ type TranslationDicType = {|
   labelDeliveryPrice: string,
   labelTrackID: string,
   labelQuantity: string,
-  labelSubtotal: string,
+  labelTotalAmount: string,
   labelCouponDiscount: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
@@ -45,6 +46,7 @@ const translations: TranslationsBundleType = {
     somethingIsGoingWrong: 'Something is going wrong :(',
     orderSuccessfullyCanceled: 'Order successfully canceled.',
     orderSuccessfullyComplete: 'Order successfully complete.',
+    chargeFeefullyComplete: 'Charge fee successfully paid.',
     ok: 'Ok .',
     order: 'ORDER',
     orderStatusInfo: 'Order status info',
@@ -64,7 +66,7 @@ const translations: TranslationsBundleType = {
     labelDeliveryPrice: 'Delivery price',
     labelTrackID: 'Track ID',
     labelQuantity: 'Quantity',
-    labelSubtotal: 'Subtotal',
+    labelTotalAmount: 'Total amount',
     labelCouponDiscount: 'Coupon discount',
   },
 };

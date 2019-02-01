@@ -184,20 +184,7 @@ class Cart extends Component<PropsType, StateType> {
         <Container withoutGrow>
           <Row withoutGrow>
             <Col size={12}>
-              <div styleName="header">{t.myCart}</div>
-              {!emptyCart &&
-                !noTabs && (
-                  <div styleName="tabs">
-                    <Tabs selected={selectedTab} onClick={this.handleClickTab}>
-                      <div label="Fiat" amount={totalCountFiat}>
-                        This is the Fiat panel
-                      </div>
-                      <div label="Crypto" amount={totalCountCrypto}>
-                        This is the Crypto panel
-                      </div>
-                    </Tabs>
-                  </div>
-                )}
+              {/* <div styleName="header">{t.myCart}</div> */}
               <div ref={ref => this.setStoresRef(ref)}>
                 <Row withoutGrow>
                   {emptyCart ? (
@@ -210,6 +197,21 @@ class Cart extends Component<PropsType, StateType> {
                     </Col>
                   ) : (
                     <Col size={12} lg={8} xl={9}>
+                      {!noTabs && (
+                        <div styleName="tabs">
+                          <Tabs
+                            selected={selectedTab}
+                            onClick={this.handleClickTab}
+                            withoutPanel
+                          >
+                            <div label={t.cart} amount={totalCountFiat} />
+                            <div
+                              label={t.cryptoCart}
+                              amount={totalCountCrypto}
+                            />
+                          </Tabs>
+                        </div>
+                      )}
                       <div styleName="wrapper">
                         <div styleName="storeContainer">
                           {stores.map(store => (

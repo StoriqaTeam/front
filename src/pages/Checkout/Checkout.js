@@ -481,14 +481,12 @@ class Checkout extends Component<PropsType, StateType> {
       invoice,
       currencyType,
     } = this.state;
-
     const actualCart = currencyType === 'CRYPTO' ? cart.crypto : cart.fiat;
-
     const stores = pipe(pathOr([], ['stores', 'edges']), map(path(['node'])))(
       actualCart,
     );
-
     const emptyCart = stores.length === 0;
+
     return (
       <CheckoutContext.Provider
         value={{
@@ -582,6 +580,9 @@ class Checkout extends Component<PropsType, StateType> {
                         {step === 3 &&
                           currencyType === 'FIAT' && (
                             <PaymentInfoFiat
+                              restCartCount={
+                                cart.crypto ? cart.crypto.totalCount : 0
+                              }
                               invoice={invoice}
                               me={this.props.me}
                             />
@@ -590,6 +591,9 @@ class Checkout extends Component<PropsType, StateType> {
                           invoice &&
                           currencyType === 'CRYPTO' && (
                             <PaymentInfo
+                              restCartCount={
+                                cart.fiat ? cart.fiat.totalCount : 0
+                              }
                               invoiceId={invoice.id}
                               me={this.props.me}
                             />

@@ -6,12 +6,16 @@ import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
   myCart: string,
+  cart: string,
+  cryptoCart: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
     myCart: 'My Cart',
+    cart: 'CART',
+    cryptoCart: 'CRYPTO CART',
   },
 };
 

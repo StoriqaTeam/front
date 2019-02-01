@@ -53,7 +53,11 @@ const ProductPrice = ({
             <strong>{t.price}</strong>
           </div>
           <thin styleName="lastPrice">
-            {formatPrice(price)} {currency}
+            {formatPrice(
+              price,
+              checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+            )}{' '}
+            {currency}
           </thin>
         </div>
       ) : null}
