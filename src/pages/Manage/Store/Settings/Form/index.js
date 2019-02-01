@@ -424,7 +424,10 @@ class Form extends Component<PropsType, StateType> {
         <div styleName="form">
           {status && (
             <div styleName="storeStatus">
-              <ModerationStatus status={status} dataTest="storeStatus" />
+              <ModerationStatus
+                status={status}
+                dataTest={`storeStatus_${status}`}
+              />
             </div>
           )}
           <div styleName="formHeader">
