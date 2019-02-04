@@ -101,6 +101,7 @@ type StateType = {
   },
   isAddToCart: boolean,
   isLoading: boolean,
+  isLoadingAddToCart: boolean,
   cartQuantity: number,
   deliveryData: DeliveryDataType,
 };
@@ -153,6 +154,7 @@ class Product extends Component<PropsType, StateType> {
       availableAttributes: {},
       isAddToCart: false,
       isLoading: false,
+      isLoadingAddToCart: false,
       cartQuantity: 1,
       deliveryData: {
         deliveryPackage: null,
@@ -238,6 +240,8 @@ class Product extends Component<PropsType, StateType> {
         ? deliveryData.deliveryPackage.shippingId
         : null;
 
+      this.setState({ isLoadingAddToCart: true });
+
       AddInCartMutation.commit({
         input: {
           clientMutationId: '',
@@ -263,9 +267,11 @@ class Product extends Component<PropsType, StateType> {
             this.setState({ isAddToCart: true }, () => {
               setCookie('CURRENCY_TYPE', toUpper(sellerCurrenyType));
             });
+            this.setState({ isLoadingAddToCart: false });
           }
         },
         onError: error => {
+          this.setState({ isLoadingAddToCart: false });
           log.error('Error in IncrementInCart mutation');
           log.error(error);
           this.props.showAlert({
@@ -440,7 +446,7 @@ class Product extends Component<PropsType, StateType> {
 
   render() {
     const { me, baseProduct, router } = this.props;
-    const { unselectedAttr } = this.state;
+    const { unselectedAttr, isLoadingAddToCart } = this.state;
     if (isNil(baseProduct)) {
       return <div styleName="productNotFound">{t.productNotFound}</div>;
     }
@@ -518,6 +524,7 @@ class Product extends Component<PropsType, StateType> {
                           isAddToCart={isAddToCart}
                           router={router}
                           isLoading={isLoading}
+                          isLoadingAddToCart={isLoadingAddToCart}
                           isDisabledBuyNowButton={!me}
                         />
                         <div styleName="line" />

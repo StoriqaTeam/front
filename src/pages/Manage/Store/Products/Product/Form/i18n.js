@@ -62,8 +62,7 @@ const translations: TranslationsBundleType = {
     vendorCodeIsRequired: 'Vendor code is required',
     priceIsRequired: 'Price is required',
     metricsError: 'Please, specify all metrics',
-    addAtLeastOneDeliveryServiceOrPickup:
-      'Add at least one delivery service or pickup',
+    addAtLeastOneDeliveryServiceOrPickup: 'Add at least one delivery service',
     addAtLeastOneDeliveryDelivery: 'Add at least one delivery service',
     productPhotos: 'Product photos',
     generalSettings: 'General settings',

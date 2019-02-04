@@ -21,6 +21,7 @@ type PropsType = {
   isAddToCart: boolean,
   router: routerShape,
   isLoading: boolean,
+  isLoadingAddToCart: boolean,
 };
 
 const ProductButtons = ({
@@ -34,6 +35,7 @@ const ProductButtons = ({
   onBuyNow,
   onAddToCartTracker,
   isLoading,
+  isLoadingAddToCart,
 }: PropsType) => {
   const isPreOrderAvailable = quantity === 0 && preOrder && preOrderDays;
   return (
@@ -63,6 +65,7 @@ const ProductButtons = ({
           }
           onMouseDown={onAddToCartTracker}
           dataTest="product-addToCart"
+          isLoading={isLoadingAddToCart}
         >
           {!isAddToCart ? t.addToCart : t.viewCart}
         </Button>
