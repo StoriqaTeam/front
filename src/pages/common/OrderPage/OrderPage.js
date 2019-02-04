@@ -385,6 +385,7 @@ class OrderPage extends Component<PropsType, StateType> {
               </div>
               {order.product.name ? (
                 <ProductBlock
+                  subtotal={order.subtotal}
                   product={order.product}
                   currency={order.currency}
                 />

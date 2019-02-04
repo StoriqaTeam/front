@@ -174,12 +174,14 @@ class ProductInfo extends PureComponent<PropsType> {
                       title={t.price}
                       value={`${formatPrice(
                         product.subtotalWithoutDiscounts || 0,
+                        checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
                       )} ${currency || ''}`}
                     />
                     <CartProductAttribute
                       title={t.delivery}
                       value={`${formatPrice(
                         product.deliveryCost || 0,
+                        checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
                       )} ${currency || ''}`}
                     />
                     {product.couponDiscount !== 0 && (
@@ -187,6 +189,9 @@ class ProductInfo extends PureComponent<PropsType> {
                         title={t.couponDiscount}
                         value={`${formatPrice(
                           product.couponDiscount || 0,
+                          checkCurrencyType(currency) === 'fiat'
+                            ? 2
+                            : undefined,
                         )} ${currency || ''}`}
                       />
                     )}

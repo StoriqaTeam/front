@@ -87,6 +87,7 @@ export default createFragmentContainer(
         quantity
         price
         totalAmount
+        subtotal
         product {
           currency
           attributes {

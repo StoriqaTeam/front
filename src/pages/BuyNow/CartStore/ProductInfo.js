@@ -7,7 +7,12 @@ import { AppContext } from 'components/App';
 import Stepper from 'components/Stepper';
 import { Container, Col, Row } from 'layout';
 import { DeliveryCompaniesSelect } from 'pages/Checkout/CheckoutContent/DeliveryCompaniesSelect';
-import { formatPrice, getNameText, convertCountries } from 'utils';
+import {
+  formatPrice,
+  getNameText,
+  convertCountries,
+  checkCurrencyType,
+} from 'utils';
 import type { AvailableDeliveryPackageType } from 'relay/queries/fetchAvailableShippingForUser';
 import type { AllCurrenciesType } from 'types';
 
@@ -112,12 +117,14 @@ class ProductInfo extends PureComponent<PropsType> {
                     title="Price"
                     value={`${formatPrice(
                       buyNowData.subtotalWithoutDiscounts || 0,
+                      checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
                     )} ${currency || ''}`}
                   />
                   <CartProductAttribute
                     title="Delivery"
                     value={`${formatPrice(
                       buyNowData.deliveryCost || 0,
+                      checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
                     )} ${currency || ''}`}
                   />
                   {buyNowData.couponsDiscounts !== 0 && (
@@ -125,6 +132,7 @@ class ProductInfo extends PureComponent<PropsType> {
                       title="Coupon discount"
                       value={`${formatPrice(
                         buyNowData.couponsDiscounts || 0,
+                        checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
                       )} ${currency || ''}`}
                     />
                   )}
@@ -211,13 +219,16 @@ class ProductInfo extends PureComponent<PropsType> {
               />
               <CartProductAttribute
                 title="Price"
-                value={`${formatPrice(buyNowData.subtotal || 0)} ${currency ||
-                  ''}`}
+                value={`${formatPrice(
+                  buyNowData.subtotal || 0,
+                  checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                )} ${currency || ''}`}
               />
               <CartProductAttribute
                 title="Delivery"
                 value={`${formatPrice(
                   buyNowData.deliveryCost || 0,
+                  checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
                 )} ${currency || ''}`}
               />
               {buyNowData.couponsDiscounts !== 0 && (
@@ -225,6 +236,7 @@ class ProductInfo extends PureComponent<PropsType> {
                   title="Coupon discount"
                   value={`−${formatPrice(
                     buyNowData.couponsDiscounts || 0,
+                    checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
                   )} ${currency || ''}`}
                 />
               )}
