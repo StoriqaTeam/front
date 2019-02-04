@@ -137,6 +137,12 @@ export default createRefetchContainer(
             currency
             chargeId
           }
+          orderBilling {
+            id
+            state
+            stripeFee
+            sellerCurrency
+          }
         }
       }
     }

@@ -6,6 +6,7 @@ import { map } from 'ramda';
 import { Icon } from 'components/Icon';
 import { Checkbox } from 'components/common/Checkbox';
 import { Button } from 'components/common';
+import { formatPrice, checkCurrencyType } from 'utils';
 
 import type { AvailableDeliveryPackageType } from 'relay/queries/fetchAvailableShippingForUser';
 import type { AllCurrenciesType } from 'types';
@@ -101,7 +102,10 @@ class Dropdown extends React.Component<PropsType, StateType> {
                       </div>
                     </div>
                     <span styleName="price">
-                      {`${item.price} ${currency || ''}`}
+                      {`${formatPrice(
+                        item.price,
+                        checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                      )} ${currency || ''}`}
                     </span>
                   </div>
                 ),

@@ -118,7 +118,7 @@ class PaymentInfoFiat extends PureComponent<PropsType, StateType> {
                     onPaid={this.handlePaid}
                   />
                 </div>
-                {restCartCount &&
+                {Boolean(restCartCount) &&
                   restCartCount !== 0 && (
                     <div styleName="restCartInfo">
                       <CartRest count={restCartCount} cartType="crypto" />

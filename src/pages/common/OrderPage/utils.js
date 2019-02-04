@@ -28,6 +28,20 @@ const getStatusStringFromEnum = (orderStatus: string): string => {
       return 'Not paid';
     case 'FAIL':
       return 'Fail';
+    case 'INITIAL':
+      return 'Initial';
+    case 'DECLINED':
+      return 'Declined';
+    case 'CAPTURED':
+      return 'Captured';
+    case 'REFUND_NEEDED':
+      return 'Refund needed';
+    case 'REFUNDED':
+      return 'Refunded';
+    case 'PAID_TO_SELLER':
+      return 'Paid to seller';
+    case 'PAYMENT_TO_SELLER_NEEDED':
+      return 'Payment to seller needed';
     default:
       return 'Undefined';
   }
@@ -61,6 +75,20 @@ const getEnumFromStatusString = (orderStatus: string): ?string => {
       return 'NOT_PAID';
     case 'Fail':
       return 'FAIL';
+    case 'Initial':
+      return 'INITIAL';
+    case 'Declined':
+      return 'DECLINED';
+    case 'Captured':
+      return 'CAPTURED';
+    case 'Refund needed':
+      return 'REFUND_NEEDED';
+    case 'Refunded':
+      return 'REFUNDED';
+    case 'Paid to seller':
+      return 'PAID_TO_SELLER';
+    case 'Payment to seller needed':
+      return 'PAYMENT_TO_SELLER_NEEDED';
     default:
       return null;
   }

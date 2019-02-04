@@ -18,7 +18,7 @@ import {
   ChargeFeeMutation,
 } from 'relay/mutations';
 
-import type { AllCurrenciesType } from 'types';
+import type { AllCurrenciesType, OrderBillingStatusesType } from 'types';
 import type {
   MutationParamsType as CancelOrderMutationParamsType,
   CancelOrderMutationResponseType,
@@ -65,6 +65,12 @@ type PropsType = {
     chargeId: string,
   },
   orderId: string,
+  orderBilling: ?{
+    id: string,
+    state: OrderBillingStatusesType,
+    stripeFee: number,
+    sellerCurrency: AllCurrenciesType,
+  },
 };
 
 type StateType = {
@@ -221,7 +227,12 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { orderFee, isAbleToSend, isAbleToConfirm } = this.props;
+    const {
+      orderFee,
+      isAbleToSend,
+      isAbleToConfirm,
+      orderBilling,
+    } = this.props;
 
     const {
       isSendInProgress,
@@ -354,22 +365,38 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
               <strong>{t.chargeFee}</strong>
             </div>
             <div styleName="desc">
-              <Row>
-                <Col size={12} lg={5}>
-                  <TextWithLabel
-                    label={t.amount}
-                    text={`${formatPrice(orderFee.amount)} ${
-                      orderFee.currency
-                    }`}
-                  />
-                </Col>
-                <Col size={12} lg={7}>
-                  <TextWithLabel
-                    label={t.status}
-                    text={getStatusStringFromEnum(orderFee.status)}
-                  />
-                </Col>
-              </Row>
+              <div styleName="infoBlockItem">
+                <Row>
+                  <Col size={12} lg={5}>
+                    <TextWithLabel
+                      label={t.storiqaFee}
+                      text={`${formatPrice(orderFee.amount)} ${
+                        orderFee.currency
+                      }`}
+                    />
+                  </Col>
+                  <Col size={12} lg={7}>
+                    <TextWithLabel
+                      label={t.status}
+                      text={getStatusStringFromEnum(orderFee.status)}
+                    />
+                  </Col>
+                </Row>
+              </div>
+              {orderBilling && (
+                <div styleName="infoBlockItem">
+                  <Row>
+                    <Col size={12} lg={5}>
+                      <TextWithLabel
+                        label={t.bankTransactionFee}
+                        text={`${formatPrice(orderBilling.stripeFee)} ${
+                          orderBilling.sellerCurrency
+                        }`}
+                      />
+                    </Col>
+                  </Row>
+                </div>
+              )}
             </div>
             {orderFee.status === 'NOT_PAID' && (
               <div styleName="cancelButtonWrapper">
