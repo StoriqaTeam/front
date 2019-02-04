@@ -4,7 +4,7 @@ import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import { isEmpty, map } from 'ramda';
 
-import { InputPrice, Checkbox, RadioButton } from 'components/common';
+import { RadioButton } from 'components/common';
 
 import type { SelectItemType } from 'types';
 import type {
@@ -125,8 +125,8 @@ class LocalShipping extends Component<PropsType, StateType> {
       currency,
     } = this.props;
     const {
-      isSelectedPickup,
-      pickupPrice,
+      // isSelectedPickup,
+      // pickupPrice,
       isSelectedWithout,
       isSelectedFixPrice,
     } = this.state;
@@ -156,7 +156,7 @@ class LocalShipping extends Component<PropsType, StateType> {
           </div>
         </div>
         <div styleName={classNames('form', { hidePlane: isSelectedWithout })}>
-          <div styleName="pickup">
+          {/* <div styleName="pickup">
             <div styleName="pickupCheckbox">
               <Checkbox
                 inline
@@ -174,7 +174,7 @@ class LocalShipping extends Component<PropsType, StateType> {
                 dataTest="shippingPickupPrice"
               />
             </div>
-          </div>
+          </div> */}
           {localAvailablePackages &&
             !isEmpty(localAvailablePackages) && (
               <div
