@@ -440,12 +440,19 @@ const routes = (
           }
         `}
         render={({ props, Component, resolving }) => {
-          if (Component && props && !props.me && resolving === true) {
+          if (Component && props) {
             const {
               location: { pathname },
             } = props;
-            JWT.clearJWT();
-            throw new RedirectException(`/login?from=${pathname}`);
+
+            if (pathname === '/manage' || pathname === '/manage/') {
+              throw new RedirectException('/404');
+            }
+
+            if (!props.me && resolving === true) {
+              JWT.clearJWT();
+              throw new RedirectException(`/login?from=${pathname}`);
+            }
           }
         }}
         Component={() => <div />}
