@@ -11,7 +11,7 @@ import '../OrderInvoice.scss';
 
 type PropsType = {
   slug: number,
-  price: number,
+  totalAmount: number,
   quantity: number,
   product: {
     currency: string,
@@ -24,7 +24,7 @@ type PropsType = {
 
 const OrderInvoiceTableRow = ({
   slug,
-  price,
+  totalAmount,
   quantity,
   product: {
     attributes,
@@ -45,11 +45,11 @@ const OrderInvoiceTableRow = ({
       <div styleName="tableRowItem"> {quantity}</div>
       <div styleName="tableRowItem">
         {' '}
-        {price} - {currency}
+        {totalAmount} - {currency}
       </div>
       <div styleName="tableRowItem">
         {' '}
-        {product([quantity, price])} - {currency}
+        {product([quantity, totalAmount])} - {currency}
       </div>
     </div>
   );

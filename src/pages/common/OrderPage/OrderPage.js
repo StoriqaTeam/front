@@ -24,6 +24,8 @@ import { addressToString, formatPrice, getNameText } from 'utils';
 
 import { AppContext } from 'components/App';
 
+import type { OrderBillingStatusesType } from 'types';
+
 import TextWithLabel from './TextWithLabel';
 import ProductBlock from './ProductBlock';
 import StatusList from './StatusList';
@@ -70,6 +72,7 @@ type OrderDTOType = {
   deliveryPrice: number,
   couponPrice: ?number,
   currency: string,
+  billingStatus: ?OrderBillingStatusesType,
 };
 
 class OrderPage extends Component<PropsType, StateType> {
@@ -164,6 +167,8 @@ class OrderPage extends Component<PropsType, StateType> {
           additionalInfo: historyEdge.node.comment,
         };
       }, order && order.history ? sort((a, b) => moment(a.node.committedAt).isBefore(b.node.committedAt), order.history.edges) : []),
+      billingStatus:
+        order && order.orderBilling ? order.orderBilling.state : null,
     };
     return orderDTO;
   };
@@ -294,6 +299,7 @@ class OrderPage extends Component<PropsType, StateType> {
       email,
       showAlert,
       showInvoice,
+      isAbleToManageOrder,
     } = this.props;
     const { isOpenTicketModalShown } = this.state;
     const order: OrderDTOType = this.getOrderDTO(orderFromProps);
@@ -326,6 +332,17 @@ class OrderPage extends Component<PropsType, StateType> {
                       </div>
                     </div>
                   </div>
+                  {isAbleToManageOrder &&
+                    order.billingStatus && (
+                      <div styleName="statusesBlock">
+                        <div styleName="statusItem">
+                          <div styleName="statusTitle">{t.billingStatus}</div>
+                          <div styleName="statusInfo">
+                            {getStatusStringFromEnum(order.billingStatus)}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   {isPaymentInfoCanBeShown &&
                     (orderFromProps.state === 'NEW' ||
                       orderFromProps.state === 'PAYMENT_AWAITED' ||
@@ -368,6 +385,7 @@ class OrderPage extends Component<PropsType, StateType> {
               </div>
               {order.product.name ? (
                 <ProductBlock
+                  subtotal={order.subtotal}
                   product={order.product}
                   currency={order.currency}
                 />
@@ -505,6 +523,7 @@ class OrderPage extends Component<PropsType, StateType> {
                       onOrderCancel={this.handleOrderCanceled}
                       onChargeFee={this.handleChargeFee}
                       orderFee={orderFromProps.fee || null}
+                      orderBilling={orderFromProps.orderBilling || null}
                       orderId={orderFromProps.id}
                     />
                   </div>

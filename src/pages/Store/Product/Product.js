@@ -195,6 +195,20 @@ class Product extends Component<PropsType, StateType> {
     this.setState({ selectedAttributes });
   }
 
+  getUserAddress = () => {
+    const { me } = this.props;
+    let userAddress = null;
+    if (me) {
+      const { deliveryAddressesFull } = me;
+      if (deliveryAddressesFull && !isEmpty(deliveryAddressesFull)) {
+        userAddress =
+          find(propEq('isPriority', true))(deliveryAddressesFull) ||
+          head(deliveryAddressesFull);
+      }
+    }
+    return userAddress;
+  };
+
   handleChangeQuantity = (quantity: number) => {
     this.setState({ cartQuantity: quantity });
   };
@@ -369,6 +383,20 @@ class Product extends Component<PropsType, StateType> {
     }
 
     if (isEmpty(widgets) || !unselectedAttr) {
+      const userAddress = this.getUserAddress();
+      // $FlowIgnore
+      const userCountryCode = pathOr(
+        null,
+        ['address', 'countryCode'],
+        userAddress,
+      );
+      // $FlowIgnore
+      const deliveryCountryCode = pathOr(null, ['country', 'id'], deliveryData);
+      const isDeliveryQuery = Boolean(
+        userCountryCode &&
+          deliveryCountryCode &&
+          userCountryCode === deliveryCountryCode,
+      );
       // $FlowIgnore
       const baseProductRawId = pathOr(
         null,
@@ -379,11 +407,13 @@ class Product extends Component<PropsType, StateType> {
         `/buy-now?product=${baseProductRawId}&variant=${
           productVariant.rawId
         }&quantity=${quantity}${
-          deliveryData.deliveryPackage
+          deliveryData.deliveryPackage && isDeliveryQuery
             ? `&delivery=${deliveryData.deliveryPackage.shippingId}`
             : ''
         }${
-          deliveryData.deliveryPackage && deliveryData.country
+          deliveryData.deliveryPackage &&
+          deliveryData.country &&
+          isDeliveryQuery
             ? `&country=${deliveryData.country.id}`
             : ''
         }`,
@@ -436,15 +466,7 @@ class Product extends Component<PropsType, StateType> {
       deliveryData,
     } = this.state;
     const description = extractText(shortDescription, 'EN', t.noDescription);
-    let userAddress = null;
-    if (me) {
-      const { deliveryAddressesFull } = me;
-      if (deliveryAddressesFull && !isEmpty(deliveryAddressesFull)) {
-        userAddress =
-          find(propEq('isPriority', true))(deliveryAddressesFull) ||
-          head(deliveryAddressesFull);
-      }
-    }
+    const userAddress = this.getUserAddress();
     return (
       <AppContext.Consumer>
         {({ categories, directories }) => (

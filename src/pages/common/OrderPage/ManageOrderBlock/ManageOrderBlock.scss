@@ -93,3 +93,13 @@
     }
   }
 }
+
+.infoBlockItem {
+  margin-top: 2rem;
+
+  @media (max-width: #{$lg - 1px}) {
+    & > div > div + div {
+      margin-top: 2rem;
+    }
+  }
+}

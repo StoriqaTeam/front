@@ -346,7 +346,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
                       </div>
                     )}
                 </div>
-                {restCartCount &&
+                {Boolean(restCartCount) &&
                   restCartCount !== 0 && (
                     <div styleName="restCartInfo">
                       <CartRest count={restCartCount} cartType="fiat" />

@@ -45,9 +45,6 @@ import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { CreateOrdersMutationResponseType } from 'relay/mutations/CreateOrdersMutation';
 import type { OrderStatusType } from 'types';
 
-// eslint-disable-next-line
-import type Cart_cart from '../Cart/__generated__/Cart_cart.graphql';
-
 import CheckoutHeader from './CheckoutHeader';
 import CheckoutAddress from './CheckoutContent/CheckoutAddress';
 import CheckoutProducts from './CheckoutContent/CheckoutProducts';
@@ -63,10 +60,46 @@ import './Checkout.scss';
 
 import t from './i18n';
 
+type CartType = {
+  id: string,
+  productsCost: number,
+  deliveryCost: number,
+  totalCount: number,
+  totalCost: number,
+  totalCostWithoutDiscounts: number,
+  productsCostWithoutDiscounts: number,
+  couponsDiscounts: number,
+  stores: {
+    edges: Array<{
+      node: {
+        id: string,
+        productsCost: number,
+        deliveryCost: number,
+        totalCost: number,
+        totalCount: number,
+        products: Array<{
+          id: string,
+          selected: boolean,
+          baseProduct: ?{
+            id: string,
+            isShippingAvailable: boolean,
+          },
+          quantity: number,
+        }>,
+      },
+    }>,
+  },
+};
+
 type PropsType = {
   me: any,
   // eslint-disable-next-line
-  cart: Cart_cart,
+  cart: {
+    id: string,
+    totalCount: number,
+    fiat: CartType,
+    crypto: CartType,
+  },
   router: routerShape,
   showAlert: (input: AddAlertInputType) => void,
 };
@@ -424,14 +457,12 @@ class Checkout extends Component<PropsType, StateType> {
     });
   };
 
-  checkReadyToCheckout = (): boolean => {
-    if (!this.props.cart) {
+  checkReadyToCheckout = (cart: CartType): boolean => {
+    if (!cart) {
       return false;
     }
 
-    const {
-      cart: { totalCount, stores },
-    } = this.props;
+    const { totalCount, stores } = cart;
     const { step } = this.state;
 
     // check that all products have selected delivery packages
@@ -444,7 +475,7 @@ class Checkout extends Component<PropsType, StateType> {
           return [];
         }, stores.edges),
       );
-
+      // $FlowIgnore
       const selectedProducts = filter(whereEq({ selected: true }), products);
 
       const isProductsWithoutPackageExist = find(
@@ -483,6 +514,7 @@ class Checkout extends Component<PropsType, StateType> {
     } = this.state;
     const actualCart = currencyType === 'CRYPTO' ? cart.crypto : cart.fiat;
     const stores = pipe(pathOr([], ['stores', 'edges']), map(path(['node'])))(
+      // $FlowIgnore
       actualCart,
     );
     const emptyCart = stores.length === 0;
@@ -506,7 +538,7 @@ class Checkout extends Component<PropsType, StateType> {
                   <div styleName="headerWrapper">
                     <CheckoutHeader
                       currentStep={step}
-                      isReadyToNext={this.checkReadyToCheckout()}
+                      isReadyToNext={this.checkReadyToCheckout(actualCart)}
                       onChangeStep={this.handleChangeStep}
                     />
                   </div>
@@ -607,7 +639,9 @@ class Checkout extends Component<PropsType, StateType> {
                             <CheckoutSidebar
                               step={step}
                               buttonText={step === 1 ? t.next : t.checkout}
-                              isReadyToClick={this.checkReadyToCheckout()}
+                              isReadyToClick={this.checkReadyToCheckout(
+                                actualCart,
+                              )}
                               checkoutInProcess={this.state.checkoutInProcess}
                               onCheckout={this.handleCheckout}
                               goToCheckout={this.goToCheckout}

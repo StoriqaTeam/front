@@ -15,10 +15,10 @@ import {
 import classname from 'classnames';
 
 import { Select, SpinnerCircle } from 'components/common';
-import { log, getCookie, formatPrice } from 'utils';
+import { log, getCookie, formatPrice, checkCurrencyType } from 'utils';
 import { fetchAvailableShippingForUser } from 'relay/queries';
 
-import type { SelectItemType, CountryType } from 'types';
+import type { SelectItemType, CountryType, AllCurrenciesType } from 'types';
 import type { DeliveryAddress, DeliveryDataType, PackageType } from '../types';
 
 import CheckedIcon from './img/checked.svg';
@@ -39,7 +39,7 @@ type PropsType = {
   countries: Array<CountryType>,
   onChangeDeliveryData: (deliveryData: DeliveryDataType) => void,
   deliveryData: DeliveryDataType,
-  currency: string,
+  currency: AllCurrenciesType,
 };
 
 class Delivery extends Component<PropsType, StateType> {
@@ -290,7 +290,12 @@ class Delivery extends Component<PropsType, StateType> {
                                     selected: isChecked,
                                   })}
                                 >
-                                  {`${formatPrice(pkgType.price)} ${currency}`}
+                                  {`${formatPrice(
+                                    pkgType.price,
+                                    checkCurrencyType(currency) === 'fiat'
+                                      ? 2
+                                      : undefined,
+                                  )} ${currency || ''}`}
                                 </div>
                               </div>
                             </div>
@@ -320,7 +325,11 @@ class Delivery extends Component<PropsType, StateType> {
               <div styleName="textWrapper">
                 <div styleName="pkgName">{t.price}</div>
                 <div styleName="pkgPrice">
-                  {formatPrice(deliveryPackage.price)} {currency}
+                  {formatPrice(
+                    deliveryPackage.price,
+                    checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                  )}{' '}
+                  {currency}
                 </div>
               </div>
             </div>

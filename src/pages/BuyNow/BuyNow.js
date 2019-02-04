@@ -186,21 +186,21 @@ class BuyNow extends Component<PropsType, StateType> {
     const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
     // $FlowIgnore
     const variants = pathOr([], ['variants', 'all'], baseProduct);
-    const variant = find(propEq('rawId', parseFloat(queryParams.variant)))(
+    const variant = find(propEq('rawId', parseInt(queryParams.variant, 10)))(
       variants,
     );
 
     if (
       variant &&
       !variant.preOrder &&
-      parseFloat(queryParams.quantity) > variant.quantity
+      parseInt(queryParams.quantity, 10) > variant.quantity
     ) {
       this.handleChangeCount(variant.quantity);
     }
 
-    if (queryParams.delivery) {
-      // this.handleChangeDelivery(queryParams.delivery);
-    }
+    // if (queryParams.delivery) {
+    //   this.handleChangeDelivery(queryParams.delivery);
+    // }
   }
 
   componentDidUpdate = (prevProps, prevState) => {
@@ -353,13 +353,13 @@ class BuyNow extends Component<PropsType, StateType> {
       );
       this.setState({ isLoadingCheckout: true });
       const variables = {
-        productId: parseFloat(queryParams.variant),
-        quantity: parseFloat(queryParams.quantity),
+        productId: parseInt(queryParams.variant, 10),
+        quantity: parseInt(queryParams.quantity, 10),
       };
       fetchBuyNow(
         this.props.relay.environment,
         deliveryAddress && deliveryAddress.countryCode === queryParams.country
-          ? assoc('shippingId', parseFloat(queryParams.delivery), variables)
+          ? assoc('shippingId', parseInt(queryParams.delivery, 10), variables)
           : variables,
       )
         .then(({ calculateBuyNow }) => {
@@ -482,8 +482,8 @@ class BuyNow extends Component<PropsType, StateType> {
     const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
     let input = {
       clientMutationId: '',
-      productId: parseFloat(queryParams.variant),
-      quantity: parseFloat(queryParams.quantity),
+      productId: parseInt(queryParams.variant, 10),
+      quantity: parseInt(queryParams.quantity, 10),
       addressFull: deliveryAddress,
       receiverName,
       receiverPhone: phone,
@@ -590,7 +590,7 @@ class BuyNow extends Component<PropsType, StateType> {
     const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
     const { successCouponCodeValue, deliveryPackage } = this.state;
     const variables = {
-      productId: parseFloat(queryParams.variant),
+      productId: parseInt(queryParams.variant, 10),
       quantity,
       couponCode: successCouponCodeValue || null,
       shippingId: deliveryPackage ? deliveryPackage.shippingId : null,
@@ -660,8 +660,8 @@ class BuyNow extends Component<PropsType, StateType> {
       deliveryPackage,
     } = this.state;
     const variables = {
-      productId: parseFloat(queryParams.variant),
-      quantity: parseFloat(queryParams.quantity),
+      productId: parseInt(queryParams.variant, 10),
+      quantity: parseInt(queryParams.quantity, 10),
       couponCode: couponCodeValue,
       shippingId: deliveryPackage ? deliveryPackage.shippingId : null,
     };
@@ -734,8 +734,8 @@ class BuyNow extends Component<PropsType, StateType> {
     const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
     const { successCouponCodeValue } = this.state;
     const variables = {
-      productId: parseFloat(queryParams.variant),
-      quantity: parseFloat(queryParams.quantity),
+      productId: parseInt(queryParams.variant, 10),
+      quantity: parseInt(queryParams.quantity, 10),
       couponCode: successCouponCodeValue || null,
       shippingId: pkg.shippingId,
     };
@@ -791,7 +791,7 @@ class BuyNow extends Component<PropsType, StateType> {
     const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
     if (queryParams.delivery) {
       const deliveryPackage = find(
-        propEq('shippingId', parseFloat(queryParams.delivery)),
+        propEq('shippingId', parseInt(queryParams.delivery, 10)),
       )(packages);
       this.setState({ deliveryPackage: deliveryPackage || null });
     }
@@ -820,7 +820,7 @@ class BuyNow extends Component<PropsType, StateType> {
     const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
     // $FlowIgnore
     const variants = pathOr([], ['variants', 'all'], baseProduct);
-    const variant = find(propEq('rawId', parseFloat(queryParams.variant)))(
+    const variant = find(propEq('rawId', parseInt(queryParams.variant, 10)))(
       variants,
     );
     const productName = getNameText(baseProduct.name, 'EN');
