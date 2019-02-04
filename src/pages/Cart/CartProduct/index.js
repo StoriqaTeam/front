@@ -72,7 +72,9 @@ class CartProduct extends Component<PropsType, StateType> {
         }
         if (errors) {
           log.debug(t.errors, errors);
+          return;
         }
+        this.setState({ showModal: false });
       },
       onError: error => {
         log.error(t.errorInDeleteFromCart);

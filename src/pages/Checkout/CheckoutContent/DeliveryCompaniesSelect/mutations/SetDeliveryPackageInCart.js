@@ -15,32 +15,64 @@ const mutation = graphql`
   ) {
     setDeliveryMethodInCart(input: $input) {
       id
-      productsCost
-      deliveryCost
-      totalCost
       totalCount
-      couponsDiscounts
-      stores {
-        edges {
-          node {
-            id
-            productsCost
-            deliveryCost
-            totalCost
-            totalCount
-            totalCostWithoutDiscounts
-            couponsDiscount
-            products {
+      fiat {
+        id
+        productsCost
+        deliveryCost
+        totalCount
+        totalCost
+        totalCostWithoutDiscounts
+        productsCostWithoutDiscounts
+        couponsDiscounts
+        stores {
+          edges {
+            node {
               id
-              subtotal
+              ...CartStore_store
+              productsCost
               deliveryCost
-              companyPackage {
+              totalCost
+              totalCount
+              products {
                 id
-                rawId
+                selected
+                baseProduct(visibility: "active") {
+                  id
+                  isShippingAvailable
+                }
+                quantity
               }
-              selectPackage {
+            }
+          }
+        }
+      }
+      crypto {
+        id
+        productsCost
+        deliveryCost
+        totalCount
+        totalCost
+        totalCostWithoutDiscounts
+        productsCostWithoutDiscounts
+        couponsDiscounts
+        stores {
+          edges {
+            node {
+              id
+              ...CartStore_store
+              productsCost
+              deliveryCost
+              totalCost
+              totalCount
+              products {
                 id
-                shippingId
+                selected
+                baseProduct(visibility: "active") {
+                  id
+                  isShippingAvailable
+                }
+                quantity
               }
             }
           }
