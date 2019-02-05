@@ -36,7 +36,10 @@ const menu = {
 
 const initialValue = `
   <p>
-    <span style="font-size: 14px; color: rgb(199, 199, 199);" data-mce-style="font-size: 14px; color: #c7c7c7;">
+    <span
+      style="font-size: 16px; color: rgb(80, 80, 80);"
+      data-mce-style="font-size: 16px; color: #505050;"
+    >
       Write something...
     </span>
   </p>
