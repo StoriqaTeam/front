@@ -90,11 +90,6 @@ export default createRefetchContainer(
             }
             photoMain
           }
-          customer {
-            firstName
-            lastName
-            phone
-          }
           receiverName
           receiverPhone
           addressFull {

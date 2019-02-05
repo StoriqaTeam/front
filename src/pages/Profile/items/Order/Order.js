@@ -59,11 +59,6 @@ export default createRefetchContainer(
         slug
         deliveryCompany
         storeId
-        customer {
-          firstName
-          lastName
-          phone
-        }
         product {
           baseProduct {
             rawId
