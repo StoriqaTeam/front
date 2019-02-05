@@ -5,7 +5,7 @@ import { routerShape, withRouter } from 'found';
 
 import CartRest from 'pages/common/CartRest';
 
-import type { OrderStatusType } from 'types';
+import type { OrderStatusType, PaymentIntentStatusesType } from 'types';
 
 import { Stripe } from '../Stripe';
 
@@ -41,6 +41,7 @@ type PropsType = {
     paymentIntent: {
       id: string,
       clientSecret: string,
+      status: PaymentIntentStatusesType,
     },
   },
   orderSlug?: number,
@@ -89,6 +90,17 @@ class PaymentInfoFiat extends PureComponent<PropsType, StateType> {
           <div styleName="wrap">
             <div styleName="title">{t.error}</div>
             <div styleName="description">{t.yourPaymentWasFailed}</div>
+          </div>
+        </div>
+      );
+    }
+
+    if (paymentIntent && paymentIntent.status === 'SUCCEEDED') {
+      return (
+        <div styleName="container" data-test="PAYMENT_INFO_ALREADY_PAID">
+          <div styleName="wrap">
+            <div styleName="title">{t.success}</div>
+            <div styleName="description">{t.alreadyPaid}</div>
           </div>
         </div>
       );

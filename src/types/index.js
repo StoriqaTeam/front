@@ -14,6 +14,7 @@ export type { IconSizeType } from './IconSizeType';
 export type { LanguageType } from './LanguageType';
 export type { MobileCategoryType } from './MobileCategoryType';
 export type { OrderStatusesType } from './OrderStatusesType';
+export type { PaymentIntentStatusesType } from './PaymentIntentStatusesType';
 export type { OrderBillingStatusesType } from './OrderBillingStatusesType';
 export type { TransformedCategoryType } from './TransformedCategoryType';
 export type { TranslationType } from './TranslationType';
