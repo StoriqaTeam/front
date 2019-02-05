@@ -5,6 +5,7 @@ import { Environment } from 'relay-runtime';
 
 import { Button } from 'components/common/Button';
 import { SetOrderStatusCompleteMutation } from 'relay/mutations';
+import { Confirmation } from 'components/Confirmation';
 
 import type {
   MutationParamsType as SetOrderStatusCompleteMutationParamsType,
@@ -12,6 +13,8 @@ import type {
 } from 'relay/mutations/SetOrderStatusCompleteMutation';
 
 import './ManageOrderBlockForUser.scss';
+
+import t from './i18n';
 
 type PropsType = {
   environment: Environment,
@@ -22,11 +25,13 @@ type PropsType = {
 
 type StateType = {
   isCompleteInProgress: boolean,
+  showModal: boolean,
 };
 
 class ManageOrderBlock extends Component<PropsType, StateType> {
   state: StateType = {
     isCompleteInProgress: false,
+    showModal: false,
   };
 
   completeOrder = () => {
@@ -59,10 +64,26 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
     SetOrderStatusCompleteMutation.commit(params);
   };
 
+  handleCloseModal = () => {
+    this.setState({
+      showModal: false,
+    });
+  };
+
   render() {
-    const { isCompleteInProgress } = this.state;
+    const { isCompleteInProgress, showModal } = this.state;
     return (
       <div styleName="container">
+        <Confirmation
+          showModal={showModal}
+          onClose={this.handleCloseModal}
+          title={t.title}
+          description=""
+          onCancel={this.handleCloseModal}
+          onConfirm={this.completeOrder}
+          confirmText={t.confirmText}
+          cancelText={t.cancelText}
+        />
         {this.props.isAbleToSend && (
           <div styleName="completeButtonWrapper">
             <Button
@@ -71,7 +92,7 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
               isLoading={isCompleteInProgress}
               onClick={this.completeOrder}
             >
-              Complete
+              {t.complete}
             </Button>
           </div>
         )}
