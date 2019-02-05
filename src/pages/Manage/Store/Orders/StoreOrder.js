@@ -1,8 +1,8 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { createRefetchContainer, graphql } from 'react-relay';
-import { matchShape, withRouter } from 'found';
+import { graphql, createFragmentContainer } from 'react-relay';
+import { withRouter } from 'found';
 import { pathOr } from 'ramda';
 
 import { Page } from 'components/App';
@@ -13,25 +13,9 @@ import type { StoreOrder_me as MyStoreType } from './__generated__/StoreOrder_me
 
 type PropsType = {
   me: MyStoreType,
-  relay: {
-    refetch: Function,
-  },
-  match: matchShape,
 };
 
 class StoreOrder extends PureComponent<PropsType> {
-  componentDidMount() {
-    const orderId = pathOr(0, ['params', 'orderId'], this.props.match);
-    this.props.relay.refetch(
-      {
-        slug: parseInt(orderId, 10),
-      },
-      null,
-      () => {},
-      { force: true },
-    );
-  }
-
   render() {
     // $FlowIgnoreMe
     const order = pathOr(null, ['myStore', 'order'], this.props.me);
@@ -43,7 +27,7 @@ class StoreOrder extends PureComponent<PropsType> {
   }
 }
 
-export default createRefetchContainer(
+export default createFragmentContainer(
   Page(
     withRouter(
       ManageStore({
@@ -139,13 +123,6 @@ export default createRefetchContainer(
             sellerCurrency
           }
         }
-      }
-    }
-  `,
-  graphql`
-    query StoreOrder_Query($slug: Int!) {
-      me {
-        ...StoreOrder_me @arguments(slug: $slug)
       }
     }
   `,
