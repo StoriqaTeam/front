@@ -121,9 +121,10 @@ class Profile extends PureComponent<PropsType, StateType> {
 export default createFragmentContainer(
   Page(Profile),
   graphql`
-    fragment Profile_me on User {
+    fragment Profile_me on User
+      @argumentDefinitions(slug: { type: "Int!", defaultValue: 0 }) {
       ...Orders_me
-      ...Order_me
+      ...Order_me @arguments(slug: $slug)
       ...PersonalData_me
       ...ShippingAddresses_me
       id

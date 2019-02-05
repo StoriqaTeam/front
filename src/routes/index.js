@@ -603,12 +603,15 @@ const routes = (
               path="/orders/:orderId"
               Component={StoreOrder}
               query={graphql`
-                query routes_StoreOrder_Query {
+                query routes_StoreOrder_Query($slug: Int!) {
                   me {
-                    ...StoreOrder_me
+                    ...StoreOrder_me @arguments(slug: $slug)
                   }
                 }
               `}
+              prepareVariables={(_, { params }) => ({
+                slug: parseInt(params.orderId, 10) || 0,
+              })}
             />
             <Route
               path="/orders/:orderId/invoice"
@@ -799,9 +802,9 @@ const routes = (
           path="/:item/:orderId?"
           Component={Profile}
           query={graphql`
-            query routes_ProfileItem_Query {
+            query routes_ProfileItem_Query($slug: Int!) {
               me {
-                ...Profile_me
+                ...Profile_me @arguments(slug: $slug)
                 ...UserData_me
               }
               cart {
@@ -832,7 +835,9 @@ const routes = (
               return undefined;
             }
           }}
-          prepareVariables={() => {}}
+          prepareVariables={(_, { params }) => ({
+            slug: parseInt(params.orderId, 10) || 0,
+          })}
         />
       </Route>
       <Route
