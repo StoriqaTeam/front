@@ -22,7 +22,6 @@ import { Button } from 'components/common/Button';
 import { Icon } from 'components/Icon';
 import { PasswordHints } from 'components/PasswordHints';
 import { withShowAlert } from 'components/Alerts/AlertContext';
-import { Modal } from 'components/Modal';
 import { Confirmation } from 'components/Confirmation';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
@@ -336,19 +335,15 @@ class Security extends Component<PropsType, StateType> {
     } = this.state;
     return (
       <div styleName="security">
-        <Modal
+        <Confirmation
           showModal={showModal}
           onClose={this.handleCloseModal}
-          render={() => (
-            <Confirmation
-              title={t.resetPassword}
-              description={t.confirmationDescription}
-              onCancel={this.handleCloseModal}
-              onConfirm={this.handleSave}
-              confirmText={t.confirmText}
-              cancelText={t.cancelText}
-            />
-          )}
+          title={t.resetPassword}
+          description={t.confirmationDescription}
+          onCancel={this.handleCloseModal}
+          onConfirm={this.handleSave}
+          confirmText={t.confirmText}
+          cancelText={t.cancelText}
         />
         <div styleName="subtitle">
           <strong>{t.securitySettings}</strong>

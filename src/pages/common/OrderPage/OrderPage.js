@@ -533,7 +533,10 @@ class OrderPage extends Component<PropsType, StateType> {
                   <div styleName="manageBlock">
                     <ManageOrderBlockForUser
                       environment={environment}
-                      isAbleToSend={orderFromProps.state === 'DELIVERED'}
+                      isAbleToSend={
+                        orderFromProps.state === 'DELIVERED' ||
+                        orderFromProps.state === 'SENT'
+                      }
                       orderSlug={parseInt(order.number, 10)}
                       onOrderComplete={this.handleOrderComplete}
                     />
