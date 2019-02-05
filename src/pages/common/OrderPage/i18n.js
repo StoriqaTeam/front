@@ -35,6 +35,11 @@ type TranslationDicType = {|
   labelQuantity: string,
   labelTotalAmount: string,
   labelCouponDiscount: string,
+  //
+  title: string,
+  confirmText: string,
+  cancelText: string,
+  complete: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -70,6 +75,11 @@ const translations: TranslationsBundleType = {
     labelQuantity: 'Quantity',
     labelTotalAmount: 'Total amount',
     labelCouponDiscount: 'Coupon discount',
+    //
+    title: 'Are you sure to complete order?',
+    confirmText: 'Complete',
+    cancelText: 'Cancel',
+    complete: 'Complete',
   },
 };
 
