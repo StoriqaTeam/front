@@ -1,7 +1,7 @@
 // @flow strict
 
 import React from 'react';
-import { product, join, map, prop, isEmpty } from 'ramda';
+import { join, map, prop, isEmpty } from 'ramda';
 
 import type { TranslationType } from 'types';
 
@@ -43,13 +43,10 @@ const OrderInvoiceTableRow = ({
         {extractText(name, 'EN')} - {description}
       </div>
       <div styleName="tableRowItem"> {quantity}</div>
+      <div styleName="tableRowItem">-</div>
       <div styleName="tableRowItem">
         {' '}
         {totalAmount} - {currency}
-      </div>
-      <div styleName="tableRowItem">
-        {' '}
-        {product([quantity, totalAmount])} - {currency}
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { Link } from 'found';
 import { Icon } from 'components/Icon';
-import { isNil, product } from 'ramda';
+import { isNil } from 'ramda';
 
 import type { OrderInvoice_me as OrderInvoiceType } from './__generated__/OrderInvoice_me.graphql';
 
@@ -39,9 +39,9 @@ class OrderInvoice extends PureComponent<PropsType> {
     const phone = !isNil(order) ? order.receiverPhone : '';
     const currency = !isNil(order) ? order.currency : '';
     const invoiceAddress = { ...address, email, phone };
-    const quantity = !isNil(order) ? order.quantity : 0;
+    // const quantity = !isNil(order) ? order.quantity : 0;
     const totalAmount = !isNil(order) ? order.totalAmount : 0;
-    const total = product([quantity, totalAmount]);
+    // const total = product([quantity, totalAmount]);
     return (
       <section styleName="container">
         <header styleName="header">
@@ -62,7 +62,11 @@ class OrderInvoice extends PureComponent<PropsType> {
             <OrderInvoiceTable>
               {/* $FlowIgnoreMe */}
               <OrderInvoiceTableRow {...clonedOrder} />
-              <InvoiceTotal total={total} currency={currency} shipping="N/A" />
+              <InvoiceTotal
+                total={totalAmount}
+                currency={currency}
+                shipping="N/A"
+              />
             </OrderInvoiceTable>
           </div>
         </div>
