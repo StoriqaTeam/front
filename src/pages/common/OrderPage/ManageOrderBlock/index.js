@@ -383,20 +383,21 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
                   </Col>
                 </Row>
               </div>
-              {orderBilling && (
-                <div styleName="infoBlockItem">
-                  <Row>
-                    <Col size={12} lg={5}>
-                      <TextWithLabel
-                        label={t.bankTransactionFee}
-                        text={`${formatPrice(orderBilling.stripeFee)} ${
-                          orderBilling.sellerCurrency
-                        }`}
-                      />
-                    </Col>
-                  </Row>
-                </div>
-              )}
+              {orderBilling &&
+                orderBilling.stripeFee && (
+                  <div styleName="infoBlockItem">
+                    <Row>
+                      <Col size={12} lg={5}>
+                        <TextWithLabel
+                          label={t.bankTransactionFee}
+                          text={`${formatPrice(orderBilling.stripeFee)} ${
+                            orderBilling.sellerCurrency
+                          }`}
+                        />
+                      </Col>
+                    </Row>
+                  </div>
+                )}
             </div>
             {orderFee.status === 'NOT_PAID' && (
               <div styleName="cancelButtonWrapper">
