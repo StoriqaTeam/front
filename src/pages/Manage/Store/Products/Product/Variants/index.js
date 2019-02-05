@@ -6,7 +6,6 @@ import { Environment } from 'relay-runtime';
 
 import { log, fromRelayError } from 'utils';
 import { DeactivateProductMutation } from 'relay/mutations';
-import { Modal } from 'components/Modal';
 import { Confirmation } from 'components/Confirmation';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
@@ -131,19 +130,15 @@ class Variants extends Component<PropsType, StateType> {
             variants,
           )}
         </div>
-        <Modal
+        <Confirmation
           showModal={showModal}
           onClose={this.handleCloseModal}
-          render={() => (
-            <Confirmation
-              title={t.deleteVariant}
-              description={t.confirmationDescription}
-              onCancel={this.handleCloseModal}
-              onConfirm={this.handleDelete}
-              confirmText={t.confirmText}
-              cancelText={t.cancelText}
-            />
-          )}
+          title={t.deleteVariant}
+          description={t.confirmationDescription}
+          onCancel={this.handleCloseModal}
+          onConfirm={this.handleDelete}
+          confirmText={t.confirmText}
+          cancelText={t.cancelText}
         />
       </div>
     );

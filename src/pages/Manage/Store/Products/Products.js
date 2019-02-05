@@ -11,7 +11,6 @@ import { ManageStore } from 'pages/Manage/Store';
 import { getNameText, log, fromRelayError } from 'utils';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Button } from 'components/common/Button';
-import { Modal } from 'components/Modal';
 import { Confirmation } from 'components/Confirmation';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
@@ -166,19 +165,15 @@ class Products extends PureComponent<PropsType, StateType> {
       <div styleName="container">
         <ProductsHeader onAdd={this.addProduct} />
         <ProductsTableHeader />
-        <Modal
+        <Confirmation
           showModal={showModal}
           onClose={this.handleCloseModal}
-          render={() => (
-            <Confirmation
-              title={t.deleteYourProduct}
-              description={t.confirmationDescription}
-              onCancel={this.handleCloseModal}
-              onConfirm={this.handleDelete}
-              confirmText={t.confirmText}
-              cancelText={t.cancelText}
-            />
-          )}
+          title={t.deleteYourProduct}
+          description={t.confirmationDescription}
+          onCancel={this.handleCloseModal}
+          onConfirm={this.handleDelete}
+          confirmText={t.confirmText}
+          cancelText={t.cancelText}
         />
         {isEmpty(products) ? (
           <div styleName="emptyProductsBlock">{t.noProducts}</div>
