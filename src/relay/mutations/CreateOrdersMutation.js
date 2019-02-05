@@ -44,6 +44,7 @@ const mutation = graphql`
         paymentIntent {
           id
           clientSecret
+          status
         }
       }
     }
