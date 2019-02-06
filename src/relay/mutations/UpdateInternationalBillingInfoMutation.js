@@ -14,6 +14,7 @@ const mutation = graphql`
   ) {
     updateInternationalBillingInfo(input: $input) {
       id
+      rawId
       storeId
       account
       currency
