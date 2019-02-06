@@ -12,6 +12,7 @@ const mutation = graphql`
   mutation CreateRussiaBillingInfoMutation($input: NewRussiaBillingInfoInput!) {
     createRussiaBillingInfo(input: $input) {
       id
+      rawId
       storeId
       bankName
       branchName
