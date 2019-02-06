@@ -6,6 +6,7 @@ import uuidv4 from 'uuid/v4';
 
 import { Button } from 'components/common/Button';
 import { SetOrderStatusCompleteMutation } from 'relay/mutations';
+import { Confirmation } from 'components/Confirmation';
 
 import type {
   MutationParamsType as SetOrderStatusCompleteMutationParamsType,
@@ -13,6 +14,8 @@ import type {
 } from 'relay/mutations/SetOrderStatusCompleteMutation';
 
 import './ManageOrderBlockForUser.scss';
+
+import t from './i18n';
 
 type PropsType = {
   environment: Environment,
@@ -23,21 +26,20 @@ type PropsType = {
 
 type StateType = {
   isCompleteInProgress: boolean,
+  showModal: boolean,
 };
 
 class ManageOrderBlock extends Component<PropsType, StateType> {
   state: StateType = {
     isCompleteInProgress: false,
+    showModal: false,
   };
 
   completeOrder = () => {
-    // eslint-disable-next-line
-    const isConfirmed = confirm('Are you sure to complete order?');
-    if (!isConfirmed) {
-      return;
-    }
-
-    this.setState({ isCompleteInProgress: true });
+    this.setState({
+      isCompleteInProgress: true,
+      showModal: false,
+    });
     const params: SetOrderStatusCompleteMutationParamsType = {
       environment: this.props.environment,
       input: {
@@ -60,19 +62,37 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
     SetOrderStatusCompleteMutation.commit(params);
   };
 
+  handleCloseModal = () => {
+    this.setState({
+      showModal: false,
+    });
+  };
+
   render() {
-    const { isCompleteInProgress } = this.state;
+    const { isCompleteInProgress, showModal } = this.state;
     return (
       <div styleName="container">
+        <Confirmation
+          showModal={showModal}
+          onClose={this.handleCloseModal}
+          title={t.title}
+          description=""
+          onCancel={this.handleCloseModal}
+          onConfirm={this.completeOrder}
+          confirmText={t.confirmText}
+          cancelText={t.cancelText}
+        />
         {this.props.isAbleToSend && (
           <div styleName="completeButtonWrapper">
             <Button
               big
               fullWidth
               isLoading={isCompleteInProgress}
-              onClick={this.completeOrder}
+              onClick={() => {
+                this.setState({ showModal: true });
+              }}
             >
-              Complete
+              {t.complete}
             </Button>
           </div>
         )}

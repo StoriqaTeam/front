@@ -11,7 +11,6 @@ import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Checkbox } from 'components/Checkbox';
 import { Icon } from 'components/Icon';
 import { Container, Col, Row } from 'layout';
-import { Modal } from 'components/Modal';
 import { Confirmation } from 'components/Confirmation';
 import {
   SetQuantityInCartMutation,
@@ -214,19 +213,15 @@ class CartProduct extends Component<PropsType, StateType> {
     return (
       <div styleName="container">
         <Container correct>
-          <Modal
+          <Confirmation
             showModal={showModal}
             onClose={this.handleCloseModal}
-            render={() => (
-              <Confirmation
-                title={t.deleteYourProduct}
-                description={t.confirmationDescription}
-                onCancel={this.handleCloseModal}
-                onConfirm={this.handleDelete}
-                confirmText={t.confirmText}
-                cancelText={t.cancelText}
-              />
-            )}
+            title={t.deleteYourProduct}
+            description={t.confirmationDescription}
+            onCancel={this.handleCloseModal}
+            onConfirm={this.handleDelete}
+            confirmText={t.confirmText}
+            cancelText={t.cancelText}
           />
           <Row>
             <Col size={12} sm={3}>

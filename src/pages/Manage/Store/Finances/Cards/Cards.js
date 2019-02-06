@@ -7,7 +7,7 @@ import { createFragmentContainer, graphql } from 'react-relay';
 // $FlowIgnoreMe
 import uuidv4 from 'uuid/v4';
 
-import { Table, Checkbox, Button } from 'components/common';
+import { Table, Button } from 'components/common';
 import { Icon } from 'components/Icon';
 
 import {
@@ -30,7 +30,6 @@ import './Cards.scss';
 import t from './i18n';
 
 type StateType = {
-  checked: ?number | ?string,
   isNewCardForm: boolean,
   isLoading: boolean,
 };
@@ -59,19 +58,18 @@ type PropsType = {
 };
 
 class Cards extends Component<PropsType, StateType> {
-  static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
-    const { stripeCustomer } = nextProps.me;
-    const isCards = Boolean(stripeCustomer && !isEmpty(stripeCustomer.cards));
-    let checked = null;
-    if (isCards) {
-      // $FlowIgnore
-      checked = pathOr(null, ['cards', 0, 'id'], stripeCustomer);
-      if (checked !== prevState.checked) {
-        return { checked };
-      }
-    }
-    return null;
-  }
+  // static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
+  //   const { stripeCustomer } = nextProps.me;
+  //   const isCards = Boolean(stripeCustomer && !isEmpty(stripeCustomer.cards));
+  //   let checked = null;
+  //   if (isCards) {
+  //     checked = pathOr(null, ['cards', 0, 'id'], stripeCustomer);
+  //     if (checked !== prevState.checked) {
+  //       return { checked };
+  //     }
+  //   }
+  //   return null;
+  // }
 
   constructor(props: PropsType) {
     super(props);
@@ -79,25 +77,24 @@ class Cards extends Component<PropsType, StateType> {
     const { stripeCustomer } = props.me;
 
     const isCards = Boolean(stripeCustomer && !isEmpty(stripeCustomer.cards));
-    let checked = null;
+    // let checked = null;
 
-    if (isCards) {
-      // $FlowIgnore
-      checked = pathOr(null, ['cards', 0, 'id'], stripeCustomer);
-    }
+    // if (isCards) {
+    //   checked = pathOr(null, ['cards', 0, 'id'], stripeCustomer);
+    // }
 
     this.state = {
-      checked,
+      // checked,
       isNewCardForm: !isCards,
       isLoading: false,
     };
   }
 
-  handleChange = (id: string) => {
-    this.setState({
-      checked: id,
-    });
-  };
+  // handleChange = (id: string) => {
+  //   this.setState({
+  //     checked: id,
+  //   });
+  // };
 
   handleOpenNewCardForm = () => {
     this.setState({
@@ -189,7 +186,7 @@ class Cards extends Component<PropsType, StateType> {
 
   render() {
     const { firstName, lastName, email, stripeCustomer } = this.props.me;
-    const { checked, isNewCardForm, isLoading } = this.state;
+    const { isNewCardForm, isLoading } = this.state;
     const isCards = Boolean(stripeCustomer && !isEmpty(stripeCustomer.cards));
     return (
       <div styleName="container">
@@ -199,10 +196,10 @@ class Cards extends Component<PropsType, StateType> {
               <Table
                 minWidth={640}
                 columns={[
-                  {
-                    id: 1,
-                    title: '',
-                  },
+                  // {
+                  //   id: 1,
+                  //   title: '',
+                  // },
                   {
                     id: 2,
                     title: t.tableColumns.cardTypeNumber,
@@ -224,20 +221,20 @@ class Cards extends Component<PropsType, StateType> {
                   item => ({
                     id: item.id,
                     item: [
-                      {
-                        id: 1,
-                        content: (
-                          <div styleName="radio">
-                            <Checkbox
-                              id={item.id}
-                              isRadio
-                              isChecked={checked === item.id}
-                              onChange={this.handleChange}
-                            />
-                          </div>
-                        ),
-                        byContent: true,
-                      },
+                      // {
+                      //   id: 1,
+                      //   content: (
+                      //     <div styleName="radio">
+                      //       <Checkbox
+                      //         id={item.id}
+                      //         isRadio
+                      //         isChecked={checked === item.id}
+                      //         onChange={this.handleChange}
+                      //       />
+                      //     </div>
+                      //   ),
+                      //   byContent: true,
+                      // },
                       {
                         id: 2,
                         content: `•••• •••• •••• ${item.last4}`,

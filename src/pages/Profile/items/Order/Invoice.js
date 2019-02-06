@@ -61,6 +61,7 @@ export default createFragmentContainer(
           paymentIntent {
             id
             clientSecret
+            status
           }
         }
       }

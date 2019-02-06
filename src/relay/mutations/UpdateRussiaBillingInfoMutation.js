@@ -14,6 +14,7 @@ const mutation = graphql`
   ) {
     updateRussiaBillingInfo(input: $input) {
       id
+      rawId
       storeId
       bankName
       branchName

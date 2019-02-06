@@ -205,8 +205,7 @@ class PaymentAccount extends Component<PropsType, StateType> {
     };
 
     if (russianBillingInfo != null) {
-      // $FlowIgnore
-      input = assoc('id', russianForm.id, input);
+      input = assoc('id', russianBillingInfo.rawId, input);
     } else {
       input = assoc('storeId', storeId, input);
     }
@@ -307,8 +306,7 @@ class PaymentAccount extends Component<PropsType, StateType> {
     };
 
     if (internationalBillingInfo != null) {
-      // $FlowIgnore
-      input = assoc('id', internationalForm.id, input);
+      input = assoc('id', internationalBillingInfo.rawId, input);
     } else {
       input = assoc('storeId', storeId, input);
     }

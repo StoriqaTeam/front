@@ -282,19 +282,15 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
             </div>
           </div>
         </Modal>
-        <Modal
+        <Confirmation
           showModal={isCancelOrderModalShown}
           onClose={this.handleCancelOrderModalClose}
-          render={() => (
-            <Confirmation
-              title={t.cancelOrderTitle}
-              description={t.cancelOrderDescription}
-              onCancel={this.handleCancelOrderModalClose}
-              onConfirm={this.cancelOrder}
-              confirmText={t.cancelOrderConfirmText}
-              cancelText={t.cancelOrderCancelText}
-            />
-          )}
+          title={t.cancelOrderTitle}
+          description={t.cancelOrderDescription}
+          onCancel={this.handleCancelOrderModalClose}
+          onConfirm={this.cancelOrder}
+          confirmText={t.cancelOrderConfirmText}
+          cancelText={t.cancelOrderCancelText}
         />
         {(isAbleToSend || isAbleToConfirm) && (
           <Fragment>
@@ -348,19 +344,15 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
               alone: !isAbleToSend && !isAbleToConfirm,
             })}
           >
-            <Modal
+            <Confirmation
               showModal={isChargeFeeModalShown}
               onClose={this.handleChargeFeeModalClose}
-              render={() => (
-                <Confirmation
-                  title={t.areYouSureToPayChargeFee}
-                  description={t.pleaseCheckCard}
-                  onCancel={this.handleChargeFeeModalClose}
-                  onConfirm={this.chargeFee}
-                  confirmText={t.payFee}
-                  cancelText={t.cancel}
-                />
-              )}
+              title={t.areYouSureToPayChargeFee}
+              description={t.pleaseCheckCard}
+              onCancel={this.handleChargeFeeModalClose}
+              onConfirm={this.chargeFee}
+              confirmText={t.payFee}
+              cancelText={t.cancel}
             />
             <div styleName="title">
               <strong>{t.chargeFee}</strong>
