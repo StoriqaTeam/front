@@ -53,10 +53,13 @@ const commit = (params: CreateRussiaBillingInfoMutationType) =>
       const internationalBillingInfo = myStore.getLinkedRecord(
         'internationalBillingInfo',
       );
-      const internationalBillingInfoId = internationalBillingInfo.getValue(
-        'id',
-      );
-      relayStore.delete(internationalBillingInfoId);
+
+      if (internationalBillingInfo) {
+        const internationalBillingInfoId = internationalBillingInfo.getValue(
+          'id',
+        );
+        relayStore.delete(internationalBillingInfoId);
+      }
       myStore.setLinkedRecord(createRussiaBillingInfo, 'russiaBillingInfo');
     },
   });

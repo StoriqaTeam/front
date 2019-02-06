@@ -54,8 +54,10 @@ const commit = (params: CreateInternationalBillingInfoMutationType) =>
       const me = relayStore.getRoot().getLinkedRecord('me');
       const myStore = me.getLinkedRecord('myStore');
       const russiaBillingInfo = myStore.getLinkedRecord('russiaBillingInfo');
-      const russiaBillingInfoId = russiaBillingInfo.getValue('id');
-      relayStore.delete(russiaBillingInfoId);
+      if (russiaBillingInfo) {
+        const russiaBillingInfoId = russiaBillingInfo.getValue('id');
+        relayStore.delete(russiaBillingInfoId);
+      }
       myStore.setLinkedRecord(
         createInternationalBillingInfo,
         'internationalBillingInfo',
