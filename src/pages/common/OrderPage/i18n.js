@@ -46,7 +46,7 @@ type TranslationsBundleType = Translation<TranslationDicType>;
 const translations: TranslationsBundleType = {
   en: {
     paid: 'Paid',
-    notPaid: 'Not Paid',
+    notPaid: 'Not paid',
     orderWasSuccessfullySent: 'Order was successfully sent.',
     orderWasSuccessfullyConfirm: 'Order was successfully confirm.',
     somethingIsGoingWrong: 'Something is going wrong :(',

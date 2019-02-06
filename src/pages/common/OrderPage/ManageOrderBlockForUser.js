@@ -35,13 +35,10 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
   };
 
   completeOrder = () => {
-    // eslint-disable-next-line
-    const isConfirmed = confirm('Are you sure to complete order?');
-    if (!isConfirmed) {
-      return;
-    }
-
-    this.setState({ isCompleteInProgress: true });
+    this.setState({
+      isCompleteInProgress: true,
+      showModal: false,
+    });
     const params: SetOrderStatusCompleteMutationParamsType = {
       environment: this.props.environment,
       input: {
@@ -90,7 +87,9 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
               big
               fullWidth
               isLoading={isCompleteInProgress}
-              onClick={this.completeOrder}
+              onClick={() => {
+                this.setState({ showModal: true });
+              }}
             >
               {t.complete}
             </Button>
