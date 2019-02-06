@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter, routerShape } from 'found';
 import { pathOr } from 'ramda';
+import uuidv4 from 'uuid/v4';
 
 import Logo from 'components/Icon/svg/logo.svg';
 import { VerifyEmailMutation } from 'relay/mutations';
@@ -44,7 +45,7 @@ class VerifyEmail extends Component<PropsType, StateType> {
     const params: VerifyEmailMutationParamsType = {
       variables: {
         input: {
-          clientMutationId: '',
+          clientMutationId: uuidv4(),
           token: this.props.params.token,
         },
       },

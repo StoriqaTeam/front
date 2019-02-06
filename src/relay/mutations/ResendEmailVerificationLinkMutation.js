@@ -2,6 +2,7 @@
 
 import { graphql, commitMutation } from 'react-relay';
 import { Environment } from 'relay-runtime';
+import uuidv4 from 'uuid/v4';
 
 const mutation = graphql`
   mutation ResendEmailVerificationLinkMutation($input: VerifyEmailResend!) {
@@ -26,7 +27,7 @@ const commit = (params: ResendEmailVerificationLinkParams) =>
     mutation,
     variables: {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         email: params.input.email,
       },
     },

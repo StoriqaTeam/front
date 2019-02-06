@@ -17,6 +17,7 @@ import {
 import { createFragmentContainer, graphql } from 'react-relay';
 import copy from 'copy-to-clipboard';
 import { validate } from '@storiqa/shared';
+import uuidv4 from 'uuid/v4';
 
 import { Input, Button, Select } from 'components/common';
 import { Icon } from 'components/Icon';
@@ -131,7 +132,7 @@ class PersonalData extends Component<PropsType, StateType> {
 
     const params: MutationParamsType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         id: propsData.id,
         phone: phone || null,
         firstName: firstName || null,

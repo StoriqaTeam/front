@@ -19,6 +19,7 @@ import {
 import { Environment } from 'relay-runtime';
 import smoothscroll from 'libs/smoothscroll';
 import MediaQuery from 'libs/react-responsive';
+import uuidv4 from 'uuid/v4';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { AppContext, Page } from 'components/App';
@@ -244,7 +245,7 @@ class Product extends Component<PropsType, StateType> {
 
       AddInCartMutation.commit({
         input: {
-          clientMutationId: '',
+          clientMutationId: uuidv4(),
           productId: id,
           value: cartQuantity,
           shippingId,

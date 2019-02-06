@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 import { map, isEmpty, pathOr } from 'ramda';
 import { Environment } from 'relay-runtime';
 import { createFragmentContainer, graphql } from 'react-relay';
+// $FlowIgnoreMe
+import uuidv4 from 'uuid/v4';
 
 import { Table, Checkbox, Button } from 'components/common';
 import { Icon } from 'components/Icon';
@@ -115,7 +117,7 @@ class Cards extends Component<PropsType, StateType> {
     this.setState({ isLoading: true });
     const params: CreateCustomerWithSourceMutationType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         cardToken: token.id,
       },
       environment: this.props.environment,

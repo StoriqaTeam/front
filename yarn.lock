@@ -9372,7 +9372,6 @@ react-static-container@^1.0.2:
 react-stripe-elements@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/react-stripe-elements/-/react-stripe-elements-2.0.1.tgz#197db4762c57bf73a07d852564ebdbac52954094"
-  integrity sha512-P70Yd55FZGgOChvgSyegPOisfc/5kWVucYvb9je9RhTMm44fY5Q0yQz9yL0kLcYfCPkJWVmXl6Ex7FiMEuAdtg==
   dependencies:
     prop-types "^15.5.10"
 
@@ -10746,7 +10745,6 @@ strip-json-comments@~2.0.1:
 stripe@^6.20.0:
   version "6.20.0"
   resolved "https://registry.yarnpkg.com/stripe/-/stripe-6.20.0.tgz#b862165da39507194962e8b91131fbf537fd81c1"
-  integrity sha512-a/F/hyuQpUKuiY1zyK1PcLiWBsEUR8WbsAJ7UP1xHTPyWrRZV0zWGAjhL1p0SKXPfuC5EMYNKUplmod7pBBsyg==
   dependencies:
     lodash.isplainobject "^4.0.6"
     qs "~6.5.1"
@@ -11379,13 +11377,13 @@ uuid@3.0.0:
   version "3.0.0"
   resolved "http://registry.npmjs.org/uuid/-/uuid-3.0.0.tgz#6728fc0459c450d796a99c31837569bdf672d728"
 
+uuid@3.3.2, uuid@^3.0.0, uuid@^3.1.0, uuid@^3.2.1, uuid@^3.3.2:
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
+
 uuid@^2.0.2:
   version "2.0.3"
   resolved "http://registry.npmjs.org/uuid/-/uuid-2.0.3.tgz#67e2e863797215530dff318e5bf9dcebfd47b21a"
-
-uuid@^3.0.0, uuid@^3.1.0, uuid@^3.2.1, uuid@^3.3.2:
-  version "3.3.2"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
 
 v8-compile-cache@^1.1.2:
   version "1.1.2"

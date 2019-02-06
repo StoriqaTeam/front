@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { createFragmentContainer, graphql, Relay } from 'react-relay';
 import { filter, whereEq, toUpper, isEmpty, pathOr } from 'ramda';
 import { Link } from 'found';
+import uuidv4 from 'uuid/v4';
 
 import { Input, Button } from 'components/common';
 import { Rating } from 'components/common/Rating';
@@ -75,7 +76,7 @@ class CartStore extends Component<PropsType, StateType> {
     const storeId = pathOr(null, ['store', 'rawId'], this.props);
     const params: SetCouponInCartMutationType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         couponCode: this.state.couponCodeValue,
         storeId,
       },

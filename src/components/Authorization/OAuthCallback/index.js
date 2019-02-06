@@ -13,6 +13,8 @@ import {
   isNil,
 } from 'ramda';
 import { routerShape } from 'found';
+// $FlowIgnoreMe
+import uuidv4 from 'uuid/v4';
 
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import {
@@ -71,7 +73,7 @@ class OAuthCallback extends PureComponent<PropsType> {
           input: {
             provider: this.props.provider,
             token: accessToken,
-            clientMutationId: '',
+            clientMutationId: uuidv4(),
             additionalData: getAdditionalData(),
           },
         },

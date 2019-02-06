@@ -6,6 +6,7 @@ import { routerShape, withRouter, matchShape } from 'found';
 import { pathOr, isEmpty, head, filter, prepend, map } from 'ramda';
 import { Environment } from 'relay-runtime';
 import { createFragmentContainer, graphql } from 'react-relay';
+import uuidv4 from 'uuid/v4';
 
 import { AppContext, Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
@@ -158,7 +159,7 @@ class NewProduct extends Component<PropsType, StateType> {
       environment,
       variables: {
         input: {
-          clientMutationId: '',
+          clientMutationId: uuidv4(),
           name: [{ lang: 'EN', text: name }],
           storeId: parseInt(storeRawId, 10),
           shortDescription: [{ lang: 'EN', text: shortDescription }],
@@ -176,7 +177,7 @@ class NewProduct extends Component<PropsType, StateType> {
           selectedAttributes: map(item => item.rawId, customAttributes),
           variants: [
             {
-              clientMutationId: '',
+              clientMutationId: uuidv4(),
               product: {
                 price: form.price,
                 vendorCode: form.vendorCode,
@@ -294,7 +295,7 @@ class NewProduct extends Component<PropsType, StateType> {
     } = shippingData;
     const params: UpsertShippingMutationType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         local: withoutLocal ? [] : local,
         international: withoutInter ? [] : international,
         pickup: withoutLocal ? { pickup: false, price: 0 } : pickup,

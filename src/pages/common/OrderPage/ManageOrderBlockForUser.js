@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import { Environment } from 'relay-runtime';
+import uuidv4 from 'uuid/v4';
 
 import { Button } from 'components/common/Button';
 import { SetOrderStatusCompleteMutation } from 'relay/mutations';
@@ -40,7 +41,7 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
     const params: SetOrderStatusCompleteMutationParamsType = {
       environment: this.props.environment,
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         orderSlug: this.props.orderSlug,
         committerRole: 'CUSTOMER',
       },

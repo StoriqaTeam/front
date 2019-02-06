@@ -19,6 +19,7 @@ import {
 import { routerShape } from 'found';
 import classNames from 'classnames';
 import { validate } from '@storiqa/shared';
+import uuidv4 from 'uuid/v4';
 
 import { Page } from 'components/App';
 import { withShowAlert } from 'components/Alerts/AlertContext';
@@ -404,7 +405,7 @@ class BuyNow extends Component<PropsType, StateType> {
         environment: this.props.relay.environment,
         variables: {
           input: {
-            clientMutationId: '',
+            clientMutationId: uuidv4(),
             id: me.id,
             phone: this.state.phone,
           },
@@ -481,7 +482,7 @@ class BuyNow extends Component<PropsType, StateType> {
     // $FlowIgnore
     const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
     let input = {
-      clientMutationId: '',
+      clientMutationId: uuidv4(),
       productId: parseInt(queryParams.variant, 10),
       quantity: parseInt(queryParams.quantity, 10),
       addressFull: deliveryAddress,
@@ -547,7 +548,7 @@ class BuyNow extends Component<PropsType, StateType> {
     const userId = pathOr(null, ['me', 'rawId'], this.props);
     const params: CreateMutationParamsType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         userId,
         addressFull: this.state.deliveryAddress,
         isPriority: false,

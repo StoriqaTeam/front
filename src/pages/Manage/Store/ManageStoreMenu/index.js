@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import { isEmpty, isNil, pathOr } from 'ramda';
 import type { Environment } from 'relay-runtime';
 import { graphql } from 'react-relay';
+import uuidv4 from 'uuid/v4';
 
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { UploadWrapper } from 'components/Upload';
@@ -176,7 +177,7 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
     }
     const params: MutationParamsType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         id: storeId,
         logo: url,
         name: null,

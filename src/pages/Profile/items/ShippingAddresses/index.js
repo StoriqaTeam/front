@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { assocPath, map, assoc, pathOr } from 'ramda';
 import { createFragmentContainer, graphql } from 'react-relay';
+import uuidv4 from 'uuid/v4';
 
 import { AddressForm } from 'components/AddressAutocomplete';
 import { Checkbox } from 'components/common/Checkbox';
@@ -141,7 +142,7 @@ class ShippingAddresses extends Component<PropsType, StateType> {
     this.setState(() => ({ isLoading: true }));
 
     const input = {
-      clientMutationId: '',
+      clientMutationId: uuidv4(),
       addressFull: {
         country,
         countryCode,

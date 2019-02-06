@@ -18,6 +18,8 @@ import {
   head,
   keys,
 } from 'ramda';
+import uuidv4 from 'uuid/v4';
+
 import { routerShape, withRouter } from 'found';
 import { validate } from '@storiqa/shared';
 
@@ -204,7 +206,7 @@ class Checkout extends Component<PropsType, StateType> {
     const userId = pathOr(null, ['me', 'rawId'], this.props);
     CreateUserDeliveryAddressFullMutation.commit({
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         userId,
         addressFull,
         isPriority: false,
@@ -271,7 +273,7 @@ class Checkout extends Component<PropsType, StateType> {
         environment: this.context.environment,
         variables: {
           input: {
-            clientMutationId: '',
+            clientMutationId: uuidv4(),
             id: me.id,
             phone: orderInput.receiverPhone,
           },
@@ -385,7 +387,7 @@ class Checkout extends Component<PropsType, StateType> {
     this.setState({ checkoutInProcess: true }, () => {
       CreateOrdersMutation.commit({
         input: {
-          clientMutationId: '',
+          clientMutationId: uuidv4(),
           addressFull,
           receiverName,
           receiverPhone,
