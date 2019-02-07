@@ -98,6 +98,7 @@ class Dropdown extends React.Component<PropsType, StateType> {
                             selectedPackage && item.id === selectedPackage.id
                           }
                           label={item.name}
+                          dataTest="deliverySelectCheckbox"
                         />
                       </div>
                     </div>
@@ -115,7 +116,12 @@ class Dropdown extends React.Component<PropsType, StateType> {
                 {this.props.isError && (
                   <span styleName="error">Error :( Please try again</span>
                 )}
-                <Button big onClick={onAccept} isLoading={this.props.isLoading}>
+                <Button
+                  big
+                  onClick={onAccept}
+                  isLoading={this.props.isLoading}
+                  dataTest="deliverySelectAcceptButton"
+                >
                   Accept
                 </Button>
               </div>
@@ -129,6 +135,7 @@ class Dropdown extends React.Component<PropsType, StateType> {
             onKeyDown={() => {}}
             role="button"
             tabIndex="0"
+            data-test="deliverySelect"
           >
             <div styleName="label">
               {selectedPackage != null
