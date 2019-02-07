@@ -207,6 +207,8 @@ class StorageProducts extends Component<PropsType, StateType> {
       if (!product) {
         return {};
       }
+      const currency = pathOr('STQ', ['currency'], product);
+
       const { photoMain, price } = product;
       const name = getNameText(
         pathOr(null, ['baseProduct', 'name'], product),
@@ -236,6 +238,7 @@ class StorageProducts extends Component<PropsType, StateType> {
         categoryName,
         price,
         attributes,
+        currency,
       };
       // $FlowIgnoreMe
     }, pathOr([], ['warehouse', 'products', 'edges'], me));
@@ -348,6 +351,7 @@ export default createRefetchContainer(
                 id
                 rawId
                 price
+
                 photoMain
                 currency
                 attributes {

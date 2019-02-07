@@ -1,7 +1,7 @@
 // @flow strict
 import React from 'react';
 
-import { Checkbox } from 'components/common/Checkbox';
+// import { Checkbox } from 'components/common/Checkbox';
 import { Icon } from 'components/Icon';
 import { Col } from 'layout';
 
@@ -11,9 +11,9 @@ import t from './i18n';
 
 const StorageProductsTableHeader = () => (
   <div styleName="headerRowWrap">
-    <div styleName="tdCheckbox">
+    {/* <div styleName="tdCheckbox">
       <Checkbox id="header" onChange={() => {}} />
-    </div>
+    </div> */}
     <Col size={1} sm={2} md={2} lg={2} xl={1} mdVisible />
     <Col size={4} sm={4} md={4} lg={3} xl={2}>
       <div styleName="colColor name">
