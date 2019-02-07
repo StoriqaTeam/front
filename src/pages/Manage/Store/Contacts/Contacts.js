@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { assocPath, pathOr, propOr, pick, isEmpty } from 'ramda';
 import { createFragmentContainer, graphql } from 'react-relay';
+import uuidv4 from 'uuid/v4';
 
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { currentUserShape } from 'utils/shapes';
@@ -216,7 +217,7 @@ class Contacts extends Component<PropsType, StateType> {
 
     const params: MutationParamsType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         id: myStore.id || '',
         logo: logoUrl,
         email,

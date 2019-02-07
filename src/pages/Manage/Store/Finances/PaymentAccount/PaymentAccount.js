@@ -4,6 +4,7 @@ import React, { Component, Fragment } from 'react';
 import { isEmpty, pathOr, path, assocPath, assoc, omit, isNil } from 'ramda';
 import { Environment } from 'relay-runtime';
 import { createFragmentContainer, graphql } from 'react-relay';
+import uuidv4 from 'uuid/v4';
 
 import { Checkbox, Input, Button, Select } from 'components/common';
 
@@ -199,7 +200,7 @@ class PaymentAccount extends Component<PropsType, StateType> {
     this.setState({ isLoading: true });
 
     let input = {
-      clientMutationId: '',
+      clientMutationId: uuidv4(),
       ...omit(['id'], russianForm),
     };
 
@@ -299,7 +300,7 @@ class PaymentAccount extends Component<PropsType, StateType> {
     this.setState({ isLoading: true });
 
     let input = {
-      clientMutationId: '',
+      clientMutationId: uuidv4(),
       ...omit(['currency', 'id'], internationalForm),
       currency: internationalForm.currency.label,
     };

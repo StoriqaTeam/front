@@ -5,6 +5,8 @@ import type { Node } from 'react';
 import { pathOr } from 'ramda';
 import { withRouter, matchShape, routerShape } from 'found';
 import type { Environment } from 'relay-runtime';
+// $FlowIgnoreMe
+import uuidv4 from 'uuid/v4';
 
 import { PopUpWrapper } from 'components/PopUpWrapper';
 import { Spinner } from 'components/common/Spinner';
@@ -176,7 +178,7 @@ class Authorization extends Component<PropsType, StateType> {
     this.setState({ isLoading: true, errors: null });
     const { email, password, firstName, lastName } = this.state;
     const input = {
-      clientMutationId: '',
+      clientMutationId: uuidv4(),
       email,
       firstName: firstName || null,
       lastName: lastName || null,
@@ -256,7 +258,7 @@ class Authorization extends Component<PropsType, StateType> {
         input: {
           email,
           password,
-          clientMutationId: '',
+          clientMutationId: uuidv4(),
         },
       },
     })
@@ -372,7 +374,7 @@ class Authorization extends Component<PropsType, StateType> {
     requestPasswordResetMutation({
       environment,
       variables: {
-        input: { clientMutationId: '', email },
+        input: { clientMutationId: uuidv4(), email },
       },
     })
       .then((): void => {
@@ -414,7 +416,7 @@ class Authorization extends Component<PropsType, StateType> {
     } = this.props;
     const { password } = this.state;
     const params = {
-      input: { clientMutationId: '', password, token },
+      input: { clientMutationId: uuidv4(), password, token },
       environment,
       onCompleted: (
         response: ?ApplyPasswordResetMutationResponse,
@@ -481,7 +483,7 @@ class Authorization extends Component<PropsType, StateType> {
     const { environment } = this.props;
     const { email } = this.state;
     const params = {
-      input: { clientMutationId: '', email },
+      input: { clientMutationId: uuidv4(), email },
       environment,
       onCompleted: (
         response: ResendEmailVerificationLinkMutationResponse,

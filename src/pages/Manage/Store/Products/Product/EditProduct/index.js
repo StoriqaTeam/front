@@ -15,6 +15,7 @@ import {
   find,
   propEq,
 } from 'ramda';
+import uuidv4 from 'uuid/v4';
 
 import { AppContext, Page } from 'components/App';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
@@ -300,7 +301,7 @@ class EditProduct extends Component<PropsType, StateType> {
     this.setState({ isLoading: true });
     const params: UpdateProductMutationType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         id: variantData.idMainVariant || '',
         product: {
           price: variantData.price,
@@ -445,7 +446,7 @@ class EditProduct extends Component<PropsType, StateType> {
     }
     const params: UpsertShippingMutationType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         local: withoutLocal ? [] : local,
         international: withoutInter ? [] : international,
         pickup: withoutLocal ? { pickup: false, price: 0 } : pickup,

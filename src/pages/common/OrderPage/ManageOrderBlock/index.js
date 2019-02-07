@@ -4,6 +4,7 @@ import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import { pathOr, isNil } from 'ramda';
 import { Environment } from 'relay-runtime';
+import uuidv4 from 'uuid/v4';
 
 import { Input } from 'components/common/Input';
 import { Button } from 'components/common/Button';
@@ -126,7 +127,7 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
     this.setState({ isSendInProgress: true });
     const params: SendOrderMutationParamsType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         orderSlug: this.props.orderSlug,
         trackId: this.state.trackNumber,
         comment: this.state.comment,
@@ -154,7 +155,7 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
     this.setState({ isSendInProgress: true });
     const params: ConfirmOrderMutationParamsType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         orderSlug: this.props.orderSlug,
       },
       environment: this.props.environment,
@@ -181,7 +182,7 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
     const params: CancelOrderMutationParamsType = {
       environment: this.props.environment,
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         orderSlug: this.props.orderSlug,
         committerRole: 'SELLER',
       },
@@ -208,7 +209,7 @@ class ManageOrderBlock extends Component<PropsType, StateType> {
     const params: ChargeFeeMutationParamsType = {
       environment: this.props.environment,
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         orderId: this.props.orderId,
       },
       onCompleted: (

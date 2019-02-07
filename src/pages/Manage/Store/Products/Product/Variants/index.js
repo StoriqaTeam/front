@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { isEmpty, pathOr, map } from 'ramda';
 import { Environment } from 'relay-runtime';
+import uuidv4 from 'uuid/v4';
 
 import { log, fromRelayError } from 'utils';
 import { DeactivateProductMutation } from 'relay/mutations';
@@ -52,7 +53,7 @@ class Variants extends Component<PropsType, StateType> {
     }
     const params: MutationParamsType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         id,
       },
       parentID: productId,

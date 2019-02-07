@@ -3,6 +3,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { head, map, find, whereEq, propOr, pathOr, isNil, is } from 'ramda';
+import uuidv4 from 'uuid/v4';
 
 import ShowMore from 'components/ShowMore';
 import Stepper from 'components/Stepper';
@@ -51,7 +52,7 @@ class ProductInfo extends PureComponent<PropsType> {
         environment: this.context.environment,
         variables: {
           input: {
-            clientMutationId: '',
+            clientMutationId: uuidv4(),
             productId: parseInt(productId, 10),
             companyPackageId: pkg.companyPackageRawId,
             shippingId: pkg.shippingId,
@@ -84,7 +85,7 @@ class ProductInfo extends PureComponent<PropsType> {
           environment: this.context.environment,
           variables: {
             input: {
-              clientMutationId: '',
+              clientMutationId: uuidv4(),
               productId: currentProductRawId,
             },
           },

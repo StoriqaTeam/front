@@ -5,6 +5,7 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { pipe, path, pathOr, head, defaultTo } from 'ramda';
 import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
+import uuidv4 from 'uuid/v4';
 
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Checkbox } from 'components/Checkbox';
@@ -62,7 +63,7 @@ class CartProduct extends Component<PropsType, StateType> {
   handleDelete = () => {
     const id = this.props.product.rawId;
     DeleteFromCartMutation.commit({
-      input: { clientMutationId: '', productId: id },
+      input: { clientMutationId: uuidv4(), productId: id },
       environment: this.context.environment,
       onCompleted: (response, errors) => {
         log.debug(t.successForDeleteFromCart);
@@ -91,7 +92,7 @@ class CartProduct extends Component<PropsType, StateType> {
     const { rawId: productId, id: nodeId } = this.props.product;
     SetSelectionInCartMutation.commit({
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         productId,
         value: !this.props.product.selected,
       },
@@ -122,7 +123,7 @@ class CartProduct extends Component<PropsType, StateType> {
     const { rawId: productId, id: nodeId } = this.props.product;
     const { storeId } = this.props;
     SetQuantityInCartMutation.commit({
-      input: { clientMutationId: '', productId, value: newVal },
+      input: { clientMutationId: uuidv4(), productId, value: newVal },
       nodeId,
       storeId,
       environment: this.context.environment,
@@ -159,7 +160,7 @@ class CartProduct extends Component<PropsType, StateType> {
   handleOnSaveComment = debounce((productId, value) => {
     if (value) {
       SetCommentInCartMutation.commit({
-        input: { clientMutationId: '', productId, value },
+        input: { clientMutationId: uuidv4(), productId, value },
         environment: this.context.environment,
         onCompleted: (response, errors) => {
           log.debug(t.successForSetCommentInCart);

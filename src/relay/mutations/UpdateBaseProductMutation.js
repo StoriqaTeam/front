@@ -2,6 +2,7 @@
 
 import { graphql, commitMutation } from 'react-relay';
 import { Environment } from 'relay-runtime';
+import uuidv4 from 'uuid/v4';
 
 import type { UpdateBaseProductMutationResponse as UpdateBaseProductMutationResponseType } from './__generated__/UpdateBaseProductMutation.graphql';
 
@@ -115,7 +116,7 @@ const commit = (params: MutationParamsType) =>
     mutation,
     variables: {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         id: params.id,
         name: params.name,
         shortDescription: params.shortDescription,

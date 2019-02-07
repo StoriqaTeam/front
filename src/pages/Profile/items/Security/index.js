@@ -16,6 +16,7 @@ import {
 } from 'ramda';
 import classNames from 'classnames';
 import { validate } from '@storiqa/shared';
+import uuidv4 from 'uuid/v4';
 
 import { Input } from 'components/common/Input';
 import { Button } from 'components/common/Button';
@@ -139,7 +140,7 @@ class Security extends Component<PropsType, StateType> {
     this.setState(() => ({ isLoading: true }));
 
     const input = {
-      clientMutationId: '',
+      clientMutationId: uuidv4(),
       oldPassword,
       newPassword,
     };

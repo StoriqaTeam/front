@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { isEmpty, map, pathOr } from 'ramda';
+import uuidv4 from 'uuid/v4';
 
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Input } from 'components/common/Input';
@@ -96,7 +97,7 @@ class Warehouses extends Component<PropsType, StateType> {
     const { environment } = this.context;
     const params: MutationParamsType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         warehouseId,
         productId,
         quantity: parseInt(quantity, 10),
