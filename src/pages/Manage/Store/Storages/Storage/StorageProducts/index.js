@@ -207,7 +207,7 @@ class StorageProducts extends Component<PropsType, StateType> {
       if (!product) {
         return {};
       }
-      const currency = pathOr('STQ', ['currency'], product);
+      const currency = pathOr('', ['currency'], product);
 
       const { photoMain, price } = product;
       const name = getNameText(
@@ -351,7 +351,6 @@ export default createRefetchContainer(
                 id
                 rawId
                 price
-
                 photoMain
                 currency
                 attributes {
