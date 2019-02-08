@@ -207,6 +207,8 @@ class StorageProducts extends Component<PropsType, StateType> {
       if (!product) {
         return {};
       }
+      const currency = pathOr('', ['currency'], product);
+
       const { photoMain, price } = product;
       const name = getNameText(
         pathOr(null, ['baseProduct', 'name'], product),
@@ -236,6 +238,7 @@ class StorageProducts extends Component<PropsType, StateType> {
         categoryName,
         price,
         attributes,
+        currency,
       };
       // $FlowIgnoreMe
     }, pathOr([], ['warehouse', 'products', 'edges'], me));
