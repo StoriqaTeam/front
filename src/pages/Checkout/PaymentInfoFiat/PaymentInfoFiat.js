@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent, Fragment } from 'react';
-import { routerShape, withRouter } from 'found';
+import { withRouter, Link } from 'found';
 
 import CartRest from 'pages/common/CartRest';
 
@@ -19,7 +19,6 @@ type PropsType = {
     firstName: string,
     lastName: string,
   },
-  router: routerShape,
   invoice: {
     id: string,
     amount: number,
@@ -44,7 +43,6 @@ type PropsType = {
       status: PaymentIntentStatusesType,
     },
   },
-  orderSlug?: number,
   restCartCount?: number,
 };
 
@@ -67,17 +65,15 @@ class PaymentInfoFiat extends PureComponent<PropsType, StateType> {
 
   handlePaid = () => {
     this.setState({ paidComplete: true }, () => {
-      if (this.paidTimer) {
-        clearTimeout(this.paidTimer);
-      }
-      this.paidTimer = setTimeout(() => {
-        const { orderSlug } = this.props;
-        this.props.router.push(
-          orderSlug != null
-            ? `/profile/orders/${orderSlug}`
-            : '/profile/orders',
-        );
-      }, 2000);
+      // if (this.paidTimer) {
+      //   clearTimeout(this.paidTimer);
+      // }
+      // this.paidTimer = setTimeout(() => {
+      //   const { orderSlug } = this.props;
+      //   if (orderSlug != null) {
+      //     this.props.router.push(`/profile/orders/${orderSlug}`);
+      //   }
+      // }, 2000);
     });
   };
 
@@ -130,18 +126,23 @@ class PaymentInfoFiat extends PureComponent<PropsType, StateType> {
                     onPaid={this.handlePaid}
                   />
                 </div>
-                {Boolean(restCartCount) &&
-                  restCartCount !== 0 && (
-                    <div styleName="restCartInfo">
-                      <CartRest count={restCartCount} cartType="crypto" />
-                    </div>
-                  )}
               </Fragment>
             ) : (
               <div>
                 <div styleName="title">{t.success}</div>
                 <div styleName="description">
                   {t.yourPaymentWasSuccessfullyCompleted}
+                </div>
+                {Boolean(restCartCount) &&
+                  restCartCount !== 0 && (
+                    <div styleName="restCartInfo">
+                      <CartRest count={restCartCount} cartType="crypto" />
+                    </div>
+                  )}
+                <div styleName="ordersLinkWrap">
+                  <Link to="/profile/orders" styleName="ordersLink">
+                    {t.myOrders}
+                  </Link>
                 </div>
               </div>
             )}
