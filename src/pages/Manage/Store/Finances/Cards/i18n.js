@@ -8,7 +8,7 @@ type TranslationDicType = {|
   error: string,
   close: string,
   somethingGoingWrong: string,
-  addAnotherCard: string,
+  changeCardInfo: string,
   tableColumns: {
     cardTypeNumber: string,
     expirationDate: string,
@@ -22,7 +22,7 @@ const translations: TranslationsBundleType = {
     error: 'Error: ',
     close: 'Close.',
     somethingGoingWrong: 'Something going wrong :(',
-    addAnotherCard: 'Add another card',
+    changeCardInfo: 'Change card info',
     tableColumns: {
       cardTypeNumber: 'Card type & number',
       expirationDate: 'Expiration date',

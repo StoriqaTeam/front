@@ -5,7 +5,7 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  orders: string,
+  myOrders: string,
   profileSettings: string,
   myShop: string,
   startSelling: string,
@@ -15,7 +15,7 @@ type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    orders: 'Orders',
+    myOrders: 'My orders',
     profileSettings: 'Profile Settings',
     myShop: 'My Shop',
     startSelling: 'Start Selling',

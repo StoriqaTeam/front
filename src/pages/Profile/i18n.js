@@ -8,7 +8,7 @@ type TranslationDicType = {|
   personalData: string,
   shippingAddresses: string,
   security: string,
-  orders: string,
+  myOrders: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -17,7 +17,7 @@ const translations: TranslationsBundleType = {
     personalData: 'Personal data',
     shippingAddresses: 'Shipping addresses',
     security: 'Security',
-    orders: 'Orders',
+    myOrders: 'My orders',
   },
 };
 

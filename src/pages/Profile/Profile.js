@@ -50,7 +50,7 @@ class Profile extends PureComponent<PropsType, StateType> {
       { id: 'personal-data', title: t.personalData },
       { id: 'shipping-addresses', title: t.shippingAddresses },
       { id: 'security', title: t.security },
-      { id: 'orders', title: t.orders },
+      { id: 'orders', title: t.myOrders },
       // { id: 'kyc', title: 'KYC' },
     ];
     const {
