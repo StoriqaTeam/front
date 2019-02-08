@@ -281,7 +281,7 @@ class Cards extends Component<PropsType, StateType> {
                 onClick={this.handleOpenNewCardForm}
                 dataTest="addCardButton"
               >
-                {t.addAnotherCard}
+                {t.changeCardInfo}
               </Button>
             </div>
           )}

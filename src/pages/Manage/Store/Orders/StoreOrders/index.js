@@ -179,7 +179,7 @@ export default createRefetchContainer(
     ManageStore({
       OriginalComponent: StoreOrders,
       active: 'orders',
-      title: 'Orders',
+      title: 'Shop orders',
     }),
   ),
   graphql`

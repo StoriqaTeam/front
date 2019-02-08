@@ -53,7 +53,7 @@ const ProfileMenu = ({
         styleName="item"
         data-test="header-user-menu-profileOrdersLink"
       >
-        {t.orders}
+        {t.myOrders}
       </Link>
       <Link
         to="/profile"
