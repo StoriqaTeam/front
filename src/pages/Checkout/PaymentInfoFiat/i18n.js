@@ -12,6 +12,7 @@ type TranslationDicType = {|
   success: string,
   yourPaymentWasSuccessfullyCompleted: string,
   alreadyPaid: string,
+  myOrders: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -25,6 +26,7 @@ const translations: TranslationsBundleType = {
     yourPaymentWasSuccessfullyCompleted:
       'Your payment was successfully completed.',
     alreadyPaid: 'Already paid',
+    myOrders: 'My orders',
   },
 };
 

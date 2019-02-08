@@ -252,3 +252,19 @@
 .restCartInfo {
   margin-top: 4rem;
 }
+
+.ordersLinkWrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.ordersLink {
+  font-size: 14px;
+  color: $color_blue;
+  transition: $transition_all_ease;
+
+  &:hover {
+    color: $color_blue_hover;
+  }
+}

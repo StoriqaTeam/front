@@ -7,7 +7,7 @@ import QRCode from 'qrcode.react';
 // import moment from 'moment';
 import { map, pathOr } from 'ramda';
 import classNames from 'classnames';
-import { routerShape, withRouter } from 'found';
+import { withRouter, Link } from 'found';
 
 import { formatPrice } from 'utils';
 import { RecalcInvoiceAmountMutation } from 'relay/mutations';
@@ -37,7 +37,6 @@ type PropsType = {
     refetch: Function,
     environment: Environment,
   },
-  router: routerShape,
   restCartCount?: number,
 };
 
@@ -97,12 +96,6 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
 
     // $FlowIgnoreMe
     const state = pathOr(null, ['invoice', 'state'], this.props.me);
-    if (state === 'PAID') {
-      setTimeout(() => {
-        this.props.router.push('/profile/orders');
-      }, 2000);
-      return;
-    }
 
     if (state === 'AMOUNT_EXPIRED') {
       this.recalculateAmount(this.refetchInvoice);
@@ -346,12 +339,6 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
                       </div>
                     )}
                 </div>
-                {Boolean(restCartCount) &&
-                  restCartCount !== 0 && (
-                    <div styleName="restCartInfo">
-                      <CartRest count={restCartCount} cartType="fiat" />
-                    </div>
-                  )}
               </Fragment>
             )}
           {state === 'PAID' && (
@@ -359,6 +346,17 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
               <div styleName="title">Success</div>
               <div styleName="description">
                 Your payment was successfully completed.
+              </div>
+              {Boolean(restCartCount) &&
+                restCartCount !== 0 && (
+                  <div styleName="restCartInfo">
+                    <CartRest count={restCartCount} cartType="fiat" />
+                  </div>
+                )}
+              <div styleName="ordersLinkWrap">
+                <Link to="/profile/orders" styleName="ordersLink">
+                  {t.myOrders}
+                </Link>
               </div>
             </div>
           )}
