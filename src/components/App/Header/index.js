@@ -291,25 +291,6 @@ class Header extends Component<PropsType, StateType> {
               withoutCategories,
             })}
           >
-            <MobileSearchMenu
-              isOpen={isMobileSearchOpen}
-              searchCategories={searchCategories}
-              searchValue={searchValue}
-              onClick={this.handleMobileSearch}
-            >
-              <SearchInput
-                isMobile
-                selectedCategory={selectedCategory}
-                onDropDown={this.handleDropDown}
-                searchCategories={searchCategories}
-                searchValue={searchValue}
-                getSearchItems={this.handleGetSearchItems}
-              />
-            </MobileSearchMenu>
-            <MobileMenu
-              isOpen={isMenuToggled}
-              onClose={this.handleMobileMenu}
-            />
             <Container>
               <BurgerMenu />
               <HeaderTop
@@ -339,6 +320,25 @@ class Header extends Component<PropsType, StateType> {
                   />
                 )}
             </Container>
+            <MobileSearchMenu
+              isOpen={isMobileSearchOpen}
+              searchCategories={searchCategories}
+              searchValue={searchValue}
+              onClick={this.handleMobileSearch}
+            >
+              <SearchInput
+                isMobile
+                selectedCategory={selectedCategory}
+                onDropDown={this.handleDropDown}
+                searchCategories={searchCategories}
+                searchValue={searchValue}
+                getSearchItems={this.handleGetSearchItems}
+              />
+            </MobileSearchMenu>
+            <MobileMenu
+              isOpen={isMenuToggled}
+              onClose={this.handleMobileMenu}
+            />
             <Modal
               showModal={showModal}
               onClose={this.handleCloseModal}

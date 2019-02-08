@@ -17,8 +17,8 @@ $burger_menu_size: 7.5rem;
     display: block;
     right: 0;
     width: calc(100% - #{$burger_menu_size});
+    top: 0;
   }
-
 }
 
 .close {
