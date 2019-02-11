@@ -27,17 +27,24 @@ class Invoice extends PureComponent<PropsType> {
     // $FlowIgnoreMe
     const currency = pathOr(null, ['order', 'currency'], me);
 
-    if (!invoice.id || !currency) {
+    if (!invoice || !invoice.id || !currency) {
       return null;
     }
 
     // $FlowIgnoreMe
     const orderSlug = pathOr(null, ['order', 'slug'], me);
+    // $FlowIgnoreMe
+    const orderState = pathOr(null, ['order', 'state'], me);
 
     return checkCurrencyType(currency) === 'fiat' ? (
-      <PaymentInfoFiat invoice={invoice} me={me} orderSlug={orderSlug} />
+      <PaymentInfoFiat
+        invoice={invoice}
+        me={me}
+        orderSlug={orderSlug}
+        orderState={orderState}
+      />
     ) : (
-      <PaymentInfo invoiceId={invoice.id} me={me} />
+      <PaymentInfo invoiceId={invoice.id} me={me} orderState={orderState} />
     );
   }
 }
@@ -52,6 +59,7 @@ export default createFragmentContainer(
       firstName
       lastName
       order(slug: $slug) {
+        state
         slug
         currency
         invoice {
@@ -63,6 +71,7 @@ export default createFragmentContainer(
             clientSecret
             status
           }
+          state
         }
       }
     }

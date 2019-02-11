@@ -40,6 +40,10 @@ type TranslationDicType = {|
   confirmText: string,
   cancelText: string,
   complete: string,
+  dispute: string,
+  createDispute: string,
+  writeComment: string,
+  labelComment: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -53,7 +57,7 @@ const translations: TranslationsBundleType = {
     orderSuccessfullyCanceled: 'Order successfully canceled.',
     orderSuccessfullyComplete: 'Order successfully complete.',
     chargeFeefullyComplete: 'Charge fee successfully paid.',
-    ok: 'Ok .',
+    ok: 'Ok.',
     order: 'ORDER',
     orderStatusInfo: 'Order status info',
     status: 'Status',
@@ -80,6 +84,10 @@ const translations: TranslationsBundleType = {
     confirmText: 'Complete',
     cancelText: 'Cancel',
     complete: 'Complete',
+    dispute: 'Dispute',
+    createDispute: 'Create dispute',
+    writeComment: 'Please, write a comment',
+    labelComment: 'Comment',
   },
 };
 

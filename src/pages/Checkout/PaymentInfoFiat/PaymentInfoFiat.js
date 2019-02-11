@@ -44,6 +44,7 @@ type PropsType = {
     },
   },
   restCartCount?: number,
+  orderState: ?OrderStatusType,
 };
 
 type StateType = {
@@ -78,9 +79,13 @@ class PaymentInfoFiat extends PureComponent<PropsType, StateType> {
   };
 
   render() {
-    const { invoice, me, restCartCount } = this.props;
+    const { invoice, me, restCartCount, orderState } = this.props;
     const { paymentIntent } = invoice;
-    if (!invoice || !paymentIntent) {
+    if (
+      !invoice ||
+      !paymentIntent ||
+      (orderState && orderState === 'AMOUNT_EXPIRED')
+    ) {
       return (
         <div styleName="container" data-test="PAYMENT_INFO_FAILED">
           <div styleName="wrap">
