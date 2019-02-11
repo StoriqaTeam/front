@@ -15,6 +15,7 @@ import { RecalcInvoiceAmountMutation } from 'relay/mutations';
 import { NotificationBlock } from 'components/NotificationBlock';
 import CartRest from 'pages/common/CartRest';
 
+import type { OrderStatusType } from 'types';
 import type {
   RecalcInvoiceAmountMutationVariablesType,
   RecalcInvoiceAmountMutationResponseType,
@@ -38,6 +39,7 @@ type PropsType = {
     environment: Environment,
   },
   restCartCount?: number,
+  orderState: ?OrderStatusType,
 };
 
 type StateType = {
@@ -215,7 +217,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
   );
 
   render() {
-    const { restCartCount } = this.props;
+    const { restCartCount, orderState } = this.props;
     const { isFirstRefetch, isNotificationActive } = this.state;
     if (isFirstRefetch) {
       return (
@@ -231,7 +233,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
     }
     // $FlowIgnoreMe;
     const invoice = pathOr(null, ['me', 'invoice'], this.props);
-    if (!invoice) {
+    if (!invoice || (orderState && orderState === 'AMOUNT_EXPIRED')) {
       return (
         <div styleName="container" data-test="PAYMENT_INFO_FAILED">
           <div>

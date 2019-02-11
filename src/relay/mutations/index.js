@@ -89,3 +89,6 @@ export {
 export {
   default as UpdateRussiaBillingInfoMutation,
 } from './UpdateRussiaBillingInfoMutation';
+
+// New mutations with basicMutation
+export { default as CreateDisputeMutation } from './CreateDisputeMutation';

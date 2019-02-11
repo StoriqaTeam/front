@@ -348,8 +348,7 @@ class OrderPage extends Component<PropsType, StateType> {
                   {isPaymentInfoCanBeShown &&
                     (orderFromProps.state === 'NEW' ||
                       orderFromProps.state === 'PAYMENT_AWAITED' ||
-                      orderFromProps.state === 'TRANSACTION_PENDING' ||
-                      orderFromProps.state === 'AMOUNT_EXPIRED') && (
+                      orderFromProps.state === 'TRANSACTION_PENDING') && (
                       <div styleName="paymentButtonWrapper">
                         <Button
                           big
@@ -540,6 +539,7 @@ class OrderPage extends Component<PropsType, StateType> {
                         orderFromProps.state === 'SENT'
                       }
                       orderSlug={parseInt(order.number, 10)}
+                      orderId={orderFromProps.id}
                       onOrderComplete={this.handleOrderComplete}
                     />
                   </div>
