@@ -11,7 +11,8 @@ type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    youHave: 'You have {count} more items with {cartType} payment method left in your cart',
+    youHave:
+      'You have {count} more items with {cartType} payment method left in your cart',
   },
 };
 

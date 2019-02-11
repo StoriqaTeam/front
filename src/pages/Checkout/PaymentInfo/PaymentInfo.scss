@@ -188,20 +188,19 @@
 
     .amount {
       font-size: 20px;
-      font-weight: bold;
       color: $color_grey;
-    }
-
-    .reserveInfo {
-      margin-top: 4.5rem;
-      font-size: 14px;
-      color: $color_grey_minor;
     }
 
     .timer {
       color: $color_grey;
     }
   }
+}
+
+.reserveInfo {
+  font-size: 14px;
+  color: $color_grey_minor;
+  text-align: center;
 }
 
 .transactionsBlock {
