@@ -248,11 +248,12 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
 
     let wallet;
     let amount;
+    let amountCaptured;
     let transactions;
     let state: ?OrderStateType;
 
     if (invoice) {
-      ({ wallet, amount, transactions } = invoice);
+      ({ wallet, amount, transactions, amountCaptured } = invoice);
       ({ state } = invoice);
     }
 
@@ -286,14 +287,15 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
                     <div styleName="addressTitle">Address</div>
                     <div styleName="address">{wallet}</div>
                     <div styleName="amountTitle">Amount</div>
-                    <div styleName="amount">{`${formatPrice(amount)} ${
-                      invoice.currency
-                    }`}</div>
-                    {
-                      <div styleName="reserveInfo">
-                        The order must be paid in three days after creation.
-                      </div>
-                    }
+                    <div styleName="amount">
+                      <strong>{`${formatPrice(amount)} ${
+                        invoice.currency
+                      }`}</strong>
+                    </div>
+                    <div styleName="amountTitle">Amount captured</div>
+                    <div styleName="amount">
+                      {`${formatPrice(amountCaptured)} ${invoice.currency}`}
+                    </div>
                   </div>
                 </div>
                 <div styleName="transactionsBlock">
@@ -340,6 +342,9 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
                         )}
                       </div>
                     )}
+                </div>
+                <div styleName="reserveInfo">
+                  The order must be paid in three days after creation.
                 </div>
               </Fragment>
             )}
@@ -393,6 +398,7 @@ export default createRefetchContainer(
       invoice(id: $id) {
         id
         amount
+        amountCaptured
         priceReservedDueDateTime
         state
         wallet
