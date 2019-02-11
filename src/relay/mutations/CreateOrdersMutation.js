@@ -26,6 +26,7 @@ const mutation = graphql`
       invoice {
         id
         amount
+        amountCaptured
         currency
         priceReservedDueDateTime
         state
