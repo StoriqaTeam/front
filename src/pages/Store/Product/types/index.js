@@ -27,7 +27,7 @@ export type VarianAttributeType = {
 
 export type VariantType = {
   id: string,
-  rawId?: number,
+  rawId: number,
   price: number,
   cashback: number | null,
   discount: number | null,
@@ -35,6 +35,9 @@ export type VariantType = {
   additionalPhotos: Array<string> | null,
   description: string,
   attributes: Array<VarianAttributeType>,
+  quantity: number,
+  preOrder: boolean,
+  preOrderDays: number,
 };
 
 export type WidgetOptionType = {
