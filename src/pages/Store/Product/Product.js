@@ -15,6 +15,7 @@ import {
   pathOr,
   find,
   toUpper,
+  forEach,
 } from 'ramda';
 import { Environment } from 'relay-runtime';
 import smoothscroll from 'libs/smoothscroll';
@@ -61,7 +62,7 @@ import {
 
 import type {
   ProductType,
-  ProductVariantType,
+  VariantType,
   WidgetType,
   TabType,
   TranslationType,
@@ -92,7 +93,7 @@ type PropsType = {
 
 type StateType = {
   widgets: Array<WidgetType>,
-  productVariant: ProductVariantType,
+  productVariant: VariantType,
   unselectedAttr: ?Array<string>,
   selectedAttributes: {
     [string]: string,
@@ -108,51 +109,39 @@ type StateType = {
 };
 
 class Product extends Component<PropsType, StateType> {
-  static getDerivedStateFromProps(
-    nextProps: PropsType,
-    prevState: StateType,
-  ): ?StateType {
-    if (isNil(nextProps.baseProduct)) {
-      return null;
-    }
+  constructor(props) {
+    super(props);
     const {
       baseProduct: {
         variants: { all },
       },
-    } = nextProps;
-    const { widgets } = prevState;
-    if (isEmpty(widgets)) {
-      return {
-        ...prevState,
-        widgets: makeWidgets(all),
-        // $FlowIgnoreMe
-        productVariant: head(all),
-        availableAttributes: attributesFromVariants(all),
-      };
+    } = props;
+
+    const storeId = pathOr('', ['match', 'params', 'storeId'], props);
+    const productId = pathOr('', ['match', 'params', 'productId'], props);
+    const variantId = pathOr('', ['match', 'params', 'variantId'], props);
+
+    let productVariant = head(all);
+    if (variantId) {
+      const matchProductVariant = find(
+        propEq('rawId', parseInt(variantId, 10)),
+      )(all);
+      if (matchProductVariant) {
+        productVariant = matchProductVariant;
+      }
     }
-    return prevState;
-  }
-  constructor(props) {
-    super(props);
+    props.router.replace(
+      `/store/${storeId}/products/${productId}/variant/${
+        productVariant.rawId
+        }`,
+    );
+
     this.state = {
-      widgets: [],
-      productVariant: {
-        id: '',
-        rawId: 0,
-        description: '',
-        photoMain: '',
-        additionalPhotos: null,
-        price: 0,
-        cashback: null,
-        discount: null,
-        quantity: 0,
-        preOrder: false,
-        preOrderDays: 0,
-        attributes: [],
-      },
+      widgets: makeWidgets(all),
+      productVariant,
       unselectedAttr: null,
       selectedAttributes: {},
-      availableAttributes: {},
+      availableAttributes: attributesFromVariants(all),
       isAddToCart: false,
       isLoading: false,
       isLoadingAddToCart: false,
@@ -166,37 +155,49 @@ class Product extends Component<PropsType, StateType> {
   }
 
   componentDidMount() {
-    // window.scrollTo(0, 0);
-    const { baseProduct } = this.props;
     const { productVariant, widgets } = this.state;
     const { attributes } = productVariant;
-    if (
-      process.env.BROWSER &&
-      process.env.REACT_APP_RRPARTNERID &&
-      baseProduct &&
-      baseProduct.rawId
-    ) {
-      productViewTracker(baseProduct.rawId);
-    }
+    this.setProductViewTracker(productVariant.rawId);
 
     const selectedAttributes = {};
 
-    // eslint-disable-next-line
-    attributes.map(attr => {
-      // $FlowIgnore
+    forEach(attr => {
       const { value, attribute } = attr;
       const result = find(propEq('id', attribute.id))(widgets);
 
-      if (isNil(result)) {
-        // eslint-disable-next-line
-        return;
+      if (!isNil(result)) {
+        selectedAttributes[attribute.id] = value;
       }
-
-      selectedAttributes[attribute.id] = value;
-    });
+    }, attributes);
     // eslint-disable-next-line
     this.setState({ selectedAttributes });
   }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { productVariant } = this.state;
+    if (productVariant.rawId !== prevState.productVariant.rawId) {
+      // $FlowIgnore
+      const storeId = pathOr('', ['match', 'params', 'storeId'], this.props);
+      // $FlowIgnore
+      const productId = pathOr(
+        '',
+        ['match', 'params', 'productId'],
+        this.props,
+      );
+      this.props.router.replace(
+        `/store/${storeId}/products/${productId}/variant/${
+          productVariant.rawId
+        }`,
+      );
+      this.setProductViewTracker(productVariant.rawId);
+    }
+  }
+
+  setProductViewTracker = (id: number) => {
+    if (process.env.BROWSER && process.env.REACT_APP_RRPARTNERID && id) {
+      productViewTracker(id);
+    }
+  };
 
   getUserAddress = () => {
     const { me } = this.props;
