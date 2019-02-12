@@ -131,9 +131,7 @@ class Product extends Component<PropsType, StateType> {
       }
     }
     props.router.replace(
-      `/store/${storeId}/products/${productId}/variant/${
-        productVariant.rawId
-        }`,
+      `/store/${storeId}/products/${productId}/variant/${productVariant.rawId}`,
     );
 
     this.state = {

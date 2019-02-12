@@ -190,7 +190,9 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
                 ? withCompanySaveButtonDisabled
                 : inter === true && !countries
             }
-            dataTest={`shipping${company ? 'Save' : 'Add'}CompanyButton`}
+            dataTest={`shipping${company ? 'Save' : 'Add'}CompanyButton_${
+              inter === true ? 'inter' : 'local'
+            }`}
           >
             {company ? t.save : t.addCompany}
           </Button>
