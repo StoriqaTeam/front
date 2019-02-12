@@ -154,9 +154,7 @@ class Product extends Component<PropsType, StateType> {
     // $FlowIgnore
     const productId = pathOr('', ['match', 'params', 'productId'], this.props);
     this.props.router.replace(
-      `/store/${storeId}/products/${productId}/variant/${
-        productVariant.rawId
-        }`,
+      `/store/${storeId}/products/${productId}/variant/${productVariant.rawId}`,
     );
     this.setProductViewTracker(productVariant.rawId);
 
