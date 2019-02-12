@@ -1,15 +1,13 @@
 // @flow strict
 
-import React from 'react';
-// $FlowIgnore
-import axios from 'axios';
-import { head } from 'ramda';
+import React, { PureComponent } from 'react';
 
-import { formatPrice, currentCurrency, log } from 'utils';
-import { CurrencyPrice } from 'components/common';
+import { ContextDecorator } from 'components/App';
+import { formatPrice, getExchangePrice, checkCurrencyType } from 'utils';
 import { Button } from 'components/common/Button';
 import { Row, Col } from 'layout';
 
+import type { AllCurrenciesType, DirectoriesType } from 'types';
 import type { CalculateBuyNowType } from '../BuyNow';
 
 import './CheckoutSidebar.scss';
@@ -21,40 +19,11 @@ type PropsType = {
   buyNowData: CalculateBuyNowType,
   onCheckout: () => void,
   shippingId: ?number,
+  currency: AllCurrenciesType,
+  directories: DirectoriesType,
 };
 
-type StateType = {
-  priceUsd: ?number,
-};
-
-class CheckoutSidebar extends React.Component<PropsType, StateType> {
-  constructor(props: PropsType) {
-    super(props);
-    this.state = {
-      priceUsd: null,
-    };
-  }
-
-  componentDidMount() {
-    this.isMount = true;
-    axios
-      .get('https://api.coinmarketcap.com/v1/ticker/storiqa/')
-      .then(({ data }) => {
-        const dataObj = head(data);
-        if (dataObj && this.isMount) {
-          this.setState({ priceUsd: Number(dataObj.price_usd) });
-        }
-        return true;
-      })
-      .catch(log.error);
-  }
-
-  componentWillUnmount() {
-    this.isMount = false;
-  }
-
-  isMount = false;
-
+class CheckoutSidebar extends PureComponent<PropsType> {
   render() {
     const {
       step,
@@ -63,8 +32,18 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
       buyNowData,
       onCheckout,
       shippingId,
+      currency,
+      directories,
     } = this.props;
-    const { priceUsd } = this.state;
+    const { currencyExchange } = directories;
+
+    const exchangePrice = getExchangePrice({
+      price: buyNowData.totalCost,
+      currency,
+      currencyExchange,
+      withSymbol: true,
+    });
+
     return (
       <div>
         <div styleName="paperWrapper">
@@ -81,8 +60,9 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                   <div styleName="label">Subtotal</div>
                   <div styleName="value">
                     {`${formatPrice(
-                      buyNowData.subtotalWithoutDiscounts || 0,
-                    )} ${currentCurrency()}`}
+                      buyNowData.subtotal || 0,
+                      checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                    )} ${currency}`}
                   </div>
                 </div>
               </Col>
@@ -92,7 +72,8 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                   <div styleName="value">
                     {`${formatPrice(
                       buyNowData.deliveryCost || 0,
-                    )} ${currentCurrency()}`}
+                      checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                    )} ${currency}`}
                   </div>
                 </div>
               </Col>
@@ -103,7 +84,8 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                     <div styleName="value">
                       {`−${formatPrice(
                         buyNowData.couponsDiscounts || 0,
-                      )} ${currentCurrency()}`}
+                        checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                      )} ${currency}`}
                     </div>
                   </div>
                 </Col>
@@ -120,23 +102,11 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                     <div styleName="value bold">
                       {`${formatPrice(
                         buyNowData.totalCost || 0,
-                      )} ${currentCurrency()}`}
+                        checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                      )} ${currency}`}
                     </div>
-                    {priceUsd != null && (
-                      <div styleName="usdPrice">
-                        <div styleName="slash">/</div>
-                        <CurrencyPrice
-                          withTilda
-                          withSlash
-                          reverse
-                          fontSize={18}
-                          dark
-                          price={buyNowData.totalCost || 0}
-                          currencyPrice={priceUsd}
-                          currencyCode="$"
-                          toFixedValue={2}
-                        />
-                      </div>
+                    {exchangePrice != null && (
+                      <div styleName="exchangePrice">{exchangePrice}</div>
                     )}
                   </div>
                 </div>
@@ -169,4 +139,4 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
   }
 }
 
-export default CheckoutSidebar;
+export default ContextDecorator(CheckoutSidebar);

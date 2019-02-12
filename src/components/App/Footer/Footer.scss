@@ -118,9 +118,27 @@
   padding-bottom: 3.25rem;
 }
 
+.storiqaGlobal {
+  font-size: 13px;
+  line-height: 1.31;
+  letter-spacing: normal;
+  text-align: right;
+  color: $color_grey_minor;
+  margin-top: 3rem;
+
+  @media (max-width: #{$lg - 1px}) {
+    text-align: center;
+  }
+}
+
 .startSellingButton {
   margin-top: 2rem;
   align-items: center;
+  background: $color_grey_bg;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 1rem 0;
 
   @media (min-width: $md) {
     margin-top: 0;
@@ -131,9 +149,28 @@
   }
 }
 
+.startSeelingLogo {
+  width: 8rem;
+}
+
+.sellGoods {
+  font-size: 20px;
+  font-weight: 500;
+  color: $color_grey;
+  line-height: 1.05;
+  max-width: 100%;
+  margin: 2rem 0;
+  text-align: center;
+
+  @media (min-width: $md) {
+    max-width: 26rem;
+    margin: 0;
+  }
+}
+
 @media (min-width: $xl) {
   .startSellingButton {
-    align-items: flex-end;
+    align-items: center;
   }
 }
 

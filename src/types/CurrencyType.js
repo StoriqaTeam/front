@@ -1,11 +1,5 @@
 // @flow strict
 
-type CurrencyEnumType =
-  | 'rouble'
-  | 'euro'
-  | 'dollar'
-  | 'bitcoin'
-  | 'ethereum'
-  | 'stq';
+type CurrencyEnumType = 'STQ';
 
 export type CurrencyType = Array<CurrencyEnumType>;

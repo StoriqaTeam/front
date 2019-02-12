@@ -1,0 +1,98 @@
+@import "../../../../styles/variables";
+
+.container {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &.scroll-y {
+
+  }
+
+  &.scroll-x {
+    max-width: 61.875rem;
+    overflow-x: scroll;
+    overflow-y: hidden;
+  }
+
+}
+
+.thumbnailContainer {
+  height: 10rem;
+  position: relative;
+  width: 10rem;
+
+  img[src] {
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+    border-radius: 0.5rem;
+  }
+
+  &.clicked {
+    position: relative;
+    border-radius: 0.5rem;
+    overflow: hidden;
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border: 2px solid $color_blue;
+      z-index: 1;
+    }
+  }
+}
+
+.thumbnails {
+  display: flex;
+}
+
+.title {
+  margin: 4rem 0 3rem;
+  font-size: 14px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+
+  &.isOnSelected {
+    color: $color_red;
+  }
+}
+
+.column {
+  flex-flow: column;
+  button {
+    margin-bottom: 1rem;
+  }
+}
+
+.row {
+  flex-flow: row;
+  button {
+    margin-right: 2rem;
+  }
+}
+
+.disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.emptyImg {
+  position: relative;
+  height: 10rem;
+  width: 10rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $color_grey_trivial;
+  border-radius: 0.5rem;
+
+  &.clicked {
+    border: 0.25rem solid $color_blue;
+  }
+}
+

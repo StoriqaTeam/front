@@ -90,6 +90,7 @@ class Footer extends PureComponent<PropsType, StateType> {
       <Col lg={9} xl={9}>
         <div styleName="footerLogo">
           <Icon type="logo" />
+          <p styleName="storiqaGlobal">{t.storiqaIsAGlobalMarketPlace}</p>
         </div>
       </Col>
     );
@@ -131,12 +132,15 @@ class Footer extends PureComponent<PropsType, StateType> {
     );
     const StartSellingButton = () => (
       <div styleName="startSellingButton">
+        <div styleName="startSeelingLogo">
+          <Icon type="logo" />
+        </div>
+        <p styleName="sellGoods">{t.wannaSellYourGoodsGlobally}</p>
         <Button
-          wireframe
           href="https://selling.storiqa.com/"
           dataTest="footerStartSellingButton"
         >
-          {t.startSelling}
+          {t.startTrade}
         </Button>
       </div>
     );
@@ -146,14 +150,14 @@ class Footer extends PureComponent<PropsType, StateType> {
         <Container>
           <div styleName="footerTop">
             <Row>
-              <Col md={12} lg={4} xl={4}>
+              <Col md={12} lg={3} xl={3}>
                 <div styleName="logo">
                   <Row>
                     <FooterLogo />
                   </Row>
                 </div>
               </Col>
-              <Col md={12} lg={8} xl={6} mdVisible>
+              <Col md={12} lg={9} xl={6} mdVisible>
                 <Row>
                   {columns.map(column => (
                     <FooterColumn key={column.id} {...column} />
@@ -164,11 +168,11 @@ class Footer extends PureComponent<PropsType, StateType> {
                 <Collapse
                   grouped
                   menuTitle="Menu"
-                  items={columns}
                   onSelected={() => {}}
+                  items={columns}
                 />
               </Col>
-              <Col md={12} lg={12} xl={2}>
+              <Col md={12} lg={12} xl={3}>
                 {isShopCreated ? null : <StartSellingButton />}
               </Col>
             </Row>

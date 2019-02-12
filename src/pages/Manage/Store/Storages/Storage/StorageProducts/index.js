@@ -4,6 +4,7 @@ import React, { Component, Fragment } from 'react';
 import { pathOr, isEmpty, map, addIndex, filter } from 'ramda';
 import { graphql, createRefetchContainer } from 'react-relay';
 import type { Environment } from 'relay-runtime';
+import uuidv4 from 'uuid/v4';
 
 import { Paginator } from 'components/common/Paginator';
 import { withShowAlert } from 'components/Alerts/AlertContext';
@@ -57,7 +58,7 @@ class StorageProducts extends Component<PropsType, StateType> {
     const { environment } = this.props;
     const params: MutationParamsType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         warehouseId,
         productId,
         quantity: parseInt(quantity, 10),
@@ -206,6 +207,8 @@ class StorageProducts extends Component<PropsType, StateType> {
       if (!product) {
         return {};
       }
+      const currency = pathOr('', ['currency'], product);
+
       const { photoMain, price } = product;
       const name = getNameText(
         pathOr(null, ['baseProduct', 'name'], product),
@@ -235,6 +238,7 @@ class StorageProducts extends Component<PropsType, StateType> {
         categoryName,
         price,
         attributes,
+        currency,
       };
       // $FlowIgnoreMe
     }, pathOr([], ['warehouse', 'products', 'edges'], me));
@@ -296,7 +300,15 @@ class StorageProducts extends Component<PropsType, StateType> {
 }
 
 export default createRefetchContainer(
-  withShowAlert(Page(ManageStore(StorageProducts, 'Storages'))),
+  withShowAlert(
+    Page(
+      ManageStore({
+        OriginalComponent: StorageProducts,
+        active: 'storages',
+        title: 'Storages',
+      }),
+    ),
+  ),
   graphql`
     fragment StorageProducts_me on User
       @argumentDefinitions(

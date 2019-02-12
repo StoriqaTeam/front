@@ -1,0 +1,31 @@
+@import "../../styles/variables";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.logo svg {
+  width: 33rem;
+  height: 4.5rem;
+}
+
+.text {
+  text-align: center;
+  margin-top: 3.25rem;
+  font-family: $font_regular;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 35px;
+}
+
+.description {
+  font-family: $font_regular;
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 3rem;
+  color: $color_grey_minor;
+}

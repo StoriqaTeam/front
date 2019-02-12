@@ -18,6 +18,7 @@ import {
 } from 'ramda';
 import { Environment } from 'relay-runtime';
 import { validate } from '@storiqa/shared';
+import uuidv4 from 'uuid/v4';
 
 import { Input, Button, InputPrice } from 'components/common';
 import { Icon } from 'components/Icon';
@@ -316,7 +317,7 @@ class VariantForm extends Component<PropsType, StateType> {
     this.setState({ isLoading: true });
     const params: CreateProductWithAttributesMutationType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         product: {
           baseProductId: productRawId,
           price: price || 0,
@@ -427,7 +428,7 @@ class VariantForm extends Component<PropsType, StateType> {
     this.setState({ isLoading: true });
     const params: UpdateProductMutationType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         id: variant.id,
         product: {
           price,

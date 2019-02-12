@@ -1,20 +1,21 @@
 @import '../../../styles/variables';
+@import '../../../styles/mixins';
 
 .container {
-  margin: 0;
+  margin: 0 2rem;
   overflow: hidden;
-  @media (min-width: $lg) {
-    margin: 0 2rem;
+
+  @media (max-width: #{$lg - 1px}) {
+    margin: 0;
   }
 }
 
 .productContent {
-  background-color: $color_white;
-  border: 1px solid $color_grey_trivial;
-  margin: 0 0 4rem;
+  margin: 2rem 0 4rem;
   position: relative;
-  @media (min-width: $lg) {
-    margin: 2rem 0 4rem;
+
+  @media (max-width: #{$md - 1px}) {
+    margin-top: 0;
   }
 }
 
@@ -25,10 +26,10 @@
 
 .detailsWrapper {
   border-left: 1px solid $color_grey_trivial;
-  margin-left: 0;
-  height: 100%;
-  @media (min-width: $md) {
-    margin-left: -2rem;
+  margin-left: -2rem;
+
+  @media (max-width: #{$md - 1px}) {
+    margin-left: 0;
   }
 }
 
@@ -51,7 +52,7 @@
 .line {
   background-color: $color_grey_trivial;
   height: 1px;
-  margin: 2rem -4rem;
+  margin: 4rem -4rem 4rem -2rem;
 }
 
 .thumbnailsWrapper {
@@ -65,10 +66,13 @@
 }
 
 .longDescription {
-  width: 70%;
+  // width: 70%;
+
   & hr {
     display: block;
     margin-bottom: 2rem;
     border: 0;
   }
+
+  @include long-description();
 }

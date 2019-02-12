@@ -1,0 +1,78 @@
+@import "../../../../../styles/variables";
+
+.container {
+  //
+}
+
+.checkboxes {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.checkbox {
+  margin-right: 2rem;
+}
+
+.items {
+  margin-bottom: 2rem;
+
+  .item {
+    .label {
+      font-size: 12px;
+      color: $color_grey_minor;
+    }
+    .value {
+      padding-left: 2rem;
+      font-size: 14px;
+    }
+  }
+}
+
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  height: 41rem;
+  max-width: 90rem;
+
+  @media (max-width: #{$sm - 1px}) {
+    display: block;
+    height: auto;
+  }
+}
+
+.input {
+  margin-bottom: 2rem;
+  margin-right: 4rem;
+
+  @media (max-width: #{$sm - 1px}) {
+    max-width: 41rem;
+    margin-top: 5rem;
+    margin-right: 0;
+  }
+}
+
+.asterisk {
+  color: $color_red;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  margin-top: 4rem;
+
+  .button {
+    max-width: 20rem;
+  }
+
+  .cancelButton {
+    margin-left: 2rem;
+    font-size: 14px;
+    color: $color_blue;
+
+    &:hover {
+      color: $color_blue_hover;
+    }
+  }
+}

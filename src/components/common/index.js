@@ -12,3 +12,5 @@ export { default as RadioButton } from './RadioButton/RadioButton';
 export { default as SpinnerCircle } from './SpinnerCircle/SpinnerCircle';
 export { default as CurrencyPrice } from './CurrencyPrice/CurrencyPrice';
 export { default as Rating } from './Rating/Rating';
+export { default as Tabs } from './Tabs/Tabs';
+export { default as Table } from './Table/Table';

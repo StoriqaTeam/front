@@ -5,6 +5,8 @@ import type { Node } from 'react';
 import { pathOr } from 'ramda';
 import { withRouter, matchShape, routerShape } from 'found';
 import type { Environment } from 'relay-runtime';
+// $FlowIgnoreMe
+import uuidv4 from 'uuid/v4';
 
 import { PopUpWrapper } from 'components/PopUpWrapper';
 import { Spinner } from 'components/common/Spinner';
@@ -22,6 +24,8 @@ import {
   fromRelayError,
   errorsHandler,
   removeCookie,
+  setCookie,
+  getCookie,
   jwt as JWT,
 } from 'utils';
 
@@ -66,6 +70,7 @@ type PropsType = {
   isResetPassword: boolean,
   router: routerShape,
   isLogin: boolean,
+  noPopup?: boolean,
 };
 
 type StateType = {
@@ -107,6 +112,12 @@ class Authorization extends Component<PropsType, StateType> {
   };
   constructor(props) {
     super(props);
+
+    const { noPopup } = props;
+    const isRegistered = getCookie('registered');
+    const selected = this.props.isSignUp ? 0 : 1;
+    const indexByRegistered = isRegistered !== 'true' && noPopup ? 0 : selected;
+
     this.state = {
       email: '',
       emailValid: false,
@@ -120,11 +131,11 @@ class Authorization extends Component<PropsType, StateType> {
       isSignUp: this.props.isSignUp,
       lastName: '',
       lastNameValid: false,
-      modalTitle: this.setModalTitle(),
+      modalTitle: this.setModalTitle(indexByRegistered),
       password: '',
       passwordValid: false,
       passwordRepeat: '',
-      selected: this.props.isSignUp && !this.props.isLogin ? 0 : 1,
+      selected: indexByRegistered,
     };
     if (process.env.BROWSER) {
       document.addEventListener('keydown', this.handleKeydown);
@@ -151,12 +162,12 @@ class Authorization extends Component<PropsType, StateType> {
     }
   }
 
-  setModalTitle = (): string => {
-    const { isSignUp, isResetPassword } = this.props;
+  setModalTitle = (index: 1 | 0): string => {
+    const { isResetPassword } = this.props;
     if (isResetPassword) {
       return t.recoverPassword;
     }
-    return headerTabsItems[isSignUp ? 0 : 1].name;
+    return headerTabsItems[index].name;
   };
 
   handleAlertOnClick = (): void => {
@@ -167,7 +178,7 @@ class Authorization extends Component<PropsType, StateType> {
     this.setState({ isLoading: true, errors: null });
     const { email, password, firstName, lastName } = this.state;
     const input = {
-      clientMutationId: '',
+      clientMutationId: uuidv4(),
       email,
       firstName: firstName || null,
       lastName: lastName || null,
@@ -205,6 +216,7 @@ class Authorization extends Component<PropsType, StateType> {
         removeCookie('REFERAL');
         removeCookie('REFERER');
         removeCookie('UTM_MARKS');
+        setCookie('registered', true);
         const { onCloseModal } = this.props;
         if (onCloseModal) {
           onCloseModal();
@@ -246,7 +258,7 @@ class Authorization extends Component<PropsType, StateType> {
         input: {
           email,
           password,
-          clientMutationId: '',
+          clientMutationId: uuidv4(),
         },
       },
     })
@@ -265,6 +277,7 @@ class Authorization extends Component<PropsType, StateType> {
           const expirationDate = date;
           expirationDate.setDate(today.getDate() + 14);
           JWT.setJWT(jwtStr);
+          setCookie('registered', true);
           if (this.props.handleLogin) {
             this.props.handleLogin();
             if (from && from !== '') {
@@ -361,7 +374,7 @@ class Authorization extends Component<PropsType, StateType> {
     requestPasswordResetMutation({
       environment,
       variables: {
-        input: { clientMutationId: '', email },
+        input: { clientMutationId: uuidv4(), email },
       },
     })
       .then((): void => {
@@ -403,7 +416,7 @@ class Authorization extends Component<PropsType, StateType> {
     } = this.props;
     const { password } = this.state;
     const params = {
-      input: { clientMutationId: '', password, token },
+      input: { clientMutationId: uuidv4(), password, token },
       environment,
       onCompleted: (
         response: ?ApplyPasswordResetMutationResponse,
@@ -470,7 +483,7 @@ class Authorization extends Component<PropsType, StateType> {
     const { environment } = this.props;
     const { email } = this.state;
     const params = {
-      input: { clientMutationId: '', email },
+      input: { clientMutationId: uuidv4(), email },
       environment,
       onCompleted: (
         response: ResendEmailVerificationLinkMutationResponse,
@@ -582,9 +595,9 @@ class Authorization extends Component<PropsType, StateType> {
       password,
       formValid,
       errors,
-      isSignUp,
+      selected,
     } = this.state;
-    return isSignUp ? (
+    return selected === 0 ? (
       <SignUp
         email={email}
         firstName={firstName}

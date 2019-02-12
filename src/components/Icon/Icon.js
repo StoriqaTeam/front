@@ -85,6 +85,7 @@ type PropsTypes = {
   type: string,
   size: IconSizeType,
   inline: boolean,
+  dataTest: string,
 };
 
 const iconsMap = {
@@ -168,11 +169,13 @@ class Icon extends PureComponent<PropsTypes> {
   static defaultProps = {
     inline: false,
     size: 16,
+    dataTest: 'icon',
   };
   render() {
-    const { type, size, inline } = this.props;
+    const { type, size, inline, dataTest } = this.props;
     return (
       <div
+        data-test={dataTest}
         styleName={classNames('container', {
           [`size-${size || '16'}`]: type !== 'logo',
           isLogo: type === 'logo',

@@ -1,57 +1,25 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { head, isEmpty, map, pathOr } from 'ramda';
-import axios from 'axios';
+import { isEmpty, map, pathOr } from 'ramda';
 
-import { log } from 'utils';
-
-import { GoodsSlider } from 'components/GoodsSlider';
 import { SearchNoResults } from 'components/SearchNoResults';
+import Goods from 'pages/Start/Goods';
 
 import type { Showcase_shop as ShowcaseShopType } from './__generated__/Showcase_shop.graphql';
 
 import './Showcase.scss';
 
-type StateType = {
-  priceUsd: ?number,
-};
+import t from './i18n';
 
 type PropsType = {
   shop: ShowcaseShopType,
 };
 
-class Showcase extends Component<PropsType, StateType> {
-  state = {
-    priceUsd: null,
-  };
-
-  componentDidMount() {
-    this.isMount = true;
-    axios
-      .get('https://api.coinmarketcap.com/v1/ticker/storiqa/')
-      .then(({ data }) => {
-        const dataObj = head(data);
-        if (dataObj && this.isMount) {
-          this.setState({ priceUsd: Number(dataObj.price_usd) });
-        }
-        return true;
-      })
-      .catch(error => {
-        log.debug(error);
-      });
-  }
-
-  componentWillUnmount() {
-    this.isMount = false;
-  }
-
-  isMount = false;
-
+class Showcase extends PureComponent<PropsType> {
   render() {
     const { shop } = this.props;
-    const { priceUsd } = this.state;
     // $FlowIgnoreMe
     const mostViewedProducts = pathOr(
       [],
@@ -65,25 +33,22 @@ class Showcase extends Component<PropsType, StateType> {
       shop,
     );
     const discountProducts = map(
-      item => ({ ...item.node, priceUsd }),
+      item => ({ ...item.node }),
       mostDiscountProducts,
     );
-    const viewedProducts = map(
-      item => ({ ...item.node, priceUsd }),
-      mostViewedProducts,
-    );
+    const viewedProducts = map(item => ({ ...item.node }), mostViewedProducts);
     return (
       <div styleName="container">
         {viewedProducts &&
           !isEmpty(viewedProducts) && (
             <div styleName="item">
-              <GoodsSlider items={viewedProducts} title="Most Popular" />
+              <Goods items={viewedProducts} title={t.mostPopular} />
             </div>
           )}
         {discountProducts &&
           !isEmpty(discountProducts) && (
             <div styleName="item">
-              <GoodsSlider items={discountProducts} title="Sale" />
+              <Goods items={discountProducts} title={t.sale} />
             </div>
           )}
         {isEmpty(viewedProducts) &&
@@ -125,6 +90,10 @@ export default createFragmentContainer(
                   photoMain
                   cashback
                   price
+                  customerPrice {
+                    price
+                    currency
+                  }
                 }
               }
             }
@@ -160,6 +129,10 @@ export default createFragmentContainer(
                   photoMain
                   cashback
                   price
+                  customerPrice {
+                    price
+                    currency
+                  }
                 }
               }
             }

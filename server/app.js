@@ -35,7 +35,7 @@ import moment from 'moment';
 
 import { Error404, Error } from '../src/pages/Errors';
 
-import { COOKIE_NAME } from 'constants';
+import { COOKIE_NAME, COOKIE_CURRENCY, COOKIE_FIAT_CURRENCY } from 'constants';
 
 if (process.env.NODE_ENV === 'development') {
   var babelrc = fs.readFileSync(path.resolve(__dirname, '..', '.babelrc'));
@@ -173,11 +173,13 @@ app.use(
         ? process.env.REACT_APP_GRAPHQL_ENDPOINT_NODEJS
         : process.env.REACT_APP_GRAPHQL_ENDPOINT;
 
-    const currency = req.universalCookies.get('CURRENCY') || 'STQ';
+    const currency = req.universalCookies.get(COOKIE_CURRENCY) || 'STQ';
+    const fiatCurrency = req.universalCookies.get(COOKIE_FIAT_CURRENCY) || 'USD';
     const fetcher = new ServerFetcher(
       url,
       req.universalCookies.get('SESSION_ID'),
       currency,
+      fiatCurrency,
       req.headers && req.headers['correlation-token'],
       req.universalCookies,
     );

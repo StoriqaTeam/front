@@ -25,7 +25,7 @@
   width: 100%;
   background-color: #FFFFFF;
   margin-bottom: 2rem;
-  padding-bottom: 2rem;
+  padding-bottom: 3rem;
 
   .title {
     text-transform: uppercase;
@@ -81,6 +81,10 @@
         font-size: 12px;
         color: $color_red;
         line-height: 2rem;
+
+        &:first-letter {
+          text-transform: uppercase;
+        }
       }
     }
   }
@@ -101,4 +105,8 @@
   .store {
 
   }
+}
+
+.isEmptyDeliveryAddressesFull {
+  margin-top: 2rem;
 }

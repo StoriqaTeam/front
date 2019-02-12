@@ -47,6 +47,7 @@ type TranslationDicType = {|
   },
   baseProductIsOnModeration: string,
   baseProductIsBlocked: string,
+  close: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -61,8 +62,7 @@ const translations: TranslationsBundleType = {
     vendorCodeIsRequired: 'Vendor code is required',
     priceIsRequired: 'Price is required',
     metricsError: 'Please, specify all metrics',
-    addAtLeastOneDeliveryServiceOrPickup:
-      'Add at least one delivery service or pickup',
+    addAtLeastOneDeliveryServiceOrPickup: 'Add at least one delivery service',
     addAtLeastOneDeliveryDelivery: 'Add at least one delivery service',
     productPhotos: 'Product photos',
     generalSettings: 'General settings',
@@ -99,6 +99,7 @@ const translations: TranslationsBundleType = {
     },
     baseProductIsOnModeration: 'Product is on moderation',
     baseProductIsBlocked: 'Product is blocked, contact the support service',
+    close: 'Close.',
   },
 };
 

@@ -16,7 +16,7 @@ const translations: TranslationsBundleType = {
   en: {
     giveYourStoreAname: 'Give your store a name',
     makeAbrightName:
-      'Make a bright name for your store to attend your customers and encrease your sales',
+      'Make a bright name for your store to attend your customers and increase your sales',
     storeName: 'Store name',
     shortDescription: 'Short Description',
   },

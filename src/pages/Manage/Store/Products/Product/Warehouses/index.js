@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { isEmpty, map, pathOr } from 'ramda';
+import uuidv4 from 'uuid/v4';
 
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Input } from 'components/common/Input';
@@ -14,6 +15,8 @@ import type { MutationParamsType } from 'relay/mutations/SetProductQuantityInWar
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
 import './Warehouses.scss';
+
+import t from './i18n';
 
 type AddressFullType = {|
   value: ?string,
@@ -94,7 +97,7 @@ class Warehouses extends Component<PropsType, StateType> {
     const { environment } = this.context;
     const params: MutationParamsType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         warehouseId,
         productId,
         quantity: parseInt(quantity, 10),
@@ -109,16 +112,16 @@ class Warehouses extends Component<PropsType, StateType> {
         if (!isEmpty(statusError)) {
           this.props.showAlert({
             type: 'danger',
-            text: `Error: "${statusError}"`,
-            link: { text: 'Close.' },
+            text: `${t.error}: "${statusError}"`,
+            link: { text: t.close },
           });
           return;
         }
         if (errors) {
           this.props.showAlert({
             type: 'danger',
-            text: 'Something going wrong :(',
-            link: { text: 'Close.' },
+            text: t.somethingWentWrong,
+            link: { text: t.close },
           });
           return;
         }
@@ -130,8 +133,8 @@ class Warehouses extends Component<PropsType, StateType> {
         log.debug({ error });
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong :(',
-          link: { text: 'Close.' },
+          text: t.somethingWentWrong,
+          link: { text: t.close },
         });
       },
     };
@@ -144,7 +147,7 @@ class Warehouses extends Component<PropsType, StateType> {
     return (
       <div styleName="container">
         <div styleName="title">
-          <strong>Storages</strong>
+          <strong>{t.storages}</strong>
         </div>
         <div styleName="items">
           {map(item => {
@@ -163,7 +166,7 @@ class Warehouses extends Component<PropsType, StateType> {
                 </div>
                 <div styleName="td tdAddress">
                   <div styleName="address">
-                    {addressToString(addressFull) || 'No address'}
+                    {addressToString(addressFull) || t.noAddress}
                   </div>
                 </div>
                 <div styleName="td tdQuantity">
@@ -173,6 +176,7 @@ class Warehouses extends Component<PropsType, StateType> {
                       type="number"
                       inline
                       fullWidth
+                      dataTest="quantity"
                       value={
                         thisProduct ? storageFocusValue : `${item.quantity}`
                       }
@@ -196,7 +200,7 @@ class Warehouses extends Component<PropsType, StateType> {
                         }}
                         dataTest="saveQuantityButton"
                       >
-                        Save
+                        {t.save}
                       </Button>
                     </div>
                   )}

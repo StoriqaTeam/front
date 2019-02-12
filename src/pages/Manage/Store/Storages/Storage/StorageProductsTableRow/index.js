@@ -7,7 +7,7 @@ import ImageLoader from 'libs/react-image-loader';
 import { Input } from 'components/common/Input';
 import { Button } from 'components/common/Button';
 
-import { Checkbox } from 'components/common/Checkbox';
+// import { Checkbox } from 'components/common/Checkbox';
 import { Icon } from 'components/Icon';
 import BannerLoading from 'components/Banner/BannerLoading';
 import { Col } from 'layout';
@@ -25,6 +25,7 @@ type PropsType = {
     name: string,
     categoryName: string,
     price: string,
+    currency: string,
     attributes: Array<{
       attrId: number,
       attributeName: string,
@@ -95,12 +96,12 @@ class StorageProductsTableRow extends Component<PropsType, StateType> {
     const thisProduct = `${item.productId}` === storageFocusId;
     return (
       <div styleName="container">
-        <div styleName="td tdCheckbox">
+        {/* <div styleName="td tdCheckbox">
           <Checkbox
             id={item.productId}
             onChange={() => this.handleCheckboxClick(item.productId)}
           />
-        </div>
+        </div> */}
         <Col size={6} sm={6} md={2} lg={2} xl={1}>
           <div styleName="foto">
             {!item || !item.photoMain ? (
@@ -126,10 +127,12 @@ class StorageProductsTableRow extends Component<PropsType, StateType> {
         </Col>
         <Col size={3} sm={3} md={3} lg={3} xl={2} mdVisible>
           {item &&
-            item.price && <span>{`${formatPrice(item.price)} STQ`}</span>}
+            item.price && (
+              <span>{`${formatPrice(item.price)} ${item.currency}`}</span>
+            )}
         </Col>
         <Col size={2} sm={2} md={2} lg={2} xl={3} xlVisible>
-          {!isEmpty(item.attributes) && (
+          {!isEmpty(item.attributes) ? (
             <div>
               <div styleName="characteristicItem">
                 <div styleName="characteristicLabels">
@@ -154,6 +157,8 @@ class StorageProductsTableRow extends Component<PropsType, StateType> {
                 </div>
               </div>
             </div>
+          ) : (
+            'No Characteristics'
           )}
         </Col>
         <Col size={3} sm={3} md={3} lg={3} xl={3} lgVisible>

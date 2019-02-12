@@ -6,15 +6,17 @@ import PropTypes from 'prop-types';
 
 import { SpinnerCircle, Button } from 'components/common';
 import { log } from 'utils';
-
 import { fetchAvailableShippingForUser } from 'relay/queries';
+
 import type { AvailableDeliveryPackageType } from 'relay/queries/fetchAvailableShippingForUser';
+import type { AllCurrenciesType } from 'types';
 
 import Dropdown from './Dropdown';
 
 import './DeliveryCompaniesSelect.scss';
 
 type PropsType = {
+  currency: AllCurrenciesType,
   country: string,
   baseProductId: number,
   selectedCompanyShippingRawId: ?number,
@@ -119,6 +121,7 @@ class DeliveryCompaniesSelect extends Component<PropsType, StateType> {
             <Fragment>
               {!isEmpty(packages) ? (
                 <Dropdown
+                  currency={this.props.currency}
                   packages={this.state.packages}
                   selectedPackage={selectedPackage || selectedPkg}
                   isOpen={this.state.isDropdownOpened}

@@ -13,6 +13,8 @@ import {
   addIndex,
 } from 'ramda';
 
+import type { SelectItemType } from 'types';
+
 import {
   getServiceLogo,
   convertInterAvailablePackages,
@@ -34,6 +36,7 @@ import type {
 } from '../types';
 
 type PropsType = {
+  currency: SelectItemType,
   children?: Node,
   interShipping: Array<ShippingType>,
   interAvailablePackages: Array<AvailablePackageType>,
@@ -287,6 +290,7 @@ export default (OriginalComponent: ComponentType<*>): ComponentType<*> =>
         interAvailablePackages,
         interShipping,
         onChangeShippingData,
+        currency,
       } = this.props;
       const {
         companies,
@@ -296,6 +300,7 @@ export default (OriginalComponent: ComponentType<*>): ComponentType<*> =>
       } = this.state;
       return (
         <OriginalComponent
+          currency={currency}
           error={error}
           companies={companies}
           editableItemId={editableItemId}

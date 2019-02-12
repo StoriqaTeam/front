@@ -129,7 +129,7 @@
     white-space: nowrap;
 
     &:after {
-      content: '/';
+      // content: '/';
       font-family: $font_light;
       margin-left: 0.5rem;
       font-size: 16px;
@@ -143,6 +143,7 @@
   background: url('./img/dropdown_toggle_opened.svg');
   margin-left: 0.5rem;
   margin-right: 0.5rem;
+  //display: none;
 }
 
 .toggleRatesDropdownOpened {
@@ -151,6 +152,7 @@
   background: url('./img/dropdown_toggle_closed.svg');
   margin-left: 0.5rem;
   margin-right: 0.5rem;
+  //display: none;
 }
 
 .price {
@@ -164,6 +166,7 @@
   font-size: 14px;
   line-height: 2.25rem;
   color: $color_black;
+  margin-right: 1rem;
 }
 
 .bannerLoading {
@@ -172,4 +175,11 @@
   left: 0;
   right: 0;
   bottom: 0;
+}
+
+.priceExchanged {
+  font-size: 16px;
+  font-family: $font_light;
+  line-height: 2.5rem;
+  color: $color_grey_minor
 }

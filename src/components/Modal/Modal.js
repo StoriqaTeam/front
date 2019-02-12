@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, Fragment } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import type { Node } from 'react';
 import { isNil } from 'ramda';
 
@@ -18,35 +18,37 @@ type PropsTypes = {
   render?: ?() => Node,
 };
 
-type StateTypes = {
-  showModal: ?boolean,
-};
+// type StateTypes = {
+//   showModal: ?boolean,
+// };
 
-class Modal extends Component<PropsTypes, StateTypes> {
+class Modal extends PureComponent<PropsTypes> {
   static defaultProps = {
     render: null,
   };
-  state = {
-    showModal: false,
-  };
+  // state = {
+  //   showModal: false,
+  // };
 
   componentWillMount() {
-    this.setState({ showModal: this.props.showModal });
+    // this.setState({ showModal: this.props.showModal });
 
     if (process.env.BROWSER) {
       window.addEventListener('keydown', this.handleKeydown);
     }
   }
+  /**
+    TODO: momentary comment while is fixed when the Modal is already UNMOUNT!
+   */
+  // componentWillReceiveProps(nextProps: Object) {
+  //   const { showModal } = nextProps;
 
-  componentWillReceiveProps(nextProps: Object) {
-    const { showModal } = nextProps;
-
-    if (this.props.showModal !== showModal) {
-      this.setState({ showModal }, () => {
-        this.toggleScroll(showModal);
-      });
-    }
-  }
+  //   if (this.props.showModal !== showModal) {
+  //     this.setState({ showModal }, () => {
+  //       this.toggleScroll(showModal);
+  //     });
+  //   }
+  // }
 
   componentWillUnmount() {
     if (process.env.BROWSER) {
@@ -83,7 +85,7 @@ class Modal extends Component<PropsTypes, StateTypes> {
   };
 
   render() {
-    if (!this.state.showModal) return null;
+    if (!this.props.showModal) return null;
     const closeButton = (
       <div
         styleName="close"

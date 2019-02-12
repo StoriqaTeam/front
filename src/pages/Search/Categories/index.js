@@ -192,6 +192,10 @@ export default createPaginationContainer(
                   photoMain
                   cashback
                   price
+                  customerPrice {
+                    price
+                    currency
+                  }
                   attributes {
                     attribute {
                       id

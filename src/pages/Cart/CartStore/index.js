@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { createFragmentContainer, graphql, Relay } from 'react-relay';
 import { filter, whereEq, toUpper, isEmpty, pathOr } from 'ramda';
 import { Link } from 'found';
+import uuidv4 from 'uuid/v4';
 
 import { Input, Button } from 'components/common';
 import { Rating } from 'components/common/Rating';
@@ -13,16 +14,17 @@ import { Container, Row, Col } from 'layout';
 import {
   formatPrice,
   getNameText,
-  currentCurrency,
   convertSrc,
   log,
   fromRelayError,
+  checkCurrencyType,
 } from 'utils';
 
 import { SetCouponInCartMutation } from 'relay/mutations';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { MutationParamsType as SetCouponInCartMutationType } from 'relay/mutations/SetCouponInCartMutation';
+import type { AllCurrenciesType } from 'types';
 
 import CartProduct from '../CartProduct';
 
@@ -46,6 +48,7 @@ type PropsType = {
   withDeliveryCompaniesSelect?: boolean,
   relay: Relay,
   showAlert: (input: AddAlertInputType) => void,
+  currency: AllCurrenciesType,
 };
 
 /* eslint-disable react/no-array-index-key */
@@ -73,7 +76,7 @@ class CartStore extends Component<PropsType, StateType> {
     const storeId = pathOr(null, ['store', 'rawId'], this.props);
     const params: SetCouponInCartMutationType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         couponCode: this.state.couponCodeValue,
         storeId,
       },
@@ -152,6 +155,7 @@ class CartStore extends Component<PropsType, StateType> {
       unselectable,
       isOpenInfo,
       withDeliveryCompaniesSelect,
+      currency,
     } = this.props;
 
     const {
@@ -177,6 +181,7 @@ class CartStore extends Component<PropsType, StateType> {
               unselectable={unselectable}
               isOpenInfo={isOpenInfo}
               withDeliveryCompaniesSelect={withDeliveryCompaniesSelect}
+              currency={currency}
             />
           </div>
         ))}
@@ -198,7 +203,7 @@ class CartStore extends Component<PropsType, StateType> {
                       </div>
                     )}
                     <div styleName="store-description">
-                      <div styleName="store-name">
+                      <div styleName="storeName">
                         {getNameText(store.name, 'EN')}
                       </div>
                       <Rating value={store.rating} />
@@ -240,13 +245,20 @@ class CartStore extends Component<PropsType, StateType> {
                     {Boolean(store.couponsDiscount) && (
                       <div styleName="value">
                         <thin styleName="through">
-                          {formatPrice(store.totalCostWithoutDiscounts || 0)}{' '}
-                          {currentCurrency()}
+                          {`${formatPrice(
+                            store.totalCostWithoutDiscounts || 0,
+                            checkCurrencyType(currency) === 'fiat'
+                              ? 2
+                              : undefined,
+                          )} ${currency || ''}`}
                         </thin>
                       </div>
                     )}
                     <div styleName="value">
-                      {formatPrice(store.totalCost || 0)} {currentCurrency()}
+                      {`${formatPrice(
+                        store.totalCost || 0,
+                        checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                      )} ${currency || ''}`}
                     </div>
                   </div>
                 </div>

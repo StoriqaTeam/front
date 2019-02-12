@@ -1,0 +1,87 @@
+@import "../../../styles/variables";
+
+.container {
+  overflow: hidden;
+
+  .wrap {
+    margin-bottom: -3rem;
+    padding-bottom: 3rem;
+    overflow-x: scroll;
+    overflow-y: hidden;
+
+    table {
+      display: table;
+      width: 100%;
+
+      thead {
+        display: table-header-group;
+      }
+
+      tr {
+        display: table-row;
+        outline: none;
+        vertical-align: middle;
+      }
+
+      tbody {
+        tr {
+          td:first-child {
+            position: relative;
+
+            &:before {
+              content: '';
+              position: absolute;
+              display: block;
+              width: 2px;
+              bottom: 0;
+              left: 0;
+              top: 0;
+              opacity: 0;
+              background-color: $color_blue_hover;
+              transition: $transition_all_ease;
+            }
+          }
+
+          &:hover {
+            td:first-child {
+              &:before {
+                opacity: 1;
+              }
+            }
+          }
+        }
+      }
+
+      th, td {
+        display: table-cell;
+        border-bottom: 1px solid $color_grey_trivial;
+        text-align: left;
+        vertical-align: middle;
+
+        &:first-child {
+          padding-left: 4rem;
+        }
+
+        &:last-child {
+          padding-right: 4rem;
+        }
+
+        &.byContent {
+          width: 1px;
+        }
+      }
+
+      th {
+        padding: 2rem 0 0.5rem 2rem;
+        font-size: 14px;
+        color: $color_grey_minor;
+      }
+
+      td {
+        padding: 2rem 0 2rem 2rem;
+        color: $color_grey;
+      }
+    }
+  }
+}
+

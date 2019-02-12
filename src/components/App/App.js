@@ -20,8 +20,12 @@ import type {
   CategoryType,
   LanguageType,
   CurrencyType,
+  FiatCurrencyType,
+  CryptoCurrencyType,
+  SellerCurrencyType,
   OrderStatusesType,
   DirectoriesType,
+  CurrencyExchangeType,
 } from 'types';
 
 import { AppContext } from './index';
@@ -38,9 +42,12 @@ type PropsType = {
   cart: ?{},
   languages: Array<LanguageType>,
   currencies: Array<CurrencyType>,
+  fiatCurrencies: Array<FiatCurrencyType>,
+  cryptoCurrencies: Array<CryptoCurrencyType>,
+  sellerCurrencies: Array<SellerCurrencyType>,
   categories: CategoryType,
   orderStatuses: OrderStatusesType,
-  currencyExchange: Object,
+  currencyExchange: CurrencyExchangeType,
   children: any,
   relay: {
     environment: Environment,
@@ -131,6 +138,9 @@ class App extends Component<PropsType, StateType> {
     const {
       languages,
       currencies,
+      fiatCurrencies,
+      cryptoCurrencies,
+      sellerCurrencies,
       categories,
       orderStatuses,
       currencyExchange,
@@ -141,6 +151,9 @@ class App extends Component<PropsType, StateType> {
       languages,
       orderStatuses,
       currencies,
+      fiatCurrencies,
+      cryptoCurrencies,
+      sellerCurrencies,
       currencyExchange,
       countries,
     };

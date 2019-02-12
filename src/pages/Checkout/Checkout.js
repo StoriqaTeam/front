@@ -1,14 +1,13 @@
 // @flow
 
 import React, { Component } from 'react';
-import { createPaginationContainer, graphql } from 'react-relay';
+import { graphql, createFragmentContainer } from 'react-relay';
 import PropTypes from 'prop-types';
 import {
   pipe,
   pathOr,
   path,
   map,
-  prop,
   isEmpty,
   flatten,
   find,
@@ -19,10 +18,19 @@ import {
   head,
   keys,
 } from 'ramda';
+import uuidv4 from 'uuid/v4';
+
 import { routerShape, withRouter } from 'found';
 import { validate } from '@storiqa/shared';
 
-import { log } from 'utils';
+import { renameKeys } from 'utils/ramda';
+import {
+  log,
+  fromRelayError,
+  getCookie,
+  setCookie,
+  getCurrentCurrency,
+} from 'utils';
 import {
   CreateUserDeliveryAddressFullMutation,
   CreateOrdersMutation,
@@ -37,16 +45,13 @@ import { transactionTracker } from 'rrHalper';
 import type { AddressFullType } from 'components/AddressAutocomplete/AddressForm';
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { CreateOrdersMutationResponseType } from 'relay/mutations/CreateOrdersMutation';
-
-// eslint-disable-next-line
-import type Cart_cart from '../Cart/__generated__/Cart_cart.graphql';
-// eslint-disable-next-line
-import type Checkout_me from './__generated__/Checkout_me.graphql';
+import type { OrderStatusType } from 'types';
 
 import CheckoutHeader from './CheckoutHeader';
 import CheckoutAddress from './CheckoutContent/CheckoutAddress';
 import CheckoutProducts from './CheckoutContent/CheckoutProducts';
 import CheckoutSidebar from './CheckoutSidebar';
+import { PaymentInfoFiat } from './PaymentInfoFiat';
 import { PaymentInfo } from './PaymentInfo';
 import CartStore from '../Cart/CartStore';
 import CartEmpty from '../Cart/CartEmpty';
@@ -57,10 +62,46 @@ import './Checkout.scss';
 
 import t from './i18n';
 
+type CartType = {
+  id: string,
+  productsCost: number,
+  deliveryCost: number,
+  totalCount: number,
+  totalCost: number,
+  totalCostWithoutDiscounts: number,
+  productsCostWithoutDiscounts: number,
+  couponsDiscounts: number,
+  stores: {
+    edges: Array<{
+      node: {
+        id: string,
+        productsCost: number,
+        deliveryCost: number,
+        totalCost: number,
+        totalCount: number,
+        products: Array<{
+          id: string,
+          selected: boolean,
+          baseProduct: ?{
+            id: string,
+            isShippingAvailable: boolean,
+          },
+          quantity: number,
+        }>,
+      },
+    }>,
+  },
+};
+
 type PropsType = {
   me: any,
   // eslint-disable-next-line
-  cart: Cart_cart,
+  cart: {
+    id: string,
+    totalCount: number,
+    fiat: CartType,
+    crypto: CartType,
+  },
   router: routerShape,
   showAlert: (input: AddAlertInputType) => void,
 };
@@ -76,10 +117,33 @@ type StateType = {
     receiverName: string,
     receiverPhone: string,
   },
-  invoiceId: ?string,
+  invoice: ?{
+    id: string,
+    amount: number,
+    currency: string,
+    priceReservedDueDateTime: string,
+    state: OrderStatusType,
+    wallet: ?string,
+    transactions: Array<{
+      id: string,
+      amount: number,
+    }>,
+    orders: Array<{
+      id: string,
+      slug: number,
+      productId: number,
+      quantity: number,
+      price: number,
+    }>,
+    paymentIntent: {
+      id: string,
+      clientSecret: string,
+    },
+  },
   checkoutInProcess: boolean,
   errors: { [string]: Array<string> },
   scrollArr: Array<string>,
+  currencyType: 'FIAT' | 'CRYPTO',
 };
 
 const emptyAddress = {
@@ -99,7 +163,13 @@ const emptyAddress = {
 class Checkout extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
+
+    const currencyType = getCookie('CURRENCY_TYPE');
+    if (!currencyType) {
+      setCookie('CURRENCY_TYPE', 'FIAT');
+    }
     const { deliveryAddressesFull } = props.me;
+
     this.state = {
       storesRef: null,
       step: 1,
@@ -112,10 +182,11 @@ class Checkout extends Component<PropsType, StateType> {
           (props.me && `${props.me.firstName} ${props.me.lastName}`) || '',
         receiverPhone: (props.me && props.me.phone) || '',
       },
-      invoiceId: null,
+      invoice: null,
       checkoutInProcess: false,
       errors: {},
       scrollArr: ['receiverName', 'phone', 'deliveryAddress'],
+      currencyType: currencyType === 'CRYPTO' ? 'CRYPTO' : 'FIAT',
     };
   }
 
@@ -128,23 +199,20 @@ class Checkout extends Component<PropsType, StateType> {
   storesRef: any;
 
   createAddress = () => {
+    this.setState({ checkoutInProcess: true });
     // $FlowIgnore
     const addressFull = pathOr(null, ['orderInput', 'addressFull'], this.state);
     // $FlowIgnore
     const userId = pathOr(null, ['me', 'rawId'], this.props);
     CreateUserDeliveryAddressFullMutation.commit({
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         userId,
         addressFull,
         isPriority: false,
       },
       environment: this.context.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
-        this.setState(() => ({
-          isAddressSelect: true,
-          isNewAddress: false,
-        }));
         if (errors) {
           this.props.showAlert({
             type: 'danger',
@@ -158,12 +226,19 @@ class Checkout extends Component<PropsType, StateType> {
           text: t.addressCreated,
           link: { text: '' },
         });
+        this.setState({
+          isAddressSelect: true,
+          isNewAddress: false,
+          checkoutInProcess: false,
+          step: 2,
+        });
       },
       onError: (error: Error) => {
         log.error(error);
         this.setState(() => ({
           isAddressSelect: true,
           isNewAddress: false,
+          checkoutInProcess: false,
         }));
         this.props.showAlert({
           type: 'danger',
@@ -174,10 +249,11 @@ class Checkout extends Component<PropsType, StateType> {
     });
   };
 
-  handleChangeStep = step => () => {
+  handleChangeStep = (step: number) => {
     const { saveAsNewAddress, isNewAddress } = this.state;
     if (saveAsNewAddress && isNewAddress) {
       this.createAddress();
+      return;
     }
     this.setState({ step });
   };
@@ -189,39 +265,65 @@ class Checkout extends Component<PropsType, StateType> {
       this.setState({ errors: preValidationErrors });
       return;
     }
-    this.setState({ step: 2 });
 
-    const phone = pathOr(null, ['phone'])(this.props.me);
-    const userId = pathOr(null, ['id'])(this.props.me);
-    if (phone === null && userId !== null) {
+    const { orderInput } = this.state;
+    const { me } = this.props;
+    if (me != null && me.phone !== orderInput.receiverPhone) {
       updateUserPhoneMutation({
         environment: this.context.environment,
         variables: {
           input: {
-            clientMutationId: '',
-            id: userId,
-            phone: this.state.orderInput.receiverPhone,
+            clientMutationId: uuidv4(),
+            id: me.id,
+            phone: orderInput.receiverPhone,
           },
         },
       })
-        .then(() => true)
-        .catch(log.error);
+        .then(() => {
+          this.handleChangeStep(2);
+          return true;
+        })
+        .catch(error => {
+          const relayErrors = fromRelayError({ source: { errors: [error] } });
+          // $FlowIgnoreMe
+          const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+          if (!isEmpty(validationErrors)) {
+            this.setState({
+              errors: renameKeys(
+                {
+                  phone: 'receiverPhone',
+                },
+                validationErrors,
+              ),
+            });
+          }
+        });
+      return;
     }
+    this.handleChangeStep(2);
   };
 
   validate = () => {
     const { addressFull } = this.state.orderInput;
     let { errors } = validate(
       {
-        receiverName: [[val => Boolean(val), 'Receiver name is required']],
-        receiverPhone: [[val => Boolean(val), 'Receiver phone is required']],
+        receiverName: [[val => Boolean(val), t.errors.receiverNameRequired]],
+        receiverPhone: [[val => Boolean(val), t.errors.receiverPhoneRequired]],
       },
       this.state.orderInput,
     );
     if (!addressFull.country || !addressFull.postalCode || !addressFull.value) {
+      const errorString = `
+        ${!addressFull.country ? t.errors.country : ''}
+        ${!addressFull.value ? `, ${t.errors.address}` : ''}
+        ${!addressFull.postalCode ? `, ${t.errors.postalCode}` : ''}
+        ${t.errors.areRequired}
+      `;
       errors = {
         ...errors,
-        deliveryAddress: ['Country, address and postal code are required'],
+        deliveryAddress: [
+          errorString.replace(/^(\s+)?,\s+/, '').replace(/\s+,\s+/g, ', '),
+        ],
       };
     }
     if (errors && !isEmpty(errors)) {
@@ -235,7 +337,7 @@ class Checkout extends Component<PropsType, StateType> {
   };
 
   handleOnChangeOrderInput = orderInput => {
-    this.setState({ orderInput });
+    this.setState({ orderInput, errors: {} });
   };
 
   handleOnChangeAddressType = () => {
@@ -260,6 +362,24 @@ class Checkout extends Component<PropsType, StateType> {
   };
 
   handleCheckout = () => {
+    const currencyType = getCookie('CURRENCY_TYPE');
+    let actualCurrency = null;
+    if (currencyType === 'FIAT') {
+      actualCurrency = getCookie('FIAT_CURRENCY');
+    }
+    if (currencyType === 'CRYPTO') {
+      actualCurrency = getCookie('CURRENCY');
+    }
+
+    if (!actualCurrency) {
+      this.props.showAlert({
+        type: 'danger',
+        text: t.error,
+        link: { text: t.close },
+      });
+      return;
+    }
+
     const {
       orderInput: { addressFull, receiverName, receiverPhone },
     } = this.state;
@@ -267,11 +387,11 @@ class Checkout extends Component<PropsType, StateType> {
     this.setState({ checkoutInProcess: true }, () => {
       CreateOrdersMutation.commit({
         input: {
-          clientMutationId: '',
+          clientMutationId: uuidv4(),
           addressFull,
           receiverName,
           receiverPhone,
-          currency: 'STQ',
+          currency: actualCurrency,
         },
         environment: this.context.environment,
         onCompleted: (response: CreateOrdersMutationResponseType, errors) => {
@@ -281,13 +401,13 @@ class Checkout extends Component<PropsType, StateType> {
               text: t.ordersSuccessfullyCreated,
               link: { text: t.close },
             });
+            const { invoice } = response.createOrders;
             this.setState({
-              invoiceId: response.createOrders.invoice.id,
+              // $FlowIgnore
+              invoice, // eslint-disable-line
               checkoutInProcess: false,
             });
-            this.handleChangeStep(3)();
-
-            const { invoice } = response.createOrders;
+            this.handleChangeStep(3);
 
             if (
               process.env.BROWSER &&
@@ -339,14 +459,12 @@ class Checkout extends Component<PropsType, StateType> {
     });
   };
 
-  checkReadyToCheckout = (): boolean => {
-    if (!this.props.cart) {
+  checkReadyToCheckout = (cart: CartType): boolean => {
+    if (!cart) {
       return false;
     }
 
-    const {
-      cart: { totalCount, stores },
-    } = this.props;
+    const { totalCount, stores } = cart;
     const { step } = this.state;
 
     // check that all products have selected delivery packages
@@ -359,7 +477,7 @@ class Checkout extends Component<PropsType, StateType> {
           return [];
         }, stores.edges),
       );
-
+      // $FlowIgnore
       const selectedProducts = filter(whereEq({ selected: true }), products);
 
       const isProductsWithoutPackageExist = find(
@@ -379,7 +497,7 @@ class Checkout extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { me } = this.props;
+    const { me, cart } = this.props;
     // $FlowIgnore
     const deliveryAddresses = pathOr(
       null,
@@ -393,14 +511,16 @@ class Checkout extends Component<PropsType, StateType> {
       saveAsNewAddress,
       orderInput,
       errors,
+      invoice,
+      currencyType,
     } = this.state;
-    const stores = pipe(
-      pathOr([], ['cart', 'stores', 'edges']),
-      map(path(['node'])),
+    const actualCart = currencyType === 'CRYPTO' ? cart.crypto : cart.fiat;
+    const stores = pipe(pathOr([], ['stores', 'edges']), map(path(['node'])))(
       // $FlowIgnore
-    )(this.props);
-
+      actualCart,
+    );
     const emptyCart = stores.length === 0;
+
     return (
       <CheckoutContext.Provider
         value={{
@@ -420,7 +540,7 @@ class Checkout extends Component<PropsType, StateType> {
                   <div styleName="headerWrapper">
                     <CheckoutHeader
                       currentStep={step}
-                      isReadyToNext={this.checkReadyToCheckout()}
+                      isReadyToNext={this.checkReadyToCheckout(actualCart)}
                       onChangeStep={this.handleChangeStep}
                     />
                   </div>
@@ -485,15 +605,30 @@ class Checkout extends Component<PropsType, StateType> {
                                   store={store}
                                   totals={1000}
                                   withDeliveryCompaniesSelect
+                                  currency={getCurrentCurrency(currencyType)}
                                 />
                               ))}
                             </div>
                           </div>
                         )}
                         {step === 3 &&
-                          this.state.invoiceId && (
+                          currencyType === 'FIAT' && (
+                            <PaymentInfoFiat
+                              restCartCount={
+                                cart.crypto ? cart.crypto.totalCount : 0
+                              }
+                              invoice={invoice}
+                              me={this.props.me}
+                            />
+                          )}
+                        {step === 3 &&
+                          invoice &&
+                          currencyType === 'CRYPTO' && (
                             <PaymentInfo
-                              invoiceId={this.state.invoiceId}
+                              restCartCount={
+                                cart.fiat ? cart.fiat.totalCount : 0
+                              }
+                              invoiceId={invoice.id}
                               me={this.props.me}
                             />
                           )}
@@ -506,10 +641,14 @@ class Checkout extends Component<PropsType, StateType> {
                             <CheckoutSidebar
                               step={step}
                               buttonText={step === 1 ? t.next : t.checkout}
-                              isReadyToClick={this.checkReadyToCheckout()}
+                              isReadyToClick={this.checkReadyToCheckout(
+                                actualCart,
+                              )}
                               checkoutInProcess={this.state.checkoutInProcess}
                               onCheckout={this.handleCheckout}
                               goToCheckout={this.goToCheckout}
+                              cart={actualCart}
+                              currency={getCurrentCurrency(currencyType)}
                             />
                           </StickyBar>
                         </Col>
@@ -525,7 +664,7 @@ class Checkout extends Component<PropsType, StateType> {
   }
 }
 
-export default createPaginationContainer(
+export default createFragmentContainer(
   Page(withShowAlert(withRouter(Checkout)), { withoutCategories: true }),
   graphql`
     fragment Checkout_me on User {
@@ -553,57 +692,78 @@ export default createPaginationContainer(
       }
     }
 
-    fragment Checkout_cart on Cart
-      @argumentDefinitions(
-        first: { type: "Int", defaultValue: null }
-        after: { type: "ID", defaultValue: null }
-      ) {
+    fragment Checkout_cart on Cart {
       id
-      productsCost
-      deliveryCost
-      totalCost
-      totalCount
-      stores(first: $first, after: $after) @connection(key: "Cart_stores") {
-        edges {
-          node {
-            id
-            productsCost
-            deliveryCost
-            totalCost
-            totalCount
-            ...CartStore_store
-            products {
+      fiat {
+        id
+        productsCost
+        deliveryCost
+        totalCount
+        totalCost
+        totalCostWithoutDiscounts
+        productsCostWithoutDiscounts
+        couponsDiscounts
+        stores {
+          edges {
+            node {
               id
-              companyPackage {
+              productsCost
+              deliveryCost
+              totalCost
+              totalCount
+              ...CartStore_store
+              products {
                 id
-                rawId
+                companyPackage {
+                  id
+                  rawId
+                }
+                selectPackage {
+                  id
+                  shippingId
+                }
+                selected
               }
-              selectPackage {
+            }
+          }
+        }
+      }
+      crypto {
+        id
+        productsCost
+        deliveryCost
+        totalCount
+        totalCost
+        totalCostWithoutDiscounts
+        productsCostWithoutDiscounts
+        couponsDiscounts
+        stores {
+          edges {
+            node {
+              id
+              productsCost
+              deliveryCost
+              totalCost
+              totalCount
+              ...CartStore_store
+              products {
                 id
-                shippingId
+                companyPackage {
+                  id
+                  rawId
+                }
+                selectPackage {
+                  id
+                  shippingId
+                }
+                selected
               }
-              selected
             }
           }
         }
       }
     }
   `,
-  {
-    direction: 'forward',
-    getConnectionFromProps: prop('cart'),
-    getVariables: () => ({
-      first: null,
-      after: null,
-    }),
-    query: graphql`
-      query Checkout_cart_Query($first: Int, $after: ID) {
-        cart {
-          ...Cart_cart @arguments(first: $first, after: $after)
-        }
-      }
-    `,
-  },
 );
 
 Checkout.contextTypes = {

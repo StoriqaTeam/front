@@ -7,9 +7,10 @@ import { Input, Button, Rating } from 'components/common';
 import { Icon } from 'components/Icon';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Container, Row, Col } from 'layout';
-import { formatPrice, getNameText, currentCurrency, convertSrc } from 'utils';
+import { formatPrice, getNameText, convertSrc, checkCurrencyType } from 'utils';
 
 import type { AvailableDeliveryPackageType } from 'relay/queries/fetchAvailableShippingForUser';
+import type { AllCurrenciesType } from 'types';
 
 import CartProduct from './CartProduct';
 import type { CalculateBuyNowType } from '../BuyNow';
@@ -57,6 +58,7 @@ type PropsType = {
     }>,
     rating: number,
   },
+  currency: AllCurrenciesType,
   buyNowData: CalculateBuyNowType,
   onChangeCount: (quantity: number) => void,
   couponCodeValue: string,
@@ -92,7 +94,9 @@ class CartStore extends PureComponent<PropsType> {
       onChangeDelivery,
       deliveryPackage,
       onPackagesFetched,
+      currency,
     } = this.props;
+
     return (
       <div styleName="container">
         <div>
@@ -108,6 +112,7 @@ class CartStore extends PureComponent<PropsType> {
             onChangeDelivery={onChangeDelivery}
             deliveryPackage={deliveryPackage}
             onPackagesFetched={onPackagesFetched}
+            currency={currency}
           />
         </div>
         <div styleName="footer">
@@ -128,7 +133,7 @@ class CartStore extends PureComponent<PropsType> {
                       </div>
                     )}
                     <div styleName="store-description">
-                      <div styleName="store-name">
+                      <div styleName="storeName">
                         {getNameText(store.name, 'EN')}
                       </div>
                       <Rating value={store.rating} />
@@ -170,16 +175,20 @@ class CartStore extends PureComponent<PropsType> {
                     {Boolean(buyNowData.couponsDiscounts) && (
                       <div styleName="value">
                         <thin styleName="through">
-                          {formatPrice(
+                          {`${formatPrice(
                             buyNowData.totalCostWithoutDiscounts || 0,
-                          )}{' '}
-                          {currentCurrency()}
+                            checkCurrencyType(currency) === 'fiat'
+                              ? 2
+                              : undefined,
+                          )} ${currency || ''}`}
                         </thin>
                       </div>
                     )}
                     <div styleName="value">
-                      {formatPrice(buyNowData.totalCost || 0)}{' '}
-                      {currentCurrency()}
+                      {`${formatPrice(
+                        buyNowData.totalCost || 0,
+                        checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                      )} ${currency || ''}`}
                     </div>
                   </div>
                 </div>

@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { pathOr, isEmpty, map, length } from 'ramda';
+import { pathOr, isEmpty, map, length, head } from 'ramda';
 import { withRouter, routerShape } from 'found';
 import { graphql, createFragmentContainer } from 'react-relay';
 import type { Environment } from 'relay-runtime';
@@ -146,7 +146,7 @@ class Storages extends PureComponent<PropsType> {
                     handleCheckboxClick={this.handleCheckboxClick}
                   />
                 ),
-                storages,
+                [head(storages)],
               )
             )}
           </div>
@@ -161,7 +161,17 @@ Storages.contextTypes = {
 };
 
 export default createFragmentContainer(
-  Page(withShowAlert(withRouter(ManageStore(Storages, 'Storages')))),
+  Page(
+    withShowAlert(
+      withRouter(
+        ManageStore({
+          OriginalComponent: Storages,
+          active: 'storages',
+          title: 'Storages',
+        }),
+      ),
+    ),
+  ),
   graphql`
     fragment Storages_me on User {
       myStore {

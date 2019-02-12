@@ -2,6 +2,7 @@ import ReactDOM from 'react-dom';
 
 import buildApp from 'components/entry';
 import { log } from 'utils';
+import entry from './components/entry';
 
 import './windowModal';
 import './index.scss';
@@ -20,7 +21,7 @@ if (process.env.BROWSER && buildApp) {
       // $FlowIgnore
       if (process.env.NODE_ENV === 'development' && module.hot) {
         module.hot.accept('./components/entry.js', () => {
-          import('./components/entry.js')
+          entry()
             .then(newInstance => {
               const rebuildApp = newInstance.default;
               rebuildApp()

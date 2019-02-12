@@ -13,6 +13,8 @@ import {
   isNil,
 } from 'ramda';
 import { routerShape } from 'found';
+// $FlowIgnoreMe
+import uuidv4 from 'uuid/v4';
 
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import {
@@ -21,6 +23,7 @@ import {
   fromRelayError,
   jwt as JWT,
   removeCookie,
+  setCookie,
 } from 'utils';
 import Logo from 'components/Icon/svg/logo.svg';
 import { Spinner } from 'components/common/Spinner';
@@ -70,7 +73,7 @@ class OAuthCallback extends PureComponent<PropsType> {
           input: {
             provider: this.props.provider,
             token: accessToken,
-            clientMutationId: '',
+            clientMutationId: uuidv4(),
             additionalData: getAdditionalData(),
           },
         },
@@ -79,6 +82,7 @@ class OAuthCallback extends PureComponent<PropsType> {
           removeCookie('REFERAL');
           removeCookie('REFERER');
           removeCookie('UTM_MARKS');
+          setCookie('registered', true);
           log.debug({ response });
           // $FlowIgnoreMe
           const jwtStr = pathOr(null, ['getJWTByProvider', 'token'], response);
@@ -88,7 +92,7 @@ class OAuthCallback extends PureComponent<PropsType> {
             const redirectPath = getPathForRedirectAfterLogin();
             if (!isNil(redirectPath)) {
               clearPathForRedirectAfterLogin();
-              this.props.router.push(redirectPath);
+              this.props.router.push(decodeURIComponent(redirectPath));
             } else {
               window.location.href = '/'; // TODO: use refetch or store update
             }

@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import { isEmpty, isNil, pathOr } from 'ramda';
 import type { Environment } from 'relay-runtime';
 import { graphql } from 'react-relay';
+import uuidv4 from 'uuid/v4';
 
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { UploadWrapper } from 'components/Upload';
@@ -61,6 +62,7 @@ type StateType = {
       rawId: number,
       name: TranslationType,
       logo: string,
+      status: string,
     },
   },
 };
@@ -75,6 +77,7 @@ const MANAGE_STORE_MENU_FRAGMENT = graphql`
         text
       }
       logo
+      status
     }
   }
 `;
@@ -122,6 +125,16 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
   disposeUser: () => void;
 
   handleOnUpload = (e: SyntheticInputEvent<HTMLInputElement>) => {
+    const { storeData } = this.state;
+    if (storeData && storeData.myStore.status === 'MODERATION') {
+      this.props.showAlert({
+        type: 'danger',
+        text: `${t.error}${t.statusModerationCannotBeChanged}`,
+        link: { text: t.close },
+      });
+      return;
+    }
+
     e.preventDefault();
     this.setState({ isMainPhotoUploading: true });
     uploadFile(e.target.files[0])
@@ -164,7 +177,7 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
     }
     const params: MutationParamsType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         id: storeId,
         logo: url,
         name: null,
@@ -239,6 +252,15 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
   };
 
   deleteAvatar = (): void => {
+    const { storeData } = this.state;
+    if (storeData && storeData.myStore.status === 'MODERATION') {
+      this.props.showAlert({
+        type: 'danger',
+        text: `${t.error}${t.statusModerationCannotBeChanged}`,
+        link: { text: t.close },
+      });
+      return;
+    }
     this.handleLogoUpload('');
   };
 
@@ -329,7 +351,7 @@ class ManageStoreMenu extends Component<PropsType, StateType> {
                 onKeyDown={() => {}}
                 role="button"
                 tabIndex="0"
-                data-test={item.dataTest}
+                data-test={item.title}
               >
                 {item.title}
               </div>

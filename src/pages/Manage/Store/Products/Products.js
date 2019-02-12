@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { pathOr, isEmpty, map, head } from 'ramda';
+import { pathOr, isEmpty, map, head, addIndex } from 'ramda';
 import { withRouter, routerShape } from 'found';
 import { graphql, createPaginationContainer, Relay } from 'react-relay';
 
@@ -11,6 +11,7 @@ import { ManageStore } from 'pages/Manage/Store';
 import { getNameText, log, fromRelayError } from 'utils';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Button } from 'components/common/Button';
+import { Confirmation } from 'components/Confirmation';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
@@ -31,7 +32,17 @@ type PropsType = {
   me: ProductsMe,
 };
 
-class Products extends PureComponent<PropsType> {
+type StateType = {
+  showModal: boolean,
+  dataToDelete: ?string,
+};
+
+class Products extends PureComponent<PropsType, StateType> {
+  state = {
+    showModal: false,
+    dataToDelete: null,
+  };
+
   addProduct = () => {
     // $FlowIgnoreMe
     const storeId = pathOr(null, ['match', 'params', 'storeId'], this.props);
@@ -56,8 +67,7 @@ class Products extends PureComponent<PropsType> {
     log.info('id', id);
   };
 
-  handleDelete = (id: string, e) => {
-    e.stopPropagation();
+  deleteProduct = (id: string): void => {
     // $FlowIgnoreMe
     const storeId = pathOr(null, ['me', 'myStore', 'id'], this.props);
 
@@ -93,6 +103,7 @@ class Products extends PureComponent<PropsType> {
           });
           return;
         }
+        this.handleCloseModal();
         this.props.showAlert({
           type: 'success',
           text: t.deleted,
@@ -110,12 +121,28 @@ class Products extends PureComponent<PropsType> {
     });
   };
 
+  handleDelete = () => {
+    const { dataToDelete } = this.state;
+    // $FlowIgnoreMe
+    this.deleteProduct(dataToDelete);
+  };
+
+  handleDeleteModal = (id: string, e): void => {
+    e.stopPropagation();
+    this.setState({ showModal: true, dataToDelete: id });
+  };
+
+  handleCloseModal = (): void => {
+    this.setState({ showModal: false, dataToDelete: null });
+  };
+
   productsRefetch = () => {
     this.props.relay.loadMore(8);
   };
 
   render() {
     const { me } = this.props;
+    const { showModal } = this.state;
     // $FlowIgnoreMe
     const baseProducts = pathOr([], ['myStore', 'baseProducts', 'edges'], me);
     const products = map(item => {
@@ -133,21 +160,35 @@ class Products extends PureComponent<PropsType> {
       };
       return newItem;
     }, baseProducts);
+    const mapIndexed = addIndex(map);
     return (
       <div styleName="container">
         <ProductsHeader onAdd={this.addProduct} />
         <ProductsTableHeader />
+        <Confirmation
+          showModal={showModal}
+          onClose={this.handleCloseModal}
+          title={t.deleteYourProduct}
+          description={t.confirmationDescription}
+          onCancel={this.handleCloseModal}
+          onConfirm={this.handleDelete}
+          confirmText={t.confirmText}
+          cancelText={t.cancelText}
+        />
         {isEmpty(products) ? (
           <div styleName="emptyProductsBlock">{t.noProducts}</div>
         ) : (
-          map(
-            item => (
+          mapIndexed(
+            /* eslint-disable no-return-assign */
+            (item, index) => (
+              /* eslint-disable no-plusplus, no-param-reassign, no-return-assign */
               <ProductsTableRow
                 key={item.rawId}
                 item={item}
                 onEdit={this.editProduct}
-                onDelete={this.handleDelete}
+                onDelete={this.handleDeleteModal}
                 onCheckbox={this.handleCheckboxClick}
+                index={(index += 1)}
               />
             ),
             products,
@@ -177,7 +218,17 @@ Products.contextTypes = {
 };
 
 export default createPaginationContainer(
-  withShowAlert(withRouter(Page(ManageStore(Products, 'Goods')))),
+  withShowAlert(
+    withRouter(
+      Page(
+        ManageStore({
+          OriginalComponent: Products,
+          active: 'goods',
+          title: 'Goods',
+        }),
+      ),
+    ),
+  ),
   graphql`
     fragment Products_me on User
       @argumentDefinitions(

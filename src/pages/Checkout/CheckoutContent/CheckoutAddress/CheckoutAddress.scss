@@ -67,10 +67,18 @@
   font-size: 12px;
   color: $color_red;
   line-height: 2rem;
+
+  &:first-letter {
+    text-transform: uppercase;
+  }
 }
 
 .newAddressWrap {
   @media (max-width: #{$xl - 1px}) {
+    margin-top: 4rem;
+  }
+
+  &.isEmptyDeliveryAddressesFull {
     margin-top: 2rem;
   }
 }

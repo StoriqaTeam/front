@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { pathOr, isEmpty } from 'ramda';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { routerShape } from 'found';
+import uuidv4 from 'uuid/v4';
 
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Page } from 'components/App';
@@ -68,7 +69,7 @@ class EditStorage extends Component<PropsType, StateType> {
     const id = pathOr(null, ['me', 'warehouse', 'id'], this.props);
     const params: MutationParamsType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         id,
         name: data.name,
         addressFull: {
@@ -146,7 +147,15 @@ EditStorage.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withShowAlert(Page(ManageStore(EditStorage, 'Storages'))),
+  withShowAlert(
+    Page(
+      ManageStore({
+        OriginalComponent: EditStorage,
+        active: 'storages',
+        title: 'Storages',
+      }),
+    ),
+  ),
   graphql`
     fragment EditStorage_me on User
       @argumentDefinitions(storageSlug: { type: "String!" }) {

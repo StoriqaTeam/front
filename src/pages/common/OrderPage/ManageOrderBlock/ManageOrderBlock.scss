@@ -1,16 +1,32 @@
 @import '../../../../styles/variables.scss';
 
 .container {
+
+}
+
+.title {
+  margin-bottom: 2rem;
+  font-size: 14px;
+  letter-spacing: 0.15rem;
+  text-transform: uppercase;
+}
+
+.buttons {
   display: flex;
+  //border-top: 1px solid $color_grey_trivial;
+  //border-bottom: 1px solid $color_grey_trivial;
+  //margin: 0 -4rem;
+  //padding: 4rem;
 }
 
 .sendButtonWrapper {
-  padding-right: 2.5rem;
+  margin-right: 2.5rem;
 }
 
 .sendButtonWrapper,
 .cancelButtonWrapper {
   width: 28.25rem;
+
   button {
     width: 100%;
   }
@@ -52,6 +68,38 @@
     margin-top: 7.75rem;
     button {
       width: 100%;
+    }
+  }
+}
+
+.orderFee {
+  margin-top: 6rem;
+
+  &.alone {
+    margin-top: 0;
+  }
+
+  .desc {
+    margin-bottom: 2rem;
+
+    .label {
+      color: $color_grey_minor;
+      font-size: 14px;
+      line-height: 1.43;
+    }
+    .text {
+      font-size: 16px;
+      line-height: 1.25;
+    }
+  }
+}
+
+.infoBlockItem {
+  margin-top: 2rem;
+
+  @media (max-width: #{$lg - 1px}) {
+    & > div > div + div {
+      margin-top: 2rem;
     }
   }
 }

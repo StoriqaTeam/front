@@ -4,13 +4,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { pathOr, toUpper, isEmpty } from 'ramda';
 import { createFragmentContainer, graphql } from 'react-relay';
+import uuidv4 from 'uuid/v4';
 
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
 import { log, fromRelayError } from 'utils';
-
+import { renameKeys } from 'utils/ramda';
 import { UpdateStoreMainMutation } from 'relay/mutations';
 
 import type { MutationParamsType } from 'relay/mutations/UpdateStoreMainMutation';
@@ -52,12 +53,12 @@ class EditStore extends Component<PropsType, StateType> {
       cover,
       slogan,
     } = form;
-    this.setState(() => ({ isLoading: true }));
+    this.setState(() => ({ isLoading: true, serverValidationErrors: {} }));
     // $FlowIgnoreMe
     const id = pathOr(null, ['me', 'myStore', 'id'], this.props);
     const params: MutationParamsType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         id,
         name: [{ lang: optionLanguage, text: name }],
         // $FlowIgnoreMe
@@ -79,8 +80,17 @@ class EditStore extends Component<PropsType, StateType> {
         this.setState(() => ({ isLoading: false }));
         // $FlowIgnoreMe
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+
         if (!isEmpty(validationErrors)) {
-          this.setState({ serverValidationErrors: validationErrors });
+          this.setState({
+            serverValidationErrors: renameKeys(
+              {
+                long_description: 'longDescription',
+                short_description: 'shortDescription',
+              },
+              validationErrors,
+            ),
+          });
           return;
         }
         // $FlowIgnoreMe
@@ -93,38 +103,6 @@ class EditStore extends Component<PropsType, StateType> {
           });
           return;
         }
-
-        // change status to DRAFT after saving published store
-        /* if (status === 'PUBLISHED') {
-          draftStoreFromUserMutation({
-            environment,
-            variables: {
-              id: form.rawId,
-            },
-          })
-            .then(() => {
-              this.props.showAlert({
-                type: 'success',
-                text: 'Saved!',
-                link: { text: '' },
-              });
-              return true;
-            })
-            .catch(error => {
-              log.error(error);
-              this.props.showAlert({
-                type: 'danger',
-                text: `Error when updating store status`,
-                link: { text: 'Close.' },
-              });
-            });
-        } else {
-          this.props.showAlert({
-            type: 'success',
-            text: 'Saved!',
-            link: { text: '' },
-          });
-        } */
 
         this.props.showAlert({
           type: 'success',
@@ -209,7 +187,15 @@ class EditStore extends Component<PropsType, StateType> {
 }
 
 export default createFragmentContainer(
-  Page(withShowAlert(ManageStore(EditStore, 'Settings'))),
+  Page(
+    withShowAlert(
+      ManageStore({
+        OriginalComponent: EditStore,
+        active: 'settings',
+        title: 'Settings',
+      }),
+    ),
+  ),
   graphql`
     fragment EditStore_me on User {
       id

@@ -12,6 +12,9 @@ export { default as ProductQuantity } from './ProductQuantity';
 export { default as ProductSize } from './ProductSize';
 export { default as ProductStore } from './ProductStore';
 export { default as ProductThumbnails } from './ProductThumbnails';
+export {
+  default as ProductVariantThumbnails,
+} from './ProductVariantThumbnails';
 export { default as Delivery } from './Delivery/Delivery';
 export { default as Tab } from './Tab';
 export { default as TabColumn } from './TabColumn';

@@ -4,6 +4,7 @@ import React, { Component, Fragment } from 'react';
 import { Link, routerShape, withRouter } from 'found';
 import classNames from 'classnames';
 import type { Environment } from 'relay-runtime';
+import uuidv4 from 'uuid/v4';
 
 import { Collapse } from 'components/Collapse';
 import { Icon } from 'components/Icon';
@@ -72,7 +73,7 @@ class Menu extends Component<PropsType, StateType> {
 
     const params: MutationParamsType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         avatar,
         id: this.props.id,
         phone: null,
@@ -179,6 +180,7 @@ class Menu extends Component<PropsType, StateType> {
                 key={item.id}
                 to={`/profile/${item.id}`}
                 styleName={classNames('item', { isActive })}
+                data-test={item.title}
               >
                 {item.title}
               </Link>

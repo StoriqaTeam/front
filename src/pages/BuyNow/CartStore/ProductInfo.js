@@ -9,11 +9,12 @@ import { Container, Col, Row } from 'layout';
 import { DeliveryCompaniesSelect } from 'pages/Checkout/CheckoutContent/DeliveryCompaniesSelect';
 import {
   formatPrice,
-  currentCurrency,
   getNameText,
   convertCountries,
+  checkCurrencyType,
 } from 'utils';
 import type { AvailableDeliveryPackageType } from 'relay/queries/fetchAvailableShippingForUser';
+import type { AllCurrenciesType } from 'types';
 
 import CartProductAttribute from './CartProductAttribute';
 
@@ -34,6 +35,7 @@ type PropsType = {
   onChangeDelivery: (pkg: ?AvailableDeliveryPackageType) => Promise<boolean>,
   deliveryPackage: ?AvailableDeliveryPackageType,
   onPackagesFetched: (packages: Array<AvailableDeliveryPackageType>) => void,
+  currency: AllCurrenciesType,
 };
 
 class ProductInfo extends PureComponent<PropsType> {
@@ -52,6 +54,7 @@ class ProductInfo extends PureComponent<PropsType> {
       deliveryPackage,
       onChangeDelivery,
       onPackagesFetched,
+      currency,
     } = this.props;
 
     const attrs = map(
@@ -114,20 +117,23 @@ class ProductInfo extends PureComponent<PropsType> {
                     title="Price"
                     value={`${formatPrice(
                       buyNowData.subtotalWithoutDiscounts || 0,
-                    )} ${currentCurrency()}`}
+                      checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                    )} ${currency || ''}`}
                   />
                   <CartProductAttribute
                     title="Delivery"
                     value={`${formatPrice(
                       buyNowData.deliveryCost || 0,
-                    )} ${currentCurrency()}`}
+                      checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                    )} ${currency || ''}`}
                   />
                   {buyNowData.couponsDiscounts !== 0 && (
                     <CartProductAttribute
                       title="Coupon discount"
                       value={`${formatPrice(
                         buyNowData.couponsDiscounts || 0,
-                      )} ${currentCurrency()}`}
+                        checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                      )} ${currency || ''}`}
                     />
                   )}
                 </div>
@@ -170,6 +176,7 @@ class ProductInfo extends PureComponent<PropsType> {
                                 <Row>
                                   <Col size={11}>
                                     <DeliveryCompaniesSelect
+                                      currency={currency}
                                       baseProductId={baseProductId}
                                       // $FlowIgnoreMe
                                       country={currentCountryAlpha3}
@@ -213,21 +220,24 @@ class ProductInfo extends PureComponent<PropsType> {
               <CartProductAttribute
                 title="Price"
                 value={`${formatPrice(
-                  buyNowData.subtotalWithoutDiscounts || 0,
-                )} ${currentCurrency()}`}
+                  buyNowData.subtotal || 0,
+                  checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                )} ${currency || ''}`}
               />
               <CartProductAttribute
                 title="Delivery"
                 value={`${formatPrice(
                   buyNowData.deliveryCost || 0,
-                )} ${currentCurrency()}`}
+                  checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                )} ${currency || ''}`}
               />
               {buyNowData.couponsDiscounts !== 0 && (
                 <CartProductAttribute
                   title="Coupon discount"
                   value={`−${formatPrice(
                     buyNowData.couponsDiscounts || 0,
-                  )} ${currentCurrency()}`}
+                    checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                  )} ${currency || ''}`}
                 />
               )}
             </div>

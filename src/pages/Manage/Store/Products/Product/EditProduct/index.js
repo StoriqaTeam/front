@@ -15,6 +15,7 @@ import {
   find,
   propEq,
 } from 'ramda';
+import uuidv4 from 'uuid/v4';
 
 import { AppContext, Page } from 'components/App';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
@@ -28,6 +29,7 @@ import {
 } from 'relay/mutations';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 
+import type { CategoryType } from 'types';
 import type {
   FormErrorsType,
   CustomAttributeType,
@@ -59,6 +61,7 @@ type PropsType = {
   router: routerShape,
   environment: Environment,
   match: matchShape,
+  allCategories: Array<CategoryType>,
 };
 
 type StateType = {
@@ -199,10 +202,10 @@ class EditProduct extends Component<PropsType, StateType> {
         ? [{ lang: 'EN', text: seoDescription }]
         : null,
       currency,
-      lengthCm: metrics.lengthCm,
-      widthCm: metrics.widthCm,
-      heightCm: metrics.heightCm,
-      weightG: metrics.weightG,
+      lengthCm: metrics.lengthCm || null,
+      widthCm: metrics.widthCm || null,
+      heightCm: metrics.heightCm || null,
+      weightG: metrics.weightG || null,
       environment: this.props.environment,
       onCompleted: (response: ?Object, errors: ?Array<any>) => {
         this.setState({ isLoading: false });
@@ -213,7 +216,15 @@ class EditProduct extends Component<PropsType, StateType> {
         // $FlowIgnoreMe
         const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
         if (!isEmpty(validationErrors)) {
-          this.setState({ formErrors: validationErrors });
+          this.setState({
+            formErrors: renameKeys(
+              {
+                long_description: 'longDescription',
+                short_description: 'shortDescription',
+              },
+              validationErrors,
+            ),
+          });
           return;
         }
 
@@ -290,7 +301,7 @@ class EditProduct extends Component<PropsType, StateType> {
     this.setState({ isLoading: true });
     const params: UpdateProductMutationType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         id: variantData.idMainVariant || '',
         product: {
           price: variantData.price,
@@ -435,7 +446,7 @@ class EditProduct extends Component<PropsType, StateType> {
     }
     const params: UpsertShippingMutationType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         local: withoutLocal ? [] : local,
         international: withoutInter ? [] : international,
         pickup: withoutLocal ? { pickup: false, price: 0 } : pickup,
@@ -544,7 +555,7 @@ class EditProduct extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { me, router, match } = this.props;
+    const { me, router, match, allCategories } = this.props;
     const {
       isLoading,
       availablePackages,
@@ -568,8 +579,8 @@ class EditProduct extends Component<PropsType, StateType> {
               baseProduct={baseProduct}
               onSave={this.handleSave}
               formErrors={formErrors}
-              categories={directories.categories}
-              currencies={directories.currencies}
+              allCategories={allCategories}
+              currencies={directories.sellerCurrencies}
               isLoading={isLoading}
               availablePackages={availablePackages}
               isLoadingPackages={isLoadingPackages}
@@ -599,8 +610,16 @@ EditProduct.contextTypes = {
 
 export default createFragmentContainer(
   withShowAlert(
-    // $FlowIgnore
-    withErrorBoundary(Page(ManageStore(EditProduct, 'Goods'))),
+    withErrorBoundary(
+      // $FlowIgnore
+      Page(
+        ManageStore({
+          OriginalComponent: EditProduct,
+          active: 'goods',
+          title: 'Goods',
+        }),
+      ),
+    ),
   ),
   graphql`
     fragment EditProduct_me on User

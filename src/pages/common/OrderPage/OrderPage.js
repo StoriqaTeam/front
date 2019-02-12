@@ -24,6 +24,8 @@ import { addressToString, formatPrice, getNameText } from 'utils';
 
 import { AppContext } from 'components/App';
 
+import type { OrderBillingStatusesType } from 'types';
+
 import TextWithLabel from './TextWithLabel';
 import ProductBlock from './ProductBlock';
 import StatusList from './StatusList';
@@ -69,6 +71,8 @@ type OrderDTOType = {
   customerAddress: string,
   deliveryPrice: number,
   couponPrice: ?number,
+  currency: string,
+  billingStatus: ?OrderBillingStatusesType,
 };
 
 class OrderPage extends Component<PropsType, StateType> {
@@ -149,6 +153,7 @@ class OrderPage extends Component<PropsType, StateType> {
       totalAmount: order.totalAmount,
       deliveryPrice: order.deliveryPrice,
       couponPrice: order.couponDiscount,
+      currency: order.currency,
       status: order.state,
       paymentStatus: order.paymentStatus ? t.paid : t.notPaid,
       statusHistory: map(historyEdge => {
@@ -162,6 +167,8 @@ class OrderPage extends Component<PropsType, StateType> {
           additionalInfo: historyEdge.node.comment,
         };
       }, order && order.history ? sort((a, b) => moment(a.node.committedAt).isBefore(b.node.committedAt), order.history.edges) : []),
+      billingStatus:
+        order && order.orderBilling ? order.orderBilling.state : null,
     };
     return orderDTO;
   };
@@ -171,6 +178,26 @@ class OrderPage extends Component<PropsType, StateType> {
       this.props.showAlert({
         type: 'success',
         text: t.orderWasSuccessfullySent,
+        link: {
+          text: t.ok,
+        },
+      });
+    } else {
+      this.props.showAlert({
+        type: 'danger',
+        text: t.somethingIsGoingWrong,
+        link: {
+          text: t.ok,
+        },
+      });
+    }
+  };
+
+  handleOrderConfirm = (success: boolean): void => {
+    if (success) {
+      this.props.showAlert({
+        type: 'success',
+        text: t.orderWasSuccessfullyConfirm,
         link: {
           text: t.ok,
         },
@@ -226,6 +253,26 @@ class OrderPage extends Component<PropsType, StateType> {
     }
   };
 
+  handleChargeFee = (success: boolean): void => {
+    if (success) {
+      this.props.showAlert({
+        type: 'success',
+        text: t.chargeFeefullyComplete,
+        link: {
+          text: 'Ok',
+        },
+      });
+    } else {
+      this.props.showAlert({
+        type: 'danger',
+        text: t.somethingIsGoingWrong,
+        link: {
+          text: 'Ok',
+        },
+      });
+    }
+  };
+
   invoice = (): void => {
     const {
       match: {
@@ -252,6 +299,7 @@ class OrderPage extends Component<PropsType, StateType> {
       email,
       showAlert,
       showInvoice,
+      isAbleToManageOrder,
     } = this.props;
     const { isOpenTicketModalShown } = this.state;
     const order: OrderDTOType = this.getOrderDTO(orderFromProps);
@@ -284,11 +332,23 @@ class OrderPage extends Component<PropsType, StateType> {
                       </div>
                     </div>
                   </div>
+                  {isAbleToManageOrder &&
+                    order.billingStatus && (
+                      <div styleName="statusesBlock">
+                        <div styleName="statusItem">
+                          <div styleName="statusTitle">{t.billingStatus}</div>
+                          <div styleName="statusInfo">
+                            {order.billingStatus === 'PAID_TO_SELLER'
+                              ? t.paid
+                              : t.notPaid}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   {isPaymentInfoCanBeShown &&
                     (orderFromProps.state === 'NEW' ||
                       orderFromProps.state === 'PAYMENT_AWAITED' ||
-                      orderFromProps.state === 'TRANSACTION_PENDING' ||
-                      orderFromProps.state === 'AMOUNT_EXPIRED') && (
+                      orderFromProps.state === 'TRANSACTION_PENDING') && (
                       <div styleName="paymentButtonWrapper">
                         <Button
                           big
@@ -325,7 +385,11 @@ class OrderPage extends Component<PropsType, StateType> {
                 ) : null}
               </div>
               {order.product.name ? (
-                <ProductBlock product={order.product} />
+                <ProductBlock
+                  subtotal={order.subtotal}
+                  product={order.product}
+                  currency={order.currency}
+                />
               ) : (
                 <div styleName="noProduct">{t.theProductWasDeleted}</div>
               )}
@@ -389,57 +453,79 @@ class OrderPage extends Component<PropsType, StateType> {
                   <Row>
                     <Col size={12} lg={5}>
                       <TextWithLabel
-                        label={t.labelDeliveryPrice}
-                        text={`${formatPrice(order.deliveryPrice)} STQ`}
+                        label={t.labelDelivery}
+                        text={order.delivery}
                       />
                     </Col>
                     <Col size={12} lg={7}>
+                      <TextWithLabel
+                        label={t.labelDeliveryPrice}
+                        text={`${formatPrice(order.deliveryPrice)} ${
+                          order.currency
+                        }`}
+                      />
+                    </Col>
+                  </Row>
+                </div>
+                <div styleName="infoBlockItem">
+                  <Row>
+                    <Col size={12} lg={5}>
                       <TextWithLabel
                         label={t.labelTrackID}
                         text={order.trackId}
                       />
                     </Col>
-                  </Row>
-                </div>
-                {order.couponPrice && (
-                  <div styleName="infoBlockItem">
-                    <Row>
-                      <Col size={12} lg={5}>
-                        <TextWithLabel
-                          label={t.labelCouponDiscount}
-                          text={`−${formatPrice(order.couponPrice)} STQ`}
-                        />
-                      </Col>
-                    </Row>
-                  </div>
-                )}
-                <div styleName="infoBlockItem">
-                  <Row>
-                    <Col size={12} lg={5}>
+                    <Col size={12} lg={7}>
                       <TextWithLabel
                         label={t.labelQuantity}
                         text={`${order.quantity}`}
                       />
                     </Col>
+                  </Row>
+                </div>
+                <div styleName="infoBlockItem">
+                  <Row>
+                    <Col size={12} lg={5}>
+                      <TextWithLabel
+                        label={t.labelCouponDiscount}
+                        text={
+                          order.couponPrice
+                            ? `−${formatPrice(order.couponPrice)} ${
+                                order.currency
+                              }`
+                            : '—'
+                        }
+                      />
+                    </Col>
                     <Col size={12} lg={7}>
                       <TextWithLabel
-                        label={t.labelSubtotal}
-                        text={`${formatPrice(order.totalAmount)} STQ`}
+                        label={t.labelTotalAmount}
+                        text={`${formatPrice(order.totalAmount)} ${
+                          order.currency
+                        }`}
                       />
                     </Col>
                   </Row>
                 </div>
               </div>
               {this.props.isAbleToManageOrder &&
-                orderFromProps.state === 'PAID' && (
+                (orderFromProps.state === 'PAID' ||
+                  orderFromProps.state === 'IN_PROCESSING' ||
+                  orderFromProps.fee) && (
                   <div styleName="manageBlock">
                     <ManageOrderBlock
                       environment={environment}
-                      isAbleToSend={orderFromProps.state === 'PAID'}
+                      isAbleToConfirm={orderFromProps.state === 'PAID'}
+                      isAbleToSend={orderFromProps.state === 'IN_PROCESSING'}
                       isAbleToCancel={false}
                       orderSlug={parseInt(order.number, 10)}
                       onOrderSend={this.handleOrderSent}
+                      onOrderConfirm={this.handleOrderConfirm}
                       onOrderCancel={this.handleOrderCanceled}
+                      onChargeFee={this.handleChargeFee}
+                      orderFee={orderFromProps.fee || null}
+                      orderBilling={orderFromProps.orderBilling || null}
+                      orderId={orderFromProps.id}
                     />
                   </div>
                 )}
@@ -448,8 +534,12 @@ class OrderPage extends Component<PropsType, StateType> {
                   <div styleName="manageBlock">
                     <ManageOrderBlockForUser
                       environment={environment}
-                      isAbleToSend={orderFromProps.state === 'DELIVERED'}
+                      isAbleToSend={
+                        orderFromProps.state === 'DELIVERED' ||
+                        orderFromProps.state === 'SENT'
+                      }
                       orderSlug={parseInt(order.number, 10)}
+                      orderId={orderFromProps.id}
                       onOrderComplete={this.handleOrderComplete}
                     />
                   </div>

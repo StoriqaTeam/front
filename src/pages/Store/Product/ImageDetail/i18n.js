@@ -6,7 +6,6 @@ import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
   touchAndDrag: string,
-  toSeeTheDetails: string,
   moveYourMouse: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
@@ -14,8 +13,7 @@ type TranslationsBundleType = Translation<TranslationDicType>;
 const translations: TranslationsBundleType = {
   en: {
     touchAndDrag: 'Touch and drag',
-    toSeeTheDetails: 'to see the details',
-    moveYourMouse: 'Move your mouse',
+    moveYourMouse: 'Move your mouse to see the details',
   },
 };
 

@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { pathOr, toUpper, isEmpty } from 'ramda';
 import { withRouter, routerShape } from 'found';
+import uuidv4 from 'uuid/v4';
 
 import { currentUserShape } from 'utils/shapes';
 import { Page } from 'components/App';
@@ -62,7 +63,7 @@ class NewStore extends Component<PropsType, StateType> {
 
     const params: MutationParamsType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         userId: parseInt(currentUser.rawId, 10),
         name: [{ lang: optionLanguage, text: newStoreName }],
         // $FlowIgnoreMe
@@ -153,7 +154,15 @@ class NewStore extends Component<PropsType, StateType> {
 }
 
 export default withShowAlert(
-  Page(withRouter(ManageStore(NewStore, 'Settings'))),
+  Page(
+    withRouter(
+      ManageStore({
+        OriginalComponent: NewStore,
+        active: 'settings',
+        title: 'Settings',
+      }),
+    ),
+  ),
 );
 
 NewStore.contextTypes = {

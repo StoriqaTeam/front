@@ -1,7 +1,7 @@
 // @flow strict
 
 import React from 'react';
-import { product, join, map, prop, isEmpty } from 'ramda';
+import { join, map, prop, isEmpty } from 'ramda';
 
 import type { TranslationType } from 'types';
 
@@ -11,7 +11,7 @@ import '../OrderInvoice.scss';
 
 type PropsType = {
   slug: number,
-  price: number,
+  totalAmount: number,
   quantity: number,
   product: {
     currency: string,
@@ -24,7 +24,7 @@ type PropsType = {
 
 const OrderInvoiceTableRow = ({
   slug,
-  price,
+  totalAmount,
   quantity,
   product: {
     attributes,
@@ -43,13 +43,10 @@ const OrderInvoiceTableRow = ({
         {extractText(name, 'EN')} - {description}
       </div>
       <div styleName="tableRowItem"> {quantity}</div>
+      <div styleName="tableRowItem">-</div>
       <div styleName="tableRowItem">
         {' '}
-        {price} - {currency}
-      </div>
-      <div styleName="tableRowItem">
-        {' '}
-        {product([quantity, price])} - {currency}
+        {totalAmount} - {currency}
       </div>
     </div>
   );

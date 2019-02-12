@@ -5,6 +5,9 @@ import classNames from 'classnames';
 import { head, assoc, isEmpty, find, propEq } from 'ramda';
 
 import { InputPrice, Button } from 'components/common';
+
+import type { SelectItemType } from 'types';
+
 import Countries from '../Countries';
 import ShippingLocalSelect from '../ShippingLocalSelect';
 import ShippingInterSelect from '../ShippingInterSelect';
@@ -31,6 +34,7 @@ type StateType = {
 };
 
 type PropsType = {
+  currency: SelectItemType,
   services: Array<ServiceType>,
   onSaveCompany: (company: CompanyType) => void,
   company?: FilledCompanyType,
@@ -113,7 +117,13 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
   };
 
   render() {
-    const { services, company, onRemoveEditableItem, inter } = this.props;
+    const {
+      services,
+      company,
+      onRemoveEditableItem,
+      inter,
+      currency,
+    } = this.props;
     const { price, service, countries } = this.state;
     let isInterCompanyDisabled = true;
     let isLocalCompanyDisabled = true;
@@ -153,7 +163,7 @@ class FixPriceForm extends PureComponent<PropsType, StateType> {
             <InputPrice
               onChangePrice={this.handlePriceChange}
               price={price}
-              currency={service ? service.currency : null}
+              currency={currency}
               dataTest={`shipping${
                 inter === true ? 'Inter' : 'Local'
               }ServicePrice`}

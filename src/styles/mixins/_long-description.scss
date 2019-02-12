@@ -1,0 +1,71 @@
+@import '../variables';
+
+$table-cell-padding: .75rem !default;
+
+@mixin long-description() {
+  @media (max-width: $md) {
+    p {
+      img {
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+
+  a {
+    font-size: 16px;
+    color: $color_blue;
+    &:hover {
+      color: $color_blue_hover
+    }
+  }
+  
+  ul, ol {
+    padding-left: 3rem;
+  }
+
+  ul {
+    li {
+      list-style-type: disc;
+    }
+  }
+
+  ol {
+    li {
+      list-style-type: decimal;
+    }
+  }
+  
+  table {
+    // width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+    background-color: transparent; // Reset for nesting within parents with `background-color`.
+    border: 1px solid #dee2e6;
+    th,
+    td {
+      padding: $table-cell-padding;
+      vertical-align: top;
+      // border-top: 1px solid #dee2e6;
+      border: 1px solid #dee2e6;
+    }
+  
+    thead th {
+      vertical-align: bottom;
+      border-bottom: (2 * 1px) solid #dee2e6;
+    }
+
+    thead {
+      th,
+      td {
+        border-bottom-width: 2 * 1px;
+      }
+    }
+  
+    // tbody + tbody {
+    //   border-top: (2 * 1px) solid #dee2e6;
+    // }
+    
+  }
+  
+}

@@ -2,6 +2,8 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withRouter, routerShape } from 'found';
+
 import {
   assocPath,
   pathOr,
@@ -14,12 +16,14 @@ import {
 } from 'ramda';
 import classNames from 'classnames';
 import { validate } from '@storiqa/shared';
+import uuidv4 from 'uuid/v4';
 
 import { Input } from 'components/common/Input';
 import { Button } from 'components/common/Button';
 import { Icon } from 'components/Icon';
 import { PasswordHints } from 'components/PasswordHints';
 import { withShowAlert } from 'components/Alerts/AlertContext';
+import { Confirmation } from 'components/Confirmation';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
@@ -35,6 +39,7 @@ import t from './i18n';
 
 type PropsType = {
   showAlert: (input: AddAlertInputType) => void,
+  router: routerShape,
 };
 
 type StateType = {
@@ -57,6 +62,7 @@ type StateType = {
     length: boolean,
   },
   newPasswordFocus: boolean,
+  showModal: boolean,
 };
 
 // eslint-disable-next-line
@@ -79,6 +85,7 @@ class Security extends Component<PropsType, StateType> {
       length: false,
     },
     newPasswordFocus: false,
+    showModal: false,
   };
 
   handleSave = () => {
@@ -126,14 +133,14 @@ class Security extends Component<PropsType, StateType> {
     );
 
     if (formErrors) {
-      this.setState({ formErrors });
+      this.setState({ formErrors, showModal: false });
       return;
     }
 
     this.setState(() => ({ isLoading: true }));
 
     const input = {
-      clientMutationId: '',
+      clientMutationId: uuidv4(),
       oldPassword,
       newPassword,
     };
@@ -159,6 +166,7 @@ class Security extends Component<PropsType, StateType> {
               },
               validationErrors,
             ),
+            showModal: false,
           });
           return;
         } else if (status) {
@@ -181,10 +189,21 @@ class Security extends Component<PropsType, StateType> {
           text: t.passwordSuccessfullyUpdated,
           link: { text: '' },
         });
-        this.setState(() => ({
-          newPasswordSee: false,
-          repeatNewPasswordSee: false,
-        }));
+        this.setState(
+          () => ({
+            showModal: false,
+            newPasswordSee: false,
+            repeatNewPasswordSee: false,
+            form: {
+              oldPassword: '',
+              newPassword: '',
+              repeatNewPassword: '',
+            },
+          }),
+          () => {
+            this.props.router.push('/logout');
+          },
+        );
       },
       onError: (error: Error) => {
         this.setState(() => ({ isLoading: false }));
@@ -203,6 +222,7 @@ class Security extends Component<PropsType, StateType> {
               },
               validationErrors,
             ),
+            showModal: false,
           });
           return;
         }
@@ -212,6 +232,7 @@ class Security extends Component<PropsType, StateType> {
           link: { text: t.close },
         });
         this.setState(() => ({
+          showModal: false,
           newPasswordSee: false,
           repeatNewPasswordSee: false,
         }));
@@ -295,6 +316,14 @@ class Security extends Component<PropsType, StateType> {
     }
   };
 
+  handleSaveModal = (): void => {
+    this.setState({ showModal: true });
+  };
+
+  handleCloseModal = (): void => {
+    this.setState({ showModal: false });
+  };
+
   render() {
     const {
       isLoading,
@@ -303,9 +332,20 @@ class Security extends Component<PropsType, StateType> {
       isValidNewPassword,
       newPasswordValidParams,
       newPasswordFocus,
+      showModal,
     } = this.state;
     return (
       <div styleName="security">
+        <Confirmation
+          showModal={showModal}
+          onClose={this.handleCloseModal}
+          title={t.resetPassword}
+          description={t.confirmationDescription}
+          onCancel={this.handleCloseModal}
+          onConfirm={this.handleSave}
+          confirmText={t.confirmText}
+          cancelText={t.cancelText}
+        />
         <div styleName="subtitle">
           <strong>{t.securitySettings}</strong>
         </div>
@@ -359,7 +399,8 @@ class Security extends Component<PropsType, StateType> {
         </div>
         <Button
           big
-          onClick={this.handleSave}
+          disabled={!isValidNewPassword}
+          onClick={this.handleSaveModal}
           isLoading={isLoading}
           dataTest="saveSecuritySettingsButton"
         >
@@ -374,4 +415,4 @@ Security.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default withShowAlert(Security);
+export default withShowAlert(withRouter(Security));

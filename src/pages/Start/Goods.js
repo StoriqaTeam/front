@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { map, take } from 'ramda';
+import { map, take, length } from 'ramda';
 import classNames from 'classnames';
 import { routerShape, withRouter } from 'found';
 
@@ -37,7 +37,7 @@ type ProductType = {
 type PropsType = {
   items: Array<ProductType>,
   title: string,
-  seeAllUrl: string,
+  seeAllUrl?: string,
   router: routerShape,
 };
 
@@ -50,8 +50,6 @@ class Goods extends Component<PropsType, StateType> {
     loadedPagesCount: 1,
   };
 
-  sectionsRef = null;
-
   loadMore = () => {
     this.setState(prevState => {
       if (prevState.loadedPagesCount < 3) {
@@ -61,14 +59,11 @@ class Goods extends Component<PropsType, StateType> {
     });
   };
 
-  renderGoods = (props: { nodeData: ?{ height: number }, count: number }) => {
-    const { nodeData, count } = props;
+  renderGoods = (count: number) => {
+    const { items, seeAllUrl } = this.props;
     const { loadedPagesCount } = this.state;
     return (
-      <div
-        styleName="goods"
-        style={{ minHeight: nodeData ? `${nodeData.height / 8}rem` : '88rem' }}
-      >
+      <div styleName="goods">
         <div styleName={classNames('section view')}>
           {map(
             good => (
@@ -84,23 +79,27 @@ class Goods extends Component<PropsType, StateType> {
           )}
         </div>
         <div styleName="loadMoreButton">
-          {loadedPagesCount < 3 && (
-            <Button big wireframe load onClick={this.loadMore}>
-              Load more
-            </Button>
-          )}
-          {loadedPagesCount === 3 && (
-            <Button
-              big
-              wireframe
-              load
-              onClick={() => {
-                this.props.router.push(this.props.seeAllUrl);
-              }}
-            >
-              See all
-            </Button>
-          )}
+          {loadedPagesCount < 3 &&
+            loadedPagesCount < length(items) / count &&
+            length(items) > count && (
+              <Button big wireframe load onClick={this.loadMore}>
+                Load more
+              </Button>
+            )}
+          {seeAllUrl &&
+            (loadedPagesCount > length(items) / count ||
+              loadedPagesCount === 3) && (
+              <Button
+                big
+                wireframe
+                load
+                onClick={() => {
+                  this.props.router.push(this.props.seeAllUrl);
+                }}
+              >
+                See all
+              </Button>
+            )}
         </div>
       </div>
     );
@@ -108,11 +107,6 @@ class Goods extends Component<PropsType, StateType> {
 
   render() {
     const { items, title } = this.props;
-    let nodeData = null;
-    if (this.sectionsRef) {
-      const node = this.sectionsRef;
-      nodeData = node.getBoundingClientRect();
-    }
     return (
       <div styleName="container">
         <div styleName="header">
@@ -131,14 +125,15 @@ class Goods extends Component<PropsType, StateType> {
           </div>
         </MediaQuery>
         <MediaQuery maxWidth={767} minWidth={576}>
-          {this.renderGoods({ nodeData, count: 4 })}
+          {this.renderGoods(4)}
         </MediaQuery>
-        <MediaQuery maxWidth={1199} minWidth={768}>
-          {this.renderGoods({ nodeData, count: 6 })}
+        <MediaQuery maxWidth={991} minWidth={768}>
+          {this.renderGoods(6)}
         </MediaQuery>
-        <MediaQuery minWidth={1200}>
-          {this.renderGoods({ nodeData, count: 8 })}
+        <MediaQuery maxWidth={1199} minWidth={992}>
+          {this.renderGoods(8)}
         </MediaQuery>
+        <MediaQuery minWidth={1200}>{this.renderGoods(10)}</MediaQuery>
       </div>
     );
   }

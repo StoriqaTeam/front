@@ -81,13 +81,15 @@
 
 .discountPrice {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   margin-top: 1rem;
   font-size: 26px;
+  line-height: 4rem;
 
-  @media (max-width: #{$md - 1px}) {
-    display: block;
-  }
+  //@media (max-width: #{$md - 1px}) {
+  //  display: block;
+  //}
 }
 
 .title {
@@ -96,15 +98,23 @@
   text-transform: uppercase;
 }
 
+.basePrice {
+  margin-right: 1rem;
+}
+
 .currencyPrice {
   display: flex;
   align-items: baseline;
-  margin-left: 1rem;
+  margin-top: 0.5rem;
+  line-height: 1.5rem;
+  color: $color_grey_minor;
+  font-weight: normal;
+  font-family: $font_light;
 
-  @media (max-width: #{$md - 1px}) {
-    margin-left: 0;
-    margin-top: 1rem;
-  }
+  //@media (max-width: #{$md - 1px}) {
+  //  margin-left: 0;
+  //  margin-top: 1rem;
+  //}
 
   .slash {
     font-weight: normal;
@@ -112,8 +122,8 @@
     color: $color_grey;
     font-size: 24px;
 
-    @media (max-width: #{$md - 1px}) {
-      display: none;
-    }
+    //@media (max-width: #{$md - 1px}) {
+    //  display: none;
+    //}
   }
 }

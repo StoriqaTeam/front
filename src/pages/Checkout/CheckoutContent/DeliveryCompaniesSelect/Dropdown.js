@@ -6,12 +6,15 @@ import { map } from 'ramda';
 import { Icon } from 'components/Icon';
 import { Checkbox } from 'components/common/Checkbox';
 import { Button } from 'components/common';
+import { formatPrice, checkCurrencyType } from 'utils';
 
 import type { AvailableDeliveryPackageType } from 'relay/queries/fetchAvailableShippingForUser';
+import type { AllCurrenciesType } from 'types';
 
 import './Dropdown.scss';
 
 type PropsType = {
+  currency: AllCurrenciesType,
   isOpen: boolean,
   isLoading: boolean,
   isError: boolean,
@@ -62,6 +65,7 @@ class Dropdown extends React.Component<PropsType, StateType> {
       toggleExpand,
       packages,
       onAccept,
+      currency,
     } = this.props;
     return (
       <div styleName="dropdown">
@@ -94,11 +98,15 @@ class Dropdown extends React.Component<PropsType, StateType> {
                             selectedPackage && item.id === selectedPackage.id
                           }
                           label={item.name}
+                          dataTest="deliverySelectCheckbox"
                         />
                       </div>
                     </div>
                     <span styleName="price">
-                      {item.price} {item.currency}
+                      {`${formatPrice(
+                        item.price,
+                        checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                      )} ${currency || ''}`}
                     </span>
                   </div>
                 ),
@@ -108,7 +116,12 @@ class Dropdown extends React.Component<PropsType, StateType> {
                 {this.props.isError && (
                   <span styleName="error">Error :( Please try again</span>
                 )}
-                <Button big onClick={onAccept} isLoading={this.props.isLoading}>
+                <Button
+                  big
+                  onClick={onAccept}
+                  isLoading={this.props.isLoading}
+                  dataTest="deliverySelectAcceptButton"
+                >
                   Accept
                 </Button>
               </div>
@@ -122,6 +135,7 @@ class Dropdown extends React.Component<PropsType, StateType> {
             onKeyDown={() => {}}
             role="button"
             tabIndex="0"
+            data-test="deliverySelect"
           >
             <div styleName="label">
               {selectedPackage != null

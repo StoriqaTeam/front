@@ -1,6 +1,6 @@
-const price = number =>
+const price = (number, decimals = 8) =>
   number
-    .toFixed(8)
+    .toFixed(decimals)
     .replace(/(\d)(?=(\d{3})+\.)/g, '$1,')
     .replace(/\.?0+$/, '');
 

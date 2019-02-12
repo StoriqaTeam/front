@@ -1,7 +1,8 @@
 // @flow
 
 import React from 'react';
-import { find, propEq, head, filter, addIndex, map } from 'ramda';
+import { find, propEq, head, filter, addIndex, map, isEmpty } from 'ramda';
+import classNames from 'classnames';
 
 import { Checkbox } from 'components/common/Checkbox';
 import { RadioButton } from 'components/common/RadioButton';
@@ -156,6 +157,7 @@ class CheckoutAddress extends React.Component<PropsType, StateType> {
     } = this.props;
     const { addressFull } = orderInput;
     const { addresses, selectedAddress } = this.state;
+    const isEmptyDeliveryAddressesFull = isEmpty(me.deliveryAddressesFull);
 
     return (
       <Container correct>
@@ -186,60 +188,55 @@ class CheckoutAddress extends React.Component<PropsType, StateType> {
                       id="receiverPhone"
                       label={
                         <span>
-                          {t.labelReceiverPhone}
+                          {`${t.labelReceiverPhone} `}
                           <span styleName="red">*</span>
                         </span>
                       }
                       onChange={this.handleChangePhone}
                       value={orderInput.receiverPhone}
-                      limit={50}
                       errors={errors.receiverPhone}
                     />
                   </div>
-                  <div styleName="selectAddressContainer">
-                    <RadioButton
-                      id="existingAddressCheckbox"
-                      label={t.labelChooseYourAddress}
-                      isChecked={isAddressSelect}
-                      onChange={this.handleOnChangeAddressType}
-                    />
-                    {isAddressSelect && (
-                      <div styleName="selectWrapper">
-                        <div>
-                          <Select
-                            label={t.labelAddress}
-                            items={addresses}
-                            activeItem={selectedAddress}
-                            onSelect={this.handleOnSelectAddress}
-                            forForm
-                            containerStyle={{ width: '26rem' }}
-                            dataTest="selectExistingAddress"
-                          />
+                  {!isEmptyDeliveryAddressesFull && (
+                    <div styleName="selectAddressContainer">
+                      <RadioButton
+                        id="existingAddressCheckbox"
+                        label={t.labelChooseYourAddress}
+                        isChecked={isAddressSelect}
+                        onChange={this.handleOnChangeAddressType}
+                      />
+                      {isAddressSelect && (
+                        <div styleName="selectWrapper">
+                          <div>
+                            <Select
+                              label={t.labelAddress}
+                              items={addresses}
+                              activeItem={selectedAddress}
+                              onSelect={this.handleOnSelectAddress}
+                              forForm
+                              containerStyle={{ width: '26rem' }}
+                              dataTest="selectExistingAddress"
+                            />
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
-                </Col>
-                <Col size={12} xlHidden>
-                  {orderInput.addressFull.value && (
-                    <AddressInfo
-                      addressFull={orderInput.addressFull}
-                      receiverName={
-                        orderInput.receiverName ||
-                        `${me.firstName} ${me.lastName}`
-                      }
-                      email={me.email}
-                    />
+                      )}
+                    </div>
                   )}
                 </Col>
                 <Col size={12} sm={9} md={8} xl={12}>
-                  <div styleName="newAddressWrap">
-                    <RadioButton
-                      id="newAddressCheckbox"
-                      label={t.labelOrFillFields}
-                      isChecked={isNewAddress}
-                      onChange={this.handleOnChangeAddressType}
-                    />
+                  <div
+                    styleName={classNames('newAddressWrap', {
+                      isEmptyDeliveryAddressesFull,
+                    })}
+                  >
+                    {!isEmptyDeliveryAddressesFull && (
+                      <RadioButton
+                        id="newAddressCheckbox"
+                        label={t.labelOrFillFields}
+                        isChecked={isNewAddress}
+                        onChange={this.handleOnChangeAddressType}
+                      />
+                    )}
                     {isNewAddress && (
                       <div id="deliveryAddress" styleName="formWrapper">
                         <AddressForm
@@ -269,7 +266,7 @@ class CheckoutAddress extends React.Component<PropsType, StateType> {
               </Row>
             </div>
           </Col>
-          <Col size={6} xlVisibleOnly>
+          <Col size={12} xl={6}>
             {addressToString(orderInput.addressFull) && (
               <div styleName="addressInfoContainer">
                 <AddressInfo

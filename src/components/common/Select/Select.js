@@ -57,6 +57,7 @@ type PropsType = {
   isMobile: boolean,
   renderSelectItem?: (item: SelectItemType) => Node,
   withInput?: boolean,
+  maxItemsHeight?: number,
 };
 
 const maxItemsCount = 5;
@@ -121,7 +122,11 @@ class Select extends Component<PropsType, StateType> {
       withInput !== true &&
       JSON.stringify(items) !== JSON.stringify(prevProps.items)
     ) {
-      this.updateStateItems(items);
+      if (prevProps.withEmpty === true) {
+        this.updateStateItems(prepend({ id: '', label: '-' }, items));
+      } else {
+        this.updateStateItems(items);
+      }
     }
     if (
       withInput === true &&
@@ -204,8 +209,8 @@ class Select extends Component<PropsType, StateType> {
 
     if (withInput === true) {
       const { activeItem, onSelect } = this.props;
-      const { items, hoverItem } = this.state;
-      if (e.keyCode === 40 || e.keyCode === 38) {
+      const { items, hoverItem, isOpenItems } = this.state;
+      if (isOpenItems && (e.keyCode === 40 || e.keyCode === 38)) {
         const activeItemIdx = this.getIndexFromItems(
           hoverItem || activeItem,
           items,
@@ -343,11 +348,13 @@ class Select extends Component<PropsType, StateType> {
   handleChangeInput = (e: SyntheticInputEvent<HTMLInputElement>) => {
     const { value } = e.target;
     const { activeItem } = this.props;
+    const items = this.updateItems(value);
     this.setState(
       {
         inputValue: value,
-        items: this.updateItems(value),
+        items,
         isOpenItems: true,
+        hoverItem: length(items) === 1 ? head(items) : null,
       },
       () => {
         const activeItemIdx = this.getIndexFromItems(
@@ -394,6 +401,7 @@ class Select extends Component<PropsType, StateType> {
       isMobile,
       renderSelectItem,
       withInput,
+      maxItemsHeight,
     } = this.props;
     const {
       isExpanded,
@@ -425,7 +433,9 @@ class Select extends Component<PropsType, StateType> {
             styleName={classNames('label', {
               labelFloat:
                 withInput === true
-                  ? (inputValue !== null && inputValue !== '') || isFocusInput
+                  ? (inputValue !== null && inputValue !== '') ||
+                    isFocusInput ||
+                    isOpenItems
                   : activeItem || isExpanded,
             })}
           >
@@ -478,7 +488,12 @@ class Select extends Component<PropsType, StateType> {
               onKeyDown={() => {}}
               role="button"
               tabIndex="0"
-              style={{ maxHeight: `${maxItemsCount * itemHeight / 8}rem` }}
+              style={{
+                maxHeight:
+                  maxItemsHeight != null
+                    ? `${maxItemsHeight}rem`
+                    : `${maxItemsCount * itemHeight / 8}rem`,
+              }}
             >
               {items.map(item => {
                 const { id } = item;
@@ -494,7 +509,9 @@ class Select extends Component<PropsType, StateType> {
                           ? hoverItem.id === id
                           : activeItem && activeItem.id === id,
                     })}
-                    data-test={`${dataTest}_item`}
+                    data-test={`${dataTest}_item${
+                      label != null ? `_${label}` : ''
+                    }_${item.label}`}
                   >
                     {item.label}
                   </div>

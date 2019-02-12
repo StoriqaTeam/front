@@ -1,0 +1,84 @@
+@import '../../../../../../styles/variables.scss';
+
+.container {
+  max-width: 60rem;
+
+  &.isFocus {
+    .cardElement hr {
+      transform: scaleX(1);
+    }
+
+    .label {
+      color: $color_blue !important;
+    }
+  }
+
+  &.isError {
+    .cardElement hr {
+      border: 1px solid $color_red;
+    }
+
+    .label {
+      color: $color_red;
+    }
+  }
+}
+
+.label {
+  position: relative;
+  top: 2rem;
+  color: $color_grey_minor;
+  font-size: 14px;
+  transform: scale(0.9) translate(0, -2.6rem);
+  transform-origin: left top 0;
+  transition: $transition_all_ease;
+}
+
+.input {
+  margin-top: 5rem;
+}
+
+.cardElement {
+  position: relative;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid $color_grey_light;
+
+  hr {
+    display: block;
+    position: absolute;
+    bottom: -1px;
+    width: 100%;
+    border: 1px solid $color_blue;
+    transform: scaleX(0);
+    transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  }
+
+  .cardError {
+    position: absolute;
+    left: 0;
+    margin-top: 0.5rem;
+    font-size: 12px;
+    color: $color_red;
+  }
+}
+
+.asterisk {
+  color: $color_red;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  margin-top: 4rem;
+
+  .button {
+    max-width: 20rem;
+    margin-right: 2rem;
+  }
+
+  .cancelButton {
+    font-size: 14px;
+    color: $color_blue;
+    cursor: pointer;
+  }
+}

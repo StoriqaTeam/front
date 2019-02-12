@@ -1,8 +1,8 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { createRefetchContainer, graphql } from 'react-relay';
-import { matchShape, withRouter } from 'found';
+import { graphql, createFragmentContainer } from 'react-relay';
+import { withRouter } from 'found';
 import { pathOr } from 'ramda';
 
 import { Page } from 'components/App';
@@ -13,25 +13,9 @@ import type { StoreOrder_me as MyStoreType } from './__generated__/StoreOrder_me
 
 type PropsType = {
   me: MyStoreType,
-  relay: {
-    refetch: Function,
-  },
-  match: matchShape,
 };
 
 class StoreOrder extends PureComponent<PropsType> {
-  componentDidMount() {
-    const orderId = pathOr(0, ['params', 'orderId'], this.props.match);
-    this.props.relay.refetch(
-      {
-        slug: parseInt(orderId, 10),
-      },
-      null,
-      () => {},
-      { force: true },
-    );
-  }
-
   render() {
     // $FlowIgnoreMe
     const order = pathOr(null, ['myStore', 'order'], this.props.me);
@@ -43,8 +27,16 @@ class StoreOrder extends PureComponent<PropsType> {
   }
 }
 
-export default createRefetchContainer(
-  Page(ManageStore(withRouter(StoreOrder), 'Orders')),
+export default createFragmentContainer(
+  Page(
+    withRouter(
+      ManageStore({
+        OriginalComponent: StoreOrder,
+        active: 'orders',
+        title: 'Orders',
+      }),
+    ),
+  ),
   graphql`
     fragment StoreOrder_me on User
       @argumentDefinitions(slug: { type: "Int!", defaultValue: 0 }) {
@@ -52,6 +44,7 @@ export default createRefetchContainer(
         rawId
         order(slug: $slug) {
           id
+          currency
           slug
           deliveryCompany
           storeId
@@ -80,11 +73,6 @@ export default createRefetchContainer(
               }
             }
             photoMain
-          }
-          customer {
-            firstName
-            lastName
-            phone
           }
           receiverName
           receiverPhone
@@ -120,14 +108,21 @@ export default createRefetchContainer(
               }
             }
           }
+          fee {
+            id
+            orderId
+            amount
+            status
+            currency
+            chargeId
+          }
+          orderBilling {
+            id
+            state
+            stripeFee
+            sellerCurrency
+          }
         }
-      }
-    }
-  `,
-  graphql`
-    query StoreOrder_Query($slug: Int!) {
-      me {
-        ...StoreOrder_me @arguments(slug: $slug)
       }
     }
   `,

@@ -103,6 +103,7 @@ class StoreOrders extends Component<PropsType, StateType> {
       status: order.state,
       subtotal: order.subtotal,
       totalAmount: order.totalAmount,
+      currency: order.currency,
     };
     return result;
   };
@@ -174,7 +175,13 @@ class StoreOrders extends Component<PropsType, StateType> {
 }
 
 export default createRefetchContainer(
-  Page(ManageStore(StoreOrders, 'Orders')),
+  Page(
+    ManageStore({
+      OriginalComponent: StoreOrders,
+      active: 'orders',
+      title: 'Shop orders',
+    }),
+  ),
   graphql`
     fragment StoreOrders_me on User
       @argumentDefinitions(
@@ -194,6 +201,7 @@ export default createRefetchContainer(
             node {
               slug
               id
+              currency
               state
               price
               quantity

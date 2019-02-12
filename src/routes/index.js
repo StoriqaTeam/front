@@ -5,7 +5,7 @@ import { Route, RedirectException, Redirect } from 'found';
 import { graphql } from 'react-relay';
 import { find, pathEq, pathOr, last, isNil, pick } from 'ramda';
 
-import { log, jwt as JWT } from 'utils';
+import { log, jwt as JWT, getCookie } from 'utils';
 import { urlToInput } from 'utils/search';
 import { App } from 'components/App';
 import { Authorization, OAuthCallback } from 'components/Authorization';
@@ -21,6 +21,7 @@ import {
   StorageProducts,
 } from 'pages/Manage/Store/Storages/Storage';
 import { Contacts } from 'pages/Manage/Store/Contacts';
+import { Finances } from 'pages/Manage/Store/Finances';
 import { Wizard } from 'pages/Manage/Wizard';
 import Stores from 'pages/Stores/Stores';
 import { NewProduct, EditProduct } from 'pages/Manage/Store/Products/Product';
@@ -43,6 +44,7 @@ import {
   DeviceConfirmed,
   PasswordResetDeny,
 } from 'pages/Wallet';
+import SpinnerPage from 'pages/SpinnerPage';
 
 const routes = (
   <Route>
@@ -65,7 +67,7 @@ const routes = (
           }
           cart {
             id
-            ...Cart_cart
+            ...UserDataTotalLocalFragment
           }
           mainPage {
             ...Start_mainPage
@@ -83,6 +85,9 @@ const routes = (
             isoCode
           }
           currencies
+          fiatCurrencies
+          cryptoCurrencies
+          sellerCurrencies
           categories {
             name {
               lang
@@ -171,6 +176,15 @@ const routes = (
             }
           }
         `}
+        prepareVariables={() => {
+          const currencyType = getCookie('CURRENCY_TYPE');
+          return {
+            currencyType:
+              currencyType === 'FIAT' || currencyType === 'CRYPTO'
+                ? currencyType
+                : 'FIAT',
+          };
+        }}
       />
 
       <Route
@@ -184,7 +198,7 @@ const routes = (
             JWT.clearJWT();
             throw new RedirectException(`/login?from=${pathname}`);
           } else if (!props) {
-            return null;
+            return <SpinnerPage />;
           } else {
             return <Component {...props} />;
           }
@@ -426,12 +440,19 @@ const routes = (
           }
         `}
         render={({ props, Component, resolving }) => {
-          if (Component && props && !props.me && resolving === true) {
+          if (Component && props) {
             const {
               location: { pathname },
             } = props;
-            JWT.clearJWT();
-            throw new RedirectException(`/login?from=${pathname}`);
+
+            if (pathname === '/manage' || pathname === '/manage/') {
+              throw new RedirectException('/404');
+            }
+
+            if (!props.me && resolving === true) {
+              JWT.clearJWT();
+              throw new RedirectException(`/login?from=${pathname}`);
+            }
           }
         }}
         Component={() => <div />}
@@ -455,6 +476,9 @@ const routes = (
               }
               cart {
                 ...UserDataTotalLocalFragment
+              }
+              allCategories {
+                ...ThirdForm_allCategories
               }
             }
           `}
@@ -554,6 +578,17 @@ const routes = (
               `}
             />
             <Route
+              path="/finances"
+              Component={Finances}
+              query={graphql`
+                query routes_Finances_Query {
+                  me {
+                    ...Finances_me
+                  }
+                }
+              `}
+            />
+            <Route
               path="/orders"
               Component={StoreOrders}
               query={graphql`
@@ -568,12 +603,15 @@ const routes = (
               path="/orders/:orderId"
               Component={StoreOrder}
               query={graphql`
-                query routes_StoreOrder_Query {
+                query routes_StoreOrder_Query($slug: Int!) {
                   me {
-                    ...StoreOrder_me
+                    ...StoreOrder_me @arguments(slug: $slug)
                   }
                 }
               `}
+              prepareVariables={(_, { params }) => ({
+                slug: parseInt(params.orderId, 10) || 0,
+              })}
             />
             <Route
               path="/orders/:orderId/invoice"
@@ -591,11 +629,16 @@ const routes = (
             />
             <Route
               path="/product/new"
-              Component={({ me }) => <NewProduct me={me} />}
+              Component={({ me, allCategories }) => (
+                <NewProduct me={me} allCategories={allCategories} />
+              )}
               query={graphql`
                 query routes_NewProduct_Query {
                   me {
                     ...NewProduct_me
+                  }
+                  allCategories {
+                    ...Form_allCategories
                   }
                 }
               `}
@@ -619,6 +662,9 @@ const routes = (
                   me {
                     id
                     ...EditProduct_me @arguments(productId: $productID)
+                  }
+                  allCategories {
+                    ...Form_allCategories
                   }
                 }
               `}
@@ -704,7 +750,7 @@ const routes = (
             return; // eslint-disable-line
           }
           // eslint-disable-next-line
-          return <Component alone {...props} />;
+          return <Component noPopup {...props} />;
         }}
       />
 
@@ -756,9 +802,9 @@ const routes = (
           path="/:item/:orderId?"
           Component={Profile}
           query={graphql`
-            query routes_ProfileItem_Query {
+            query routes_ProfileItem_Query($slug: Int!) {
               me {
-                ...Profile_me
+                ...Profile_me @arguments(slug: $slug)
                 ...UserData_me
               }
               cart {
@@ -789,7 +835,9 @@ const routes = (
               return undefined;
             }
           }}
-          prepareVariables={() => {}}
+          prepareVariables={(_, { params }) => ({
+            slug: parseInt(params.orderId, 10) || 0,
+          })}
         />
       </Route>
       <Route

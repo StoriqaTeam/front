@@ -2,38 +2,32 @@
 
 .container {
   background-color: $color_pink;
-  border-bottom: none;
-  border-left: none;
-  border-radius: 0.5rem;
-  border-right: none;
   border-top: 0 solid transparent;
-  bottom: 2rem;
   color: white;
   font-size: 14px;
   font-weight: bold;
-  height: 4rem;
-  padding-top: 0.5rem;
   position: absolute;
   right: 2rem;
   text-align: center;
-  top: initial;
   width: 8rem;
   z-index: 1;
+  border-bottom: 1px solid $color_white;
+  border-left: 1px solid $color_white;
+  border-radius: 0 0 0.5rem 0.5rem;
+  border-right: 1px solid $color_white;
+  height: 9.375rem;
+  padding-top: 1px;
+  top: 0;
 
-  @media (min-width: $lg) {
-    border-bottom: 1px solid $color_white;
-    border-left: 1px solid $color_white;
-    border-radius: 0 0 0.5rem 0.5rem;
-    border-right: 1px solid $color_white;
-    bottom: initial;
-    height: 9.375rem;
-    padding-top: 1px;
-    top: 0;
+  @media (max-width: #{$lg - 1px}) {
+    height: 4rem;
+    padding-top: 0.5rem;
   }
 }
 
 .price {
   display: none;
+
   @media (min-width: $lg) {
     display: block;
   }

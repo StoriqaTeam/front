@@ -6,6 +6,7 @@ import { routerShape, withRouter, matchShape } from 'found';
 import { pathOr, isEmpty, head, filter, prepend, map } from 'ramda';
 import { Environment } from 'relay-runtime';
 import { createFragmentContainer, graphql } from 'react-relay';
+import uuidv4 from 'uuid/v4';
 
 import { AppContext, Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
@@ -17,6 +18,7 @@ import {
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { renameKeys } from 'utils/ramda';
 
+import type { CategoryType } from 'types';
 import type {
   FormErrorsType,
   CustomAttributeType,
@@ -46,6 +48,7 @@ type PropsType = {
   router: routerShape,
   match: matchShape,
   environment: Environment,
+  allCategories: Array<CategoryType>,
 };
 
 type StateType = {
@@ -156,7 +159,7 @@ class NewProduct extends Component<PropsType, StateType> {
       environment,
       variables: {
         input: {
-          clientMutationId: '',
+          clientMutationId: uuidv4(),
           name: [{ lang: 'EN', text: name }],
           storeId: parseInt(storeRawId, 10),
           shortDescription: [{ lang: 'EN', text: shortDescription }],
@@ -174,7 +177,7 @@ class NewProduct extends Component<PropsType, StateType> {
           selectedAttributes: map(item => item.rawId, customAttributes),
           variants: [
             {
-              clientMutationId: '',
+              clientMutationId: uuidv4(),
               product: {
                 price: form.price,
                 vendorCode: form.vendorCode,
@@ -188,10 +191,10 @@ class NewProduct extends Component<PropsType, StateType> {
               attributes: form.attributeValues,
             },
           ],
-          lengthCm: metrics.lengthCm,
-          widthCm: metrics.widthCm,
-          heightCm: metrics.heightCm,
-          weightG: metrics.weightG,
+          lengthCm: metrics.lengthCm || null,
+          widthCm: metrics.widthCm || null,
+          heightCm: metrics.heightCm || null,
+          weightG: metrics.weightG || null,
         },
       },
     })
@@ -292,7 +295,7 @@ class NewProduct extends Component<PropsType, StateType> {
     } = shippingData;
     const params: UpsertShippingMutationType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         local: withoutLocal ? [] : local,
         international: withoutInter ? [] : international,
         pickup: withoutLocal ? { pickup: false, price: 0 } : pickup,
@@ -416,8 +419,8 @@ class NewProduct extends Component<PropsType, StateType> {
               customAttributes={customAttributes}
               formErrors={formErrors}
               onSave={this.handleSave}
-              categories={directories.categories}
-              currencies={directories.currencies}
+              allCategories={this.props.allCategories}
+              currencies={directories.sellerCurrencies}
               onChangeShipping={this.handleChangeShipping}
               onCreateAttribute={this.handleCreateAttribute}
               onRemoveAttribute={this.handleRemoveAttribute}
@@ -439,7 +442,17 @@ NewProduct.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withRouter(withShowAlert(Page(ManageStore(NewProduct, 'Goods')))),
+  withRouter(
+    withShowAlert(
+      Page(
+        ManageStore({
+          OriginalComponent: NewProduct,
+          active: 'goods',
+          title: 'Goods',
+        }),
+      ),
+    ),
+  ),
   graphql`
     fragment NewProduct_me on User {
       myStore {

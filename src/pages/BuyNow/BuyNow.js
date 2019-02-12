@@ -17,7 +17,9 @@ import {
   assoc,
 } from 'ramda';
 import { routerShape } from 'found';
+import classNames from 'classnames';
 import { validate } from '@storiqa/shared';
+import uuidv4 from 'uuid/v4';
 
 import { Page } from 'components/App';
 import { withShowAlert } from 'components/Alerts/AlertContext';
@@ -25,7 +27,13 @@ import { Container, Row, Col } from 'layout';
 import { Input, RadioButton, Select, Checkbox } from 'components/common';
 import { AddressForm } from 'components/AddressAutocomplete';
 import { StickyBar } from 'components/StickyBar';
-import { log, getNameText, currentCurrency } from 'utils';
+import {
+  log,
+  getNameText,
+  fromRelayError,
+  checkCurrencyType,
+  getCurrentCurrency,
+} from 'utils';
 import smoothscroll from 'libs/smoothscroll';
 import {
   BuyNowMutation,
@@ -33,7 +41,7 @@ import {
 } from 'relay/mutations';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
-import type { AddressFullType, SelectItemType } from 'types';
+import type { AddressFullType, SelectItemType, AllCurrenciesType } from 'types';
 import type { MutationParamsType as CreateMutationParamsType } from 'relay/mutations/CreateUserDeliveryAddressFullMutation';
 import type { MutationParamsType as BuyNowMutationParamsType } from 'relay/mutations/BuyNowMutation';
 import type { AvailableDeliveryPackageType } from 'relay/queries/fetchAvailableShippingForUser';
@@ -79,6 +87,7 @@ export type CalculateBuyNowType = {
   totalCount: number, // количество
   deliveryCost: number, // цена доставки
   subtotalWithoutDiscounts: number, // цена всех продуктов без доставки и без скидки
+  subtotal: number, // цена всех продуктов без доставки
 };
 
 type StateType = {
@@ -99,6 +108,7 @@ type StateType = {
   errors: { [string]: Array<string> },
   scrollArr: Array<string>,
   deliveryPackage: ?AvailableDeliveryPackageType,
+  currency: AllCurrenciesType,
 };
 
 type PropsType = {
@@ -121,7 +131,11 @@ class BuyNow extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
 
-    const { me, calculateBuyNow } = props;
+    const { me, calculateBuyNow, baseProduct } = props;
+    const { currency } = baseProduct;
+    const currencyType =
+      // $FlowIgnore
+      checkCurrencyType(currency) === 'crypto' ? 'CRYPTO' : 'FIAT';
     const {
       couponsDiscounts,
       totalCost,
@@ -129,6 +143,7 @@ class BuyNow extends Component<PropsType, StateType> {
       totalCount,
       deliveryCost,
       subtotalWithoutDiscounts,
+      subtotal,
     } = calculateBuyNow;
     const { deliveryAddressesFull } = me;
     const addresses = addressesToSelect(deliveryAddressesFull);
@@ -149,6 +164,7 @@ class BuyNow extends Component<PropsType, StateType> {
         totalCount,
         deliveryCost,
         subtotalWithoutDiscounts,
+        subtotal,
       },
       changeCountLoading: false,
       couponCodeValue: '',
@@ -159,6 +175,8 @@ class BuyNow extends Component<PropsType, StateType> {
       errors: {},
       scrollArr: ['receiverName', 'phone', 'deliveryAddress'],
       deliveryPackage: null,
+      // $FlowIgnore
+      currency: getCurrentCurrency(currencyType),
     };
   }
 
@@ -169,21 +187,21 @@ class BuyNow extends Component<PropsType, StateType> {
     const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
     // $FlowIgnore
     const variants = pathOr([], ['variants', 'all'], baseProduct);
-    const variant = find(propEq('rawId', parseFloat(queryParams.variant)))(
+    const variant = find(propEq('rawId', parseInt(queryParams.variant, 10)))(
       variants,
     );
 
     if (
       variant &&
       !variant.preOrder &&
-      parseFloat(queryParams.quantity) > variant.quantity
+      parseInt(queryParams.quantity, 10) > variant.quantity
     ) {
       this.handleChangeCount(variant.quantity);
     }
 
-    if (queryParams.delivery) {
-      // this.handleChangeDelivery(queryParams.delivery);
-    }
+    // if (queryParams.delivery) {
+    //   this.handleChangeDelivery(queryParams.delivery);
+    // }
   }
 
   componentDidUpdate = (prevProps, prevState) => {
@@ -314,6 +332,7 @@ class BuyNow extends Component<PropsType, StateType> {
   };
 
   goToCheckout = () => {
+    // const { errors } = this.state;
     this.setState({ errors: {} });
     const preValidationErrors = this.validate();
     if (!isEmpty(preValidationErrors)) {
@@ -325,74 +344,96 @@ class BuyNow extends Component<PropsType, StateType> {
       this.createAddress();
     }
 
-    if (this.props.me != null && this.props.me.phone === null) {
-      updateUserPhoneMutation({
-        environment: this.props.relay.environment,
-        variables: {
-          input: {
-            clientMutationId: '',
-            id: this.props.me.id,
-            phone: this.state.phone,
-          },
-        },
-      })
-        .then(() => true)
-        .catch(log.error);
-    }
-
-    const { deliveryAddress } = this.state;
-    // $FlowIgnore
-    const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
-    this.setState({ isLoadingCheckout: true });
-    const variables = {
-      productId: parseFloat(queryParams.variant),
-      quantity: parseFloat(queryParams.quantity),
-    };
-    fetchBuyNow(
-      this.props.relay.environment,
-      deliveryAddress && deliveryAddress.countryCode === queryParams.country
-        ? assoc('shippingId', parseFloat(queryParams.delivery), variables)
-        : variables,
-    )
-      .then(({ calculateBuyNow }) => {
-        const {
-          couponsDiscounts,
-          totalCost,
-          totalCostWithoutDiscounts,
-          totalCount,
-          deliveryCost,
-          subtotalWithoutDiscounts,
-        } = calculateBuyNow;
-        this.setState({
-          step: 2,
-          isLoadingCheckout: false,
-          buyNowData: {
+    const handleFetchBuyNow = () => {
+      const { deliveryAddress } = this.state;
+      // $FlowIgnore
+      const queryParams = pathOr(
+        [],
+        ['match', 'location', 'query'],
+        this.props,
+      );
+      this.setState({ isLoadingCheckout: true });
+      const variables = {
+        productId: parseInt(queryParams.variant, 10),
+        quantity: parseInt(queryParams.quantity, 10),
+      };
+      fetchBuyNow(
+        this.props.relay.environment,
+        deliveryAddress && deliveryAddress.countryCode === queryParams.country
+          ? assoc('shippingId', parseInt(queryParams.delivery, 10), variables)
+          : variables,
+      )
+        .then(({ calculateBuyNow }) => {
+          const {
             couponsDiscounts,
             totalCost,
             totalCostWithoutDiscounts,
             totalCount,
             deliveryCost,
             subtotalWithoutDiscounts,
+            subtotal,
+          } = calculateBuyNow;
+          this.setState({
+            step: 2,
+            isLoadingCheckout: false,
+            buyNowData: {
+              couponsDiscounts,
+              totalCost,
+              totalCostWithoutDiscounts,
+              totalCount,
+              deliveryCost,
+              subtotalWithoutDiscounts,
+              subtotal,
+            },
+          });
+          return true;
+        })
+        .catch(() => {
+          this.props.showAlert({
+            type: 'danger',
+            text: 'Something going wrong :(',
+            link: { text: 'Close.' },
+          });
+          this.setState({ isLoadingCheckout: false });
+        });
+    };
+
+    const { me } = this.props;
+
+    if (me != null && me.phone !== this.state.phone) {
+      updateUserPhoneMutation({
+        environment: this.props.relay.environment,
+        variables: {
+          input: {
+            clientMutationId: uuidv4(),
+            id: me.id,
+            phone: this.state.phone,
           },
-        });
-        return true;
+        },
       })
-      .catch(() => {
-        this.props.showAlert({
-          type: 'danger',
-          text: 'Something going wrong :(',
-          link: { text: 'Close.' },
+        .then(() => {
+          handleFetchBuyNow();
+          return true;
+        })
+        .catch(error => {
+          const relayErrors = fromRelayError({ source: { errors: [error] } });
+          // $FlowIgnoreMe
+          const validationErrors = pathOr({}, ['100', 'messages'], relayErrors);
+          if (!isEmpty(validationErrors)) {
+            this.setState({ errors: validationErrors });
+          }
         });
-        this.setState({ isLoadingCheckout: false });
-      });
+      return;
+    }
+    handleFetchBuyNow();
   };
 
   validate = () => {
     const { deliveryAddress } = this.state;
     let { errors } = validate(
       {
-        receiverName: [[val => Boolean(val), 'Receiver name is required']],
-        phone: [[val => Boolean(val), 'Receiver phone is required']],
+        receiverName: [[val => Boolean(val), t.errors.receiverNameRequired]],
+        phone: [[val => Boolean(val), t.errors.receiverPhoneRequired]],
       },
       this.state,
     );
@@ -401,9 +442,17 @@ class BuyNow extends Component<PropsType, StateType> {
       !deliveryAddress.postalCode ||
       !deliveryAddress.value
     ) {
+      const errorString = `
+        ${!deliveryAddress.country ? t.errors.country : ''}
+        ${!deliveryAddress.value ? `, ${t.errors.address}` : ''}
+        ${!deliveryAddress.postalCode ? `, ${t.errors.postalCode}` : ''}
+        ${t.errors.areRequired}
+      `;
       errors = {
         ...errors,
-        deliveryAddress: ['Country, address and postal code are required'],
+        deliveryAddress: [
+          errorString.replace(/^(\s+)?,\s+/, '').replace(/\s+,\s+/g, ', '),
+        ],
       };
     }
     if (errors && !isEmpty(errors)) {
@@ -428,17 +477,18 @@ class BuyNow extends Component<PropsType, StateType> {
       phone,
       successCouponCodeValue,
       deliveryPackage,
+      currency,
     } = this.state;
     // $FlowIgnore
     const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
     let input = {
-      clientMutationId: '',
-      productId: parseFloat(queryParams.variant),
-      quantity: parseFloat(queryParams.quantity),
+      clientMutationId: uuidv4(),
+      productId: parseInt(queryParams.variant, 10),
+      quantity: parseInt(queryParams.quantity, 10),
       addressFull: deliveryAddress,
       receiverName,
       receiverPhone: phone,
-      currency: currentCurrency(),
+      currency,
       shippingId: deliveryPackage ? deliveryPackage.shippingId : null,
     };
     if (successCouponCodeValue) {
@@ -498,7 +548,7 @@ class BuyNow extends Component<PropsType, StateType> {
     const userId = pathOr(null, ['me', 'rawId'], this.props);
     const params: CreateMutationParamsType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         userId,
         addressFull: this.state.deliveryAddress,
         isPriority: false,
@@ -541,7 +591,7 @@ class BuyNow extends Component<PropsType, StateType> {
     const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
     const { successCouponCodeValue, deliveryPackage } = this.state;
     const variables = {
-      productId: parseFloat(queryParams.variant),
+      productId: parseInt(queryParams.variant, 10),
       quantity,
       couponCode: successCouponCodeValue || null,
       shippingId: deliveryPackage ? deliveryPackage.shippingId : null,
@@ -555,6 +605,7 @@ class BuyNow extends Component<PropsType, StateType> {
           totalCount,
           deliveryCost,
           subtotalWithoutDiscounts,
+          subtotal,
         } = calculateBuyNow;
         this.setState(
           {
@@ -565,6 +616,7 @@ class BuyNow extends Component<PropsType, StateType> {
               totalCount,
               deliveryCost,
               subtotalWithoutDiscounts,
+              subtotal,
             },
             changeCountLoading: false,
           },
@@ -609,8 +661,8 @@ class BuyNow extends Component<PropsType, StateType> {
       deliveryPackage,
     } = this.state;
     const variables = {
-      productId: parseFloat(queryParams.variant),
-      quantity: parseFloat(queryParams.quantity),
+      productId: parseInt(queryParams.variant, 10),
+      quantity: parseInt(queryParams.quantity, 10),
       couponCode: couponCodeValue,
       shippingId: deliveryPackage ? deliveryPackage.shippingId : null,
     };
@@ -629,6 +681,7 @@ class BuyNow extends Component<PropsType, StateType> {
           totalCount,
           deliveryCost,
           subtotalWithoutDiscounts,
+          subtotal,
         } = calculateBuyNow;
         this.setState(
           {
@@ -639,6 +692,7 @@ class BuyNow extends Component<PropsType, StateType> {
               totalCount,
               deliveryCost,
               subtotalWithoutDiscounts,
+              subtotal,
             },
             successCouponCodeValue: couponCodeValue,
             isLoadingCouponButton: false,
@@ -681,8 +735,8 @@ class BuyNow extends Component<PropsType, StateType> {
     const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
     const { successCouponCodeValue } = this.state;
     const variables = {
-      productId: parseFloat(queryParams.variant),
-      quantity: parseFloat(queryParams.quantity),
+      productId: parseInt(queryParams.variant, 10),
+      quantity: parseInt(queryParams.quantity, 10),
       couponCode: successCouponCodeValue || null,
       shippingId: pkg.shippingId,
     };
@@ -698,6 +752,7 @@ class BuyNow extends Component<PropsType, StateType> {
           totalCount,
           deliveryCost,
           subtotalWithoutDiscounts,
+          subtotal,
         } = calculateBuyNow;
         this.setState(
           {
@@ -708,6 +763,7 @@ class BuyNow extends Component<PropsType, StateType> {
               totalCount,
               deliveryCost,
               subtotalWithoutDiscounts,
+              subtotal,
             },
             deliveryPackage: pkg,
           },
@@ -736,7 +792,7 @@ class BuyNow extends Component<PropsType, StateType> {
     const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
     if (queryParams.delivery) {
       const deliveryPackage = find(
-        propEq('shippingId', parseFloat(queryParams.delivery)),
+        propEq('shippingId', parseInt(queryParams.delivery, 10)),
       )(packages);
       this.setState({ deliveryPackage: deliveryPackage || null });
     }
@@ -759,15 +815,17 @@ class BuyNow extends Component<PropsType, StateType> {
       isLoadingCheckout,
       errors,
       deliveryPackage,
+      currency,
     } = this.state;
     // $FlowIgnore
     const queryParams = pathOr([], ['match', 'location', 'query'], this.props);
     // $FlowIgnore
     const variants = pathOr([], ['variants', 'all'], baseProduct);
-    const variant = find(propEq('rawId', parseFloat(queryParams.variant)))(
+    const variant = find(propEq('rawId', parseInt(queryParams.variant, 10)))(
       variants,
     );
     const productName = getNameText(baseProduct.name, 'EN');
+    const isEmptyDeliveryAddressesFull = isEmpty(me.deliveryAddressesFull);
 
     return (
       <div styleName="container">
@@ -815,57 +873,55 @@ class BuyNow extends Component<PropsType, StateType> {
                                     id="phone"
                                     label={
                                       <span>
-                                        {t.labelReceiverPhone}{' '}
+                                        {`${t.labelReceiverPhone} `}
                                         <span styleName="red">*</span>
                                       </span>
                                     }
                                     onChange={this.handleChangePhone}
                                     value={phone}
-                                    limit={50}
                                     errors={errors.phone}
                                   />
                                 </div>
-                                <div styleName="selectItem">
-                                  <RadioButton
-                                    id="existingAddressCheckbox"
-                                    label={t.labelChooseYourAddress}
-                                    isChecked={selectedAddress !== null}
-                                    onChange={this.handleOnChangeAddressType}
-                                  />
-                                  {selectedAddress !== null && (
-                                    <div styleName="select">
-                                      <Select
-                                        label={t.labelAddress}
-                                        items={addresses}
-                                        activeItem={selectedAddress}
-                                        onSelect={this.handleOnSelectAddress}
-                                        forForm
-                                        containerStyle={{ width: '26rem' }}
-                                        dataTest="selectExistingAddress"
-                                      />
-                                    </div>
-                                  )}
-                                </div>
-                              </Col>
-                              <Col size={12} xlHidden>
-                                {deliveryAddress && (
-                                  <AddressInfo
-                                    addressFull={deliveryAddress}
-                                    receiverName={receiverName}
-                                    email={me.email}
-                                  />
+                                {!isEmptyDeliveryAddressesFull && (
+                                  <div styleName="selectItem">
+                                    <RadioButton
+                                      id="existingAddressCheckbox"
+                                      label={t.labelChooseYourAddress}
+                                      isChecked={selectedAddress !== null}
+                                      onChange={this.handleOnChangeAddressType}
+                                    />
+                                    {selectedAddress !== null && (
+                                      <div styleName="select">
+                                        <Select
+                                          label={t.labelAddress}
+                                          items={addresses}
+                                          activeItem={selectedAddress}
+                                          onSelect={this.handleOnSelectAddress}
+                                          forForm
+                                          containerStyle={{ width: '26rem' }}
+                                          dataTest="selectExistingAddress"
+                                        />
+                                      </div>
+                                    )}
+                                  </div>
                                 )}
                               </Col>
                               <Col size={12} sm={9} md={8} xl={12}>
-                                <div styleName="addressFormWrap">
-                                  <RadioButton
-                                    id="newAddressCheckbox"
-                                    label={
-                                      t.labelOrFillFieldsBelowAndSaveAsAddress
-                                    }
-                                    isChecked={selectedAddress === null}
-                                    onChange={this.handleOnChangeAddressType}
-                                  />
+                                <div
+                                  styleName={classNames('addressFormWrap', {
+                                    isEmptyDeliveryAddressesFull,
+                                  })}
+                                >
+                                  {!isEmptyDeliveryAddressesFull && (
+                                    <RadioButton
+                                      id="newAddressCheckbox"
+                                      label={
+                                        t.labelOrFillFieldsBelowAndSaveAsAddress
+                                      }
+                                      isChecked={selectedAddress === null}
+                                      onChange={this.handleOnChangeAddressType}
+                                    />
+                                  )}
                                   {selectedAddress === null && (
                                     <Fragment>
                                       <div
@@ -902,16 +958,17 @@ class BuyNow extends Component<PropsType, StateType> {
                             </Row>
                           </div>
                         </Col>
-                        <Col size={6} xlVisibleOnly>
-                          {deliveryAddress.country && (
-                            <div styleName="addressInfo">
-                              <AddressInfo
-                                addressFull={deliveryAddress}
-                                receiverName={receiverName}
-                                email={me.email}
-                              />
-                            </div>
-                          )}
+                        <Col size={12} xl={6}>
+                          {deliveryAddress &&
+                            deliveryAddress.country && (
+                              <div styleName="addressInfo">
+                                <AddressInfo
+                                  addressFull={deliveryAddress}
+                                  receiverName={receiverName}
+                                  email={me.email}
+                                />
+                              </div>
+                            )}
                         </Col>
                       </Row>
                     </Container>
@@ -948,6 +1005,7 @@ class BuyNow extends Component<PropsType, StateType> {
                         onChangeDelivery={this.handleChangeDelivery}
                         deliveryPackage={deliveryPackage}
                         onPackagesFetched={this.handlePackagesFetched}
+                        currency={currency}
                       />
                     </div>
                   </div>
@@ -965,6 +1023,7 @@ class BuyNow extends Component<PropsType, StateType> {
                   shippingId={
                     deliveryPackage ? deliveryPackage.shippingId : null
                   }
+                  currency={currency}
                 />
               </StickyBar>
             </Col>
@@ -1005,6 +1064,7 @@ export default createFragmentContainer(
         logo
       }
       rating
+      currency
       variants {
         all {
           id

@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { pathOr, isEmpty } from 'ramda';
 import { routerShape } from 'found';
+import uuidv4 from 'uuid/v4';
 
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Page } from 'components/App';
@@ -75,7 +76,7 @@ class NewStorage extends Component<PropsType, StateType> {
     const storeId = pathOr(null, ['match', 'params', 'storeId'], this.props);
     const params: MutationParamsType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         storeId: parseInt(storeId, 10),
         name: data.name,
         addressFull: {
@@ -152,4 +153,12 @@ NewStorage.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default withShowAlert(Page(ManageStore(NewStorage, 'Storages')));
+export default withShowAlert(
+  Page(
+    ManageStore({
+      OriginalComponent: NewStorage,
+      active: 'storages',
+      title: 'Storages',
+    }),
+  ),
+);

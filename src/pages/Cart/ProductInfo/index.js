@@ -3,15 +3,17 @@
 import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { head, map, find, whereEq, propOr, pathOr, isNil, is } from 'ramda';
+import uuidv4 from 'uuid/v4';
 
 import ShowMore from 'components/ShowMore';
 import Stepper from 'components/Stepper';
 import { Input } from 'components/common/Input';
 import { Container, Col, Row } from 'layout';
-import { formatPrice, currentCurrency, convertCountries } from 'utils';
+import { formatPrice, convertCountries, checkCurrencyType } from 'utils';
 import { AppContext } from 'components/App';
 
 import type { AvailableDeliveryPackageType } from 'relay/queries/fetchAvailableShippingForUser';
+import type { AllCurrenciesType } from 'types';
 
 import CartProductAttribute from '../CartProductAttribute';
 import { DeliveryCompaniesSelect } from '../../Checkout/CheckoutContent/DeliveryCompaniesSelect';
@@ -33,6 +35,7 @@ type PropsType = {
   // eslint-disable-next-line
   ...CartProduct_product,
   withDeliveryCompaniesSelect?: boolean,
+  currency: AllCurrenciesType,
 };
 
 class ProductInfo extends PureComponent<PropsType> {
@@ -49,7 +52,7 @@ class ProductInfo extends PureComponent<PropsType> {
         environment: this.context.environment,
         variables: {
           input: {
-            clientMutationId: '',
+            clientMutationId: uuidv4(),
             productId: parseInt(productId, 10),
             companyPackageId: pkg.companyPackageRawId,
             shippingId: pkg.shippingId,
@@ -82,7 +85,7 @@ class ProductInfo extends PureComponent<PropsType> {
           environment: this.context.environment,
           variables: {
             input: {
-              clientMutationId: '',
+              clientMutationId: uuidv4(),
               productId: currentProductRawId,
             },
           },
@@ -98,6 +101,7 @@ class ProductInfo extends PureComponent<PropsType> {
       onChangeComment,
       comment,
       withDeliveryCompaniesSelect,
+      currency,
     } = this.props;
 
     const attrs = map(
@@ -171,20 +175,25 @@ class ProductInfo extends PureComponent<PropsType> {
                       title={t.price}
                       value={`${formatPrice(
                         product.subtotalWithoutDiscounts || 0,
-                      )} ${currentCurrency()}`}
+                        checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                      )} ${currency || ''}`}
                     />
                     <CartProductAttribute
                       title={t.delivery}
                       value={`${formatPrice(
                         product.deliveryCost || 0,
-                      )} ${currentCurrency()}`}
+                        checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                      )} ${currency || ''}`}
                     />
                     {product.couponDiscount !== 0 && (
                       <CartProductAttribute
                         title={t.couponDiscount}
                         value={`${formatPrice(
                           product.couponDiscount || 0,
-                        )} ${currentCurrency()}`}
+                          checkCurrencyType(currency) === 'fiat'
+                            ? 2
+                            : undefined,
+                        )} ${currency || ''}`}
                       />
                     )}
                   </div>
@@ -233,6 +242,7 @@ class ProductInfo extends PureComponent<PropsType> {
                                     <Row>
                                       <Col size={11}>
                                         <DeliveryCompaniesSelect
+                                          currency={currency}
                                           baseProductId={product.baseProductId}
                                           // $FlowIgnoreMe
                                           country={currentCountryAlpha3}
@@ -291,21 +301,24 @@ class ProductInfo extends PureComponent<PropsType> {
                 <CartProductAttribute
                   title={t.price}
                   value={`${formatPrice(
-                    product.subtotalWithoutDiscounts || 0,
-                  )} ${currentCurrency()}`}
+                    product.subtotal || 0,
+                    checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                  )} ${currency || ''}`}
                 />
                 <CartProductAttribute
                   title={t.delivery}
                   value={`${formatPrice(
                     product.deliveryCost || 0,
-                  )} ${currentCurrency()}`}
+                    checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                  )} ${currency || ''}`}
                 />
                 {product.couponDiscount !== 0 && (
                   <CartProductAttribute
                     title={t.couponDiscount}
                     value={`−${formatPrice(
                       product.couponDiscount || 0,
-                    )} ${currentCurrency()}`}
+                      checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                    )} ${currency || ''}`}
                   />
                 )}
               </div>

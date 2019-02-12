@@ -4,7 +4,7 @@ import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import { isEmpty, map } from 'ramda';
 
-import { InputPrice, Checkbox, RadioButton } from 'components/common';
+import { RadioButton } from 'components/common';
 
 import type { SelectItemType } from 'types';
 import type {
@@ -27,7 +27,6 @@ import t from './i18n';
 type StateType = {
   isSelectedPickup: boolean,
   pickupPrice: number,
-  pickupCurrency: SelectItemType,
   isSelectedWithout: boolean,
   isSelectedFixPrice: boolean,
 };
@@ -55,7 +54,7 @@ type PropsType = {
 class LocalShipping extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
-    const { pickupShipping, currency, onChangeShippingData, companies } = props;
+    const { pickupShipping, onChangeShippingData, companies } = props;
     const isSelectedPickup = Boolean(pickupShipping && pickupShipping.pickup);
     const isSelectedWithout = isEmpty(companies) && !isSelectedPickup;
 
@@ -69,7 +68,6 @@ class LocalShipping extends Component<PropsType, StateType> {
     this.state = {
       isSelectedPickup,
       pickupPrice: (pickupShipping && pickupShipping.price) || 0,
-      pickupCurrency: currency,
       isSelectedWithout,
       isSelectedFixPrice: !isSelectedWithout,
     };
@@ -124,11 +122,11 @@ class LocalShipping extends Component<PropsType, StateType> {
       onRemoveEditableItem,
       localAvailablePackages,
       error,
+      currency,
     } = this.props;
     const {
-      isSelectedPickup,
-      pickupPrice,
-      pickupCurrency,
+      // isSelectedPickup,
+      // pickupPrice,
       isSelectedWithout,
       isSelectedFixPrice,
     } = this.state;
@@ -158,7 +156,7 @@ class LocalShipping extends Component<PropsType, StateType> {
           </div>
         </div>
         <div styleName={classNames('form', { hidePlane: isSelectedWithout })}>
-          <div styleName="pickup">
+          {/* <div styleName="pickup">
             <div styleName="pickupCheckbox">
               <Checkbox
                 inline
@@ -172,11 +170,11 @@ class LocalShipping extends Component<PropsType, StateType> {
               <InputPrice
                 onChangePrice={this.handleOnChangePickupPrice}
                 price={pickupPrice}
-                currency={pickupCurrency}
+                currency={currency}
                 dataTest="shippingPickupPrice"
               />
             </div>
-          </div>
+          </div> */}
           {localAvailablePackages &&
             !isEmpty(localAvailablePackages) && (
               <div
@@ -185,6 +183,7 @@ class LocalShipping extends Component<PropsType, StateType> {
                 })}
               >
                 <FixPriceForm
+                  currency={currency}
                   services={remainingServices}
                   onSaveCompany={onSaveCompany}
                 />
@@ -196,6 +195,7 @@ class LocalShipping extends Component<PropsType, StateType> {
                 item => (
                   <Fragment key={item.id}>
                     <CompanyItem
+                      currency={currency}
                       company={item}
                       onRemoveCompany={onRemoveCompany}
                       onSetEditableItem={onSetEditableItem}
@@ -203,6 +203,7 @@ class LocalShipping extends Component<PropsType, StateType> {
                     {editableItemId === item.id && (
                       <div styleName="editableForm">
                         <FixPriceForm
+                          currency={currency}
                           services={possibleServices}
                           company={item}
                           onSaveCompany={onSaveCompany}

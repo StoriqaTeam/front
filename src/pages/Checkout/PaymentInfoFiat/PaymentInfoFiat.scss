@@ -1,0 +1,270 @@
+@import '../../../styles/variables.scss';
+
+.container {
+  background-color: $color_white;
+  border: solid 1px $color_grey_trivial;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding: 4rem 0;
+
+  @media (min-width: $md) {
+    padding: 14rem 0;
+  }
+}
+
+.wrap {
+  min-width: 70.5rem;
+
+  @media (max-width: #{$sm - 1px}) {
+    min-width: 100%;
+  }
+}
+
+.title {
+  color: $color_grey;
+  font-family: $font_light;
+  font-size: 36px;
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 300;
+  height: 5.25rem;
+  letter-spacing: normal;
+  line-height: normal;
+  text-align: center;
+}
+
+.description {
+  margin-top: 2.25rem;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: $color_grey_minor;
+}
+
+.info {
+}
+
+.separator {
+  border: solid 1px $color_grey_trivial;
+  height: 0.375rem;
+  margin-top: 3.75rem;
+  width: 100%;
+  @media (min-width: $md) {
+    width: 65.75rem;
+  }
+}
+
+//.links {
+//  //display: none;
+//
+//
+//  align-items: center;
+//  display: flex;
+//  flex-direction: column;
+//  font-family: $font_regular;
+//  height: 4.75rem;
+//  justify-content: space-between;
+//  margin-bottom: 5.25rem;
+//  margin-top: 3.75rem;
+//  width: 100%;
+//  @media (min-width: $md) {
+//    flex-direction: row;
+//    margin-bottom: 24.25rem;
+//    width: 65.75rem;
+//  }
+//  span {
+//    font-family: $font_medium;
+//    color: $color_blue;
+//  }
+//}
+
+.paymentInfoWrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 2.25rem;
+  width: 100%;
+  @media (min-width: $md) {
+    align-items: initial;
+    flex-direction: row;
+    margin-left: 4rem;
+    margin-right: 4rem;
+    width: 70.5rem;
+  }
+
+  .qr {
+    width: 26.75rem;
+    height: 26.75rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .paymentInfo {
+    margin-left: 0.5rem;
+    text-align: center;
+    @media (min-width: $md) {
+      text-align: left;
+    }
+
+    .addressTitle {
+      font-size: 16px;
+      color: $color_grey_minor;
+      margin-top: 2rem;
+    }
+
+    .address {
+      font-size: 12px;
+      @media (min-width: $md) {
+        font-size: 16px;
+      }
+    }
+
+    .amountTitle {
+      font-size: 16px;
+      color: $color_grey_minor;
+      margin-top: 2rem;
+    }
+
+    .amount {
+      font-size: 20px;
+      font-weight: bold;
+      color: $color_grey;
+    }
+
+    .reserveInfo {
+      margin-top: 4.5rem;
+      font-size: 14px;
+      color: $color_grey_minor;
+    }
+
+    .timer {
+      color: $color_grey;
+    }
+  }
+}
+
+.transactionsBlock {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 3rem;
+  margin-bottom: 1.75rem;
+
+  .statusBlock {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    font-size: 16px;
+
+    @media (min-width: $md) {
+      align-items: initial;
+      flex-direction: row;
+    }
+    .statusTitle {
+    }
+    .statusValue {
+      margin-left: 2rem;
+      display: flex;
+      align-items: center;
+    }
+    .statusInProcess {
+      color: $color_green;
+    }
+    .statusPaymentAwaited {
+      color: $color_pink;
+    }
+  }
+
+  .transactions {
+    width: 65.5rem;
+    background-color: $color_grey_trivial;
+    padding: 2.5rem;
+    margin-top: 3rem;
+
+    .row {
+      display: flex;
+    }
+
+    .transactions-title-tx {
+      color: $color_grey_minor;
+      width: 25rem;
+    }
+
+    .transactions-title-amount {
+      color: $color_grey_minor;
+      width: 25rem;
+      margin-left: 4rem;
+    }
+
+    .row-tx {
+      width: 25rem;
+      overflow: hidden;
+      display: flex;
+      justify-content: right;
+      position: relative;
+      &:before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 6rem;
+        height: 100%;
+        width: 15rem;
+        background: linear-gradient(to right, $color_grey_trivial, transparent);
+      }
+      a {
+        color: $color_blue;
+        text-decoration: none;
+        font-size: 16px;
+      }
+    }
+
+    .row-amount {
+      width: 25rem;
+      margin-left: 4rem;
+    }
+  }
+}
+
+//.notification {
+//  position: absolute;
+//  top: 0;
+//  left: 0;
+//  width: 100%;
+//}
+
+.fiat {
+  background-color: $color_white;
+  padding: 4rem;
+}
+
+.restCartInfo {
+  margin-top: 4rem;
+}
+
+.ordersLinkWrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.ordersLink {
+  font-size: 14px;
+  color: $color_blue;
+  transition: $transition_all_ease;
+
+  &:hover {
+    color: $color_blue_hover;
+  }
+}

@@ -3,6 +3,7 @@
 import { graphql, commitMutation } from 'react-relay';
 import { omit } from 'ramda';
 import { Environment } from 'relay-runtime';
+import uuidv4 from 'uuid/v4';
 
 const mutation = graphql`
   mutation UpdateWizardMutation($input: UpdateWizardStoreInput!) {
@@ -127,7 +128,7 @@ const commit = (params: MutationParamsType) =>
     mutation,
     variables: {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         ...omit(['environment', 'onCompleted', 'onError'], params),
       },
     },

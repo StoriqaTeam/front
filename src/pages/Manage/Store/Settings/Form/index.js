@@ -24,6 +24,7 @@ import { UploadWrapper } from 'components/Upload';
 import { Icon } from 'components/Icon';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import ModerationStatus from 'pages/common/ModerationStatus';
+import { RichEditor } from 'components/RichEditor';
 
 import { uploadFile, convertSrc } from 'utils';
 
@@ -95,12 +96,12 @@ class Form extends Component<PropsType, StateType> {
     if (store) {
       this.state = {
         form: {
-          // $FlowIgnoreMe
-          name: pathOr('', ['name', 0, 'text'], store),
-          // $FlowIgnoreMe
-          longDescription: pathOr('', ['longDescription', 0, 'text'], store),
-          // $FlowIgnoreMe
-          shortDescription: pathOr('', ['shortDescription', 0, 'text'], store),
+          // $FlowIgnore
+          name: pathOr('', ['name', 0, 'text'])(store),
+          // $FlowIgnore
+          longDescription: pathOr('', ['longDescription', 0, 'text'])(store),
+          // $FlowIgnore
+          shortDescription: pathOr('', ['shortDescription', 0, 'text'])(store),
           defaultLanguage: store.defaultLanguage || 'EN',
           slug: store.slug || '',
           cover: store.cover || '',
@@ -170,13 +171,11 @@ class Form extends Component<PropsType, StateType> {
   handleInputChange = (id: string) => (e: any) => {
     this.setState({ formErrors: omit([id], this.state.formErrors) });
     const { value } = e.target;
-    if (value.length <= 50) {
-      this.setState((prevState: StateType) =>
-        assocPath(['form', id], value, prevState),
-      );
-      if (this.props.handleNewStoreNameChange && id === 'name') {
-        this.props.handleNewStoreNameChange(value);
-      }
+    this.setState((prevState: StateType) =>
+      assocPath(['form', id], value, prevState),
+    );
+    if (this.props.handleNewStoreNameChange && id === 'name') {
+      this.props.handleNewStoreNameChange(value);
     }
   };
 
@@ -249,7 +248,6 @@ class Form extends Component<PropsType, StateType> {
       this.setState({ formErrors });
       return;
     }
-
     this.setState({ formErrors: {} });
     this.props.onSave({
       form: {
@@ -295,8 +293,28 @@ class Form extends Component<PropsType, StateType> {
       });
   };
 
+  handleError = (error: { message: string }): void => {
+    const { showAlert } = this.props;
+    showAlert({
+      type: 'danger',
+      text: error.message,
+      link: { text: t.close },
+    });
+  };
+
   handleDeleteCover = () => {
     this.setState(assocPath(['form', 'cover'], '', this.state));
+  };
+
+  handleLongDescription = longDescription => {
+    const { form } = this.state;
+    this.setState({
+      form: {
+        ...form,
+        longDescription,
+      },
+      formErrors: omit(['longDescription'], this.state.formErrors),
+    });
   };
 
   writeSlug = (slugValue: string) => {
@@ -396,12 +414,20 @@ class Form extends Component<PropsType, StateType> {
     // $FlowIgnore
     const realSlug = pathOr('', ['store', 'slug'], this.props);
 
+    const longDescriptionError = propOr(
+      null,
+      'longDescription',
+      this.state.formErrors,
+    );
     return (
       <div styleName="container">
         <div styleName="form">
           {status && (
             <div styleName="storeStatus">
-              <ModerationStatus status={status} dataTest="storeStatus" />
+              <ModerationStatus
+                status={status}
+                dataTest={`storeStatus_${status}`}
+              />
             </div>
           )}
           <div styleName="formHeader">
@@ -478,11 +504,18 @@ class Form extends Component<PropsType, StateType> {
             limit: 170,
             required: true,
           })}
-          {this.renderTextarea({
-            id: 'longDescription',
-            label: t.labelLongDescription,
-            required: true,
-          })}
+
+          <h3 styleName="title">
+            <strong>{t.shopEditor}</strong>
+          </h3>
+          <RichEditor
+            content={this.state.form.longDescription}
+            onChange={this.handleLongDescription}
+            onError={this.handleError}
+          />
+          {longDescriptionError && (
+            <div styleName="error">{longDescriptionError}</div>
+          )}
           <div styleName="buttonsPanel">
             <div styleName="saveButton">
               <Button
@@ -491,7 +524,7 @@ class Form extends Component<PropsType, StateType> {
                 onClick={this.handleSave}
                 isLoading={isLoading}
                 disabled={!slug || !this.isSaveAvailable()}
-                dataTest="saveButton"
+                dataTest="saveStoreButton"
               >
                 {t.save}
               </Button>
@@ -504,7 +537,7 @@ class Form extends Component<PropsType, StateType> {
                   onClick={this.props.onClickOnSendToModeration}
                   isLoading={isLoading}
                   disabled={!slug}
-                  dataTest="sendToModerationButton"
+                  dataTest="sendToModerationStoreButton"
                 >
                   {t.sendToModeration}
                 </Button>

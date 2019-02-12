@@ -21,8 +21,10 @@ type TranslationDicType = {|
   //
   copyRight: string,
   allRightsReserved: string,
-  startSelling: string,
+  startTrade: string,
   offscreenSections: string,
+  wannaSellYourGoodsGlobally: string,
+  storiqaIsAGlobalMarketPlace: string,
 |};
 
 type TranslationsBundleType = Translation<TranslationDicType>;
@@ -46,8 +48,11 @@ const translations: TranslationsBundleType = {
     copyRight:
       '© Storiqa Marketplace DBA Storiqa Global Trades Inc. (Head Office Unit 617, 6/F 131-132 Connaught Road West Hong Kong)',
     allRightsReserved: 'All rights reserved.',
-    startSelling: 'Start selling',
+    startTrade: 'Start Trade',
     offscreenSections: 'Storiqa Sections',
+    wannaSellYourGoodsGlobally: 'Wanna sell your goods globally?',
+    storiqaIsAGlobalMarketPlace:
+      'Storiqa is a global marketplace for any kind of legal goods supporting cryptocurrency payments',
   },
 };
 

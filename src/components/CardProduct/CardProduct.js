@@ -5,15 +5,21 @@ import { Link } from 'found';
 import { head } from 'ramda';
 import classNames from 'classnames';
 
-import { CurrencyPrice } from 'components/common';
 import { Icon } from 'components/Icon';
 import { Rating } from 'components/common/Rating';
-import { MultiCurrencyDropdown } from 'components/common/MultiCurrencyDropdown';
 import BannerLoading from 'components/Banner/BannerLoading';
-import { getNameText, formatPrice, convertSrc, currentCurrency } from 'utils';
+import {
+  getNameText,
+  formatPrice,
+  convertSrc,
+  getExchangePrice,
+  verifyItemCurrency,
+  checkCurrencyType,
+} from 'utils';
 import ImageLoader from 'libs/react-image-loader';
+import { ContextDecorator } from 'components/App';
 
-import { CardProductCashback, CardProductDropdown } from './index';
+import { CardProductCashback } from './index';
 
 import './CardProduct.scss';
 
@@ -24,41 +30,63 @@ type VariantType = {
   photoMain: ?string,
   price: ?number,
   rawId: ?number,
+  customerPrice: {
+    price: number,
+    currency: string,
+  },
 };
 
-type PropsType = {
-  item: {
-    rawId: number,
-    storeId: number,
-    currency: string,
+export type ItemType = {
+  rawId: number,
+  storeId: number,
+  currency: string,
+  name: Array<{
+    lang: string,
+    text: string,
+  }>,
+  products: {
+    edges: Array<{
+      node: VariantType,
+    }>,
+  },
+  rating: number,
+  store: {
     name: Array<{
       lang: string,
       text: string,
     }>,
-    products: {
-      edges: Array<{
-        node: VariantType,
-      }>,
-    },
-    rating: number,
-    store: {
-      name: Array<{
-        lang: string,
-        text: string,
-      }>,
-    },
   },
-  isSearchPage: boolean,
   priceUsd: ?number,
+};
+
+type CurrencyExhangeType = {
+  code: string,
+  rates: Array<{
+    code: string,
+    value: number,
+  }>,
+};
+
+type PropsType = {
+  item: ItemType,
+  isSearchPage: boolean,
+  directories: {
+    currencyExchange: Array<CurrencyExhangeType>,
+  },
 };
 
 class CardProduct extends PureComponent<PropsType> {
   render() {
+    const { item, isSearchPage, directories } = this.props;
     const {
-      item: { rawId, storeId, name, products, currency, rating, store },
-      isSearchPage,
-      priceUsd,
-    } = this.props;
+      rawId,
+      storeId,
+      name,
+      products,
+      currency,
+      rating,
+      store,
+    } = verifyItemCurrency(item);
     let discount = null;
     let photoMain = null;
     let cashback = null;
@@ -75,7 +103,13 @@ class CardProduct extends PureComponent<PropsType> {
     const discountedPrice = discount ? price * (1 - discount) : price;
     const discountValue = discount ? (discount * 100).toFixed(0) : null;
     const cashbackValue = cashback ? (cashback * 100).toFixed(0) : null;
-    //
+    const priceExchanged = getExchangePrice({
+      price,
+      currency,
+      currencyExchange: directories.currencyExchange,
+      withSymbol: true,
+    });
+
     return (
       <div styleName="container">
         <Link to={productLink} styleName="body" data-test={rawId}>
@@ -126,51 +160,29 @@ class CardProduct extends PureComponent<PropsType> {
                 <div styleName="undiscountedPrice">
                   {Boolean(discount) && (
                     <span>
-                      {formatPrice(price)} {currentCurrency()}
+                      {formatPrice(
+                        price,
+                        checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                      )}{' '}
+                      {currency}
                     </span>
                   )}
                 </div>
-                <MultiCurrencyDropdown
-                  elementStyleName="priceDropdown"
-                  price={discountedPrice}
-                  renderPrice={(priceItem: {
-                    price: number,
-                    currencyCode: string,
-                  }) => (
-                    <div styleName="priceDropdown">
-                      <div styleName="actualPrice">
-                        {discountedPrice === 0
-                          ? 'FREE'
-                          : `${formatPrice(priceItem.price)} ${
-                              priceItem.currencyCode
-                            }`}
-                      </div>
-                      {priceUsd && (
-                        <CurrencyPrice
-                          reverse
-                          dark
-                          withTilda
-                          withSlash={priceUsd != null}
-                          price={priceItem.price || 0}
-                          fontSize={16}
-                          currencyPrice={priceUsd}
-                          currencyCode="$"
-                          toFixedValue={2}
-                        />
-                      )}
-                    </div>
+                <div styleName="priceDropdown">
+                  <div styleName="actualPrice">
+                    {discountedPrice === 0
+                      ? 'FREE'
+                      : `${formatPrice(
+                          discountedPrice,
+                          checkCurrencyType(currency) === 'fiat'
+                            ? 2
+                            : undefined,
+                        )} ${currency}`}
+                  </div>
+                  {priceExchanged && (
+                    <span styleName="priceExchanged">{priceExchanged}</span>
                   )}
-                  renderDropdown={(
-                    rates: Array<{ currencyCode: string, value: number }>,
-                  ) => <CardProductDropdown rates={rates} />}
-                  renderDropdownToggle={(isDropdownOpened: boolean) => (
-                    <button
-                      styleName={`toggleRatesDropdown${
-                        isDropdownOpened ? 'Closed' : 'Opened'
-                      }`}
-                    />
-                  )}
-                />
+                </div>
               </div>
             </div>
           </div>
@@ -180,4 +192,4 @@ class CardProduct extends PureComponent<PropsType> {
   }
 }
 
-export default CardProduct;
+export default ContextDecorator(CardProduct);

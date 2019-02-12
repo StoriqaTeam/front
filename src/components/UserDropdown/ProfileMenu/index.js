@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'found';
 
 import { convertSrc } from 'utils';
@@ -53,7 +53,7 @@ const ProfileMenu = ({
         styleName="item"
         data-test="header-user-menu-profileOrdersLink"
       >
-        {t.orders}
+        {t.myOrders}
       </Link>
       <Link
         to="/profile"
@@ -71,9 +71,25 @@ const ProfileMenu = ({
           <span>{t.myShop}</span>
         </Link>
       ) : (
-        <a href="https://selling.storiqa.com/" styleName="item">
-          {t.startSelling}
-        </a>
+        <Fragment>
+          {!isWizardComplete && myStoreId ? (
+            <Link
+              to="/manage/wizard"
+              styleName="item"
+              data-test="header-user-menu-sellingLink"
+            >
+              {t.startSelling}
+            </Link>
+          ) : (
+            <a
+              href="https://selling.storiqa.com/"
+              styleName="item"
+              data-test="header-user-menu-sellingLink"
+            >
+              {t.startSelling}
+            </a>
+          )}
+        </Fragment>
       )}
     </div>
     <Link

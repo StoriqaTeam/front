@@ -20,7 +20,7 @@ const ProductDiscount = ({ discount }: PropType) => (
         fontSize: 16,
       }}
     >
-      {`- ${Math.round(discount * 100)} %`}
+      {`− ${Math.round(discount * 100)} %`}
     </span>
   </span>
 );

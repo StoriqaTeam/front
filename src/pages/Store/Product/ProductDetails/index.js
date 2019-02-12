@@ -1,16 +1,20 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import type { Node } from 'react';
-import { propOr, prop, head } from 'ramda';
-import axios from 'axios';
+import { propOr, prop } from 'ramda';
 
-import { log } from 'utils';
+import { verifyItemCurrency } from 'utils';
 
 import { Rating } from 'components/common/Rating';
 
 import type { CountryType } from 'types';
-import type { WidgetType, DeliveryAddress, DeliveryDataType } from '../types';
+import type {
+  WidgetType,
+  DeliveryAddress,
+  DeliveryDataType,
+  ProductVariantType,
+} from '../types';
 
 import {
   ProductContext,
@@ -25,10 +29,6 @@ import {
 import { sortByProp } from '../utils';
 
 import './ProductDetails.scss';
-
-type StateType = {
-  priceUsd: ?number,
-};
 
 type PropsType = {
   children: Node,
@@ -48,37 +48,12 @@ type PropsType = {
   countries: Array<CountryType>,
   onChangeDeliveryData: (deliveryData: DeliveryDataType) => void,
   deliveryData: DeliveryDataType,
+  productVariant: ProductVariantType,
 };
 
-class ProductDetails extends Component<PropsType, StateType> {
-  state = {
-    priceUsd: null,
-  };
-
-  componentDidMount() {
-    this.isMount = true;
-    axios
-      .get('https://api.coinmarketcap.com/v1/ticker/storiqa/')
-      .then(({ data }) => {
-        const dataObj = head(data);
-        if (dataObj && this.isMount) {
-          this.setState({ priceUsd: Number(dataObj.price_usd) });
-        }
-        return true;
-      })
-      .catch(error => {
-        log.debug(error);
-      });
-  }
-
-  componentWillUnmount() {
-    this.isMount = false;
-  }
-
-  isMount = false;
-
+class ProductDetails extends PureComponent<PropsType> {
   generateWidget = (widget: WidgetType, index: number): Node => {
-    const { unselectedAttr } = this.props;
+    const { unselectedAttr, productVariant } = this.props;
     let WidgetComponent;
     switch (widget.uiElement) {
       case 'CHECKBOX':
@@ -148,6 +123,7 @@ class ProductDetails extends Component<PropsType, StateType> {
               (unselectedAttr && unselectedAttr.indexOf(widget.title) > -1) ||
               false
             }
+            productVariant={productVariant}
           />
         );
         break;
@@ -171,38 +147,40 @@ class ProductDetails extends Component<PropsType, StateType> {
       onChangeDeliveryData,
       deliveryData,
     } = this.props;
-    const { priceUsd } = this.state;
     return (
       <ProductContext.Consumer>
-        {({ productVariant, rating }) => (
-          <div styleName="container">
-            <h2>{productTitle}</h2>
-            <div styleName="rating">
-              <Rating value={rating} />
+        {({ productVariant, rating }) => {
+          const verifiedVariant = verifyItemCurrency(productVariant);
+          return (
+            <div styleName="container">
+              <h2>{productTitle}</h2>
+              <div styleName="rating">
+                <Rating value={rating} />
+              </div>
+              <ProductPrice {...verifiedVariant} />
+              <p styleName="productDescription">{productDescription}</p>
+              <Delivery
+                currency={verifiedVariant.currency}
+                userAddress={userAddress}
+                baseProductRawId={baseProductRawId}
+                countries={countries}
+                onChangeDeliveryData={onChangeDeliveryData}
+                deliveryData={deliveryData}
+              />
+              <div styleName="widgets">
+                {sortByProp('id')(widgets).map(this.generateWidget)}
+              </div>
+              <ProductQuantity
+                quantity={productVariant.quantity}
+                preOrder={productVariant.preOrder}
+                preOrderDays={productVariant.preOrderDays}
+                onChangeQuantity={onChangeQuantity}
+                cartQuantity={cartQuantity}
+              />
+              {children}
             </div>
-            <ProductPrice {...productVariant} priceUsd={priceUsd} />
-            <p styleName="productDescription">{productDescription}</p>
-            <div styleName="line" />
-            <Delivery
-              userAddress={userAddress}
-              baseProductRawId={baseProductRawId}
-              countries={countries}
-              onChangeDeliveryData={onChangeDeliveryData}
-              deliveryData={deliveryData}
-            />
-            <div styleName="widgets">
-              {sortByProp('id')(widgets).map(this.generateWidget)}
-            </div>
-            <ProductQuantity
-              quantity={productVariant.quantity}
-              preOrder={productVariant.preOrder}
-              preOrderDays={productVariant.preOrderDays}
-              onChangeQuantity={onChangeQuantity}
-              cartQuantity={cartQuantity}
-            />
-            {children}
-          </div>
-        )}
+          );
+        }}
       </ProductContext.Consumer>
     );
   }

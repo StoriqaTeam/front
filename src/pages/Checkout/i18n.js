@@ -15,6 +15,14 @@ type TranslationDicType = {|
   somethingWentWrong: string,
   next: string,
   checkout: string,
+  errors: {
+    receiverNameRequired: string,
+    receiverPhoneRequired: string,
+    areRequired: string,
+    country: string,
+    address: string,
+    postalCode: string,
+  },
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -30,6 +38,14 @@ const translations: TranslationsBundleType = {
     somethingWentWrong: 'Something went wrong :(',
     next: 'Next',
     checkout: 'Checkout',
+    errors: {
+      receiverNameRequired: 'Receiver name is required',
+      receiverPhoneRequired: 'Receiver phone is required',
+      areRequired: 'are required',
+      country: 'country',
+      address: 'address',
+      postalCode: 'postal code',
+    },
   },
 };
 

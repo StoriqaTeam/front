@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { assocPath, pathOr, propOr, pick, isEmpty } from 'ramda';
 import { createFragmentContainer, graphql } from 'react-relay';
+import uuidv4 from 'uuid/v4';
 
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { currentUserShape } from 'utils/shapes';
@@ -118,10 +119,8 @@ class Contacts extends Component<PropsType, StateType> {
     e: SyntheticInputEvent<HTMLInputElement>,
   ) => {
     const { value } = e.target;
-    if (value.length <= 50) {
-      const val = id === 'phone' ? value.replace(/\s/g, '') : value;
-      this.setState(assocPath(['form', id], val, this.state));
-    }
+    const val = id === 'phone' ? value.replace(/\s/g, '') : value;
+    this.setState(assocPath(['form', id], val, this.state));
   };
 
   handleUpdateForm = (form: { address: string }) => {
@@ -218,7 +217,7 @@ class Contacts extends Component<PropsType, StateType> {
 
     const params: MutationParamsType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         id: myStore.id || '',
         logo: logoUrl,
         email,
@@ -343,7 +342,10 @@ class Contacts extends Component<PropsType, StateType> {
         <div styleName="form">
           {status && (
             <div styleName="storeStatus">
-              <ModerationStatus status={status} dataTest="storeStatus" />
+              <ModerationStatus
+                status={status}
+                dataTest={`storeStatus_${status}`}
+              />
             </div>
           )}
           <div styleName="wrap">
@@ -408,7 +410,15 @@ Contacts.contextTypes = {
 };
 
 export default createFragmentContainer(
-  withShowAlert(Page(ManageStore(Contacts, 'Contacts'))),
+  withShowAlert(
+    Page(
+      ManageStore({
+        OriginalComponent: Contacts,
+        active: 'contacts',
+        title: 'Contacts',
+      }),
+    ),
+  ),
   graphql`
     fragment Contacts_me on User {
       myStore {

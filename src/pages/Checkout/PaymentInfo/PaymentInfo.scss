@@ -6,8 +6,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+  //margin-top: 2rem;
+  //margin-bottom: 2rem;
   position: relative;
 }
 
@@ -45,9 +45,9 @@
 
 .separator {
   border: solid 1px $color_grey_trivial;
-  height: 0.375rem;
   margin-top: 3.75rem;
   width: 100%;
+
   @media (min-width: $md) {
     width: 65.75rem;
   }
@@ -63,14 +63,22 @@
   margin-bottom: 5.25rem;
   margin-top: 3.75rem;
   width: 100%;
+
   @media (min-width: $md) {
     flex-direction: row;
     margin-bottom: 24.25rem;
     width: 65.75rem;
   }
-  span {
+
+  a {
+    font-size: 16px;
     font-family: $font_medium;
     color: $color_blue;
+    transition: $transition_all_ease;
+
+    &:hover {
+      color: $color_blue_hover;
+    }
   }
 }
 
@@ -180,20 +188,19 @@
 
     .amount {
       font-size: 20px;
-      font-weight: bold;
       color: $color_grey;
-    }
-
-    .reserveInfo {
-      margin-top: 4.5rem;
-      font-size: 14px;
-      color: $color_grey_minor;
     }
 
     .timer {
       color: $color_grey;
     }
   }
+}
+
+.reserveInfo {
+  font-size: 14px;
+  color: $color_grey_minor;
+  text-align: center;
 }
 
 .transactionsBlock {
@@ -262,7 +269,6 @@
         position: absolute;
         top: 0;
         left: 0;
-        width: 6rem;
         height: 100%;
         width: 15rem;
         background: linear-gradient(to right, $color_grey_trivial, transparent);
@@ -286,4 +292,24 @@
   top: 0;
   left: 0;
   width: 100%;
+}
+
+.restCartInfo {
+  margin-top: 6rem;
+}
+
+.ordersLinkWrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.ordersLink {
+  font-size: 14px;
+  color: $color_blue;
+  transition: $transition_all_ease;
+
+  &:hover {
+    color: $color_blue_hover;
+  }
 }

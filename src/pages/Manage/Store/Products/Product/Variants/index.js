@@ -1,22 +1,28 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { isEmpty, pathOr, map } from 'ramda';
 import { Environment } from 'relay-runtime';
+import uuidv4 from 'uuid/v4';
 
 import { log, fromRelayError } from 'utils';
 import { DeactivateProductMutation } from 'relay/mutations';
+import { Confirmation } from 'components/Confirmation';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 import type { ProductType } from 'pages/Manage/Store/Products/types';
 import type { MutationParamsType } from 'relay/mutations/DeactivateProductMutation';
+import type { SelectItemType } from 'types';
 
 import Header from './Header';
 import Row from './Row';
 
 import './Variants.scss';
 
+import t from './i18n';
+
 type PropsType = {
+  currency: SelectItemType,
   variants: Array<ProductType>,
   productId: string,
   environment: Environment,
@@ -25,19 +31,29 @@ type PropsType = {
   onCopyVariant: (variant: ProductType) => void,
 };
 
-class Variants extends PureComponent<PropsType> {
-  handleDeleteVariant = (id: string) => {
+type StateType = {
+  showModal: boolean,
+  dataToDelete: ?string,
+};
+
+class Variants extends Component<PropsType, StateType> {
+  state = {
+    showModal: false,
+    dataToDelete: null,
+  };
+
+  deleteVariant = (id: string) => {
     const { environment, productId } = this.props;
     if (!productId || !id) {
       this.props.showAlert({
         type: 'danger',
-        text: 'Something going wrong :(',
-        link: { text: 'Close.' },
+        text: t.somethingWentWrong,
+        link: { text: t.close },
       });
     }
     const params: MutationParamsType = {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         id,
       },
       parentID: productId,
@@ -52,14 +68,15 @@ class Variants extends PureComponent<PropsType> {
         if (!isEmpty(statusError)) {
           this.props.showAlert({
             type: 'danger',
-            text: `Error: "${statusError}"`,
-            link: { text: 'Close.' },
+            text: `${t.error} "${statusError}"`,
+            link: { text: t.close },
           });
           return;
         }
+        this.handleCloseModal();
         this.props.showAlert({
           type: 'success',
-          text: 'Variant deleted!',
+          text: t.variantDeleted,
           link: { text: '' },
         });
       },
@@ -67,20 +84,35 @@ class Variants extends PureComponent<PropsType> {
         log.debug({ error });
         this.props.showAlert({
           type: 'danger',
-          text: 'Something going wrong :(',
-          link: { text: 'Close.' },
+          text: t.somethingWentWrong,
+          link: { text: t.close },
         });
       },
     };
     DeactivateProductMutation.commit(params);
   };
 
-  expandClick = (id: number) => {
+  expandClick = (id: number): void => {
     this.props.onExpandClick(id);
   };
 
+  handleDelete = (): void => {
+    const { dataToDelete } = this.state;
+    // $FlowIgnoreMe
+    this.deleteVariant(dataToDelete);
+  };
+
+  handleDeleteModal = (id: string): void => {
+    this.setState({ showModal: true, dataToDelete: id });
+  };
+
+  handleCloseModal = (): void => {
+    this.setState({ showModal: false, dataToDelete: null });
+  };
+
   render() {
-    const { variants, onCopyVariant } = this.props;
+    const { variants, onCopyVariant, currency } = this.props;
+    const { showModal } = this.state;
     return (
       <div styleName="container">
         <Header onSelectAllClick={() => {}} />
@@ -90,7 +122,8 @@ class Variants extends PureComponent<PropsType> {
               <Row
                 key={item.rawId}
                 variant={item}
-                handleDeleteVariant={this.handleDeleteVariant}
+                currency={currency}
+                handleDeleteVariant={this.handleDeleteModal}
                 onExpandClick={this.expandClick}
                 onCopyVariant={onCopyVariant}
               />
@@ -98,6 +131,16 @@ class Variants extends PureComponent<PropsType> {
             variants,
           )}
         </div>
+        <Confirmation
+          showModal={showModal}
+          onClose={this.handleCloseModal}
+          title={t.deleteVariant}
+          description={t.confirmationDescription}
+          onCancel={this.handleCloseModal}
+          onConfirm={this.handleDelete}
+          confirmText={t.confirmText}
+          cancelText={t.cancelText}
+        />
       </div>
     );
   }

@@ -9,6 +9,7 @@ type TranslationDicType = {|
   exchangeNotification: string,
   attention: string,
   ok: string,
+  myOrders: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -19,6 +20,7 @@ const translations: TranslationsBundleType = {
       "Cashback will be sent to the address used for a payment. Don't use exchanges addresses as we can't guarantee cashback receipt in this case.",
     attention: 'Attention!',
     ok: 'ok',
+    myOrders: 'My orders',
   },
 };
 

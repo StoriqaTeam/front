@@ -2,6 +2,7 @@
 
 import { graphql, commitMutation } from 'react-relay';
 import { Environment, ConnectionHandler } from 'relay-runtime';
+import uuidv4 from 'uuid/v4';
 
 const mutation = graphql`
   mutation DeactivateBaseProductMutation($input: DeactivateBaseProductInput!) {
@@ -24,7 +25,7 @@ const commit = (params: MutationParamsType) =>
     mutation,
     variables: {
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         id: params.id,
       },
     },

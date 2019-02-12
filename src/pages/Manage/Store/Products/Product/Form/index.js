@@ -1,8 +1,9 @@
 // @flow
 
 import React, { Component, Fragment } from 'react';
-import { routerShape, matchShape } from 'found';
+import { routerShape, matchShape, withRouter } from 'found';
 import {
+  propOr,
   assocPath,
   isEmpty,
   omit,
@@ -26,6 +27,7 @@ import {
 import { validate } from '@storiqa/shared';
 import classNames from 'classnames';
 import { Environment } from 'relay-runtime';
+import { createFragmentContainer, graphql } from 'react-relay';
 import debounce from 'lodash.debounce';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
@@ -37,6 +39,7 @@ import { Input } from 'components/common/Input';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import ModerationStatus from 'pages/common/ModerationStatus';
 import { Modal } from 'components/Modal';
+import { RichEditor } from 'components/RichEditor';
 
 import {
   getNameText,
@@ -95,7 +98,7 @@ type PropsType = {
   router: routerShape,
   match: matchShape,
   onSave: (form: FormType, isAddVariant?: boolean) => {},
-  categories: Array<CategoryType>,
+  allCategories: Array<CategoryType>,
   currencies: Array<string>,
   onChangeShipping: (shippingData: ?FullShippingType) => void,
   onCreateAttribute: (attribute: GetAttributeType) => void,
@@ -109,8 +112,7 @@ type PropsType = {
 type StateType = {
   activeTab: string,
   category: ?ProductCategoryType,
-  currencies: Array<SelectItemType>,
-  currency: ?SelectItemType,
+  currency: SelectItemType,
   form: FormType,
   formErrors: FormErrorsType,
   scrollArr: Array<string>,
@@ -156,12 +158,12 @@ class Form extends Component<PropsType, StateType> {
       customAttributes,
       onFetchPackages,
     } = props;
-    // $FlowIgnore
-    const currency = pathOr('STQ', ['baseProduct', 'currency'], props);
+    let currency = currencies[0];
     let form = {};
     let variantForForm = null;
 
     if (baseProduct) {
+      ({ currency } = baseProduct);
       const {
         name,
         shortDescription,
@@ -253,7 +255,6 @@ class Form extends Component<PropsType, StateType> {
       form,
       formErrors: {},
       category: null,
-      currencies: convertCurrenciesForSelect(currencies),
       currency: { id: currency, label: currency },
       shippingErrors: null,
       scrollArr: [
@@ -561,11 +562,9 @@ class Form extends Component<PropsType, StateType> {
   handleInputChange = (id: string) => (e: any) => {
     this.setState({ formErrors: omit([id], this.state.formErrors) });
     const { value } = e.target;
-    if (value.length <= 50) {
-      this.setState((prevState: StateType) =>
-        assocPath(['form', id], value, prevState),
-      );
-    }
+    this.setState((prevState: StateType) =>
+      assocPath(['form', id], value, prevState),
+    );
   };
 
   handleTextareaChange = (id: string) => (e: any) => {
@@ -577,10 +576,10 @@ class Form extends Component<PropsType, StateType> {
   };
 
   handleSelectedCategory = (categoryId: number) => {
-    const { categories, onResetAttribute } = this.props;
+    const { allCategories, onResetAttribute } = this.props;
     const category = findCategory(
       whereEq({ rawId: parseInt(categoryId, 10) }),
-      categories,
+      allCategories,
     );
     this.setState(
       (prevState: StateType) => ({
@@ -599,7 +598,7 @@ class Form extends Component<PropsType, StateType> {
     );
   };
 
-  handleOnSelectCurrency = (currency: ?SelectItemType) => {
+  handleOnSelectCurrency = (currency: SelectItemType) => {
     this.setState({ currency });
   };
 
@@ -780,10 +779,30 @@ class Form extends Component<PropsType, StateType> {
     this.setState({ isShippingPopup: false });
   };
 
+  handleLongDescription = longDescription => {
+    const { form } = this.state;
+    this.setState({
+      form: {
+        ...form,
+        longDescription,
+      },
+      formErrors: omit(['longDescription'], this.state.formErrors),
+    });
+  };
+
+  handleError = (error: { message: string }): void => {
+    const { showAlert } = this.props;
+    showAlert({
+      type: 'danger',
+      text: error.message,
+      link: { text: t.close },
+    });
+  };
+
   renderInput = (props: {
     id: string,
     label: string,
-    limit: number,
+    limit?: number,
     required?: boolean,
   }) => {
     const { id, label, limit, required } = props;
@@ -853,10 +872,10 @@ class Form extends Component<PropsType, StateType> {
       environment,
       isLoadingShipping,
       showAlert,
+      currencies,
     } = this.props;
     const {
       category,
-      currencies,
       currency,
       shippingErrors,
       formErrors,
@@ -913,6 +932,11 @@ class Form extends Component<PropsType, StateType> {
       // metrics,
     } = form;
 
+    const longDescriptionError = propOr(
+      null,
+      'longDescription',
+      this.state.formErrors,
+    );
     return (
       <div styleName="container">
         {!variantForForm && (
@@ -921,7 +945,7 @@ class Form extends Component<PropsType, StateType> {
               <div styleName="status">
                 <ModerationStatus
                   status={baseProduct.status}
-                  dataTest="productStatus"
+                  dataTest={`productStatus_${baseProduct.status}`}
                 />
               </div>
             )}
@@ -943,7 +967,7 @@ class Form extends Component<PropsType, StateType> {
                 {this.renderInput({
                   id: 'name',
                   label: t.labelProductName,
-                  limit: 50,
+                  limit: 150,
                   required: true,
                 })}
               </div>
@@ -955,19 +979,27 @@ class Form extends Component<PropsType, StateType> {
                   required: true,
                 })}
               </div>
-              <div styleName="formItem textArea">
-                {this.renderTextarea({
-                  id: 'longDescription',
-                  label: t.labelLongDescription,
-                  required: true,
-                })}
+              <div styleName="editor">
+                <span id="longDescription" styleName="label">
+                  {t.labelLongDescription} <span styleName="asterisk">*</span>
+                </span>
+                <RichEditor
+                  content={this.state.form.longDescription}
+                  onChange={this.handleLongDescription}
+                  onError={this.handleError}
+                />
+                {longDescriptionError && (
+                  <div styleName="error">
+                    {this.state.formErrors.longDescription[0]}
+                  </div>
+                )}
               </div>
               <div styleName="formItem">
                 <Select
                   forForm
                   label={t.labelCurrency}
                   activeItem={currency}
-                  items={currencies}
+                  items={convertCurrenciesForSelect(currencies)}
                   onSelect={this.handleOnSelectCurrency}
                   dataTest="productCurrencySelect"
                   fullWidth
@@ -998,7 +1030,7 @@ class Form extends Component<PropsType, StateType> {
                 <CategorySelector
                   id="categoryId"
                   onlyView={Boolean(baseProduct)}
-                  categories={this.props.categories}
+                  categories={this.props.allCategories}
                   category={baseProduct && baseProduct.category}
                   onSelect={itemId => {
                     this.handleSelectedCategory(itemId);
@@ -1049,14 +1081,7 @@ class Form extends Component<PropsType, StateType> {
                   label={t.labelPrice}
                   onChangePrice={this.handlePriceChange}
                   price={parseFloat(price) || 0}
-                  currency={
-                    baseProduct
-                      ? {
-                          id: baseProduct.currency,
-                          label: baseProduct.currency,
-                        }
-                      : currency
-                  }
+                  currency={currency}
                   errors={formErrors && formErrors.price}
                   dataTest="variantPriceInput"
                 />
@@ -1131,7 +1156,7 @@ class Form extends Component<PropsType, StateType> {
                         big
                         fullWidth
                         onClick={this.sendToModeration}
-                        dataTest="saveProductButton"
+                        dataTest="sendToModerationProductButton"
                         isLoading={isSendingToModeration || isLoading}
                       >
                         {t.sendToModeration}
@@ -1226,6 +1251,7 @@ class Form extends Component<PropsType, StateType> {
                           <Variants
                             variants={restVariants}
                             productId={baseProduct.id}
+                            currency={currency}
                             environment={environment}
                             onExpandClick={this.expandClick}
                             showAlert={showAlert}
@@ -1374,5 +1400,61 @@ class Form extends Component<PropsType, StateType> {
   }
 }
 
-// $FlowIgnoreMe
-export default withErrorBoundary(withShowAlert(Form));
+export default createFragmentContainer(
+  // $FlowIgnore
+  withRouter(withErrorBoundary(withShowAlert(Form))),
+  graphql`
+    fragment Form_allCategories on Category {
+      name {
+        lang
+        text
+      }
+      children {
+        id
+        rawId
+        parentId
+        level
+        name {
+          lang
+          text
+        }
+        children {
+          id
+          rawId
+          parentId
+          level
+          name {
+            lang
+            text
+          }
+          children {
+            id
+            rawId
+            parentId
+            level
+            name {
+              lang
+              text
+            }
+            getAttributes {
+              id
+              rawId
+              name {
+                text
+                lang
+              }
+              metaField {
+                values
+                translatedValues {
+                  translations {
+                    text
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `,
+);

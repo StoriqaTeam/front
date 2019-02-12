@@ -4,12 +4,11 @@ import { isEmpty, map, pathOr, isNil } from 'ramda';
 // $FlowIgnoreMe
 import ImageLoader from 'libs/react-image-loader';
 
-import { Checkbox } from 'components/common/Checkbox';
 import { Icon } from 'components/Icon';
 import BannerLoading from 'components/Banner/BannerLoading';
 import { Col } from 'layout';
 
-import { convertSrc, formatPrice, getNameText, currentCurrency } from 'utils';
+import { convertSrc, formatPrice, getNameText } from 'utils';
 
 import './ProductsTableRow.scss';
 
@@ -28,17 +27,12 @@ type PropsType = {
       price: ?number,
     },
   },
+  index: string,
   onEdit: number => void,
-  onCheckbox: string => void,
   onDelete: (string, SyntheticEvent<HTMLButtonElement>) => void,
 };
 
-const ProductsTableRow = ({
-  item,
-  onEdit,
-  onDelete,
-  onCheckbox,
-}: PropsType) => {
+const ProductsTableRow = ({ item, onEdit, onDelete, index }: PropsType) => {
   const { product } = item;
   // $FlowIgnoreMe
   const attributes = pathOr([], ['product', 'attributes'], item);
@@ -51,14 +45,11 @@ const ProductsTableRow = ({
       onKeyDown={() => {}}
       role="button"
       tabIndex="0"
-      data-test="editProductButton"
+      data-test={`productRow_${index}`}
     >
-      <div styleName="td tdCheckbox">
-        <Checkbox id={item.rawId} onChange={onCheckbox} />
-      </div>
       <Col size={4} sm={4} md={2} lg={2} xl={1}>
         <div styleName="foto">
-          {!product || isNil(product.photoMain) ? (
+          {!product || isNil(product.photoMain) || product.photoMain === '' ? (
             <Icon type="camera" size={40} />
           ) : (
             <ImageLoader
@@ -82,7 +73,7 @@ const ProductsTableRow = ({
       <Col size={3} sm={3} md={3} lg={3} xl={2} mdVisible>
         {product &&
           !isNil(product.price) && (
-            <span>{`${formatPrice(product.price)} ${currentCurrency()}`}</span>
+            <span>{`${formatPrice(product.price)} ${item.currency}`}</span>
           )}
       </Col>
       <Col size={3} sm={3} md={3} lg={3} xl={2} lgVisible>
@@ -125,7 +116,10 @@ const ProductsTableRow = ({
       </Col>
       <Col size={4} sm={4} md={3} lg={1} xl={1}>
         <div styleName="buttons">
-          <button styleName="editButton" data-test="editProductButton">
+          <button
+            styleName="editButton"
+            data-test={`editProductButton_${index}`}
+          >
             <Icon type="note" size={32} />
           </button>
           <button
@@ -133,7 +127,7 @@ const ProductsTableRow = ({
             onClick={(e: SyntheticEvent<HTMLButtonElement>) => {
               onDelete(item.id, e);
             }}
-            data-test="deleteProductButton"
+            data-test={`deleteProductButton_${index}`}
           >
             <Icon type="basket" size={32} />
           </button>

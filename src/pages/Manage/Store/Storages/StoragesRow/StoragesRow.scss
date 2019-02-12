@@ -36,14 +36,6 @@
   justify-content: flex-start;
 }
 
-.checkBox {
-  display: none;
-  margin-right: 4rem;
-  @media (min-width: $md) {
-    display: block;
-  }
-}
-
 .address {
   color: $color_grey_minor;
   font-style: normal;

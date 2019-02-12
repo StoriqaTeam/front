@@ -21,7 +21,7 @@ import {
   urlToInput,
   inputToUrl,
   getNameText,
-  currentCurrency,
+  getCurrentCurrency,
 } from 'utils';
 import debounce from 'lodash.debounce';
 
@@ -440,7 +440,9 @@ class SearchSidebar extends Component<PropsType, StateType> {
         )}
         {parseFloat(minValue) !== parseFloat(maxValue) && (
           <Fragment>
-            <div styleName="blockTitle">{`Price (${currentCurrency()})`}</div>
+            <div styleName="blockTitle">{`Price (${getCurrentCurrency(
+              'FIAT',
+            )})`}</div>
             <RangeSlider
               thumb1={thumb1}
               thumb2={thumb2}

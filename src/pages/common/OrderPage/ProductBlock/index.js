@@ -5,7 +5,7 @@ import { slice, isEmpty } from 'ramda';
 import { Link } from 'found';
 
 import { Icon } from 'components/Icon';
-import { formatPrice, convertSrc } from 'utils';
+import { convertSrc, formatPrice } from 'utils';
 
 import './ProductBlock.scss';
 
@@ -18,7 +18,6 @@ export type ProductDTOType = {
     id: string,
     name: string,
   },
-  price: number,
   attributes: Array<{
     name: string,
     value: string,
@@ -28,7 +27,9 @@ export type ProductDTOType = {
 };
 
 type PropsType = {
+  subtotal: number,
   product: ProductDTOType,
+  currency: string,
 };
 
 class ProductBlock extends PureComponent<PropsType> {
@@ -59,7 +60,7 @@ class ProductBlock extends PureComponent<PropsType> {
   );
 
   render() {
-    const { product } = this.props;
+    const { product, currency, subtotal } = this.props;
     const attributes = slice(0, 3, product.attributes);
     return (
       <div styleName="container">
@@ -88,7 +89,7 @@ class ProductBlock extends PureComponent<PropsType> {
             </Link>
           </div>
           <div styleName="productPrice">
-            {formatPrice(product.price)} <strong>STQ</strong>
+            {`${formatPrice(subtotal)} ${currency}`}
           </div>
         </div>
         {!isEmpty(attributes) && this.renderAttributes(attributes)}

@@ -11,6 +11,7 @@ type TranslationDicType = {|
   somethingGoingWrong: string,
   manage: string,
   buttonLabel: string,
+  statusModerationCannotBeChanged: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -22,6 +23,8 @@ const translations: TranslationsBundleType = {
     somethingGoingWrong: 'Something going wrong :(',
     manage: 'Manage',
     buttonLabel: 'Click to upload logo',
+    statusModerationCannotBeChanged:
+      'Store in status moderation cannot be changed.',
   },
 };
 

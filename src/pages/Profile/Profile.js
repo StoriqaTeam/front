@@ -50,7 +50,7 @@ class Profile extends PureComponent<PropsType, StateType> {
       { id: 'personal-data', title: t.personalData },
       { id: 'shipping-addresses', title: t.shippingAddresses },
       { id: 'security', title: t.security },
-      { id: 'orders', title: t.orders },
+      { id: 'orders', title: t.myOrders },
       // { id: 'kyc', title: 'KYC' },
     ];
     const {
@@ -121,9 +121,10 @@ class Profile extends PureComponent<PropsType, StateType> {
 export default createFragmentContainer(
   Page(Profile),
   graphql`
-    fragment Profile_me on User {
+    fragment Profile_me on User
+      @argumentDefinitions(slug: { type: "Int!", defaultValue: 0 }) {
       ...Orders_me
-      ...Order_me
+      ...Order_me @arguments(slug: $slug)
       ...PersonalData_me
       ...ShippingAddresses_me
       id

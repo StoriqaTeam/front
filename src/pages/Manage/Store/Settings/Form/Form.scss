@@ -6,6 +6,13 @@
   flex: 1 0 auto;
 }
 
+.title {
+  margin-top: 4rem;
+  font-size: 14px;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+}
+
 .form {
   position: relative;
   background-color: $color_white;
@@ -152,4 +159,10 @@
 
 .asterisk {
   color: $color_red;
+}
+
+.error {
+  margin-top: 2rem;
+  color: $color_red;
+  font-size: 12px;
 }

@@ -7,7 +7,6 @@ import type { Translation } from 'translation/utils';
 type TranslationDicType = {|
   receiverNameIsRequired: string,
   receiverPhoneIsRequired: string,
-  countryAddressAndPostalCodeAreRequired: string,
   success: string,
   orderSuccessfullyCreated: string,
   somethingWentWrong: string,
@@ -26,6 +25,14 @@ type TranslationDicType = {|
   labelAddress: string,
   labelOrFillFieldsBelowAndSaveAsAddress: string,
   labelSaveAsANewAddress: string,
+  errors: {
+    receiverNameRequired: string,
+    receiverPhoneRequired: string,
+    areRequired: string,
+    country: string,
+    address: string,
+    postalCode: string,
+  },
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -33,8 +40,6 @@ const translations: TranslationsBundleType = {
   en: {
     receiverNameIsRequired: 'Receiver name is required',
     receiverPhoneIsRequired: 'Receiver phone is required',
-    countryAddressAndPostalCodeAreRequired:
-      'Country, address and postal code are required',
     success: 'Success',
     orderSuccessfullyCreated: 'Order Successfully Created',
     somethingWentWrong: 'Something went wrong :(',
@@ -53,8 +58,16 @@ const translations: TranslationsBundleType = {
     labelChooseYourAddress: 'Choose your address',
     labelAddress: 'Address',
     labelOrFillFieldsBelowAndSaveAsAddress:
-      'Or fill fields below and save as address',
+      'Fill fields below and save as address',
     labelSaveAsANewAddress: 'Save as a new address',
+    errors: {
+      receiverNameRequired: 'Receiver name is required',
+      receiverPhoneRequired: 'Receiver phone is required',
+      areRequired: 'are required',
+      country: 'country',
+      address: 'address',
+      postalCode: 'postal code',
+    },
   },
 };
 

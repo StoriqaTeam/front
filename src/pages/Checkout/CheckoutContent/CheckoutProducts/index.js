@@ -30,7 +30,9 @@ const CheckoutProducts = ({ orderInput, me, onChangeStep }: PropsType) => (
                     <Button
                       big
                       contour
-                      onClick={onChangeStep(1)}
+                      onClick={() => {
+                        onChangeStep(1);
+                      }}
                       type="button"
                       dataTest="changeAddress"
                     >
@@ -60,7 +62,9 @@ const CheckoutProducts = ({ orderInput, me, onChangeStep }: PropsType) => (
                   big
                   contour
                   whireframe
-                  onClick={onChangeStep(1)}
+                  onClick={() => {
+                    onChangeStep(1);
+                  }}
                   type="button"
                   dataTest="changeAddress"
                 >

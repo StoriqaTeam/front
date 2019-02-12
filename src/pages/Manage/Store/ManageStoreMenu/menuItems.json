@@ -1,8 +1,15 @@
 [
   {
     "id": "orders",
-    "title": "Orders",
+    "title": "Shop orders",
     "link": "/orders",
+    "disabled": false,
+    "dataTest": "store-menu-orders"
+  },
+  {
+    "id": "finances",
+    "title": "Finances",
+    "link": "/finances",
     "disabled": false,
     "dataTest": "store-menu-orders"
   },

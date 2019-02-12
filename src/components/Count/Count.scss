@@ -3,7 +3,7 @@
 .container {
   font-family: $font_medium;
   position: relative;
-  display: inline-block;
+  display: block;
   min-width: 2rem;
   height: 2rem;
   padding: 0 0.5rem;
@@ -13,6 +13,7 @@
   line-height: 2.25rem;
   border-radius: 2px;
   background-color: $color_blue;
+  letter-spacing: normal;
 }
 
 .blue {

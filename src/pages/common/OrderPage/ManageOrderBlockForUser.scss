@@ -4,6 +4,42 @@
   display: flex;
 }
 
-.completeButtonWrapper {
+.buttonWrapper {
   width: 28.25rem;
+  margin-right: 2rem;
+}
+
+.sendOrderModal {
+  width: 82rem;
+  background-color: white;
+  padding: 13rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .title {
+    font-family: $font_light !important;
+    font-size: 36px;
+    text-align: center;
+    color: $color_grey;
+    line-height: normal;
+  }
+
+  .description {
+    color: $color_grey_minor;
+    font-size: 16px;
+    text-align: center;
+    line-height: normal;
+    margin-top: 4rem;
+  }
+
+  .inputWrapperComment {
+    width: 47.5rem;
+    margin-top: 2rem;
+  }
+
+  .disputButtonWrapper {
+    width: 28.25rem;
+    margin-top: 7.75rem;
+  }
 }

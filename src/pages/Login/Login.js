@@ -7,7 +7,7 @@ import { Authorization } from 'components/Authorization';
 
 import './Login.scss';
 
-const Login = () => (
+const Login = (props: { noPopup?: boolean }) => (
   <AppContext.Consumer>
     {({ environment, handleLogin }) => (
       <div styleName="container">
@@ -16,11 +16,16 @@ const Login = () => (
             isLogin
             environment={environment}
             handleLogin={handleLogin}
+            noPopup={props.noPopup}
           />
         </div>
       </div>
     )}
   </AppContext.Consumer>
 );
+
+Login.defaultProps = {
+  noPopup: undefined,
+};
 
 export default Page(Login, { withoutCategories: true });

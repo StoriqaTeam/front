@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import type { ComponentType } from 'react';
-import { toLower, pathOr, isNil } from 'ramda';
+import { pathOr, isNil } from 'ramda';
 import classNames from 'classnames';
 
 import { Container, Row, Col } from 'layout';
@@ -19,12 +19,15 @@ type StateType = {
   newStoreLogo: ?string,
 };
 
-export default (
+export default (props: {
   OriginalComponent: ComponentType<*>,
+  active: string,
   title: string,
   isNewStore?: boolean,
-) =>
-  class Manage extends PureComponent<{}, StateType> {
+}) => {
+  const { OriginalComponent, active, title, isNewStore } = props;
+
+  return class Manage extends PureComponent<{}, StateType> {
     state: StateType = {
       newStoreName: null,
       newStoreLogo: null,
@@ -51,7 +54,8 @@ export default (
     render() {
       const { newStoreName, newStoreLogo } = this.state;
       let menuProps = {
-        activeItem: toLower(title),
+        activeItem: active,
+        title,
       };
       let formProps = { ...this.props };
 
@@ -108,3 +112,4 @@ export default (
       );
     }
   };
+};

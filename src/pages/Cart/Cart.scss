@@ -1,7 +1,7 @@
 @import "../../styles/variables.scss";
 
 .container {
-  margin: 2rem 0 4rem;
+  //margin: 2rem 0 4rem;
   overflow: hidden;
 }
 
@@ -32,3 +32,9 @@
   font-family: $font_medium;
 }
 
+.tabs {
+  margin-top: 2rem;
+  padding: 3rem 3rem 2rem;
+  border: 1px solid $color_grey_trivial;
+  background-color: $color_white;
+}

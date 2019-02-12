@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { routerShape } from 'found';
 import PropTypes from 'prop-types';
-import xss from 'xss';
 import {
   isNil,
   head,
@@ -13,21 +12,30 @@ import {
   dissoc,
   propEq,
   has,
-  prop,
   pathOr,
   find,
+  toUpper,
 } from 'ramda';
 import { Environment } from 'relay-runtime';
 import smoothscroll from 'libs/smoothscroll';
+import MediaQuery from 'libs/react-responsive';
+import uuidv4 from 'uuid/v4';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { AppContext, Page } from 'components/App';
 import { Col, Row } from 'layout';
 import { AddInCartMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/Alerts/AlertContext';
-import { extractText, isEmpty, log, convertCountries } from 'utils';
+import {
+  extractText,
+  isEmpty,
+  log,
+  convertCountries,
+  sanitizeHTML,
+  checkCurrencyType,
+  setCookie,
+} from 'utils';
 import { productViewTracker, addToCartTracker } from 'rrHalper';
-import { StickyBar } from 'components/StickyBar';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
@@ -35,12 +43,12 @@ import {
   makeWidgets,
   filterVariantsByAttributes,
   attributesFromVariants,
+  availableAttributesFromVariants,
   sortByProp,
   isNoSelected,
 } from './utils';
 
 import {
-  ImageDetail,
   ProductBreadcrumbs,
   ProductButtons,
   ProductContext,
@@ -94,6 +102,7 @@ type StateType = {
   },
   isAddToCart: boolean,
   isLoading: boolean,
+  isLoadingAddToCart: boolean,
   cartQuantity: number,
   deliveryData: DeliveryDataType,
 };
@@ -139,12 +148,14 @@ class Product extends Component<PropsType, StateType> {
         quantity: 0,
         preOrder: false,
         preOrderDays: 0,
+        attributes: [],
       },
       unselectedAttr: null,
       selectedAttributes: {},
       availableAttributes: {},
       isAddToCart: false,
       isLoading: false,
+      isLoadingAddToCart: false,
       cartQuantity: 1,
       deliveryData: {
         deliveryPackage: null,
@@ -155,8 +166,10 @@ class Product extends Component<PropsType, StateType> {
   }
 
   componentDidMount() {
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
     const { baseProduct } = this.props;
+    const { productVariant, widgets } = this.state;
+    const { attributes } = productVariant;
     if (
       process.env.BROWSER &&
       process.env.REACT_APP_RRPARTNERID &&
@@ -165,7 +178,39 @@ class Product extends Component<PropsType, StateType> {
     ) {
       productViewTracker(baseProduct.rawId);
     }
+
+    const selectedAttributes = {};
+
+    // eslint-disable-next-line
+    attributes.map(attr => {
+      // $FlowIgnore
+      const { value, attribute } = attr;
+      const result = find(propEq('id', attribute.id))(widgets);
+
+      if (isNil(result)) {
+        // eslint-disable-next-line
+        return;
+      }
+
+      selectedAttributes[attribute.id] = value;
+    });
+    // eslint-disable-next-line
+    this.setState({ selectedAttributes });
   }
+
+  getUserAddress = () => {
+    const { me } = this.props;
+    let userAddress = null;
+    if (me) {
+      const { deliveryAddressesFull } = me;
+      if (deliveryAddressesFull && !isEmpty(deliveryAddressesFull)) {
+        userAddress =
+          find(propEq('isPriority', true))(deliveryAddressesFull) ||
+          head(deliveryAddressesFull);
+      }
+    }
+    return userAddress;
+  };
 
   handleChangeQuantity = (quantity: number) => {
     this.setState({ cartQuantity: quantity });
@@ -189,13 +234,18 @@ class Product extends Component<PropsType, StateType> {
     );
 
     if (isEmpty(widgets) || !unselectedAttr) {
+      const { baseProduct } = this.props;
+      const sellerCurreny = baseProduct.currency;
+      const sellerCurrenyType = checkCurrencyType(sellerCurreny);
       const shippingId = deliveryData.deliveryPackage
         ? deliveryData.deliveryPackage.shippingId
         : null;
 
+      this.setState({ isLoadingAddToCart: true });
+
       AddInCartMutation.commit({
         input: {
-          clientMutationId: '',
+          clientMutationId: uuidv4(),
           productId: id,
           value: cartQuantity,
           shippingId,
@@ -215,10 +265,14 @@ class Product extends Component<PropsType, StateType> {
               text: t.productAddedToCart,
               link: { text: '' },
             });
-            this.setState({ isAddToCart: true });
+            this.setState({ isAddToCart: true }, () => {
+              setCookie('CURRENCY_TYPE', toUpper(sellerCurrenyType));
+            });
+            this.setState({ isLoadingAddToCart: false });
           }
         },
         onError: error => {
+          this.setState({ isLoadingAddToCart: false });
           log.error('Error in IncrementInCart mutation');
           log.error(error);
           this.props.showAlert({
@@ -240,16 +294,7 @@ class Product extends Component<PropsType, StateType> {
     attributeId: string,
     attributeValue: string,
   }): void => {
-    const {
-      selectedAttributes: prevSelectedAttributes,
-      availableAttributes: prevAvailableAttributes,
-    } = this.state;
-
-    const isUnselect = propEq(
-      item.attributeId,
-      item.attributeValue,
-      prevSelectedAttributes,
-    );
+    const { selectedAttributes: prevSelectedAttributes } = this.state;
 
     const selectedAttributes = ifElse(
       propEq(item.attributeId, item.attributeValue),
@@ -268,17 +313,18 @@ class Product extends Component<PropsType, StateType> {
       variants,
     );
 
-    const availableAttributes = attributesFromVariants(matchedVariants);
+    if (isEmpty(matchedVariants)) {
+      return;
+    }
+
+    const availableAttributes = availableAttributesFromVariants(
+      selectedAttributes,
+      variants,
+    );
 
     this.setState({
       selectedAttributes,
-      availableAttributes: isUnselect
-        ? availableAttributes
-        : assoc(
-            item.attributeId,
-            prop(item.attributeId, prevAvailableAttributes),
-            availableAttributes,
-          ),
+      availableAttributes,
       // $FlowIgnoreMe
       productVariant: head(matchedVariants),
       isAddToCart: false,
@@ -291,6 +337,8 @@ class Product extends Component<PropsType, StateType> {
       'EN',
       t.noLongDescription,
     ).replace(/\n/g, '<hr />');
+    /* eslint-disable no-underscore-dangle */
+    const __html = sanitizeHTML(modifLongDescription);
     const tabs: Array<TabType> = [
       {
         id: '0',
@@ -300,14 +348,7 @@ class Product extends Component<PropsType, StateType> {
             styleName="longDescription"
             // eslint-disable-next-line
             dangerouslySetInnerHTML={{
-              __html: xss(`${modifLongDescription}`, {
-                whiteList: {
-                  img: ['src', 'style', 'sizes', 'srcset'],
-                  br: [],
-                  hr: [],
-                  div: ['style'],
-                },
-              }),
+              __html,
             }}
           />
         ),
@@ -349,6 +390,20 @@ class Product extends Component<PropsType, StateType> {
     }
 
     if (isEmpty(widgets) || !unselectedAttr) {
+      const userAddress = this.getUserAddress();
+      // $FlowIgnore
+      const userCountryCode = pathOr(
+        null,
+        ['address', 'countryCode'],
+        userAddress,
+      );
+      // $FlowIgnore
+      const deliveryCountryCode = pathOr(null, ['country', 'id'], deliveryData);
+      const isDeliveryQuery = Boolean(
+        userCountryCode &&
+          deliveryCountryCode &&
+          userCountryCode === deliveryCountryCode,
+      );
       // $FlowIgnore
       const baseProductRawId = pathOr(
         null,
@@ -359,11 +414,13 @@ class Product extends Component<PropsType, StateType> {
         `/buy-now?product=${baseProductRawId}&variant=${
           productVariant.rawId
         }&quantity=${quantity}${
-          deliveryData.deliveryPackage
+          deliveryData.deliveryPackage && isDeliveryQuery
             ? `&delivery=${deliveryData.deliveryPackage.shippingId}`
             : ''
         }${
-          deliveryData.deliveryPackage && deliveryData.country
+          deliveryData.deliveryPackage &&
+          deliveryData.country &&
+          isDeliveryQuery
             ? `&country=${deliveryData.country.id}`
             : ''
         }`,
@@ -390,7 +447,7 @@ class Product extends Component<PropsType, StateType> {
 
   render() {
     const { me, baseProduct, router } = this.props;
-    const { unselectedAttr } = this.state;
+    const { unselectedAttr, isLoadingAddToCart } = this.state;
     if (isNil(baseProduct)) {
       return <div styleName="productNotFound">{t.productNotFound}</div>;
     }
@@ -416,15 +473,7 @@ class Product extends Component<PropsType, StateType> {
       deliveryData,
     } = this.state;
     const description = extractText(shortDescription, 'EN', t.noDescription);
-    let userAddress = null;
-    if (me) {
-      const { deliveryAddressesFull } = me;
-      if (deliveryAddressesFull && !isEmpty(deliveryAddressesFull)) {
-        userAddress =
-          find(propEq('isPriority', true))(deliveryAddressesFull) ||
-          head(deliveryAddressesFull);
-      }
-    }
+    const userAddress = this.getUserAddress();
     return (
       <AppContext.Consumer>
         {({ categories, directories }) => (
@@ -438,13 +487,13 @@ class Product extends Component<PropsType, StateType> {
               ) : null}
               <div styleName="productContent">
                 <Row>
-                  <Col sm={12} md={12} lg={6} xl={6}>
-                    <StickyBar>
-                      <ProductImage {...productVariant} />
-                      <ImageDetail />
-                    </StickyBar>
+                  <Col sm={12} md={7} lg={7} xl={7}>
+                    <ProductImage {...productVariant} />
+                    <MediaQuery minWidth={768}>
+                      {this.makeTabs(longDescription)}
+                    </MediaQuery>
                   </Col>
-                  <Col sm={12} md={12} lg={6} xl={6}>
+                  <Col sm={12} md={5} lg={5} xl={5}>
                     <div styleName="detailsWrapper">
                       <ProductDetails
                         productTitle={extractText(name)}
@@ -476,16 +525,19 @@ class Product extends Component<PropsType, StateType> {
                           isAddToCart={isAddToCart}
                           router={router}
                           isLoading={isLoading}
+                          isLoadingAddToCart={isLoadingAddToCart}
                           isDisabledBuyNowButton={!me}
                         />
                         <div styleName="line" />
                         <ProductStore />
                       </ProductDetails>
+                      <MediaQuery maxWidth={767}>
+                        {this.makeTabs(longDescription)}
+                      </MediaQuery>
                     </div>
                   </Col>
                 </Row>
               </div>
-              {this.makeTabs(longDescription)}
             </div>
           </ProductContext.Provider>
         )}
@@ -502,6 +554,7 @@ export default createFragmentContainer(
       isShippingAvailable
       id
       rawId
+      currency
       categoryId
       name {
         text
@@ -536,6 +589,11 @@ export default createFragmentContainer(
           photoMain
           additionalPhotos
           price
+          currency
+          customerPrice {
+            price
+            currency
+          }
           preOrder
           preOrderDays
           cashback

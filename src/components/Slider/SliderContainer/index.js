@@ -30,6 +30,7 @@ type PropsTypes = {
   dotIdx?: number,
   arrows?: boolean,
   counter?: boolean,
+  counterNum: number,
 };
 
 type StateType = {
@@ -75,8 +76,8 @@ class SliderContainer extends Component<PropsTypes, StateType> {
       dotIdx,
       arrows,
       counter,
+      counterNum,
     } = this.props;
-    const { current } = this.state;
     const slideWidth = 100 / visibleSlidesAmount;
     const isRevealButton = visibleSlidesAmount < totalSlidesAmount;
     const animationSpeedSec = animationSpeed ? animationSpeed / 1000 : 0.5;
@@ -88,7 +89,7 @@ class SliderContainer extends Component<PropsTypes, StateType> {
           itemsLength > 1 && <SliderArrows onClick={this.handleClick} />}
         {counter && (
           <div styleName="counter">
-            <div styleName="counterText">{`${current}/${itemsLength}`}</div>
+            <div styleName="counterText">{`${counterNum}/${itemsLength}`}</div>
           </div>
         )}
         {type === 'products' && (

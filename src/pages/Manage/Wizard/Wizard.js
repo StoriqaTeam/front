@@ -19,6 +19,7 @@ import {
 } from 'ramda';
 import debounce from 'lodash.debounce';
 import { routerShape, withRouter } from 'found';
+import uuidv4 from 'uuid/v4';
 
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Page } from 'components/App';
@@ -53,6 +54,12 @@ import Step3 from './Step3/View';
 import './Wizard.scss';
 
 import t from './i18n';
+
+type CategoriesTreeType = {
+  rawId: number,
+  level: number,
+  children: ?Array<CategoriesTreeType>,
+};
 
 type AttributeInputType = {
   attrId: number,
@@ -97,6 +104,7 @@ type PropsType = {
       },
     },
   },
+  allCategories: CategoriesTreeType,
 };
 
 type StateType = {
@@ -297,7 +305,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     CreateStoreMutation.commit({
       // $FlowIgnoreMe
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         ...omit(['id'], preparedData),
       },
       environment: this.context.environment,
@@ -352,7 +360,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     UpdateStoreMutation.commit({
       // $FlowIgnoreMe
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         ...omit(['userId'], preparedData),
       },
       environment: this.context.environment,
@@ -390,7 +398,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         if ((!warehouses || isEmpty(warehouses)) && addressFull) {
           CreateWarehouseMutation.commit({
             input: {
-              clientMutationId: '',
+              clientMutationId: uuidv4(),
               storeId,
               addressFull,
             },
@@ -593,12 +601,12 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       environment: this.context.environment,
       variables: {
         input: {
-          clientMutationId: '',
+          clientMutationId: uuidv4(),
           ...preparedDataForBaseProduct,
           selectedAttributes: map(item => item.attrId, baseProduct.attributes),
           variants: [
             {
-              clientMutationId: '',
+              clientMutationId: uuidv4(),
               ...prepareDataForProduct,
             },
           ],
@@ -675,7 +683,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         return SetProductQuantityInWarehouseMutation.promise(
           {
             input: {
-              clientMutationId: '',
+              clientMutationId: uuidv4(),
               warehouseId,
               productId,
               quantity: this.state.baseProduct.product.quantity,
@@ -748,7 +756,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         };
 
         const input = {
-          input: { ...prepareDataForProduct, clientMutationId: '' },
+          input: { ...prepareDataForProduct, clientMutationId: uuidv4() },
         };
         return UpdateProductMutation.promise(input, this.context.environment);
       })
@@ -778,7 +786,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           return SetProductQuantityInWarehouseMutation.promise(
             {
               input: {
-                clientMutationId: '',
+                clientMutationId: uuidv4(),
                 warehouseId,
                 productId,
                 quantity: this.state.baseProduct.product.quantity,
@@ -925,6 +933,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   renderForm = () => {
+    const { allCategories } = this.props;
     const { step, isSavingInProgress } = this.state;
     // $FlowIgnoreMe
     const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
@@ -964,6 +973,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
             errors={this.state.validationErrors}
             onChangeEditingProduct={this.handleOnChangeEditingProduct}
             isSavingInProgress={isSavingInProgress}
+            allCategories={allCategories}
           />
         );
       default:
@@ -1169,6 +1179,10 @@ export default createFragmentContainer(
                       vendorCode
                       cashback
                       price
+                      customerPrice {
+                        price
+                        currency
+                      }
                       attributes {
                         attrId
                         value

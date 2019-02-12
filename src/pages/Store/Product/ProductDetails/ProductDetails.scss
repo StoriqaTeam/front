@@ -1,10 +1,18 @@
 @import "../../../../styles/variables";
 
 .container {
-  padding: 1rem 4rem 2rem;
+  padding: 1rem 4rem 4rem 2rem;
+  border-top: 1px solid $color_grey_trivial;
+  border-bottom: 1px solid $color_grey_trivial;
+  border-right: 1px solid $color_grey_trivial;
+  background-color: $color_white;
+
+  @media (max-width: #{$lg - 1px}) {
+    padding-right: 2rem;
+  }
 
   @media (max-width: #{$md - 1px}) {
-    padding-bottom: 0;
+    padding-bottom: 2rem;
   }
 
   & h2 {
@@ -32,12 +40,12 @@
 
 .productDescription {
   margin-top: 3rem;
-  color: $color_grey_minor;
   max-width: 60rem;
+  word-wrap: break-word;
 }
 
 .line {
-  margin: 3rem -4rem 0;
+  margin: 3rem -4rem 0 -2rem;
   border-bottom: 1px solid $color_grey_trivial;
 
   @media (max-width: #{$md - 1px}) {

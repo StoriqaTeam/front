@@ -10,4 +10,7 @@ export {
   default as filterVariantsByAttributes,
 } from './filterVariantsByAttributes';
 export { default as attributesFromVariants } from './attributesFromVariants';
+export {
+  default as availableAttributesFromVariants,
+} from './availableAttributesFromVariants';
 export { default as makeAdditionalPhotos } from './makeAdditionalPhotos';

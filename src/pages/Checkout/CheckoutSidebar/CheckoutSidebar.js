@@ -1,16 +1,14 @@
 // @flow strict
 
 import React from 'react';
-// $FlowIgnoreMe
-import axios from 'axios';
 import PropTypes from 'prop-types';
-import { graphql } from 'react-relay';
-import { head, pathOr } from 'ramda';
 
-import { formatPrice, currentCurrency, log } from 'utils';
-import { CurrencyPrice } from 'components/common';
+import { formatPrice, getExchangePrice, checkCurrencyType } from 'utils';
+import { ContextDecorator } from 'components/App';
 import { Button } from 'components/common/Button';
 import { Row, Col } from 'layout';
+
+import type { DirectoriesType, AllCurrenciesType } from 'types';
 
 import './CheckoutSidebar.scss';
 
@@ -24,84 +22,19 @@ type PropsType = {
   checkoutInProcess: boolean,
   goToCheckout: () => void,
   step?: number,
+  cart: {
+    productsCostWithoutDiscounts: number,
+    productsCost: number,
+    deliveryCost: number,
+    totalCost: number,
+    totalCount: number,
+    couponsDiscounts: number,
+  },
+  directories: DirectoriesType,
+  currency: AllCurrenciesType,
 };
 
-type StateType = {
-  productsCostWithoutDiscounts: number,
-  deliveryCost: number,
-  totalCount: number,
-  totalCost: number,
-  couponsDiscounts: number,
-  priceUsd: ?number,
-};
-
-const TOTAL_FRAGMENT = graphql`
-  fragment CheckoutSidebarTotalLocalFragment on Cart {
-    id
-    productsCostWithoutDiscounts
-    deliveryCost
-    totalCount
-    totalCost
-    couponsDiscounts
-  }
-`;
-
-class CheckoutSidebar extends React.Component<PropsType, StateType> {
-  constructor(props: PropsType) {
-    super(props);
-    this.state = {
-      productsCostWithoutDiscounts: 0,
-      deliveryCost: 0,
-      totalCount: 0,
-      totalCost: 0,
-      couponsDiscounts: 0,
-      priceUsd: null,
-    };
-  }
-
-  componentDidMount() {
-    this.isMount = true;
-    axios
-      .get('https://api.coinmarketcap.com/v1/ticker/storiqa/')
-      .then(({ data }) => {
-        const dataObj = head(data);
-        if (dataObj && this.isMount) {
-          this.setState({ priceUsd: Number(dataObj.price_usd) });
-        }
-        return true;
-      })
-      .catch(error => {
-        log.debug(error);
-      });
-
-    const store = this.context.environment.getStore();
-    const cartId = pathOr(
-      null,
-      ['cart', '__ref'],
-      store.getSource().get('client:root'),
-    );
-    const queryNode = TOTAL_FRAGMENT.data();
-    const snapshot = store.lookup({
-      dataID: cartId,
-      node: queryNode,
-    });
-    const { dispose } = store.subscribe(snapshot, s => {
-      this.updateTotal(s.data);
-    });
-    this.updateTotal(snapshot.data);
-    this.dispose = dispose;
-  }
-
-  componentWillUnmount() {
-    if (this.dispose) {
-      this.dispose();
-    }
-    this.isMount = false;
-    if (this.dispose) {
-      this.dispose();
-    }
-  }
-
+class CheckoutSidebar extends React.PureComponent<PropsType> {
   // $FlowIgnoreMe
   setRef(ref: ?Object) {
     this.ref = ref;
@@ -113,32 +46,6 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
   }
 
   isMount = false;
-
-  updateTotal = (data: {
-    productsCostWithoutDiscounts: number,
-    deliveryCost: number,
-    totalCost: number,
-    totalCount: number,
-    couponsDiscounts: number,
-  }) => {
-    const {
-      productsCostWithoutDiscounts,
-      deliveryCost,
-      totalCost,
-      totalCount,
-      couponsDiscounts,
-    } = data;
-    this.setState({
-      productsCostWithoutDiscounts,
-      deliveryCost,
-      totalCost,
-      totalCount,
-      couponsDiscounts,
-    });
-  };
-
-  // $FlowIgnoreMe
-  dispose: Function;
   ref: ?{ className: string };
   // $FlowIgnoreMe
   wrapperRef: any;
@@ -155,21 +62,35 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
       checkoutInProcess,
       goToCheckout,
       step,
+      cart,
+      currency,
     } = this.props;
     const {
-      productsCostWithoutDiscounts,
+      productsCost,
       deliveryCost,
       totalCost,
       totalCount,
       couponsDiscounts,
-      priceUsd,
-    } = this.state;
-
+    } = cart;
     let onClickFunction = onClick;
 
     if (step != null) {
       onClickFunction = step === 1 ? goToCheckout : onCheckout;
     }
+
+    const { currencyExchange } = this.props.directories;
+
+    const currentCurrency = currency;
+
+    const exchangePrice =
+      currentCurrency === ''
+        ? ''
+        : getExchangePrice({
+            price: totalCost,
+            currency: currentCurrency,
+            currencyExchange,
+            withSymbol: true,
+          });
 
     return (
       <div>
@@ -186,10 +107,11 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                 <div styleName="attributeContainer">
                   <div styleName="label">{t.subtotal}</div>
                   <div styleName="value">
-                    {productsCostWithoutDiscounts &&
+                    {productsCost &&
                       `${formatPrice(
-                        productsCostWithoutDiscounts || 0,
-                      )} ${currentCurrency()}`}
+                        productsCost || 0,
+                        checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                      )} ${currency || ''}`}
                   </div>
                 </div>
               </Col>
@@ -198,18 +120,22 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                   <div styleName="label">{t.delivery}</div>
                   <div styleName="value">
                     {deliveryCost &&
-                      `${formatPrice(deliveryCost || 0)} ${currentCurrency()}`}
+                      `${formatPrice(
+                        deliveryCost || 0,
+                        checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                      )} ${currency || ''}`}
                   </div>
                 </div>
               </Col>
-              {couponsDiscounts !== 0 && (
+              {Boolean(couponsDiscounts) && (
                 <Col size={12} sm={4} lg={12}>
                   <div styleName="attributeContainer">
                     <div styleName="label">{t.couponsDiscount}</div>
                     <div styleName="value">
                       {`−${formatPrice(
                         couponsDiscounts || 0,
-                      )} ${currentCurrency()}`}
+                        checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                      )} ${currency || ''}`}
                     </div>
                   </div>
                 </Col>
@@ -225,23 +151,15 @@ class CheckoutSidebar extends React.Component<PropsType, StateType> {
                   <div styleName="totalCost">
                     <div styleName="value bold">
                       {totalCost &&
-                        `${formatPrice(totalCost || 0)} ${currentCurrency()}`}
+                        `${formatPrice(
+                          totalCost || 0,
+                          checkCurrencyType(currency) === 'fiat'
+                            ? 2
+                            : undefined,
+                        )} ${currency || ''}`}
                     </div>
-                    {priceUsd != null && (
-                      <div styleName="usdPrice">
-                        <div styleName="slash">/</div>
-                        <CurrencyPrice
-                          withTilda
-                          withSlash
-                          reverse
-                          fontSize={18}
-                          dark
-                          price={totalCost || 0}
-                          currencyPrice={priceUsd}
-                          currencyCode="$"
-                          toFixedValue={2}
-                        />
-                      </div>
+                    {exchangePrice != null && (
+                      <div styleName="exchangePrice">{exchangePrice}</div>
                     )}
                   </div>
                 </div>
@@ -275,4 +193,4 @@ CheckoutSidebar.contextTypes = {
   environment: PropTypes.object.isRequired,
 };
 
-export default CheckoutSidebar;
+export default ContextDecorator(CheckoutSidebar);

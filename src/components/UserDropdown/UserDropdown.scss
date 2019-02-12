@@ -37,6 +37,10 @@
   display: none;
   margin-left: 1rem;
   vertical-align: middle;
+  max-width: 16rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   @media (min-width: $lg) {
     display: inline-block;
   }

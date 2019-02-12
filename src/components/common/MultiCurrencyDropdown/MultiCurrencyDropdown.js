@@ -4,7 +4,7 @@ import React, { Component, Fragment } from 'react';
 import { map, find, whereEq, propOr, isEmpty } from 'ramda';
 
 import { AppContext } from 'components/App';
-import { getCookie } from 'utils';
+// import { getCookie } from 'utils';
 
 import type { Node, Element } from 'react';
 
@@ -20,6 +20,7 @@ type PropsType = {
     rates: Array<{ currencyCode: string, value: number }>,
     isDropdownShown: boolean,
   ) => void,
+  currencyCode: string,
 };
 
 type StateType = {
@@ -32,11 +33,12 @@ class MultiCurrencyDropdown extends Component<PropsType, StateType> {
   };
 
   render() {
+    const { currencyCode } = this.props;
     return (
       <AppContext.Consumer>
-        {/* $FlowIgnoreMe */}
         {({ directories: { currencyExchange } }) => {
-          const currentCurrency = getCookie('CURRENCY');
+          // const currentCurrency = getCookie('CURRENCY');
+          const currentCurrency = currencyCode;
           if (!currentCurrency) {
             return null;
           }

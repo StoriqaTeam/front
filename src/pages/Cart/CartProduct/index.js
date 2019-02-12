@@ -5,11 +5,13 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import { pipe, path, pathOr, head, defaultTo } from 'ramda';
 import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
+import uuidv4 from 'uuid/v4';
 
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { Checkbox } from 'components/Checkbox';
 import { Icon } from 'components/Icon';
 import { Container, Col, Row } from 'layout';
+import { Confirmation } from 'components/Confirmation';
 import {
   SetQuantityInCartMutation,
   SetSelectionInCartMutation,
@@ -19,6 +21,7 @@ import {
 import { log, convertSrc } from 'utils';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
+import type { AllCurrenciesType } from 'types';
 
 import ProductInfo from '../ProductInfo';
 
@@ -36,10 +39,12 @@ type PropsType = {
   ...CartProduct_product,
   isOpenInfo: ?boolean,
   withDeliveryCompaniesSelect?: boolean,
+  currency: AllCurrenciesType,
 };
 
 type StateType = {
   comment: string,
+  showModal: boolean,
 };
 
 class CartProduct extends Component<PropsType, StateType> {
@@ -51,13 +56,14 @@ class CartProduct extends Component<PropsType, StateType> {
     super(props);
     this.state = {
       comment: props.product && props.product.comment,
+      showModal: false,
     };
   }
 
-  handleDelete() {
+  handleDelete = () => {
     const id = this.props.product.rawId;
     DeleteFromCartMutation.commit({
-      input: { clientMutationId: '', productId: id },
+      input: { clientMutationId: uuidv4(), productId: id },
       environment: this.context.environment,
       onCompleted: (response, errors) => {
         log.debug(t.successForDeleteFromCart);
@@ -66,7 +72,9 @@ class CartProduct extends Component<PropsType, StateType> {
         }
         if (errors) {
           log.debug(t.errors, errors);
+          return;
         }
+        this.setState({ showModal: false });
       },
       onError: error => {
         log.error(t.errorInDeleteFromCart);
@@ -78,13 +86,13 @@ class CartProduct extends Component<PropsType, StateType> {
         });
       },
     });
-  }
+  };
 
   handleSelectChange() {
     const { rawId: productId, id: nodeId } = this.props.product;
     SetSelectionInCartMutation.commit({
       input: {
-        clientMutationId: '',
+        clientMutationId: uuidv4(),
         productId,
         value: !this.props.product.selected,
       },
@@ -115,7 +123,7 @@ class CartProduct extends Component<PropsType, StateType> {
     const { rawId: productId, id: nodeId } = this.props.product;
     const { storeId } = this.props;
     SetQuantityInCartMutation.commit({
-      input: { clientMutationId: '', productId, value: newVal },
+      input: { clientMutationId: uuidv4(), productId, value: newVal },
       nodeId,
       storeId,
       environment: this.context.environment,
@@ -152,7 +160,7 @@ class CartProduct extends Component<PropsType, StateType> {
   handleOnSaveComment = debounce((productId, value) => {
     if (value) {
       SetCommentInCartMutation.commit({
-        input: { clientMutationId: '', productId, value },
+        input: { clientMutationId: uuidv4(), productId, value },
         environment: this.context.environment,
         onCompleted: (response, errors) => {
           log.debug(t.successForSetCommentInCart);
@@ -176,12 +184,21 @@ class CartProduct extends Component<PropsType, StateType> {
     }
   }, 250);
 
+  handleDeleteModal = (): void => {
+    this.setState({ showModal: true });
+  };
+
+  handleCloseModal = (): void => {
+    this.setState({ showModal: false });
+  };
+
   render() {
     const {
       product,
       unselectable,
       isOpenInfo,
       withDeliveryCompaniesSelect,
+      currency,
     } = this.props;
     if (!product) return null;
     const name: ?string = pipe(
@@ -192,9 +209,20 @@ class CartProduct extends Component<PropsType, StateType> {
     )(product);
     log.debug('CartProduct', this.props);
     const { photoMain, selected } = product;
+    const { showModal } = this.state;
     return (
       <div styleName="container">
         <Container correct>
+          <Confirmation
+            showModal={showModal}
+            onClose={this.handleCloseModal}
+            title={t.deleteYourProduct}
+            description={t.confirmationDescription}
+            onCancel={this.handleCloseModal}
+            onConfirm={this.handleDelete}
+            confirmText={t.confirmText}
+            cancelText={t.cancelText}
+          />
           <Row>
             <Col size={12} sm={3}>
               <Row>
@@ -210,15 +238,21 @@ class CartProduct extends Component<PropsType, StateType> {
                         />
                       </div>
                     )}
-                    <div
-                      styleName="picture"
-                      style={{
-                        backgroundImage: `url(${convertSrc(
-                          photoMain,
-                          'medium',
-                        )})`,
-                      }}
-                    />
+                    {photoMain ? (
+                      <div
+                        styleName="picture"
+                        style={{
+                          backgroundImage: `url(${convertSrc(
+                            photoMain,
+                            'medium',
+                          )})`,
+                        }}
+                      />
+                    ) : (
+                      <div styleName="noLogo">
+                        <Icon type="camera" size={40} />
+                      </div>
+                    )}
                   </div>
                 </Col>
                 <Col size={6} smHidden>
@@ -228,7 +262,7 @@ class CartProduct extends Component<PropsType, StateType> {
                   <div styleName="recycleContainer">
                     <button
                       styleName="recycle"
-                      onClick={() => this.handleDelete()}
+                      onClick={() => this.handleDeleteModal()}
                       data-test="cartProductDeleteButton"
                     >
                       <Icon type="basket" size={32} />
@@ -246,7 +280,7 @@ class CartProduct extends Component<PropsType, StateType> {
                   <div styleName="recycleContainer">
                     <button
                       styleName="recycle"
-                      onClick={() => this.handleDelete()}
+                      onClick={() => this.handleDeleteModal()}
                       data-test="cartProductDeleteButton"
                     >
                       <Icon type="basket" size={32} />
@@ -262,6 +296,7 @@ class CartProduct extends Component<PropsType, StateType> {
                       comment={this.state.comment}
                       isOpen={isOpenInfo}
                       withDeliveryCompaniesSelect={withDeliveryCompaniesSelect}
+                      currency={currency}
                     />
                   </div>
                 </Col>
