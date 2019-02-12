@@ -117,10 +117,7 @@ class Product extends Component<PropsType, StateType> {
       },
     } = props;
 
-    const storeId = pathOr('', ['match', 'params', 'storeId'], props);
-    const productId = pathOr('', ['match', 'params', 'productId'], props);
     const variantId = pathOr('', ['match', 'params', 'variantId'], props);
-
     let productVariant = head(all);
     if (variantId) {
       const matchProductVariant = find(
@@ -130,11 +127,6 @@ class Product extends Component<PropsType, StateType> {
         productVariant = matchProductVariant;
       }
     }
-    props.router.replace(
-      `/store/${storeId}/products/${productId}/variant/${
-        productVariant.rawId
-        }`,
-    );
 
     this.state = {
       widgets: makeWidgets(all),
@@ -157,6 +149,15 @@ class Product extends Component<PropsType, StateType> {
   componentDidMount() {
     const { productVariant, widgets } = this.state;
     const { attributes } = productVariant;
+    // $FlowIgnore
+    const storeId = pathOr('', ['match', 'params', 'storeId'], this.props);
+    // $FlowIgnore
+    const productId = pathOr('', ['match', 'params', 'productId'], this.props);
+    this.props.router.replace(
+      `/store/${storeId}/products/${productId}/variant/${
+        productVariant.rawId
+        }`,
+    );
     this.setProductViewTracker(productVariant.rawId);
 
     const selectedAttributes = {};
