@@ -103,7 +103,7 @@ type PropsType = {
   onChangeShipping: (shippingData: ?FullShippingType) => void,
   onCreateAttribute: (attribute: GetAttributeType) => void,
   onRemoveAttribute: (id: string) => void,
-  onResetAttribute: () => void,
+  onResetAttribute: (categoryId?: number) => void,
   onSaveShipping: (onlyShippingSave?: boolean) => void,
   showAlert: (input: AddAlertInputType) => void,
   onFetchPackages?: (metrics: MetricsType) => void,
@@ -594,7 +594,11 @@ class Form extends Component<PropsType, StateType> {
         },
         formErrors: dissoc('categoryId', prevState.formErrors),
       }),
-      onResetAttribute,
+      () => {
+        if (onResetAttribute) {
+          onResetAttribute(categoryId);
+        }
+      },
     );
   };
 
@@ -904,6 +908,8 @@ class Form extends Component<PropsType, StateType> {
     const storeRawID = pathOr(null, ['store', 'rawId'], baseProduct);
     // $FlowIgnore
     const baseProductRawID = pathOr(null, ['rawId'], baseProduct);
+    const categoryEquality =
+      !isNil(baseProduct) && baseProduct.category.rawId === form.categoryId;
     let defaultAttributes = null;
     // $FlowIgnore
     const categoryAttributes = pathOr(null, ['getAttributes'], category);
@@ -916,7 +922,11 @@ class Form extends Component<PropsType, StateType> {
     if (categoryAttributes && !isEmpty(categoryAttributes)) {
       defaultAttributes = categoryAttributes;
     }
-    if (baseProductAttributes && !isEmpty(baseProductAttributes)) {
+    if (
+      baseProductAttributes &&
+      !isEmpty(baseProductAttributes) &&
+      categoryEquality
+    ) {
       defaultAttributes = baseProductAttributes;
     }
 
@@ -1029,29 +1039,29 @@ class Form extends Component<PropsType, StateType> {
               <div styleName="categorySelector">
                 <CategorySelector
                   id="categoryId"
-                  onlyView={Boolean(baseProduct)}
                   categories={this.props.allCategories}
                   category={baseProduct && baseProduct.category}
                   onSelect={itemId => {
                     this.handleSelectedCategory(itemId);
                   }}
                 />
+                {!categoryEquality && (
+                  <div styleName="categoryWarn">{t.categoryWarn}</div>
+                )}
                 {formErrors &&
                   formErrors.categoryId && (
                     <div styleName="categoryError">{formErrors.categoryId}</div>
                   )}
               </div>
               {defaultAttributes &&
-                !isEmpty(defaultAttributes) &&
-                (!baseProduct ||
-                  (!isEmpty(customAttributes) && baseProduct)) && (
+                !isEmpty(defaultAttributes) && (
                   <Fragment>
                     <div styleName="title titleCharacteristics">
                       <strong>{t.characteristics}</strong>
                     </div>
                     <div styleName="formItem additionalAttributes">
                       <AdditionalAttributes
-                        onlyView={Boolean(baseProduct)}
+                        onlyView={categoryEquality}
                         // $FlowIgnore
                         attributes={defaultAttributes}
                         customAttributes={customAttributes}

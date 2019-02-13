@@ -6,7 +6,7 @@ import { pathOr, map, addIndex, isEmpty, filter } from 'ramda';
 // import { Checkbox } from 'components/common/Checkbox';
 import { Icon } from 'components/Icon';
 
-import { log } from 'utils';
+import { log, formatPrice } from 'utils';
 
 import type { ProductType } from 'pages/Manage/Store/Products/types';
 import type { SelectItemType } from 'types';
@@ -80,7 +80,7 @@ class Row extends PureComponent<PropsType> {
             <span styleName="text vendorCodeText">{vendorCode || ''}</span>
           </div>
           <div styleName="td tdPrice">
-            <span styleName="text priceText">{`${price} ${
+            <span styleName="text priceText">{`${formatPrice(price)} ${
               currency.label
             }`}</span>
           </div>
