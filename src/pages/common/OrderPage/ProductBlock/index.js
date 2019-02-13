@@ -11,6 +11,7 @@ import './ProductBlock.scss';
 
 export type ProductDTOType = {
   id: string,
+  rawId: number,
   storeId: number,
   name: string,
   photoUrl: ?string,
@@ -79,7 +80,11 @@ class ProductBlock extends PureComponent<PropsType> {
         </div>
         <div styleName="productInfoBlock">
           <div styleName="productName">
-            <Link to={`/store/${product.storeId}/products/${product.id}`}>
+            <Link
+              to={`/store/${product.storeId}/products/${product.id}/variant/${
+                product.rawId
+              }`}
+            >
               <strong styleName="productNameText">{product.name}</strong>
             </Link>
           </div>
