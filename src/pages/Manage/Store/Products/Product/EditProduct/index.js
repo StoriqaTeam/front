@@ -554,6 +554,23 @@ class EditProduct extends Component<PropsType, StateType> {
     }));
   };
 
+  handleResetAttribute = (newCategoryId: number) => {
+    // $FlowIgnore
+    const baseProduct = pathOr(null, ['me', 'baseProduct'], this.props);
+    const { category, customAttributes } = baseProduct;
+    let newCustomAttributes = filter(
+      item =>
+        Boolean(find(propEq('attributeId', item.rawId))(customAttributes)),
+      category.getAttributes,
+    );
+
+    if (category.rawId !== newCategoryId) {
+      newCustomAttributes = [];
+    }
+
+    this.setState({ customAttributes: newCustomAttributes });
+  };
+
   render() {
     const { me, router, match, allCategories } = this.props;
     const {
@@ -587,6 +604,7 @@ class EditProduct extends Component<PropsType, StateType> {
               onChangeShipping={this.handleChangeShipping}
               shippingData={shippingData}
               customAttributes={customAttributes}
+              onResetAttribute={this.handleResetAttribute}
               onCreateAttribute={this.handleCreateAttribute}
               onRemoveAttribute={this.handleRemoveAttribute}
               environment={environment}
