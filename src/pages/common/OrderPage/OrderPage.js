@@ -110,6 +110,7 @@ class OrderPage extends Component<PropsType, StateType> {
             ? order.product.baseProduct.rawId
             : 0
         }`,
+        rawId: order.product.rawId,
         storeId: order.storeId,
         // $FlowIgnoreMe
         name: pathOr(null, ['baseProduct', 'name', 0, 'text'], order.product),
