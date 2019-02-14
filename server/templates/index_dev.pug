@@ -4,6 +4,23 @@ html
     meta(charset='utf-8')
     meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
     link(rel='stylesheet' type='text/css' href='/styles.css')
+    script.
+      var rrPartnerId = '5ba8ba0797a5281c5c422860';
+      var rrApi = {};
+      var rrApiOnReady = [];
+      rrApi.addToBasket = rrApi.order = rrApi.categoryView = rrApi.view =
+        rrApi.recomMouseDown = rrApi.recomAddToCart = function () {
+        };
+      (function (d) {
+        var ref = d.getElementsByTagName('script')[0];
+        var apiJs, apiJsId = 'rrApi-jssdk';
+        if (d.getElementById(apiJsId)) return;
+        apiJs = d.createElement('script');
+        apiJs.id = apiJsId;
+        apiJs.async = true;
+        apiJs.src = '//cdn.retailrocket.ru/content/javascript/tracking.js';
+        ref.parentNode.insertBefore(apiJs, ref);
+      }(document));
   body
     div#root(style={height: '100%'})
       #{html}
@@ -14,4 +31,3 @@ html
       window.__PRELOADED_STATE__= !{reduxState}
     script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDZFEQohOpK4QNELXiXw50DawOyoSgovTs&libraries=places&language=en' type='text/javascript')
     script(src='/static/js/bundle.js')
-    

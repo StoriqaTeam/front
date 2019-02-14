@@ -40,6 +40,7 @@ import { productViewTracker, addToCartTracker } from 'rrHalper';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
+import RRElement from './RRElement';
 import {
   makeWidgets,
   filterVariantsByAttributes,
@@ -479,6 +480,7 @@ class Product extends Component<PropsType, StateType> {
         {({ categories, directories }) => (
           <ProductContext.Provider value={{ store, productVariant, rating }}>
             <div styleName="container">
+              <RRElement />
               {has('children')(categories) && !isNil(categories.children) ? (
                 <ProductBreadcrumbs
                   categories={categories.children}
