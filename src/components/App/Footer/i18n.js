@@ -17,6 +17,7 @@ type TranslationDicType = {|
   services: string,
   services_storiqaWallet: string,
   services_sellingGuides: string,
+  services_storiqaBlog: string,
   services_helpCenter: string,
   //
   copyRight: string,
@@ -40,7 +41,8 @@ const translations: TranslationsBundleType = {
     //
     services: 'Services',
     services_storiqaWallet: 'Storiqa Wallet',
-    services_sellingGuides: 'Selling guides',
+    services_sellingGuides: 'Selling Guides',
+    services_storiqaBlog: 'Selling Blog',
     services_helpCenter: 'Help center',
     //
     copyRight:

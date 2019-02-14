@@ -79,6 +79,11 @@ class Footer extends PureComponent<PropsType, StateType> {
             name: t.services_sellingGuides,
             pdfLink: '/setting_up_store_guideline.pdf',
           },
+          {
+            id: 'services_storiqaBlog',
+            name: t.services_storiqaBlog,
+            link: 'https://storiqa.com/blog',
+          },
         ],
       },
     ],
@@ -133,7 +138,7 @@ class Footer extends PureComponent<PropsType, StateType> {
       <div styleName="startSellingButton">
         <Button
           wireframe
-          href="https://selling.storiqa.com/"
+          href="https://storiqa.com/selling-guides"
           dataTest="footerStartSellingButton"
         >
           {t.startSelling}
