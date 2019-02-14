@@ -79,6 +79,11 @@ class Footer extends PureComponent<PropsType, StateType> {
             name: t.services_sellingGuides,
             pdfLink: '/setting_up_store_guideline.pdf',
           },
+          {
+            id: 'services_storiqaBlog',
+            name: t.services_storiqaBlog,
+            link: 'https://storiqa.com/blog',
+          },
         ],
       },
     ],
@@ -132,15 +137,12 @@ class Footer extends PureComponent<PropsType, StateType> {
     );
     const StartSellingButton = () => (
       <div styleName="startSellingButton">
-        <div styleName="startSeelingLogo">
-          <Icon type="logo" />
-        </div>
         <p styleName="sellGoods">{t.wannaSellYourGoodsGlobally}</p>
         <Button
-          href="https://selling.storiqa.com/"
+          href="https://storiqa.com/selling-guides"
           dataTest="footerStartSellingButton"
         >
-          {t.startTrade}
+          {t.startSelling}
         </Button>
       </div>
     );
