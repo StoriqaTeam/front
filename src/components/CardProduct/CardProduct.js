@@ -99,7 +99,9 @@ class CardProduct extends PureComponent<PropsType> {
     if (!storeId || !rawId || !currency || !price) return null;
 
     const lang = 'EN';
-    const productLink = `/store/${storeId}/products/${rawId}`;
+    const productLink = `/store/${storeId}/products/${rawId}${
+      product ? `/variant/${product.node.rawId}` : ''
+    }`;
     const discountedPrice = discount ? price * (1 - discount) : price;
     const discountValue = discount ? (discount * 100).toFixed(0) : null;
     const cashbackValue = cashback ? (cashback * 100).toFixed(0) : null;
@@ -112,7 +114,7 @@ class CardProduct extends PureComponent<PropsType> {
 
     return (
       <div styleName="container">
-        <Link to={productLink} styleName="body" data-test={rawId}>
+        <Link to={productLink} styleName="body" data-test={rawId} exact>
           <div styleName="top">
             {discountValue && (
               <div styleName="discount">

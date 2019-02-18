@@ -1,0 +1,46 @@
+@import '../../../../styles/variables';
+
+.container {
+
+}
+
+.rrBlock {
+  overflow: hidden;
+  height: 0;
+  width: 0;
+}
+
+.items {
+  display: flex;
+  flex-wrap: wrap;
+
+  .item {
+    width: 50%;
+
+    @media (max-width: #{$lg - 1px}) {
+      width: 100%;
+    }
+  }
+
+  &.fullWidth {
+    .item {
+      width: 20%;
+
+      @media (max-width: #{$xl - 1px}) {
+        width: 25%;
+      }
+
+      @media (max-width: #{$lg - 1px}) {
+        width: 33.33%;
+      }
+
+      @media (max-width: #{$md - 1px}) {
+        width: 50%;
+      }
+
+      @media (max-width: #{$sm - 1px}) {
+        width: 100%;
+      }
+    }
+  }
+}

@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import { routerShape } from 'found';
+import uuidv4 from 'uuid/v4';
 import PropTypes from 'prop-types';
 import {
   isNil,
@@ -16,11 +17,11 @@ import {
   find,
   toUpper,
   forEach,
+  isEmpty,
 } from 'ramda';
 import { Environment } from 'relay-runtime';
 import smoothscroll from 'libs/smoothscroll';
 import MediaQuery from 'libs/react-responsive';
-import uuidv4 from 'uuid/v4';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { AppContext, Page } from 'components/App';
@@ -29,7 +30,6 @@ import { AddInCartMutation } from 'relay/mutations';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import {
   extractText,
-  isEmpty,
   log,
   convertCountries,
   sanitizeHTML,
@@ -40,6 +40,7 @@ import { productViewTracker, addToCartTracker } from 'rrHalper';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
 
+import RRElement from './RRElement';
 import {
   makeWidgets,
   filterVariantsByAttributes,
@@ -93,7 +94,7 @@ type PropsType = {
 
 type StateType = {
   widgets: Array<WidgetType>,
-  productVariant: VariantType,
+  productVariant: ?VariantType,
   unselectedAttr: ?Array<string>,
   selectedAttributes: {
     [string]: string,
@@ -111,52 +112,29 @@ type StateType = {
 class Product extends Component<PropsType, StateType> {
   constructor(props) {
     super(props);
-    const {
-      baseProduct: {
-        variants: { all },
-      },
-    } = props;
-
-    const variantId = pathOr('', ['match', 'params', 'variantId'], props);
-    let productVariant = head(all);
-    if (variantId) {
-      const matchProductVariant = find(
-        propEq('rawId', parseInt(variantId, 10)),
-      )(all);
-      if (matchProductVariant) {
-        productVariant = matchProductVariant;
-      }
-    }
-
-    this.state = {
-      widgets: makeWidgets(all),
-      productVariant,
-      unselectedAttr: null,
-      selectedAttributes: {},
-      availableAttributes: attributesFromVariants(all),
-      isAddToCart: false,
-      isLoading: false,
-      isLoadingAddToCart: false,
-      cartQuantity: 1,
-      deliveryData: {
-        deliveryPackage: null,
-        country: null,
-        deliveryPackages: [],
-      },
-    };
+    this.state = this.getDefaultState();
   }
 
   componentDidMount() {
     const { productVariant, widgets } = this.state;
-    const { attributes } = productVariant;
-    // $FlowIgnore
-    const storeId = pathOr('', ['match', 'params', 'storeId'], this.props);
-    // $FlowIgnore
-    const productId = pathOr('', ['match', 'params', 'productId'], this.props);
-    this.props.router.replace(
-      `/store/${storeId}/products/${productId}/variant/${productVariant.rawId}`,
-    );
-    this.setProductViewTracker(productVariant.rawId);
+    const attributes = productVariant ? productVariant.attributes : [];
+
+    if (productVariant) {
+      // $FlowIgnore
+      const storeId = pathOr('', ['match', 'params', 'storeId'], this.props);
+      // $FlowIgnore
+      const productId = pathOr(
+        '',
+        ['match', 'params', 'productId'],
+        this.props,
+      );
+      this.props.router.replace(
+        `/store/${storeId}/products/${productId}/variant/${
+          productVariant.rawId
+        }`,
+      );
+      this.setProductViewTracker(productVariant.rawId);
+    }
 
     const selectedAttributes = {};
 
@@ -174,15 +152,15 @@ class Product extends Component<PropsType, StateType> {
 
   componentDidUpdate(prevProps, prevState) {
     const { productVariant } = this.state;
-    if (productVariant.rawId !== prevState.productVariant.rawId) {
-      // $FlowIgnore
-      const storeId = pathOr('', ['match', 'params', 'storeId'], this.props);
-      // $FlowIgnore
-      const productId = pathOr(
-        '',
-        ['match', 'params', 'productId'],
-        this.props,
-      );
+    // $FlowIgnore
+    const storeId = pathOr('', ['match', 'params', 'storeId'], this.props);
+    // $FlowIgnore
+    const productId = pathOr('', ['match', 'params', 'productId'], this.props);
+    if (
+      productVariant &&
+      prevState.productVariant &&
+      productVariant.rawId !== prevState.productVariant.rawId
+    ) {
       this.props.router.replace(
         `/store/${storeId}/products/${productId}/variant/${
           productVariant.rawId
@@ -190,7 +168,50 @@ class Product extends Component<PropsType, StateType> {
       );
       this.setProductViewTracker(productVariant.rawId);
     }
+
+    // $FlowIgnore
+    const prevProductId = pathOr(
+      '',
+      ['match', 'params', 'productId'],
+      prevProps,
+    );
+    if (productId !== prevProductId) {
+      this.updateState(this.getDefaultState());
+    }
   }
+
+  getDefaultState = () => {
+    const { baseProduct } = this.props;
+    const variants = baseProduct ? baseProduct.variants.all : [];
+    // $FlowIgnore
+    const variantId = pathOr('', ['match', 'params', 'variantId'], this.props);
+    let productVariant = !isEmpty(variants) ? head(variants) : null;
+
+    if (variantId) {
+      const matchProductVariant = find(
+        propEq('rawId', parseInt(variantId, 10)),
+      )(variants);
+      if (matchProductVariant) {
+        productVariant = matchProductVariant;
+      }
+    }
+    return {
+      widgets: makeWidgets(variants),
+      productVariant,
+      unselectedAttr: null,
+      selectedAttributes: {},
+      availableAttributes: attributesFromVariants(variants),
+      isAddToCart: false,
+      isLoading: false,
+      isLoadingAddToCart: false,
+      cartQuantity: 1,
+      deliveryData: {
+        deliveryPackage: null,
+        country: null,
+        deliveryPackages: [],
+      },
+    };
+  };
 
   setProductViewTracker = (id: number) => {
     if (process.env.BROWSER && process.env.REACT_APP_RRPARTNERID && id) {
@@ -210,6 +231,10 @@ class Product extends Component<PropsType, StateType> {
       }
     }
     return userAddress;
+  };
+
+  updateState = (state: StateType) => {
+    this.setState(state);
   };
 
   handleChangeQuantity = (quantity: number) => {
@@ -325,7 +350,6 @@ class Product extends Component<PropsType, StateType> {
     this.setState({
       selectedAttributes,
       availableAttributes,
-      // $FlowIgnoreMe
       productVariant: head(matchedVariants),
       isAddToCart: false,
     });
@@ -366,7 +390,6 @@ class Product extends Component<PropsType, StateType> {
   };
 
   handleBuyNow = () => {
-    this.setState({ unselectedAttr: null });
     const {
       widgets,
       selectedAttributes,
@@ -374,6 +397,12 @@ class Product extends Component<PropsType, StateType> {
       productVariant,
       deliveryData,
     } = this.state;
+
+    if (!productVariant) {
+      return;
+    }
+
+    this.setState({ unselectedAttr: null });
     const unselectedAttr = isNoSelected(
       sortByProp('id')(widgets),
       selectedAttributes,
@@ -447,8 +476,8 @@ class Product extends Component<PropsType, StateType> {
 
   render() {
     const { me, baseProduct, router } = this.props;
-    const { unselectedAttr, isLoadingAddToCart } = this.state;
-    if (isNil(baseProduct)) {
+    const { unselectedAttr, isLoadingAddToCart, productVariant } = this.state;
+    if (isNil(baseProduct) || isNil(productVariant)) {
       return <div styleName="productNotFound">{t.productNotFound}</div>;
     }
     if (isNil(baseProduct.store)) {
@@ -464,7 +493,6 @@ class Product extends Component<PropsType, StateType> {
     } = baseProduct;
     const {
       widgets,
-      productVariant,
       selectedAttributes,
       availableAttributes,
       isAddToCart,
@@ -487,13 +515,13 @@ class Product extends Component<PropsType, StateType> {
               ) : null}
               <div styleName="productContent">
                 <Row>
-                  <Col sm={12} md={7} lg={7} xl={7}>
+                  <Col sm={12} md={7} lg={6} xl={7}>
                     <ProductImage {...productVariant} />
                     <MediaQuery minWidth={768}>
                       {this.makeTabs(longDescription)}
                     </MediaQuery>
                   </Col>
-                  <Col sm={12} md={5} lg={5} xl={5}>
+                  <Col sm={12} md={5} lg={6} xl={5}>
                     <div styleName="detailsWrapper">
                       <ProductDetails
                         productTitle={extractText(name)}
@@ -535,9 +563,19 @@ class Product extends Component<PropsType, StateType> {
                         {this.makeTabs(longDescription)}
                       </MediaQuery>
                     </div>
+                    <MediaQuery minWidth={992}>
+                      <div styleName="rrBlock">
+                        <RRElement productId={baseProduct.rawId} />
+                      </div>
+                    </MediaQuery>
                   </Col>
                 </Row>
               </div>
+              <MediaQuery maxWidth={991}>
+                <div styleName="rrBlock">
+                  <RRElement productId={baseProduct.rawId} fullWidth />
+                </div>
+              </MediaQuery>
             </div>
           </ProductContext.Provider>
         )}

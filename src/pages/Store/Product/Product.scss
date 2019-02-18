@@ -76,3 +76,11 @@
 
   @include long-description();
 }
+
+.rrBlock {
+  margin: 1rem -1rem 0;
+
+  @media (max-width: #{$lg - 1px}) {
+    margin: 0 1rem;
+  }
+}
