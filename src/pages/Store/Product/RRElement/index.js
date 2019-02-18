@@ -1,77 +1,159 @@
 // @flow strict
 
-import React, { PureComponent } from 'react';
-import { map, isEmpty } from 'ramda';
+import React, { Component } from 'react';
+import { map, isEmpty, dissoc, take } from 'ramda';
+import { Environment } from 'relay-runtime';
+import classNames from 'classnames';
+// $FlowIgnore
+import axios from 'axios';
+
+import { ContextDecorator } from 'components/App';
+// $FlowIgnore
+import { CardProduct } from 'components/CardProduct';
+import { log } from 'utils';
+import { fetchProducts } from 'relay/queries';
 
 import './RRElement.scss';
 
-type StateType = {
-  data: Array<{
-    productId: ?number,
-    variantId: ?number,
+type VariantType = {
+  cashback: ?number,
+  discount: ?number,
+  id: string,
+  photoMain: ?string,
+  price: ?number,
+  rawId: ?number,
+  customerPrice: {
+    price: number,
+    currency: string,
+  },
+};
+
+export type ItemType = {
+  rawId: number,
+  storeId: number,
+  currency: string,
+  name: Array<{
+    lang: string,
+    text: string,
   }>,
+  products: {
+    edges: Array<{
+      node: VariantType,
+    }>,
+  },
+  rating: number,
+  store: {
+    name: Array<{
+      lang: string,
+      text: string,
+    }>,
+  },
+  priceUsd: ?number,
+};
+
+type StateType = {
+  items: Array<ItemType>,
 };
 
 type PropsType = {
-  //
+  productId: number,
+  fullWidth?: boolean,
+  environment: Environment,
 };
 
-class RRElement extends PureComponent<PropsType, StateType> {
+class RRElement extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
 
-    if (process.env.BROWSER) {
-      window.addEventListener('DOMNodeInserted', this.handleUpdateDOM);
-    }
-
     this.state = {
-      data: [],
+      items: [],
     };
   }
 
-  componentWillUnmount() {
-    if (process.env.BROWSER) {
-      window.removeEventListener('DOMNodeInserted', this.handleUpdateDOM);
-    }
+  componentDidMount() {
+    this.isMount = true;
+    const { productId } = this.props;
+
+    axios
+      .get(
+        'https://api.retailrocket.net/api/2.0/recommendation/alternative/5ba8ba0797a5281c5c422860',
+        {
+          params: {
+            itemIds: `${productId}`,
+            format: 'json',
+          },
+        },
+      )
+      .then(({ data }) => {
+        if (data && !isEmpty(data)) {
+          const ids = map(item => item.ItemId, data);
+          this.fetchData(take(4, ids));
+        }
+        return true;
+      })
+      .catch(log.error);
   }
 
-  rrNode: ?HTMLDivElement;
+  componentWillUnmount() {
+    this.isMount = false;
+  }
 
-  handleUpdateDOM = () => {
-    const { data } = this.state;
-    if (this.rrNode && isEmpty(data)) {
-      const fourChildNode = this.rrNode.getElementsByClassName(
-        'retailrocket-item-info',
-      );
+  timer: TimeoutID;
+  isMount: boolean;
 
-      if (!isEmpty(fourChildNode)) {
-        const newDdata = map(item => {
-          const productMatch = item.href.match(/\/products\/(\d+)/i);
-          const productId = productMatch ? parseInt(productMatch[1], 10) : null;
-          const variantMatch = item.href.match(/\/variant\/(\d+)/i);
-          const variantId = variantMatch ? parseInt(variantMatch[1], 10) : null;
-          return { productId, variantId };
-        }, fourChildNode);
-        this.setState({ data: newDdata });
-      }
-    }
+  fetchData = (ids: Array<number>) => {
+    fetchProducts({
+      ids,
+      environment: this.props.environment,
+    })
+      .then(products => {
+        this.setState({
+          // $FlowIgnore
+          items: map(item => {
+            if (item.baseProduct === null) {
+              return null;
+            }
+            return {
+              ...item.baseProduct,
+              products: {
+                edges: [
+                  {
+                    node: { ...dissoc('baseProduct', item) },
+                  },
+                ],
+              },
+            };
+          }, products),
+        });
+        return true;
+      })
+      .finally(() => {})
+      .catch(error => {
+        log.error(error);
+      });
   };
 
   render() {
-    console.log('---this.state.data', this.state.data);
+    const { fullWidth } = this.props;
+    const { items } = this.state;
+    if (isEmpty(items)) {
+      return null;
+    }
     return (
       <div styleName="container">
-        <div
-          ref={node => {
-            this.rrNode = node;
-          }}
-          styleName="rrBlock"
-          data-retailrocket-markup-block="5c21e92d97a52846041b13d7"
-          data-product-id="977"
-        />
+        <div styleName={classNames('items', { fullWidth })}>
+          {map(
+            item => (
+              <div key={item.rawId} styleName="item">
+                <CardProduct item={item} />
+              </div>
+            ),
+            items,
+          )}
+        </div>
       </div>
     );
   }
 }
 
-export default RRElement;
+export default ContextDecorator(RRElement);
