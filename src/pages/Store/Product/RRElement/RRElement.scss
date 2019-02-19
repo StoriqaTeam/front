@@ -4,6 +4,14 @@
 
 }
 
+.title {
+  font-size: 14px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  padding: 0 1rem;
+}
+
 .rrBlock {
   overflow: hidden;
   height: 0;
@@ -13,6 +21,7 @@
 .items {
   display: flex;
   flex-wrap: wrap;
+  margin-bottom: 1rem;
 
   .item {
     width: 50%;
@@ -24,11 +33,7 @@
 
   &.fullWidth {
     .item {
-      width: 20%;
-
-      @media (max-width: #{$xl - 1px}) {
-        width: 25%;
-      }
+      width: 25%;
 
       @media (max-width: #{$lg - 1px}) {
         width: 33.33%;

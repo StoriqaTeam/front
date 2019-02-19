@@ -28,7 +28,7 @@ const PRODUCTS = graphql`
         price
         currency
       }
-      baseProduct {
+      baseProduct(visibility: "published") {
         rawId
         storeId
         name {
