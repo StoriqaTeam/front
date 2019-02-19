@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import { Link } from 'found';
 
 import { Icon } from 'components/Icon';
+import { categoryViewTracker } from 'rrHalper';
 
 import type { TransformedCategoryType } from 'types';
 
@@ -16,6 +17,7 @@ import t from './i18n';
 type PropsType = {
   categories: ?Array<TransformedCategoryType>,
   onClose: () => void,
+  onCloseCategories?: () => void,
   onClick: TransformedCategoryType => void,
   isOpen: boolean,
   isSecondary: boolean,
@@ -46,8 +48,27 @@ class SidebarMenu extends Component<PropsType, StateType> {
       },
     );
   };
+
+  handleClick = (categoryId: number) => {
+    if (
+      process.env.BROWSER &&
+      process.env.REACT_APP_RRPARTNERID &&
+      categoryId
+    ) {
+      categoryViewTracker(parseInt(categoryId, 10));
+    }
+    this.props.onClose();
+  };
+
   render() {
-    const { categories, onClose, isOpen, title, isSecondary } = this.props;
+    const {
+      categories,
+      onClose,
+      onCloseCategories,
+      isOpen,
+      title,
+      isSecondary,
+    } = this.props;
     const { selected } = this.state;
     return (
       <aside
@@ -60,7 +81,13 @@ class SidebarMenu extends Component<PropsType, StateType> {
           <header styleName="header">
             <span
               id="close"
-              onClick={onClose}
+              onClick={() => {
+                if (isSecondary && onCloseCategories) {
+                  onCloseCategories();
+                } else {
+                  onClose();
+                }
+              }}
               onKeyPress={() => {}}
               role="button"
               styleName="close"
@@ -78,7 +105,6 @@ class SidebarMenu extends Component<PropsType, StateType> {
                   onKeyPress={() => {}}
                   key={cat.rawId}
                   styleName={`item ${selected === index ? 'active' : ''}`}
-                  onClick={() => this.handleSelected(index, cat)}
                   tabIndex="-1"
                 >
                   {selected === index ? (
@@ -95,12 +121,24 @@ class SidebarMenu extends Component<PropsType, StateType> {
                           category: cat.rawId,
                         },
                       }}
+                      onClick={() => {
+                        if (cat.rawId) {
+                          this.handleClick(cat.rawId);
+                        }
+                      }}
                       data-test="categoryLink"
                     >
                       {cat.name}
                     </Link>
                   </span>
-                  {!isEmpty(cat.children) ? <Icon type="arrowRight" /> : null}
+                  {!isEmpty(cat.children) ? (
+                    <button
+                      styleName="icon"
+                      onClick={() => this.handleSelected(index, cat)}
+                    >
+                      <Icon type="arrowRight" />
+                    </button>
+                  ) : null}
                 </li>
               ))}
             </ul>

@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { routerShape, withRouter } from 'found';
 
 import { flattenFunc, searchPathByParent, getNameText } from 'utils';
+import { categoryViewTracker } from 'rrHalper';
 
 import './ProductBreadcrumbs.scss';
 
@@ -40,9 +41,10 @@ class ProductBreadcrumbs extends PureComponent<PropsType> {
                 styleName={classNames('item', {
                   active: item.rawId === parseInt(categoryId, 10),
                 })}
-                onClick={() =>
-                  router.push(`/categories?search=&category=${item.rawId}`)
-                }
+                onClick={() => {
+                  router.push(`/categories?search=&category=${item.rawId}`);
+                  categoryViewTracker(parseInt(item.rawId, 10));
+                }}
                 onKeyDown={() => {}}
                 role="button"
                 tabIndex="0"

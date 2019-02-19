@@ -114,7 +114,12 @@ class CardProduct extends PureComponent<PropsType> {
 
     return (
       <div styleName="container">
-        <Link to={productLink} styleName="body" data-test={rawId} exact>
+        <Link
+          to={productLink}
+          styleName="body"
+          data-test={`cardProduct_${rawId}`}
+          exact
+        >
           <div styleName="top">
             {discountValue && (
               <div styleName="discount">

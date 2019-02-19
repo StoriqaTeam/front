@@ -7,6 +7,7 @@ import { withRouter, routerShape } from 'found';
 import { Relay } from 'react-relay';
 
 import { flattenFunc, getNameText, searchPathByParent } from 'utils';
+import { categoryViewTracker } from 'rrHalper';
 import { Button } from 'components/common/Button';
 import { CardProduct } from 'components/CardProduct';
 import { Icon } from 'components/Icon';
@@ -89,9 +90,10 @@ class SearchContent extends Component<PropsType> {
                 styleName={classNames('item', {
                   active: item.rawId === parseInt(categoryId, 10),
                 })}
-                onClick={() =>
-                  router.push(`/categories?search=&category=${item.rawId}`)
-                }
+                onClick={() => {
+                  router.push(`/categories?search=&category=${item.rawId}`);
+                  categoryViewTracker(parseInt(item.rawId, 10));
+                }}
                 onKeyDown={() => {}}
                 role="button"
                 tabIndex="0"
