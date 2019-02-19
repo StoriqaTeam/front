@@ -6,6 +6,7 @@ import { find, propEq, head, pathOr } from 'ramda';
 import { Link, withRouter } from 'found';
 
 import { Icon } from 'components/Icon';
+import { categoryViewTracker } from 'rrHalper';
 
 import './CategoriesMenu.scss';
 
@@ -130,7 +131,14 @@ class CategoriesMenu extends Component<PropsType, StateType> {
     this.setState(() => ({ pageX }));
   };
 
-  handleClick = () => {
+  handleClick = (categoryId: number) => {
+    if (
+      process.env.BROWSER &&
+      process.env.REACT_APP_RRPARTNERID &&
+      categoryId
+    ) {
+      categoryViewTracker(parseInt(categoryId, 10));
+    }
     this.setState(() => ({
       active: null,
       activeMid: null,
@@ -200,7 +208,9 @@ class CategoriesMenu extends Component<PropsType, StateType> {
                 category: rawId,
               },
             }}
-            onClick={this.handleClick}
+            onClick={() => {
+              this.handleClick(category.rawId);
+            }}
             data-test="categorieLink"
           >
             {renderInnerLink()}

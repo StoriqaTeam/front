@@ -16,6 +16,7 @@ import {
 import { withRouter, routerShape } from 'found';
 import classNames from 'classnames';
 
+import { categoryViewTracker } from 'rrHalper';
 import {
   flattenFunc,
   urlToInput,
@@ -275,7 +276,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
   };
 
   handleOnChangeCategory = (item): void => {
-    const { router } = this.props;
+    const { router, onClose } = this.props;
     // $FlowIgnore
     const name = pathOr(
       '',
@@ -283,6 +284,8 @@ class SearchSidebar extends Component<PropsType, StateType> {
       this.props,
     );
     router.push(`/categories?search=${name}&category=${item.id}`);
+    this.handleClickCategory(item.id);
+    onClose();
   };
 
   handleOnRangeChange = (data: { thumb1: number, thumb2: number }) => {
@@ -331,6 +334,16 @@ class SearchSidebar extends Component<PropsType, StateType> {
     };
   };
 
+  handleClickCategory = (categoryId: number) => {
+    if (
+      process.env.BROWSER &&
+      process.env.REACT_APP_RRPARTNERID &&
+      categoryId
+    ) {
+      categoryViewTracker(parseInt(categoryId, 10));
+    }
+  };
+
   renderParentLink = () => {
     const { router } = this.props;
     // $FlowIgnoreMe
@@ -360,6 +373,7 @@ class SearchSidebar extends Component<PropsType, StateType> {
             router.push('/categories?search=');
           } else {
             router.push(`/categories?search=&category=${obj.rawId}`);
+            this.handleClickCategory(obj.rawId);
           }
         }}
         onKeyDown={() => {}}

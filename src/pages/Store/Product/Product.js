@@ -565,7 +565,7 @@ class Product extends Component<PropsType, StateType> {
                     </div>
                     <MediaQuery minWidth={992}>
                       <div styleName="rrBlock">
-                        <RRElement productId={baseProduct.rawId} />
+                        <RRElement productId={productVariant.rawId} />
                       </div>
                     </MediaQuery>
                   </Col>
@@ -573,7 +573,7 @@ class Product extends Component<PropsType, StateType> {
               </div>
               <MediaQuery maxWidth={991}>
                 <div styleName="rrBlock">
-                  <RRElement productId={baseProduct.rawId} fullWidth />
+                  <RRElement productId={productVariant.rawId} fullWidth />
                 </div>
               </MediaQuery>
             </div>
