@@ -563,11 +563,29 @@ class Product extends Component<PropsType, StateType> {
                         {this.makeTabs(longDescription)}
                       </MediaQuery>
                     </div>
+                    {/*
+                      <MediaQuery minWidth={992}>
+                        <div styleName="rrBlock">
+                          <RRElement productId={productVariant.rawId} dataVendor="brand" />
+                        </div>
+                      </MediaQuery>
+                    */}
                   </Col>
                 </Row>
               </div>
+              {/*
+                <MediaQuery maxWidth={991}>
+                  <div styleName="rrBlock">
+                    <RRElement productId={productVariant.rawId} dataVendor="brand" fullWidth />
+                  </div>
+                </MediaQuery>
+              */}
               <div styleName="rrBlock">
-                <RRElement productId={productVariant.rawId} fullWidth />
+                <RRElement
+                  productId={productVariant.rawId}
+                  title="Similar goods"
+                  fullWidth
+                />
               </div>
             </div>
           </ProductContext.Provider>

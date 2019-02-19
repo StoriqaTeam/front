@@ -1,7 +1,7 @@
 // @flow strict
 
 import React, { Component } from 'react';
-import { map, isEmpty, dissoc, take, filter, isNil } from 'ramda';
+import { map, isEmpty, dissoc, take, filter, isNil, assoc } from 'ramda';
 import { Environment } from 'relay-runtime';
 import classNames from 'classnames';
 // $FlowIgnore
@@ -59,6 +59,8 @@ type PropsType = {
   productId: number,
   fullWidth?: boolean,
   environment: Environment,
+  dataVendor?: string,
+  title?: string,
 };
 
 class RRElement extends Component<PropsType, StateType> {
@@ -72,22 +74,25 @@ class RRElement extends Component<PropsType, StateType> {
 
   componentDidMount() {
     this.isMount = true;
-    const { productId } = this.props;
+    const { productId, dataVendor } = this.props;
+    let params = {
+      itemIds: `${productId}`,
+      format: 'json',
+    };
+
+    if (dataVendor === 'brand') {
+      params = assoc('vendor', 'brand', params);
+    }
 
     axios
       .get(
         'https://api.retailrocket.net/api/2.0/recommendation/alternative/5ba8ba0797a5281c5c422860',
-        {
-          params: {
-            itemIds: `${productId}`,
-            format: 'json',
-          },
-        },
+        { params },
       )
       .then(({ data }) => {
         if (data && !isEmpty(data)) {
           const ids = map(item => item.ItemId, data);
-          this.fetchData(take(4, ids));
+          this.fetchData(ids);
         }
         return true;
       })
@@ -123,7 +128,7 @@ class RRElement extends Component<PropsType, StateType> {
               },
             };
             // $FlowIgnore
-          }, filter(item => !isNil(item.baseProduct), products)),
+          }, take(4, filter(item => !isNil(item.baseProduct), products))),
         });
         return true;
       })
@@ -134,16 +139,18 @@ class RRElement extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { fullWidth } = this.props;
+    const { fullWidth, title } = this.props;
     const { items } = this.state;
     if (isEmpty(items)) {
       return null;
     }
     return (
       <div styleName="container">
-        <div styleName="title">
-          <strong>Similar goods</strong>
-        </div>
+        {!isNil(title) && (
+          <div styleName="title">
+            <strong>Similar goods</strong>
+          </div>
+        )}
         <div styleName={classNames('items', { fullWidth })}>
           {map(
             item => (
