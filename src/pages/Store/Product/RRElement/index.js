@@ -1,7 +1,7 @@
 // @flow strict
 
 import React, { Component } from 'react';
-import { map, isEmpty, dissoc, take } from 'ramda';
+import { map, isEmpty, dissoc, take, filter, isNil } from 'ramda';
 import { Environment } from 'relay-runtime';
 import classNames from 'classnames';
 // $FlowIgnore
@@ -108,7 +108,6 @@ class RRElement extends Component<PropsType, StateType> {
     })
       .then(products => {
         this.setState({
-          // $FlowIgnore
           items: map(item => {
             if (item.baseProduct === null) {
               return null;
@@ -123,7 +122,8 @@ class RRElement extends Component<PropsType, StateType> {
                 ],
               },
             };
-          }, products),
+            // $FlowIgnore
+          }, filter(item => !isNil(item.baseProduct), products)),
         });
         return true;
       })
@@ -141,6 +141,9 @@ class RRElement extends Component<PropsType, StateType> {
     }
     return (
       <div styleName="container">
+        <div styleName="title">
+          <strong>Similar goods</strong>
+        </div>
         <div styleName={classNames('items', { fullWidth })}>
           {map(
             item => (

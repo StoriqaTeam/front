@@ -295,7 +295,12 @@ class Start extends Component<PropsTypes, StateTypes> {
               We all have inner spirit. We are all individuals. Stand out with
               Storiqa.
             </div>
-            <a styleName="readmoreAboutStoriqa" href="www.storiqa.com">
+            <a
+              styleName="readmoreAboutStoriqa"
+              href="https://storiqa.com/about/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Read more about Storiqa
             </a>
             <Container>

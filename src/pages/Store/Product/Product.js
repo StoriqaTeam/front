@@ -569,19 +569,12 @@ class Product extends Component<PropsType, StateType> {
                         {this.makeTabs(longDescription)}
                       </MediaQuery>
                     </div>
-                    <MediaQuery minWidth={992}>
-                      <div styleName="rrBlock">
-                        <RRElement productId={productVariant.rawId} />
-                      </div>
-                    </MediaQuery>
                   </Col>
                 </Row>
               </div>
-              <MediaQuery maxWidth={991}>
-                <div styleName="rrBlock">
-                  <RRElement productId={productVariant.rawId} fullWidth />
-                </div>
-              </MediaQuery>
+              <div styleName="rrBlock">
+                <RRElement productId={productVariant.rawId} fullWidth />
+              </div>
             </div>
           </ProductContext.Provider>
         )}
