@@ -1045,9 +1045,11 @@ class Form extends Component<PropsType, StateType> {
                     this.handleSelectedCategory(itemId);
                   }}
                 />
-                {!categoryEquality && (
-                  <div styleName="categoryWarn">{t.categoryWarn}</div>
-                )}
+                {!categoryEquality &&
+                  baseProduct &&
+                  restVariants && (
+                    <div styleName="categoryWarn">{t.categoryWarn}</div>
+                  )}
                 {formErrors &&
                   formErrors.categoryId && (
                     <div styleName="categoryError">{formErrors.categoryId}</div>
