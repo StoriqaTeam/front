@@ -476,8 +476,14 @@ class Product extends Component<PropsType, StateType> {
 
   render() {
     const { me, baseProduct, router } = this.props;
+    // $FlowIgnore
+    const storeId = pathOr('', ['match', 'params', 'storeId'], this.props);
     const { unselectedAttr, isLoadingAddToCart, productVariant } = this.state;
-    if (isNil(baseProduct) || isNil(productVariant)) {
+    if (
+      isNil(baseProduct) ||
+      isNil(productVariant) ||
+      storeId !== `${baseProduct.store.rawId}`
+    ) {
       return <div styleName="productNotFound">{t.productNotFound}</div>;
     }
     if (isNil(baseProduct.store)) {
