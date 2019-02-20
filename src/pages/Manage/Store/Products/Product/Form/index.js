@@ -238,6 +238,7 @@ class Form extends Component<PropsType, StateType> {
         price: 0,
         cashback: null,
         discount: null,
+        quantity: null,
         preOrderDays: '',
         preOrder: false,
         attributeValues: !isEmpty(customAttributes)
@@ -669,6 +670,28 @@ class Form extends Component<PropsType, StateType> {
     );
   };
 
+  handleQuantityChange = (e: any) => {
+    const {
+      target: { value },
+    } = e;
+    if (value === '') {
+      this.setState((prevState: StateType) =>
+        assocPath(['form', 'quantity'], null, prevState),
+      );
+      return;
+    } else if (value === '0') {
+      this.setState((prevState: StateType) =>
+        assocPath(['form', 'quantity'], 0, prevState),
+      );
+      return;
+    } else if (Number.isNaN(parseFloat(value))) {
+      return;
+    }
+    this.setState((prevState: StateType) =>
+      assocPath(['form', 'quantity'], parseFloat(value), prevState),
+    );
+  };
+
   handleChangeValues = (attributeValues: Array<AttributeValueType>) => {
     this.setState((prevState: StateType) => {
       const formErrors = dissoc('attributes', prevState.formErrors);
@@ -936,6 +959,7 @@ class Form extends Component<PropsType, StateType> {
       price,
       cashback,
       discount,
+      quantity,
       attributeValues,
       preOrder,
       preOrderDays,
@@ -1127,6 +1151,16 @@ class Form extends Component<PropsType, StateType> {
                   dataTest="variantDiscountInput"
                 />
                 <span styleName="inputPostfix">{t.percent}</span>
+              </div>
+              <div styleName="formItem">
+                <Input
+                  fullWidth
+                  id="quantity"
+                  label={t.labelQuantity}
+                  onChange={this.handleQuantityChange}
+                  value={!isNil(quantity) ? `${quantity}` : ''}
+                  dataTest="variantQuantityInput"
+                />
               </div>
               {/*
                 <div id="metrics" styleName="metrics">
