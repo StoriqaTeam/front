@@ -49,6 +49,7 @@ type TranslationDicType = {|
   baseProductIsBlocked: string,
   close: string,
   categoryWarn: string,
+  preview: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -103,6 +104,7 @@ const translations: TranslationsBundleType = {
     close: 'Close.',
     categoryWarn:
       'If you change the category, variants for this product will be deleted',
+    preview: 'Preview',
   },
 };
 

@@ -406,7 +406,7 @@ class Form extends Component<PropsType, StateType> {
       form: { defaultLanguage, cover, slug },
       status,
     } = this.state;
-    const { isLoading } = this.props;
+    const { isLoading, store } = this.props;
     const defaultLanguageValue = find(
       propEq('id', toLower(defaultLanguage || '')),
       langItems || [],
@@ -427,6 +427,11 @@ class Form extends Component<PropsType, StateType> {
               <ModerationStatus
                 status={status}
                 dataTest={`storeStatus_${status}`}
+                link={
+                  process.env.REACT_APP_HOST && store && store.rawId
+                    ? `${process.env.REACT_APP_HOST}/store/${store.rawId}`
+                    : null
+                }
               />
             </div>
           )}

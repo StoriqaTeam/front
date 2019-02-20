@@ -956,6 +956,14 @@ class Form extends Component<PropsType, StateType> {
                 <ModerationStatus
                   status={baseProduct.status}
                   dataTest={`productStatus_${baseProduct.status}`}
+                  link={
+                    process.env.REACT_APP_HOST && storeRawID && baseProductRawID
+                      ? `${
+                          process.env.REACT_APP_HOST
+                          // $FlowIgnore
+                        }/store/${storeRawID}/products/${baseProductRawID}`
+                      : null
+                  }
                 />
               </div>
             )}

@@ -28,8 +28,9 @@ const numberToWords = (val: number): string => {
 };
 
 const ProductQuantity = (props: PropsType) => {
-  const isPreOrderAvailable =
-    props.quantity === 0 && props.preOrder && props.preOrderDays;
+  const isPreOrderAvailable = Boolean(
+    props.quantity === 0 && props.preOrder && props.preOrderDays,
+  );
   return (
     <div styleName="container">
       {isPreOrderAvailable ? null : (
@@ -38,14 +39,18 @@ const ProductQuantity = (props: PropsType) => {
             <strong>{t.amount}</strong>
           </div>
           <div styleName="counter">
-            <Stepper
-              value={props.quantity === 0 ? 0 : props.cartQuantity}
-              min={props.quantity === 0 ? 0 : 1}
-              max={props.quantity}
-              onChange={
-                props.quantity === 0 ? () => {} : props.onChangeQuantity
-              }
-            />
+            {(props.quantity || props.preOrder) && (
+              <div styleName="stepper">
+                <Stepper
+                  value={props.quantity === 0 ? 0 : props.cartQuantity}
+                  min={props.quantity === 0 ? 0 : 1}
+                  max={props.quantity}
+                  onChange={
+                    props.quantity === 0 ? () => {} : props.onChangeQuantity
+                  }
+                />
+              </div>
+            )}
             <p styleName="stock">{t.remainingStock}</p>
             <span
               styleName={classNames('inStock', {

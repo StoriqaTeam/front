@@ -29,3 +29,17 @@
     background-color: $color_red;
   }
 }
+
+.previewLink {
+  .previewLinkButton {
+    width: 100%;
+    display: inline-block;
+    font-size: 12px;
+    color: $color_blue;
+    text-align: center;
+
+    &:hover {
+      color: $color_blue_hover;
+    }
+  }
+}
