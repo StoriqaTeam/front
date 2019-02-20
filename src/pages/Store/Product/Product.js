@@ -546,22 +546,25 @@ class Product extends Component<PropsType, StateType> {
                         onChangeDeliveryData={this.handleChangeDeliveryData}
                         deliveryData={deliveryData}
                       >
-                        <ProductButtons
-                          onAddToCart={() =>
-                            this.handleAddToCart(productVariant.rawId)
-                          }
-                          onBuyNow={this.handleBuyNow}
-                          onAddToCartTracker={this.handleAddToCartTracker}
-                          unselectedAttr={unselectedAttr}
-                          quantity={productVariant.quantity}
-                          preOrder={productVariant.preOrder}
-                          preOrderDays={productVariant.preOrderDays}
-                          isAddToCart={isAddToCart}
-                          router={router}
-                          isLoading={isLoading}
-                          isLoadingAddToCart={isLoadingAddToCart}
-                          isDisabledBuyNowButton={!me}
-                        />
+                        {(productVariant.quantity ||
+                          productVariant.preOrder) && (
+                          <ProductButtons
+                            onAddToCart={() =>
+                              this.handleAddToCart(productVariant.rawId)
+                            }
+                            onBuyNow={this.handleBuyNow}
+                            onAddToCartTracker={this.handleAddToCartTracker}
+                            unselectedAttr={unselectedAttr}
+                            quantity={productVariant.quantity}
+                            preOrder={productVariant.preOrder}
+                            preOrderDays={productVariant.preOrderDays}
+                            isAddToCart={isAddToCart}
+                            router={router}
+                            isLoading={isLoading}
+                            isLoadingAddToCart={isLoadingAddToCart}
+                            isDisabledBuyNowButton={!me}
+                          />
+                        )}
                         <div styleName="line" />
                         <ProductStore />
                       </ProductDetails>

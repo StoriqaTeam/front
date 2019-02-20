@@ -334,6 +334,8 @@ class Contacts extends Component<PropsType, StateType> {
   };
 
   render() {
+    // $FlowIgnore
+    const storeRawID = pathOr(null, ['me', 'myStore', 'rawId'], this.props);
     // $FlowIgnoreMe
     const status = pathOr(null, ['me', 'myStore', 'status'], this.props);
     const { isLoading, addressFull } = this.state;
@@ -345,6 +347,11 @@ class Contacts extends Component<PropsType, StateType> {
               <ModerationStatus
                 status={status}
                 dataTest={`storeStatus_${status}`}
+                link={
+                  process.env.REACT_APP_HOST && storeRawID
+                    ? `${process.env.REACT_APP_HOST}/store/${storeRawID}`
+                    : null
+                }
               />
             </div>
           )}
