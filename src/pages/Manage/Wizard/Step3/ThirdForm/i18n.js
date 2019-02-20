@@ -56,7 +56,7 @@ const translations: TranslationsBundleType = {
     price: 'Price',
     vendorCode: 'Vendor Code',
     labelCashback: 'Cash Back',
-    labelQuantity: 'Quantity',
+    labelQuantity: 'In stock',
     save: 'Save',
     cancel: 'Cancel',
     productPhotos: 'PRODUCT PHOTOS',
