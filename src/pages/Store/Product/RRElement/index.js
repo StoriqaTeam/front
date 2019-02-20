@@ -108,18 +108,18 @@ class RRElement extends Component<PropsType, StateType> {
     // alternative
 
     axios
-    .get(
-      `https://api.retailrocket.net/api/2.0/recommendation/${type}/5ba8ba0797a5281c5c422860`,
-      { params },
-    )
-    .then(({ data }) => {
-      if (data && !isEmpty(data)) {
-        const ids = map(item => item.ItemId, data);
-        this.fetchData(ids);
-      }
-      return true;
-    })
-    .catch(log.error);
+      .get(
+        `https://api.retailrocket.net/api/2.0/recommendation/${type}/5ba8ba0797a5281c5c422860`,
+        { params },
+      )
+      .then(({ data }) => {
+        if (data && !isEmpty(data)) {
+          const ids = map(item => item.ItemId, data);
+          this.fetchData(ids);
+        }
+        return true;
+      })
+      .catch(log.error);
   };
 
   fetchData = (ids: Array<number>) => {
