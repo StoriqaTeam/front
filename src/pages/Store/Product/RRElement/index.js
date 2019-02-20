@@ -61,6 +61,7 @@ type PropsType = {
   environment: Environment,
   dataVendor?: string,
   title?: string,
+  type: 'alternative' | 'related',
 };
 
 class RRElement extends Component<PropsType, StateType> {
@@ -74,29 +75,14 @@ class RRElement extends Component<PropsType, StateType> {
 
   componentDidMount() {
     this.isMount = true;
-    const { productId, dataVendor } = this.props;
-    let params = {
-      itemIds: `${productId}`,
-      format: 'json',
-    };
+    this.updateWidget();
+  }
 
-    if (dataVendor === 'brand') {
-      params = assoc('vendor', 'brand', params);
+  componentDidUpdate(prevProps: PropsType) {
+    const { productId } = this.props;
+    if (productId !== prevProps.productId) {
+      this.updateWidget();
     }
-
-    axios
-      .get(
-        'https://api.retailrocket.net/api/2.0/recommendation/alternative/5ba8ba0797a5281c5c422860',
-        { params },
-      )
-      .then(({ data }) => {
-        if (data && !isEmpty(data)) {
-          const ids = map(item => item.ItemId, data);
-          this.fetchData(ids);
-        }
-        return true;
-      })
-      .catch(log.error);
   }
 
   componentWillUnmount() {
@@ -105,6 +91,36 @@ class RRElement extends Component<PropsType, StateType> {
 
   timer: TimeoutID;
   isMount: boolean;
+
+  updateWidget = () => {
+    const { productId, dataVendor, type } = this.props;
+    let params = {
+      itemIds: `${productId}`,
+      session: '5baa64e812ff0a000198c632',
+      pvid: '561783608306378',
+      format: 'json',
+    };
+
+    if (dataVendor === 'brand') {
+      params = assoc('vendor', 'brand', params);
+    }
+
+    // alternative
+
+    axios
+    .get(
+      `https://api.retailrocket.net/api/2.0/recommendation/${type}/5ba8ba0797a5281c5c422860`,
+      { params },
+    )
+    .then(({ data }) => {
+      if (data && !isEmpty(data)) {
+        const ids = map(item => item.ItemId, data);
+        this.fetchData(ids);
+      }
+      return true;
+    })
+    .catch(log.error);
+  };
 
   fetchData = (ids: Array<number>) => {
     fetchProducts({
@@ -148,7 +164,7 @@ class RRElement extends Component<PropsType, StateType> {
       <div styleName="container">
         {!isNil(title) && (
           <div styleName="title">
-            <strong>Similar goods</strong>
+            <strong>{title}</strong>
           </div>
         )}
         <div styleName={classNames('items', { fullWidth })}>
