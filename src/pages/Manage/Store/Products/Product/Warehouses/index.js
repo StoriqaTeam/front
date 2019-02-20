@@ -151,7 +151,7 @@ class Warehouses extends Component<PropsType, StateType> {
         </div>
         <div styleName="items">
           {map(item => {
-            const thisProduct = `${item.id}` === storageFocusId;
+            const product = `${item.id}` === storageFocusId;
             const { addressFull } = item.warehouse;
             // $FlowIgnoreMe
             const warehouseName = pathOr(null, ['warehouse', 'name'], item);
@@ -161,7 +161,7 @@ class Warehouses extends Component<PropsType, StateType> {
               <div key={item.id} styleName="item">
                 <div styleName="td tdName">
                   <strong styleName="name">
-                    {warehouseName || `Storage ${warehouseSlug}`}
+                    {warehouseName || `Storage ${warehouseSlug || ''}`}
                   </strong>
                 </div>
                 <div styleName="td tdAddress">
@@ -177,9 +177,7 @@ class Warehouses extends Component<PropsType, StateType> {
                       inline
                       fullWidth
                       dataTest="quantity"
-                      value={
-                        thisProduct ? storageFocusValue : `${item.quantity}`
-                      }
+                      value={product ? storageFocusValue : `${item.quantity}`}
                       onFocus={(e: any) => {
                         this.handleFocus(e, item.quantity);
                       }}
@@ -187,13 +185,12 @@ class Warehouses extends Component<PropsType, StateType> {
                       onChange={this.handleChange}
                     />
                   </div>
-                  {thisProduct && (
+                  {product && (
                     <div>
                       <Button
                         small
                         disabled={
-                          thisProduct &&
-                          storageFocusValue === `${item.quantity}`
+                          product && storageFocusValue === `${item.quantity}`
                         }
                         onClick={() => {
                           this.handleSave(item.productId, item.warehouseId);

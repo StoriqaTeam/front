@@ -178,6 +178,7 @@ class NewProduct extends Component<PropsType, StateType> {
           variants: [
             {
               clientMutationId: uuidv4(),
+              quantity: form.quantity || 0,
               product: {
                 price: form.price,
                 vendorCode: form.vendorCode,
