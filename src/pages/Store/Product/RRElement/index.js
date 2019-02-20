@@ -61,6 +61,7 @@ type PropsType = {
   environment: Environment,
   dataVendor?: string,
   title?: string,
+  type: 'alternative' | 'related',
 };
 
 class RRElement extends Component<PropsType, StateType> {
@@ -74,9 +75,29 @@ class RRElement extends Component<PropsType, StateType> {
 
   componentDidMount() {
     this.isMount = true;
-    const { productId, dataVendor } = this.props;
+    this.updateWidget();
+  }
+
+  componentDidUpdate(prevProps: PropsType) {
+    const { productId } = this.props;
+    if (productId !== prevProps.productId) {
+      this.updateWidget();
+    }
+  }
+
+  componentWillUnmount() {
+    this.isMount = false;
+  }
+
+  timer: TimeoutID;
+  isMount: boolean;
+
+  updateWidget = () => {
+    const { productId, dataVendor, type } = this.props;
     let params = {
       itemIds: `${productId}`,
+      session: '5baa64e812ff0a000198c632',
+      pvid: '561783608306378',
       format: 'json',
     };
 
@@ -84,9 +105,11 @@ class RRElement extends Component<PropsType, StateType> {
       params = assoc('vendor', 'brand', params);
     }
 
+    // alternative
+
     axios
       .get(
-        'https://api.retailrocket.net/api/2.0/recommendation/alternative/5ba8ba0797a5281c5c422860',
+        `https://api.retailrocket.net/api/2.0/recommendation/${type}/5ba8ba0797a5281c5c422860`,
         { params },
       )
       .then(({ data }) => {
@@ -97,14 +120,7 @@ class RRElement extends Component<PropsType, StateType> {
         return true;
       })
       .catch(log.error);
-  }
-
-  componentWillUnmount() {
-    this.isMount = false;
-  }
-
-  timer: TimeoutID;
-  isMount: boolean;
+  };
 
   fetchData = (ids: Array<number>) => {
     fetchProducts({
@@ -148,7 +164,7 @@ class RRElement extends Component<PropsType, StateType> {
       <div styleName="container">
         {!isNil(title) && (
           <div styleName="title">
-            <strong>Similar goods</strong>
+            <strong>{title}</strong>
           </div>
         )}
         <div styleName={classNames('items', { fullWidth })}>

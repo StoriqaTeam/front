@@ -588,8 +588,17 @@ class Product extends Component<PropsType, StateType> {
               */}
               <div styleName="rrBlock">
                 <RRElement
+                  type="alternative"
                   productId={productVariant.rawId}
                   title="Similar goods"
+                  fullWidth
+                />
+              </div>
+              <div styleName="rrBlock">
+                <RRElement
+                  type="related"
+                  productId={productVariant.rawId}
+                  title="You also might like"
                   fullWidth
                 />
               </div>
