@@ -2,19 +2,19 @@
 
 .container {
   background-color: $color_blue;
-  height: 3rem;
   display: flex;
   justify-content: center;
 }
 
-.text {
+.textWrap {
   color: $color_white;
   font-size: 12px;
-  margin-left: 2rem;
+  line-height: 2.5rem;
+  padding: 0.5rem 0;
+}
 
-  @media (max-width: #{$md - 1px}) {
-    font-size: 10px;
-  }
+.text {
+  margin-right: 1rem;
 }
 
 .body {
@@ -25,6 +25,8 @@
   max-width: 170rem;
   width: 100%;
   margin: 0 auto;
+  padding-right: 6rem;
+  padding-left: 3rem;
 
   @media (max-width: #{$md - 1px}) {
     display: block;
@@ -37,44 +39,22 @@
 
 .link {
   display: inline-block;
-  margin-left: 4rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-  padding: 0.1rem 2rem;
   color: $color_white;
   font-size: 12px;
   transition: $transition_all_ease;
   text-decoration: underline;
   font-weight: bold;
-  @media (max-width: #{$md - 1px}) {
-    padding: 0.3rem 3rem;
-    font-size: 14px;
-    margin-left: 0;
-    margin-top: 1rem;
-  }
 }
 
 .cross {
   position: absolute;
-  right: 2rem;
-  top: 50%;
+  right: 0;
+  top: 1.75rem;
   margin-top: -2rem;
-  padding: 1.5rem;
+  padding: 1.5rem 3rem 1.5rem 1.5rem;
   cursor: pointer;
-
-  @media (max-width: #{$md - 1px}) {
-    top: 3rem;
-  }
-
-  &:hover {
-    svg {
-      opacity: 0.9;
-    }
-  }
 
   svg {
     fill: $color_white;
-    opacity: 0.6;
-    transition: $transition_all_ease;
   }
 }
