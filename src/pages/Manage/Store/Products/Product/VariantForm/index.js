@@ -275,7 +275,7 @@ class VariantForm extends Component<PropsType, StateType> {
   validate = () => {
     const { errors } = validate(
       {
-        vendorCode: [[val => Boolean(val), 'Vendor code is required']],
+        vendorCode: [[val => Boolean(val), 'SKU is required']],
         price: [[val => Boolean(val), 'Price is required']],
       },
       this.state,
@@ -558,7 +558,7 @@ class VariantForm extends Component<PropsType, StateType> {
             fullWidth
             label={
               <span>
-                {t.vendorCode} <span styleName="asterisk">*</span>
+                {t.SKU} <span styleName="asterisk">*</span>
               </span>
             }
             value={vendorCode || ''}
