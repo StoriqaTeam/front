@@ -439,7 +439,7 @@ class Form extends Component<PropsType, StateType> {
         shortDescription: [[val => Boolean(val), t.shortDescriptionIsRequired]],
         longDescription: [[val => Boolean(val), t.longDescriptionIsRequired]],
         categoryId: [[val => Boolean(val), t.categoryIsRequired]],
-        vendorCode: [[val => Boolean(val), t.vendorCodeIsRequired]],
+        vendorCode: [[val => Boolean(val), t.SKUIsRequired]],
         price: [[val => Boolean(val), t.priceIsRequired]],
         // metrics: [[val => !contains(0, values(val)), t.metricsError]],
       },
@@ -1050,7 +1050,7 @@ class Form extends Component<PropsType, StateType> {
               <div styleName="formItem">
                 {this.renderInput({
                   id: 'vendorCode',
-                  label: t.labelVendorCode,
+                  label: t.labelSKU,
                   limit: 50,
                   required: true,
                 })}

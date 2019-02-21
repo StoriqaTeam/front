@@ -388,8 +388,7 @@ class ThirdForm extends Component<PropsType, StateType> {
                                 }
                                 label={
                                   <span>
-                                    {t.vendorCode}{' '}
-                                    <span styleName="red">*</span>
+                                    {t.SKU} <span styleName="red">*</span>
                                   </span>
                                 }
                                 onChange={this.handleChangeProductState}

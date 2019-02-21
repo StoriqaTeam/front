@@ -20,7 +20,7 @@ const Header = () => (
     */}
     <div styleName="headerItem tdArticle">
       <div styleName="headerItemWrap">
-        <span>Vendor code</span>
+        <span>SKU</span>
         <Icon inline type="sortArrows" />
       </div>
     </div>
