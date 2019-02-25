@@ -35,7 +35,8 @@ type PropsType = {
     [name: string]: any,
   }) => void,
   data: BaseProductNodeType,
-  onUploadPhoto: (type: string, url: string) => void,
+  onUploadMainPhoto: (url: string) => void,
+  onUploadAdditionalPhotos: (photosUrls: Array<string>) => void,
   onSave: (callback: () => void) => void,
   onClose: () => void,
   isSavingInProgress: boolean,
@@ -189,11 +190,11 @@ class ThirdForm extends Component<PropsType, StateType> {
   };
 
   handleAddMainPhoto = (url: string): void => {
-    this.props.onUploadPhoto('main', url);
+    this.props.onUploadMainPhoto(url);
   };
 
-  handleAddPhoto = (url: string): void => {
-    this.props.onUploadPhoto('additional', url);
+  handleAddPhoto = (photosUrls: Array<string>): void => {
+    this.props.onUploadAdditionalPhotos(photosUrls);
   };
 
   handleRemovePhoto = (url: string): void => {

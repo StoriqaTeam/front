@@ -16,13 +16,12 @@ import {
   keys,
   head,
   find,
-  append,
   isNil,
   contains,
   propEq,
   drop,
   length,
-  // values,
+  concat,
 } from 'ramda';
 import { validate } from '@storiqa/shared';
 import classNames from 'classnames';
@@ -613,9 +612,9 @@ class Form extends Component<PropsType, StateType> {
     );
   };
 
-  handleAddPhoto = (url: string) => {
+  handleAddPhoto = (photosUrls: Array<string>) => {
     const { photos } = this.state.form;
-    const newPhotos = append(url, photos || []);
+    const newPhotos = concat(photos || [], photosUrls);
     this.setState((prevState: StateType) =>
       assocPath(['form', 'photos'], newPhotos, prevState),
     );
@@ -1088,7 +1087,8 @@ class Form extends Component<PropsType, StateType> {
                   )}
               </div>
               {defaultAttributes &&
-                !isEmpty(defaultAttributes) && (
+                !isEmpty(defaultAttributes) &&
+                !categoryEquality && (
                   <Fragment>
                     <div styleName="title titleCharacteristics">
                       <strong>{t.characteristics}</strong>
