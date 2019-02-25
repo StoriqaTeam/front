@@ -1,7 +1,7 @@
 // @flow strict
 
 import Cookies from 'universal-cookie';
-import { pathOr, forEach, isEmpty } from 'ramda';
+import { pathOr, forEach, isEmpty, length } from 'ramda';
 
 import { log, jwt as JWT } from 'utils';
 
@@ -12,6 +12,12 @@ const uploadMultipleFiles = (
     return Promise.reject(new Error('Please, select files'));
   }
   log.info(files);
+
+  // length
+  // $FlowIgnore
+  if (length(files) > 10) {
+    return Promise.reject(new Error('Maximum number of images: 10'));
+  }
 
   // 20MB
   forEach(file => {
