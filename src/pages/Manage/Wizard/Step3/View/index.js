@@ -57,7 +57,8 @@ type ProductType = {
 
 type PropsType = {
   onChange: (data: { [name: string]: any }) => void,
-  onUploadPhoto: (type: string, url: string) => void,
+  onUploadMainPhoto: (url: string) => void,
+  onUploadAdditionalPhotos: (photosUrls: Array<string>) => void,
   onDelete: (ID: string) => void,
   products: Array<ProductType>,
   onSave: (callback: () => void) => void,
@@ -205,7 +206,8 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
       formStateData,
       onChange,
       products,
-      onUploadPhoto,
+      onUploadMainPhoto,
+      onUploadAdditionalPhotos,
       onSave,
       isSavingInProgress,
       allCategories,
@@ -224,7 +226,8 @@ class ThirdStepView extends React.Component<PropsType, StateType> {
           data={formStateData}
           categories={this.context.directories.categories}
           onChange={onChange}
-          onUploadPhoto={onUploadPhoto}
+          onUploadMainPhoto={onUploadMainPhoto}
+          onUploadAdditionalPhotos={onUploadAdditionalPhotos}
           onSave={onSave}
           onClose={this.handleOnCloseModal}
           isSavingInProgress={isSavingInProgress}

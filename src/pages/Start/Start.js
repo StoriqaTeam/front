@@ -69,7 +69,7 @@ class Start extends Component<PropsTypes, StateTypes> {
     },
     header: [
       {
-        title: 'Fancy stuff',
+        title: 'Fancy Stuff',
         description: 'Express yourself with unique handmade items',
       },
       {

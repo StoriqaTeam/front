@@ -2,10 +2,11 @@
 
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { length, map } from 'ramda';
 
 import { Icon } from 'components/Icon';
 import { UploadWrapper } from 'components/Upload';
-import { uploadFile, log, convertSrc } from 'utils';
+import { uploadFile, uploadMultipleFiles, log, convertSrc } from 'utils';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 
 import type { AddAlertInputType } from 'components/Alerts/AlertContext';
@@ -21,7 +22,7 @@ type StateType = {
 
 type PropsType = {
   onAddMainPhoto: (url: string) => void,
-  onAddPhoto: (url: string) => void,
+  onAddPhoto: (photosUrls: Array<string>) => void,
   onRemovePhoto: (url: string) => void,
   photoMain: ?string,
   photos: ?Array<string>,
@@ -62,25 +63,54 @@ class Photos extends Component<PropsType, StateType> {
   handleOnUploadPhoto = (e: SyntheticInputEvent<HTMLInputElement>) => {
     e.preventDefault();
     this.setState({ isAdditionalPhotoUploading: true });
-    uploadFile(e.target.files[0])
-      .then(result => {
-        if (!result || result.url == null) {
-          log.error(result);
-          alert('Error :('); // eslint-disable-line
-        }
-        this.props.onAddPhoto(result.url || '');
-        return true;
-      })
-      .finally(() => {
-        this.setState({ isAdditionalPhotoUploading: false });
-      })
-      .catch(error => {
-        this.props.showAlert({
-          type: 'danger',
-          text: error.message,
-          link: { text: 'Close.' },
+
+    const { files } = e.target;
+
+    // $FlowIgnore
+    if (length(files) > 1) {
+      uploadMultipleFiles(files)
+        .then(result => {
+          if (!result) {
+            log.error(result);
+            alert('Error :('); // eslint-disable-line
+          }
+          this.props.onAddPhoto(map(item => item.url, result));
+          return true;
+        })
+        .finally(() => {
+          this.setState({ isAdditionalPhotoUploading: false });
+        })
+        .catch(error => {
+          this.props.showAlert({
+            type: 'danger',
+            text: error.message,
+            link: { text: 'Close.' },
+          });
         });
-      });
+    }
+
+    // $FlowIgnore
+    if (length(files) === 1) {
+      uploadFile(files[0])
+        .then(result => {
+          if (!result || result.url == null) {
+            log.error(result);
+            alert('Error :('); // eslint-disable-line
+          }
+          this.props.onAddPhoto([result.url]);
+          return true;
+        })
+        .finally(() => {
+          this.setState({ isAdditionalPhotoUploading: false });
+        })
+        .catch(error => {
+          this.props.showAlert({
+            type: 'danger',
+            text: error.message,
+            link: { text: 'Close.' },
+          });
+        });
+    }
   };
 
   render() {
@@ -129,6 +159,7 @@ class Photos extends Component<PropsType, StateType> {
           <div styleName="upload">
             <UploadWrapper
               id={`${isMainVariant ? 'main-variant' : ''}additional-photos`}
+              multiple
               onUpload={this.handleOnUploadPhoto}
               buttonHeight={10}
               buttonWidth={10}

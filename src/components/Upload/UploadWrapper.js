@@ -31,6 +31,7 @@ type PropsType = {
   customUnit?: boolean,
   square?: boolean,
   loading?: boolean,
+  multiple?: boolean,
 };
 
 // TODO: refactor for avoid use style props
@@ -52,6 +53,7 @@ const UploadWrapper = ({
   customUnit,
   square,
   loading,
+  multiple,
 }: PropsType) => (
   <div styleName={classNames('wrapper', { square })}>
     {loading && (
@@ -99,6 +101,7 @@ const UploadWrapper = ({
       {!disabled && (
         <input
           style={{ display: 'none' }}
+          multiple={multiple}
           id={id}
           type="file"
           onChange={onUpload}
@@ -121,6 +124,7 @@ UploadWrapper.defaultProps = {
   noIndents: null,
   disabled: null,
   loading: false,
+  multiple: undefined,
 };
 
 export default UploadWrapper;

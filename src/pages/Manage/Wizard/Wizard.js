@@ -16,6 +16,7 @@ import {
   isEmpty,
   map,
   type,
+  concat,
 } from 'ramda';
 import debounce from 'lodash.debounce';
 import { routerShape, withRouter } from 'found';
@@ -902,13 +903,13 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     });
   };
 
-  handleOnUploadPhoto = (imgType: string, url: string) => {
-    if (imgType === 'main') {
-      this.setState(prevState =>
-        assocPath(['baseProduct', 'product', 'photoMain'], url, prevState),
-      );
-      return;
-    }
+  handleOnUploadMainPhoto = (url: string) => {
+    this.setState(prevState =>
+      assocPath(['baseProduct', 'product', 'photoMain'], url, prevState),
+    );
+  };
+
+  handleOnUploadAdditionalPhotos = (photosUrls: Array<string>) => {
     const additionalPhotos =
       path(['baseProduct', 'product', 'additionalPhotos'], this.state) || [];
     this.setState(prevState => ({
@@ -917,7 +918,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         ...prevState.baseProduct,
         product: {
           ...prevState.baseProduct.product,
-          additionalPhotos: [...additionalPhotos, url || ''],
+          additionalPhotos: concat(additionalPhotos, photosUrls),
         },
       },
     }));
@@ -965,7 +966,8 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           <Step3
             formStateData={this.state.baseProduct}
             products={baseProducts ? baseProducts.edges : []}
-            onUploadPhoto={this.handleOnUploadPhoto}
+            onUploadMainPhoto={this.handleOnUploadMainPhoto}
+            onUploadAdditionalPhotos={this.handleOnUploadAdditionalPhotos}
             onChange={this.handleOnChangeProductForm}
             onClearProductState={this.handleOnClearProductState}
             onSave={this.handleOnSaveProduct}

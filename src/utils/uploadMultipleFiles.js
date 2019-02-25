@@ -1,29 +1,47 @@
 // @flow strict
 
 import Cookies from 'universal-cookie';
-import { pathOr } from 'ramda';
+import { pathOr, forEach, isEmpty } from 'ramda';
 
 import { log, jwt as JWT } from 'utils';
 
-const uploadFile = (file: ?File): Promise<{ url: string, error?: string }> => {
-  if (!file) {
-    return Promise.reject(new Error('Please, select file'));
+const uploadMultipleFiles = (
+  files: FileList,
+): Promise<Array<{ url: string, error?: string }>> => {
+  if (!files || isEmpty(files)) {
+    return Promise.reject(new Error('Please, select files'));
   }
-  log.info(file);
+  log.info(files);
 
   // 20MB
-  if (file.size > 20 * 1024 * 1024) {
-    return Promise.reject(new Error('Maximum file size is 20MB'));
-  }
+  forEach(file => {
+    log.info(file);
+    if (file.size > 20 * 1024 * 1024) {
+      return Promise.reject(new Error('Maximum file size is 20MB'));
+    }
+    return true;
+    // $FlowIgnore
+  }, files);
 
-  if (file.type !== 'image/png' && file.type !== 'image/jpeg') {
-    return Promise.reject(new Error('Only JPEG/PNG allowed'));
-  }
+  // type
+  forEach(file => {
+    log.info(file);
+    if (file.type !== 'image/png' && file.type !== 'image/jpeg') {
+      return Promise.reject(new Error('Only JPEG/PNG allowed'));
+    }
+    return true;
+    // $FlowIgnore
+  }, files);
 
   const cookies = new Cookies();
   const jwt = pathOr(null, ['value'], cookies.get(JWT.jwtCookieName));
   const body = new FormData();
-  body.append('file', file);
+
+  forEach(file => {
+    body.append('file', file);
+    // $FlowIgnore
+  }, files);
+
   if (!process.env.REACT_APP_STATIC_IMAGES_ENDPOINT || !jwt) {
     return Promise.reject(new Error('Seems that you are not logged in'));
   }
@@ -52,4 +70,4 @@ const uploadFile = (file: ?File): Promise<{ url: string, error?: string }> => {
   });
 };
 
-export default uploadFile;
+export default uploadMultipleFiles;

@@ -2,7 +2,6 @@
 
 import React, { Component, Fragment } from 'react';
 import {
-  append,
   find,
   isEmpty,
   isNil,
@@ -15,6 +14,7 @@ import {
   keys,
   filter,
   contains,
+  concat,
 } from 'ramda';
 import { Environment } from 'relay-runtime';
 import { validate } from '@storiqa/shared';
@@ -145,9 +145,9 @@ class VariantForm extends Component<PropsType, StateType> {
     this.setState({ photoMain: url });
   };
 
-  handleAddPhoto = (url: string) => {
+  handleAddPhoto = (photosUrls: Array<string>) => {
     this.setState((prevState: StateType) => ({
-      photos: append(url, prevState.photos || []),
+      photos: concat(prevState.photos || [], photosUrls),
     }));
   };
 
