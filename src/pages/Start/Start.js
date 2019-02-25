@@ -91,12 +91,12 @@ class Start extends Component<PropsTypes, StateTypes> {
       {
         title: 'Worldwide community',
         description:
-          'Storiqa is an online marketplace which global on every side. We have an international community and support that help you buy and sell craft items.',
+          'Storiqa is an online marketplace which is global on every side. We have an international community and support that help you buy and sell craft items.',
       },
       {
         title: 'Cryptopayment option',
         description:
-          'Along with traditional payments, you can finally try out paying for goods with cryptocurrencies—it’s now real with Storiqa.',
+          'Along with traditional payments, you can finally try out paying for goods with cryptocurrencies\u00A0— it’s now real with Storiqa.',
       },
     ],
   };
