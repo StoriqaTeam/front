@@ -1,16 +1,19 @@
 // @flow
 
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
+// import { graphql, createFragmentContainer } from 'react-relay';
+import { Environment } from 'relay-runtime';
 import { withRouter, routerShape } from 'found';
 import { pathOr } from 'ramda';
 import uuidv4 from 'uuid/v4';
 
+import { ContextDecorator } from 'components/App';
 import Logo from 'components/Icon/svg/logo.svg';
 import { VerifyEmailMutation } from 'relay/mutations';
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { Spinner } from 'components/common/Spinner';
-import { log } from 'utils';
+import { log, jwt as JWT } from 'utils';
 import { withShowAlert } from 'components/Alerts/AlertContext';
 import { setEmailTracker } from 'rrHalper';
 
@@ -30,6 +33,8 @@ type PropsType = {
   showAlert: (input: AddAlertInputType) => void,
   params: { token: string },
   router: routerShape,
+  environment: Environment,
+  handleLogin: () => void,
 };
 
 class VerifyEmail extends Component<PropsType, StateType> {
@@ -49,7 +54,7 @@ class VerifyEmail extends Component<PropsType, StateType> {
           token: this.props.params.token,
         },
       },
-      environment: this.context.environment,
+      environment: this.props.environment,
       onCompleted: (
         response: ?VerifyEmailMutationResponse,
         errors: ?Array<Error>,
@@ -62,7 +67,6 @@ class VerifyEmail extends Component<PropsType, StateType> {
             text: t.verifiedSuccessfully,
             link: { text: '' },
           });
-          this.props.router.replace('/');
           const { email } = response.verifyEmail;
           if (
             process.env.BROWSER &&
@@ -70,6 +74,12 @@ class VerifyEmail extends Component<PropsType, StateType> {
             email
           ) {
             setEmailTracker(email);
+          }
+          const jwtStr = response.verifyEmail.token;
+          if (jwtStr) {
+            JWT.setJWT(jwtStr);
+            this.props.router.replace('/');
+            this.props.handleLogin();
           }
         } else if (errors && errors.length > 0) {
           // $FlowIgnoreMe
@@ -123,8 +133,6 @@ class VerifyEmail extends Component<PropsType, StateType> {
   }
 }
 
-VerifyEmail.contextTypes = {
-  environment: PropTypes.object.isRequired,
-};
-
-export default withShowAlert(withErrorBoundary(withRouter(VerifyEmail)));
+export default withShowAlert(
+  withErrorBoundary(withRouter(ContextDecorator(VerifyEmail))),
+);

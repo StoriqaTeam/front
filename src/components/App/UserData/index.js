@@ -49,6 +49,7 @@ type StateType = {
 type PropsType = {
   environment: Environment,
   children: StateType => Node,
+  me: ?UserDataType,
 };
 
 class UserData extends Component<PropsType, StateType> {
@@ -104,6 +105,20 @@ class UserData extends Component<PropsType, StateType> {
       // tmp code
       setWindowTag('user', snapshotUser.data);
       // end tmp code
+    }
+  }
+
+  componentDidUpdate(prevProps: PropsType) {
+    const { me } = this.props;
+    if (prevProps.me === null && me != null) {
+      this.setUserData({
+        email: me.email,
+        firstName: me.firstName,
+        lastName: me.lastName,
+        avatar: me.avatar,
+        wizardStore: me.wizardStore,
+        myStore: me.myStore,
+      });
     }
   }
 

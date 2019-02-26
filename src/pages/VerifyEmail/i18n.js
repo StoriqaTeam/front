@@ -16,8 +16,7 @@ type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    verifiedSuccessfully:
-      'Verified successfully. Please login with your login data.',
+    verifiedSuccessfully: 'Verified successfully',
     somethingGoingWrong: 'Something going wrong',
     close: 'Close.',
     loading: 'Loading...',
