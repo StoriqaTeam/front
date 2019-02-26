@@ -89,7 +89,7 @@ export default (
       return (
         <AppContext.Consumer>
           {({ environment }) => (
-            <UserData environment={environment}>
+            <UserData environment={environment} me={this.props.me}>
               {({ isShopCreated, userData, totalCount }) => (
                 <div styleName="container">
                   {process.env.NODE_ENV === 'production' && (

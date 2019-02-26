@@ -51,6 +51,7 @@ const routes = (
     <Route path="/ture/email_confirmed" Component={EmailConfirmed} />
     <Route path="/ture/password_reset_deny" Component={PasswordResetDeny} />
     <Route path="/ture/register_device_confirmed" Component={DeviceConfirmed} />
+
     <Route
       path="/"
       Component={App}
@@ -162,6 +163,7 @@ const routes = (
         return <Component {...props} />;
       }}
     >
+      <Route path="/verify_email/:token" Component={VerifyEmail} />
       <Route path="/error" Component={Error} />
       <Route Component={Start} />
       <Route path="/404" Component={Error404} />
@@ -773,8 +775,6 @@ const routes = (
           <Component provider="GOOGLE" {...props} />
         )}
       />
-
-      <Route path="/verify_email/:token" Component={VerifyEmail} />
 
       <Redirect from="/profile" to={() => '/profile/personal-data'} />
       <Route path="/profile">

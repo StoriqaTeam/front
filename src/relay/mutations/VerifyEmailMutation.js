@@ -13,6 +13,7 @@ const mutation = graphql`
     verifyEmail(input: $input) {
       success
       email
+      token
     }
   }
 `;
