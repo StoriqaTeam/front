@@ -35,14 +35,31 @@ class Alert extends Component<AlertPropsType, StateType> {
     const { isStatic } = this.props;
     // $FlowIgnoreMe
     if (!isStatic) {
-      setTimeout(() => {
+      this.alertTimer = setTimeout(() => {
         this.props.onClose(this.props.createdAtTimestamp);
-      }, 3000);
-      setTimeout(() => {
-        this.setState({ isDisappearing: true });
-      }, 1500);
+      }, 5000);
     }
   }
+
+  componentWillUnmount() {
+    if (this.alertTimer) {
+      clearTimeout(this.alertTimer);
+    }
+  }
+
+  onMouseOver = () => {
+    if (this.alertTimer) {
+      clearTimeout(this.alertTimer);
+    }
+  };
+
+  onMouseOut = () => {
+    this.alertTimer = setTimeout(() => {
+      this.props.onClose(this.props.createdAtTimestamp);
+    }, 5000);
+  };
+
+  alertTimer: TimeoutID;
 
   render() {
     const {
@@ -64,6 +81,10 @@ class Alert extends Component<AlertPropsType, StateType> {
           danger: type === 'danger',
           warning: type === 'warning',
         })}
+        onMouseOver={this.onMouseOver}
+        onMouseOut={this.onMouseOut}
+        onBlur={() => {}}
+        onFocus={() => {}}
       >
         {/* $FlowIgnoreMe */}
         {!isStatic ? (
