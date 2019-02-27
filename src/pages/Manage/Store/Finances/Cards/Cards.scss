@@ -4,6 +4,17 @@
   //
 }
 
+.wizard {
+  .addButton {
+    padding-left: 0;
+  }
+
+  .newCardForm {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
 .cards {
   position: relative;
 }

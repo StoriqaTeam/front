@@ -6,6 +6,7 @@ import { Environment } from 'relay-runtime';
 import { createFragmentContainer, graphql } from 'react-relay';
 import uuidv4 from 'uuid/v4';
 
+import { ContextDecorator } from 'components/App';
 import { Checkbox, Input, Button, Select } from 'components/common';
 
 import {
@@ -801,7 +802,7 @@ class PaymentAccount extends Component<PropsType, StateType> {
 }
 
 export default createFragmentContainer(
-  withShowAlert(PaymentAccount),
+  withShowAlert(ContextDecorator(PaymentAccount)),
   graphql`
     fragment PaymentAccount_me on User {
       myStore {

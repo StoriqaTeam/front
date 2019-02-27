@@ -4,9 +4,11 @@ import React, { Component } from 'react';
 import { map, isEmpty, pathOr } from 'ramda';
 import { Environment } from 'relay-runtime';
 import { createFragmentContainer, graphql } from 'react-relay';
+import classNames from 'classnames';
 // $FlowIgnoreMe
 import uuidv4 from 'uuid/v4';
 
+import { ContextDecorator } from 'components/App';
 import { Table, Button } from 'components/common';
 import { Icon } from 'components/Icon';
 
@@ -55,6 +57,7 @@ type PropsType = {
   },
   showAlert: (input: AddAlertInputType) => void,
   environment: Environment,
+  wizard?: boolean,
 };
 
 class Cards extends Component<PropsType, StateType> {
@@ -158,7 +161,7 @@ class Cards extends Component<PropsType, StateType> {
         }
         this.props.showAlert({
           type: 'success',
-          text: 'success',
+          text: 'Your card was saved',
           link: { text: '' },
         });
         this.setState(() => ({ isNewCardForm: false }));
@@ -185,11 +188,12 @@ class Cards extends Component<PropsType, StateType> {
   };
 
   render() {
+    const { wizard } = this.props;
     const { firstName, lastName, email, stripeCustomer } = this.props.me;
     const { isNewCardForm, isLoading } = this.state;
     const isCards = Boolean(stripeCustomer && !isEmpty(stripeCustomer.cards));
     return (
-      <div styleName="container">
+      <div styleName={classNames('container', { wizard })}>
         <div styleName="cards">
           {isCards && (
             <div styleName="table">
@@ -272,22 +276,24 @@ class Cards extends Component<PropsType, StateType> {
               />
             </div>
           )}
-          {isCards && (
-            <div styleName="addButton">
-              <Button
-                disabled={isNewCardForm}
-                wireframe
-                big
-                onClick={this.handleOpenNewCardForm}
-                dataTest="addCardButton"
-              >
-                {t.changeCardInfo}
-              </Button>
-            </div>
-          )}
+          {isCards &&
+            !isNewCardForm && (
+              <div styleName="addButton">
+                <Button
+                  disabled={isNewCardForm}
+                  wireframe
+                  big
+                  onClick={this.handleOpenNewCardForm}
+                  dataTest="addCardButton"
+                >
+                  {t.changeCardInfo}
+                </Button>
+              </div>
+            )}
           {isNewCardForm && (
             <div styleName="newCardForm">
               <NewCardForm
+                wizard={wizard}
                 name={`${firstName} ${lastName}`}
                 email={email}
                 onCancel={this.handleCancelNewCardForm}
@@ -304,7 +310,7 @@ class Cards extends Component<PropsType, StateType> {
 }
 
 export default createFragmentContainer(
-  withShowAlert(Cards),
+  withShowAlert(ContextDecorator(Cards)),
   graphql`
     fragment Cards_me on User {
       firstName

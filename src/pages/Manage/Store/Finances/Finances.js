@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 
-import { AppContext, Page } from 'components/App';
+import { Page } from 'components/App';
 import { ManageStore } from 'pages/Manage/Store';
 import { Tabs } from 'components/common';
 
@@ -54,24 +54,20 @@ class Finances extends Component<PropsType, StateType> {
     const { selectedTab } = this.state;
 
     return (
-      <AppContext.Consumer>
-        {({ environment }) => (
-          <div styleName="container">
-            <div styleName="wrap">
-              <div styleName="tabs">
-                <Tabs selected={selectedTab} onClick={this.handleClickTab}>
-                  <div label={t.yourCards} styleName="cards">
-                    <Cards me={me} environment={environment} />
-                  </div>
-                  <div label={t.paymentAccount} styleName="paymentAccount">
-                    <PaymentAccount me={me} environment={environment} />
-                  </div>
-                </Tabs>
+      <div styleName="container">
+        <div styleName="wrap">
+          <div styleName="tabs">
+            <Tabs selected={selectedTab} onClick={this.handleClickTab}>
+              <div label={t.yourCards} styleName="cards">
+                <Cards me={me} />
               </div>
-            </div>
+              <div label={t.paymentAccount} styleName="paymentAccount">
+                <PaymentAccount me={me} />
+              </div>
+            </Tabs>
           </div>
-        )}
-      </AppContext.Consumer>
+        </div>
+      </div>
     );
   }
 }

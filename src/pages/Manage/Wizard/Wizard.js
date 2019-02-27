@@ -17,6 +17,7 @@ import {
   map,
   type,
   concat,
+  append,
 } from 'ramda';
 import debounce from 'lodash.debounce';
 import { routerShape, withRouter } from 'found';
@@ -51,6 +52,7 @@ import WizardFooter from './WizardFooter';
 import Step1 from './Step1/Form';
 import Step2 from './Step2/Form';
 import Step3 from './Step3/View';
+import Step4 from './Step4';
 
 import './Wizard.scss';
 
@@ -88,23 +90,33 @@ export type BaseProductNodeType = {
   attributes: Array<AttributeInputType>,
 };
 
+export type MeType = {
+  id: string,
+  rawId: number,
+  myStore: {
+    rawId: number,
+  },
+  wizardStore: {
+    store: {
+      baseProducts: {
+        edges: Array<{
+          node: BaseProductNodeType,
+        }>,
+      },
+    },
+  },
+  stripeCustomer: {
+    id: string,
+  },
+};
+
 type PropsType = {
   showAlert: (input: AddAlertInputType) => void,
   router: routerShape,
   languages: Array<{
     isoCode: string,
   }>,
-  me: {
-    wizardStore: {
-      store: {
-        baseProducts: {
-          edges: Array<{
-            node: BaseProductNodeType,
-          }>,
-        },
-      },
-    },
-  },
+  me: MeType,
   allCategories: CategoriesTreeType,
 };
 
@@ -396,7 +408,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           ['me', 'wizardStore', 'store', 'rawId'],
           this.props,
         );
-        if ((!warehouses || isEmpty(warehouses)) && addressFull) {
+        if (
+          (!warehouses || isEmpty(warehouses)) &&
+          addressFull &&
+          addressFull.country
+        ) {
           CreateWarehouseMutation.commit({
             input: {
               clientMutationId: uuidv4(),
@@ -484,6 +500,10 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         });
         break;
       case 3:
+        this.setState({ isSavingInProgress: false });
+        this.handleOnChangeStep(changedStep);
+        break;
+      case 4:
         this.setState({ showConfirm: true });
         break;
       default:
@@ -934,7 +954,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   renderForm = () => {
-    const { allCategories } = this.props;
+    const { allCategories, me } = this.props;
     const { step, isSavingInProgress } = this.state;
     // $FlowIgnoreMe
     const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
@@ -978,6 +998,8 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
             allCategories={allCategories}
           />
         );
+      case 4:
+        return <Step4 me={me} />;
       default:
         break;
     }
@@ -1015,18 +1037,29 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     const steptTwoChecker = where({
       defaultLanguage: isNotEmpty,
     });
-    const isReadyToNext = () => {
-      if (!wizardStore) {
-        return false;
-      }
+
+    let isReadyToNext = false;
+    let allowedSteps = [];
+    if (wizardStore) {
       const stepOne = pick(['name', 'shortDescription', 'slug'], wizardStore);
       const isStepOnePopulated = stepOneChecker(stepOne);
       const stepTwo = pick(['defaultLanguage'], wizardStore);
       const isStepTwoPopulated = steptTwoChecker(stepTwo);
       const isStepThreePopulated =
         baseProducts && baseProducts.edges.length > 0;
+
+      // set allowed steps
+      if (isStepOnePopulated && isValid) {
+        allowedSteps = append(2, allowedSteps);
+      }
+      if (isStepTwoPopulated && isValid && addressFull && addressFull.country) {
+        allowedSteps = append(3, allowedSteps);
+      }
+      if (isStepThreePopulated && isValid) {
+        allowedSteps = append(4, allowedSteps);
+      }
       if (step === 1 && isStepOnePopulated && isValid) {
-        return true;
+        isReadyToNext = true;
       }
       if (
         step === 2 &&
@@ -1035,32 +1068,24 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         addressFull &&
         addressFull.country
       ) {
-        return true;
+        isReadyToNext = true;
       }
       if (step === 3 && isStepThreePopulated && isValid) {
-        return true;
+        isReadyToNext = true;
       }
-      return false;
-    };
-    // $FlowIgnoreMe
-    const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
-    const isReadyChangeStep = () => {
-      if (step === 1 && isReadyToNext() && storeId) {
-        return true;
+      if (step === 4 && me.stripeCustomer) {
+        isReadyToNext = true;
       }
-      if (step === 2 && isReadyToNext()) {
-        return true;
-      }
-      return false;
-    };
+    }
 
     return (
       <div styleName="wizardContainer">
         <div styleName="stepperWrapper">
           <WizardHeader
             currentStep={step}
-            isReadyToNext={isReadyChangeStep()}
+            allowedSteps={allowedSteps}
             onChangeStep={this.handleOnChangeStep}
+            onSaveStep={this.handleOnSaveStep}
           />
         </div>
         <div styleName="contentWrapper">{this.renderForm()}</div>
@@ -1070,7 +1095,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
               currentStep={step}
               onChangeStep={this.handleOnChangeStep}
               onSaveStep={this.handleOnSaveStep}
-              isReadyToNext={isReadyToNext()}
+              isReadyToNext={isReadyToNext}
               isSavingInProgress={isSavingInProgress}
             />
           </div>
@@ -1117,10 +1142,14 @@ export default createFragmentContainer(
   withRouter(Page(withShowAlert(WizardWrapper), { withoutCategories: true })),
   graphql`
     fragment Wizard_me on User {
+      ...Cards_me
       id
       rawId
       myStore {
         rawId
+      }
+      stripeCustomer {
+        id
       }
       wizardStore {
         id
