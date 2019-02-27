@@ -27,6 +27,7 @@ type PropsType = {
   onCancel: () => void,
   onSave: (token: any) => void,
   isLoading: boolean,
+  wizard?: boolean,
 };
 
 type StateType = {
@@ -171,13 +172,17 @@ class NewCardForm extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { onCancel, isCards } = this.props;
+    const { onCancel, isCards, wizard } = this.props;
     const { isFocus, isLoading, errors } = this.state;
 
     return (
       <form
         onSubmit={this.handleSubmit}
-        styleName={classNames('container', { isFocus, isError: errors.card })}
+        styleName={classNames('container', {
+          isFocus,
+          isError: errors.card,
+          wizard,
+        })}
       >
         <label>
           <div styleName="label">

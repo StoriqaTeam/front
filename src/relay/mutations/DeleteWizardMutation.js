@@ -7,6 +7,11 @@ const mutation = graphql`
   mutation DeleteWizardMutation {
     deleteWizardStore {
       id
+      store {
+        id
+        rawId
+      }
+      completed
     }
   }
 `;

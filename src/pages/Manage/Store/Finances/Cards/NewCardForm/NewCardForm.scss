@@ -22,6 +22,14 @@
       color: $color_red;
     }
   }
+
+  &.wizard {
+    margin: 0 auto;
+  }
+
+  &.isCards {
+    margin: 0;
+  }
 }
 
 .label {
