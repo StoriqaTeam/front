@@ -51,7 +51,7 @@ const ProductPrice = ({
   });
   return (
     <div styleName="container">
-      {discount &&
+      {Boolean(discount) &&
         discount > 0 && (
           <div styleName="price">
             <div styleName="title">
@@ -75,7 +75,7 @@ const ProductPrice = ({
       <div styleName="stq">
         <div styleName="title">
           <strong>
-            {discount && discount > 0 ? t.discountPrice : t.price}
+            {Boolean(discount) && discount > 0 ? t.discountPrice : t.price}
           </strong>
         </div>
         <div styleName="discountPrice">
