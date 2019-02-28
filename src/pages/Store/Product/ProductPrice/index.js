@@ -43,24 +43,35 @@ const ProductPrice = ({
     price,
     currency,
     currencyExchange: directories.currencyExchange,
-    withSymbol: true,
+  });
+  const discountedPriceExchanged = getExchangePrice({
+    price: discountedPrice,
+    currency,
+    currencyExchange: directories.currencyExchange,
   });
   return (
     <div styleName="container">
-      {discount && discount > 0 ? (
-        <div styleName="price">
-          <div styleName="title">
-            <strong>{t.price}</strong>
+      {discount &&
+        discount > 0 && (
+          <div styleName="price">
+            <div styleName="title">
+              <strong>{t.price}</strong>
+            </div>
+            <thin styleName="lastPrice">
+              {priceExchanged != null ? (
+                <span>{priceExchanged}</span>
+              ) : (
+                <span>
+                  {formatPrice(
+                    price,
+                    checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                  )}{' '}
+                  {currency}
+                </span>
+              )}
+            </thin>
           </div>
-          <thin styleName="lastPrice">
-            {formatPrice(
-              price,
-              checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
-            )}{' '}
-            {currency}
-          </thin>
-        </div>
-      ) : null}
+        )}
       <div styleName="stq">
         <div styleName="title">
           <strong>
@@ -69,13 +80,26 @@ const ProductPrice = ({
         </div>
         <div styleName="discountPrice">
           <b styleName="basePrice">
-            {formatPrice(
-              discountedPrice,
-              checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
-            )}{' '}
-            {currency}
+            {priceExchanged != null ? (
+              <span>{discountedPriceExchanged}</span>
+            ) : (
+              <span>
+                {formatPrice(
+                  discountedPrice,
+                  checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+                )}{' '}
+                {currency}
+              </span>
+            )}
           </b>
-          <div styleName="currencyPrice">{priceExchanged}</div>
+          {priceExchanged != null && (
+            <div styleName="currencyPrice">
+              {`~${formatPrice(
+                discountedPrice,
+                checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
+              )} ${currency}`}
+            </div>
+          )}
         </div>
         {Boolean(cashback) && (
           <div styleName={classNames('cashback', { noCashback: !cashback })}>

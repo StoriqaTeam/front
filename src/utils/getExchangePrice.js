@@ -35,11 +35,10 @@ export default (props: {
         if (actualCurrency === 'EUR') {
           actualCurrencySymbol = '€';
         }
-        return `~${
-          withSymbol === true ? actualCurrencySymbol : ''
-        }${formatPrice(ratesItem.value * price, 2)} ${
-          withSymbol !== true ? actualCurrency : ''
-        }`;
+        return `${withSymbol === true ? actualCurrencySymbol : ''}${formatPrice(
+          ratesItem.value * price,
+          2,
+        )} ${withSymbol !== true ? actualCurrency : ''}`;
       }
     }
 

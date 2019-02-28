@@ -1,6 +1,6 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { Link } from 'found';
 import { head } from 'ramda';
 import classNames from 'classnames';
@@ -109,7 +109,11 @@ class CardProduct extends PureComponent<PropsType> {
       price,
       currency,
       currencyExchange: directories.currencyExchange,
-      withSymbol: true,
+    });
+    const discountedPriceExchanged = getExchangePrice({
+      price: discountedPrice,
+      currency,
+      currencyExchange: directories.currencyExchange,
     });
 
     return (
@@ -166,29 +170,40 @@ class CardProduct extends PureComponent<PropsType> {
               >
                 <div styleName="undiscountedPrice">
                   {Boolean(discount) && (
-                    <span>
-                      {formatPrice(
-                        price,
-                        checkCurrencyType(currency) === 'fiat' ? 2 : undefined,
-                      )}{' '}
-                      {currency}
-                    </span>
+                    <Fragment>
+                      {priceExchanged ? (
+                        <span>{priceExchanged}</span>
+                      ) : (
+                        <span>
+                          {formatPrice(
+                            price,
+                            checkCurrencyType(currency) === 'fiat'
+                              ? 2
+                              : undefined,
+                          )}{' '}
+                          {currency}
+                        </span>
+                      )}
+                    </Fragment>
                   )}
                 </div>
                 <div styleName="priceDropdown">
                   <div styleName="actualPrice">
-                    {discountedPrice === 0
-                      ? 'FREE'
-                      : `${formatPrice(
-                          discountedPrice,
-                          checkCurrencyType(currency) === 'fiat'
-                            ? 2
-                            : undefined,
-                        )} ${currency}`}
+                    {priceExchanged ? (
+                      <span>{discountedPriceExchanged}</span>
+                    ) : (
+                      <span>
+                        {discountedPrice === 0
+                          ? 'FREE'
+                          : `${formatPrice(
+                              discountedPrice,
+                              checkCurrencyType(currency) === 'fiat'
+                                ? 2
+                                : undefined,
+                            )} ${currency}`}
+                      </span>
+                    )}
                   </div>
-                  {priceExchanged && (
-                    <span styleName="priceExchanged">{priceExchanged}</span>
-                  )}
                 </div>
               </div>
             </div>
