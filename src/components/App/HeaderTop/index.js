@@ -5,6 +5,7 @@ import { head, propEq, map, find, equals } from 'ramda';
 import moment from 'moment';
 
 import { Select } from 'components/common/Select';
+import { Button } from 'components/common/Button';
 import { getCookie, setCookie } from 'utils';
 
 import languages from 'translation/languages.json';
@@ -153,7 +154,9 @@ class HeaderTop extends PureComponent<PropsType> {
         </div>
         <div>
           {isShopCreated ? null : (
-            <a href="https://selling.storiqa.com/">{t.startSelling}</a>
+            <Button extraSmall href="https://selling.storiqa.com/">
+              {t.startSelling}
+            </Button>
           )}
         </div>
       </div>

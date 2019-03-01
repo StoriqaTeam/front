@@ -50,6 +50,14 @@
   font-size: 14px;
 }
 
+.extraSmall {
+  height: 2.75rem;
+  min-width: auto;
+  line-height: 2.5rem;
+  padding: 0 0.75rem;
+  font-size: 12px;
+}
+
 .disabled {
   background-color: $color_grey_trivial;
   border: 1px solid $color_grey_trivial;

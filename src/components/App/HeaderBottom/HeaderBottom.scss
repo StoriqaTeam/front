@@ -45,6 +45,8 @@ $burger_menu_size: 7.5rem;
 
 .cartIcon {
   margin-left: 1rem;
+  margin-right: -0.5rem;
+
   &.isUserLoggedIn {
     margin-left: 0;
   }
