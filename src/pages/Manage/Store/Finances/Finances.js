@@ -9,7 +9,7 @@ import { Tabs } from 'components/common';
 
 import type { CardBrandType } from 'types';
 
-import { Cards, PaymentAccount } from './';
+import { Cards, PaymentAccount, Balance } from './';
 
 import './Finances.scss';
 
@@ -64,6 +64,9 @@ class Finances extends Component<PropsType, StateType> {
               <div label={t.paymentAccount} styleName="paymentAccount">
                 <PaymentAccount me={me} />
               </div>
+              <div label={t.balance} styleName="balance">
+                <Balance me={me} />
+              </div>
             </Tabs>
           </div>
         </div>
@@ -84,6 +87,7 @@ export default createFragmentContainer(
     fragment Finances_me on User {
       ...Cards_me
       ...PaymentAccount_me
+      ...Balance_me
     }
   `,
 );

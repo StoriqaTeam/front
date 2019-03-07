@@ -5,31 +5,27 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
+  international: string,
+  russian: string,
+  save: string,
+  cancel: string,
+  edit: string,
   error: string,
   close: string,
   somethingGoingWrong: string,
-  changeCardInfo: string,
-  successText: string,
-  tableColumns: {
-    cardTypeNumber: string,
-    expirationDate: string,
-    cardholderName: string,
-  },
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
+    international: 'International',
+    russian: 'Russian',
+    save: 'Save',
+    cancel: 'Cancel',
+    edit: 'Edit',
     error: 'Error: ',
     close: 'Close.',
     somethingGoingWrong: 'Something going wrong :(',
-    changeCardInfo: 'Change card info',
-    successText: 'Card successfully verified',
-    tableColumns: {
-      cardTypeNumber: 'Card type & number',
-      expirationDate: 'Expiration date',
-      cardholderName: 'Cardholder name',
-    },
   },
 };
 

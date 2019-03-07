@@ -1,0 +1,128 @@
+@import "../../../../../styles/variables";
+
+.container {
+  //
+}
+
+.crypto {
+
+}
+
+.fiat {
+
+}
+
+.item {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 3rem;
+}
+
+.label {
+  margin-right: 1rem;
+}
+
+.amount {
+  margin-right: 2rem;
+}
+
+.input {
+  width: 40rem;
+  margin-right: 2rem;
+}
+
+.sendButton {
+
+}
+
+.modalBody {
+  .amount {
+    margin-bottom: 2rem;
+
+    .amountLabel {
+
+    }
+
+    .amountValue {
+
+    }
+  }
+
+  .fees {
+    .feesLabel {
+      margin-bottom: 1rem;
+    }
+
+    .feeRadioButton {
+      display: flex;
+      margin-bottom: 2rem;
+
+      .feeLabel {
+        margin-top: -0.25rem;
+      }
+    }
+  }
+}
+
+
+
+
+
+//.modal {
+//  padding: 4rem 3.5rem;
+//  background: $color_white;
+//  max-width: 100%;
+//
+//  @media (min-width: $md) {
+//    max-width: 82rem;
+//    padding: 9rem;
+//  }
+//}
+//
+//.modalTitle {
+//  font-family: $font_light;
+//  font-size: 36px;
+//  font-weight: 100;
+//  line-height: 36px;
+//  margin-bottom: 4rem;
+//  text-align: center;
+//
+//  @media (min-width: $md) {
+//    margin-bottom: 2rem;
+//  }
+//}
+//
+//.modalDescription {
+//  color: $color_grey_minor;
+//  font-size: 16px;
+//  margin-bottom: 6.25rem;
+//  text-align: center;
+//  max-width: 54rem;
+//
+//}
+//
+//.modalButtons {
+//  max-width: 54rem;
+//  display: flex;
+//  justify-content: space-evenly;
+//  align-items: center;
+//  flex-direction: column;
+//  margin: 0 auto;
+//
+//  button {
+//    width: 100%;
+//  }
+//
+//  button:first-child {
+//    margin-bottom: 2rem;
+//  }
+//
+//  @media (min-width: $md) {
+//    flex-direction: row;
+//
+//    button:first-child {
+//      margin-bottom:0;
+//      margin-right: 2rem;
+//    }
+//  }
+//}

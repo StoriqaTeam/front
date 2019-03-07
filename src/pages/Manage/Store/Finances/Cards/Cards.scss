@@ -47,3 +47,30 @@
 .newCardForm {
   padding: 4rem;
 }
+
+.successText {
+  margin-top: 3rem;
+  text-align: center;
+
+  strong {
+    position: relative;
+    display: inline-block;
+    padding-right: 16px;
+    color: $color_green;
+
+    &:after {
+      content: '';
+      position: absolute;
+      top: 0.75rem;
+      right: 0;
+      width: 1rem;
+      height: 0.625rem;
+      border: 0.25rem solid;
+      border-color: $color_green;
+      border-top: none;
+      border-right: none;
+      background-color: transparent;
+      transform: rotate(-45deg);
+    }
+  }
+}

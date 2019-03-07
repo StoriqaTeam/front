@@ -1,6 +1,7 @@
 // @flow strict
 
 import React, { PureComponent } from 'react';
+import type { Node } from 'react';
 
 import { Button } from 'components/common/Button';
 import { Modal } from 'components/Modal';
@@ -16,6 +17,8 @@ type PropsType = {
   onConfirm: () => void,
   onCancel: () => void,
   handleCloseModal: () => void,
+  children?: Node,
+  disableConfirm?: boolean,
 };
 
 class Confirmation extends PureComponent<PropsType> {
@@ -25,6 +28,8 @@ class Confirmation extends PureComponent<PropsType> {
     onConfirm: () => {},
     onCancel: () => {},
     handleCloseModal: () => {},
+    disableConfirm: false,
+    children: undefined,
   };
 
   render() {
@@ -37,6 +42,8 @@ class Confirmation extends PureComponent<PropsType> {
       title,
       description,
       showModal,
+      disableConfirm,
+      children,
     } = this.props;
     return (
       <Modal
@@ -46,11 +53,18 @@ class Confirmation extends PureComponent<PropsType> {
           <aside styleName="container" data-test="confirmationPopup">
             <h2 styleName="title">{title}</h2>
             <p styleName="description">{description}</p>
+            {children != null && <div styleName="body">{children}</div>}
             <div styleName="buttons">
               <Button wireframe big onClick={onCancel} dataTest="cancel">
                 {cancelText}
               </Button>
-              <Button big onClick={onConfirm} pink dataTest="confirm">
+              <Button
+                big
+                onClick={onConfirm}
+                pink
+                disabled={disableConfirm}
+                dataTest="confirm"
+              >
                 {confirmText}
               </Button>
             </div>

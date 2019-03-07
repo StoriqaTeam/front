@@ -39,6 +39,8 @@ import {
   DeleteWizardMutation,
   CreateWarehouseMutation,
   SetProductQuantityInWarehouseMutation,
+  CreateStoreSubscriptionMutation,
+  UpdateStoreSubscriptionMutation,
 } from 'relay/mutations';
 import { errorsHandler, log, fromRelayError } from 'utils';
 
@@ -168,6 +170,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   constructor(props: PropsType) {
     super(props);
+
     this.state = {
       showConfirm: false,
       step: 1,
@@ -514,6 +517,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   handleEndingWizard = () => {
     // $FlowIgnoreMe
     const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
+
     this.setState({ showConfirm: false }, () => {
       this.props.router.push(`/manage/store/${storeId}/products`);
       DeleteWizardMutation.commit({
@@ -539,6 +543,85 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         },
       });
     });
+  };
+
+  handleSetSubscribe = (currency: string) => {
+    // $FlowIgnoreMe
+    const subscriptionCurrency = pathOr(
+      null,
+      ['me', 'myStore', 'storeSubscription', 'currency'],
+      this.props,
+    );
+
+    if (subscriptionCurrency) {
+      this.handleUpdateStoreSubscription(currency);
+    } else {
+      this.handleCreateStoreSubscription(currency);
+    }
+  };
+
+  handleCreateStoreSubscription = (currency: string) => {
+    // $FlowIgnoreMe
+    const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
+
+    CreateStoreSubscriptionMutation({
+      environment: this.context.environment,
+      variables: {
+        input: {
+          clientMutationId: uuidv4(),
+          storeId: parseInt(storeId, 10),
+          currency,
+        },
+      },
+      updater: relayStore => {
+        const storeSubscription = relayStore.getRootField(
+          'createStoreSubscription',
+        );
+        const me = relayStore.getRoot().getLinkedRecord('me');
+        const myStore = me.getLinkedRecord('myStore');
+        myStore.setLinkedRecord(storeSubscription, 'storeSubscription');
+      },
+    })
+      .then(() => true)
+      .catch(() => {
+        this.props.showAlert({
+          type: 'danger',
+          text: t.somethingGoingWrong,
+          link: { text: t.close },
+        });
+      });
+  };
+
+  handleUpdateStoreSubscription = (currency: string) => {
+    // $FlowIgnoreMe
+    const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
+
+    UpdateStoreSubscriptionMutation({
+      environment: this.context.environment,
+      variables: {
+        input: {
+          clientMutationId: uuidv4(),
+          storeId: parseInt(storeId, 10),
+          currency,
+        },
+      },
+      updater: relayStore => {
+        const storeSubscription = relayStore.getRootField(
+          'updateStoreSubscription',
+        );
+        const me = relayStore.getRoot().getLinkedRecord('me');
+        const myStore = me.getLinkedRecord('myStore');
+        myStore.setLinkedRecord(storeSubscription, 'storeSubscription');
+      },
+    })
+      .then(() => true)
+      .catch(() => {
+        this.props.showAlert({
+          type: 'danger',
+          text: t.somethingGoingWrong,
+          link: { text: t.close },
+        });
+      });
   };
 
   // delay for block tonns of query
@@ -964,6 +1047,12 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
       ['me', 'wizardStore', 'store', 'baseProducts'],
       this.props,
     );
+    // $FlowIgnoreMe
+    const subscriptionCurrency = pathOr(
+      null,
+      ['me', 'myStore', 'storeSubscription', 'currency'],
+      this.props,
+    );
     switch (step) {
       case 1:
         return (
@@ -999,7 +1088,13 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           />
         );
       case 4:
-        return <Step4 me={me} />;
+        return (
+          <Step4
+            me={me}
+            onSetSubscribe={this.handleSetSubscribe}
+            subscriptionCurrency={subscriptionCurrency}
+          />
+        );
       default:
         break;
     }
@@ -1146,7 +1241,17 @@ export default createFragmentContainer(
       id
       rawId
       myStore {
+        id
         rawId
+        storeSubscription {
+          id
+          storeId
+          currency
+          value
+          walletAddress
+          trialStartDate
+          status
+        }
       }
       stripeCustomer {
         id

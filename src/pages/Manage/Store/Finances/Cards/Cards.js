@@ -192,6 +192,7 @@ class Cards extends Component<PropsType, StateType> {
     const { firstName, lastName, email, stripeCustomer } = this.props.me;
     const { isNewCardForm, isLoading } = this.state;
     const isCards = Boolean(stripeCustomer && !isEmpty(stripeCustomer.cards));
+    console.log('---isCards', isCards);
     return (
       <div styleName={classNames('container', { wizard })}>
         <div styleName="cards">
@@ -274,6 +275,9 @@ class Cards extends Component<PropsType, StateType> {
                   stripeCustomer.cards,
                 )}
               />
+              <div styleName="successText">
+                <strong>{t.successText}</strong>
+              </div>
             </div>
           )}
           {isCards &&
