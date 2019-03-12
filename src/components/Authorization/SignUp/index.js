@@ -1,6 +1,6 @@
 // @flow strict
 
-import React, { Fragment, PureComponent } from 'react';
+import React, { Fragment, Component } from 'react';
 import { map, adjust, pipe, assoc } from 'ramda';
 
 import { Button } from 'components/common/Button';
@@ -28,23 +28,14 @@ type PropsType = {
   formValid: boolean,
   onRegistrationClick: () => void,
   onChange: InputOnChangeType,
-};
-
-type StateType = {
   isPrivacyChecked: boolean,
   isTermsChecked: boolean,
+  onPrivacyCheck: (privacy: string) => void,
 };
 
-class SignUp extends PureComponent<PropsType, StateType> {
-  state = {
-    isPrivacyChecked: false,
-    isTermsChecked: false,
-  };
-
+class SignUp extends Component<PropsType> {
   handleCheck = (privacy: string): void => {
-    this.setState((prevState: StateType) => ({
-      [privacy]: !prevState[privacy],
-    }));
+    this.props.onPrivacyCheck(privacy);
   };
 
   makeInputs = (): Array<SignUpInputType> => {
@@ -72,8 +63,12 @@ class SignUp extends PureComponent<PropsType, StateType> {
   };
 
   render() {
-    const { onRegistrationClick, formValid } = this.props;
-    const { isPrivacyChecked, isTermsChecked } = this.state;
+    const {
+      onRegistrationClick,
+      formValid,
+      isPrivacyChecked,
+      isTermsChecked,
+    } = this.props;
     return (
       <div styleName="signUp">
         {this.makeInputs().map(input => (
