@@ -11,7 +11,7 @@ import './ProductBlock.scss';
 
 export type ProductDTOType = {
   id: string,
-  rawId: number,
+  rawId: ?number,
   storeId: number,
   name: string,
   photoUrl: ?string,

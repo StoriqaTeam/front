@@ -1,4 +1,5 @@
-/* eslint-disable */
+// @flow
+
 import React, { Component, Fragment } from 'react';
 import {
   isEmpty,
@@ -256,6 +257,16 @@ class Balance extends Component<PropsType, StateType> {
     );
   };
 
+  renderItemOther = (props: {
+    label: string,
+    amount: number,
+  }) => (
+    <div styleName="item">
+      <div styleName="amount">{props.amount}</div>
+      <div styleName="label">{`Balance in ${props.label}`}</div>
+    </div>
+  );
+
   render() {
     const {
       btcWallet,
@@ -322,33 +333,57 @@ class Balance extends Component<PropsType, StateType> {
             </div>
           )}
         </Confirmation>
-        <div styleName="crypto">
-          {this.renderItem({
-            id: 'btcWallet',
-            label: 'BTC',
-            amount: balance.btc,
-            value: btcWallet,
-          })}
-          {this.renderItem({
-            id: 'ethWallet',
-            label: 'ETH',
-            amount: balance.eth,
-            value: ethWallet,
-          })}
-          {this.renderItem({
-            id: 'stqWallet',
-            label: 'STQ',
-            amount: balance.stq,
-            value: stqWallet,
-          })}
+        <div styleName="wrap">
+          <div styleName="line">
+            {this.renderItemOther({
+              label: 'EUR',
+              amount: balance.eur,
+            })}
+            {this.renderItemOther({
+              label: 'STQ',
+              amount: balance.stq,
+            })}
+          </div>
+          <div styleName="line">
+            {this.renderItemOther({
+              label: 'BTC',
+              amount: balance.btc,
+            })}
+            {this.renderItemOther({
+              label: 'ETH',
+              amount: balance.eth,
+            })}
+          </div>
         </div>
-        <div styleName="fiat">
-          {this.renderItem({
-            id: 'eurWallet',
-            label: 'EUR',
-            amount: balance.eur,
-          })}
-        </div>
+        {/*
+          <div styleName="crypto">
+            {this.renderItem({
+              id: 'btcWallet',
+              label: 'BTC',
+              amount: balance.btc,
+              value: btcWallet,
+            })}
+            {this.renderItem({
+              id: 'ethWallet',
+              label: 'ETH',
+              amount: balance.eth,
+              value: ethWallet,
+            })}
+            {this.renderItem({
+              id: 'stqWallet',
+              label: 'STQ',
+              amount: balance.stq,
+              value: stqWallet,
+            })}
+          </div>
+          <div styleName="fiat">
+            {this.renderItem({
+              id: 'eurWallet',
+              label: 'EUR',
+              amount: balance.eur,
+            })}
+          </div>
+        */}
       </div>
     );
   }
@@ -370,4 +405,3 @@ export default createFragmentContainer(
     }
   `,
 );
-/* eslint-enable */

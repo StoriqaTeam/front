@@ -14,7 +14,7 @@ import { Icon } from 'components/Icon';
 
 import type { CardBrandType } from 'types';
 
-import { Cards, PaymentAccount, WalletCode } from './';
+import { Cards, PaymentAccount, Balance, WalletCode } from './';
 
 import './Finances.scss';
 
@@ -134,11 +134,9 @@ class Finances extends Component<PropsType, StateType> {
               <div label={t.paymentAccount} styleName="paymentAccount">
                 <PaymentAccount me={me} />
               </div>
-              {/*
-                <div label={t.balance} styleName="balance">
-                  <Balance me={me} />
-                </div>
-              */}
+              <div label={t.balance} styleName="balance">
+                <Balance me={me} />
+              </div>
             </Tabs>
           </div>
         </div>

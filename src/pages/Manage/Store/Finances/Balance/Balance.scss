@@ -12,18 +12,34 @@
 
 }
 
-.item {
+.wrap {
+
+}
+
+.line {
   display: flex;
-  align-items: flex-end;
-  margin-bottom: 3rem;
+  margin-top: 1rem;
+}
+
+.item {
+  width: 50%;
+  padding: 8rem;
+  background-color: $color_grey_trivial;
+  text-align: center;
+  border-radius: 1rem;
+
+  & + .item {
+    margin-left: 2rem;
+  }
 }
 
 .label {
-  margin-right: 1rem;
+  margin-top: 1rem;
+  color: $color_grey_minor;
 }
 
 .amount {
-  margin-right: 2rem;
+  font-size: 24px;
 }
 
 .input {
@@ -61,6 +77,12 @@
         margin-top: -0.25rem;
       }
     }
+  }
+}
+
+.wrap {
+  .item {
+
   }
 }
 
