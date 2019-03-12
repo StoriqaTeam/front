@@ -17,22 +17,22 @@ if (process.env.BROWSER && buildApp) {
         ReactDOM.hydrate(App, document.getElementById('root'));
       }
       // $FlowIgnore
-      if (process.env.NODE_ENV === 'development' && module.hot) {
-        module.hot.accept('./components/entry.js', () => {
-          import('./components/entry.js')
-            .then(newInstance => {
-              const rebuildApp = newInstance.default;
-              rebuildApp()
-                .then(NewApp => {
-                  ReactDOM.render(NewApp, document.getElementById('root'));
-                  return true;
-                })
-                .catch(log.error);
-              return true;
-            })
-            .catch(log.error);
-        });
-      }
+      // if (process.env.NODE_ENV === 'development' && module.hot) {
+      //   module.hot.accept('./components/entry.js', () => {
+      //     import('./components/entry.js')
+      //       .then(newInstance => {
+      //         const rebuildApp = newInstance.default;
+      //         rebuildApp()
+      //           .then(NewApp => {
+      //             ReactDOM.render(NewApp, document.getElementById('root'));
+      //             return true;
+      //           })
+      //           .catch(log.error);
+      //         return true;
+      //       })
+      //       .catch(log.error);
+      //   });
+      // }
       return true;
     })
     .catch(log.error);

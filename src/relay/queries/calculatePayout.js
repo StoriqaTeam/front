@@ -33,14 +33,9 @@ const calculatePayout = (data: {
   variables: InputType,
   environment: Environment,
 }): Promise<ReturnType> => {
-  console.log('---data', data);
   log.debug();
-  // const variables = {
-  //   input: data.variables,
-  // };
   return fetchQuery(data.environment, CALCULATE_PAYOUT, data.variables).then(
     response => {
-      console.log('---response', response);
       if (response) {
         return Promise.resolve(response);
       }

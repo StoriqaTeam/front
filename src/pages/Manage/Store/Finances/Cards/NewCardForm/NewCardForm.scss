@@ -1,7 +1,20 @@
 @import '../../../../../../styles/variables.scss';
 
 .container {
-  max-width: 60rem;
+  width: 50rem;
+  padding: 3rem;
+  border-radius: 1rem;
+  box-shadow: 0 7px 26px 0 rgba(0, 0, 0, 0.06);
+
+  @media (max-width: #{$xl - 1px}) {
+    width: 40rem;
+  }
+
+  @media (max-width: #{$lg - 1px}) {
+    max-width: 50rem;
+    width: 100%;
+    margin: 0 auto;
+  }
 
   &.isFocus {
     .cardElement hr {
@@ -25,6 +38,8 @@
 
   &.wizard {
     margin: 0 auto;
+    max-width: 50rem;
+    width: 100%;
   }
 
   &.isCards {

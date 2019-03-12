@@ -1,5 +1,4 @@
-// @flow
-
+/* eslint-disable */
 import React, { Component, Fragment } from 'react';
 import {
   isEmpty,
@@ -138,9 +137,6 @@ class Balance extends Component<PropsType, StateType> {
       walletAddress,
     } = this.state;
 
-    console.log('---calculatePayoutData', calculatePayoutData);
-    console.log('---checkedFeeEstimatedTime', checkedFeeEstimatedTime);
-
     if (calculatePayoutData == null) {
       this.props.showAlert({
         type: 'danger',
@@ -230,7 +226,7 @@ class Balance extends Component<PropsType, StateType> {
         <div styleName="label">{`${label}:`}</div>
         <div styleName="amount">{amount}</div>
         {value != null &&
-          Boolean(!amount) && (
+          Boolean(amount) && (
             <Fragment>
               <div styleName="input">
                 <Input
@@ -374,3 +370,4 @@ export default createFragmentContainer(
     }
   `,
 );
+/* eslint-enable */

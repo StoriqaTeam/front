@@ -37,7 +37,6 @@ const basicMutation = <V: {}, R: {}>(
       onCompleted: (response: ?R, errors: ?Array<Error>) => {
         log.debug('Mutation completed', { response, errors });
         if (response != null) {
-          console.log('---objectRootField', objectRootField);
           if (objectRootField != null) {
             if (response[objectRootField]) {
               resolve(response);

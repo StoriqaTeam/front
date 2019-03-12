@@ -5,23 +5,27 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  paymentOptions: string,
-  paymentAccount: string,
-  balance: string,
-  bankCards: string,
-  addressCrypto: string,
-  copied: string,
+  international: string,
+  russian: string,
+  save: string,
+  cancel: string,
+  edit: string,
+  error: string,
+  close: string,
+  somethingGoingWrong: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    paymentOptions: 'PAYMENT OPTIONS',
-    paymentAccount: 'PAYMENT ACCOUNT',
-    balance: 'BALANCE',
-    bankCards: 'Bank cards',
-    addressCrypto: 'Address for crypto payments',
-    copied: 'Copied',
+    international: 'International',
+    russian: 'Russian',
+    save: 'Save',
+    cancel: 'Cancel',
+    edit: 'Edit',
+    error: 'Error: ',
+    close: 'Close.',
+    somethingGoingWrong: 'Something going wrong :(',
   },
 };
 

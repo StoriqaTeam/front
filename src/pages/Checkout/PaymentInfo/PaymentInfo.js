@@ -206,7 +206,7 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
       <div>
         Don’t you have one yet?{' '}
         <a
-          href="https://itunes.apple.com/ru/app/ture/id1448865994?mt=8"
+          href={process.env.REACT_APP_WALLET_APPLE_URL}
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -285,7 +285,9 @@ class PaymentInfo extends PureComponent<PropsType, StateType> {
                   </div>
                   <div styleName="paymentInfo">
                     <div styleName="addressTitle">Address</div>
-                    <div styleName="address">{wallet}</div>
+                    <div styleName="address" data-test="walletNumberField">
+                      {wallet}
+                    </div>
                     <div styleName="amountTitle">Amount</div>
                     <div styleName="amount">
                       <strong>{`${formatPrice(amount)} ${
