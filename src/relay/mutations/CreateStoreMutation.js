@@ -56,6 +56,11 @@ const commit = (params: MutationParamsType) =>
     },
     onCompleted: params.onCompleted,
     onError: params.onError,
+    updater: relayStore => {
+      const store = relayStore.getRootField('createStore');
+      const me = relayStore.getRoot().getLinkedRecord('me');
+      me.setLinkedRecord(store, 'myStore');
+    },
   });
 
 export default { commit };

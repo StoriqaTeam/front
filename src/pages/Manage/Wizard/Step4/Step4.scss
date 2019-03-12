@@ -2,10 +2,109 @@
 
 .container {
   width: 100%;
-  //max-width: 60rem;
 }
 
 .cards {
   max-width: 90rem;
   margin: 0 auto;
 }
+
+.topTitle {
+
+}
+
+.bottomTitle {
+  margin-top: 10rem;
+}
+
+.title {
+  font-family: 'Roboto_Light', 'Helvetica Neue Light', Helvetica, Arial, sans-serif;
+  font-size: 36px;
+  margin-bottom: 2.7rem;
+  text-align: center;
+  line-height: 5rem;
+
+  @media (max-width: #{$md - 1px}) {
+    font-size: 24px;
+    margin-bottom: 2.5rem;
+    line-height: 3rem;
+  }
+}
+
+.desc {
+  max-width: 54rem;
+  line-height: 2.7rem;
+  margin: 0 auto 6.5rem;
+  text-align: center;
+  color: $color_grey_minor;
+
+  @media (max-width: #{$md - 1px}) {
+    max-width: 29.75rem;
+    font-size: 14px;
+    line-height: 2.2rem;
+  }
+
+  a {
+    font-size: 16px;
+    color: $color_blue;
+    transition: $transition_all_ease;
+
+    @media (max-width: #{$md - 1px}) {
+      font-size: 14px;
+    }
+
+    &:hover {
+      color: $color_blue_hover;
+    }
+  }
+}
+
+.subscribeButtons {
+  display: flex;
+  justify-content: center;
+
+  @media (max-width: #{$md - 1px}) {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .subscribeButton {
+    position: relative;
+    max-width: 40rem;
+    min-height: 25rem;
+    padding: 3rem 3rem 7rem;
+    box-shadow: $shadow_1_hover;
+
+    & + .subscribeButton {
+      margin-left: 2rem;
+
+      @media (max-width: #{$md - 1px}) {
+        margin-left: 0;
+        margin-top: 2rem;
+      }
+    }
+
+    .price {
+      font-size: 20px;
+      text-align: center;
+
+      strong {
+        font-size: 30px;
+      }
+    }
+
+    .priceDesc {
+      margin-top: 2rem;
+      color: $color_grey_minor;
+      text-align: center;
+    }
+
+    .radio {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      margin-left: -1.5rem;
+    }
+  }
+}
+

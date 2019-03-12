@@ -1,0 +1,110 @@
+@import "../../../../../styles/variables";
+
+.container {
+  position: relative;
+  display: flex;
+  width: 100%;
+  padding: 4rem 4rem 6rem;
+  background-image: url('https://s3.eu-west-2.amazonaws.com/storiqa/img-xj3MuxJOY9oC.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: $color_white;
+  border-radius: 1rem;
+
+  @media (max-width: #{$sm - 1px}) {
+    display: block;
+  }
+}
+
+.label {
+  position: absolute;
+  top: 0;
+  right: 3rem;
+  width: 7rem;
+  padding: 1.25rem 1rem 0.5rem;
+  background-color: #ffd06f;
+  color: #3d337c;
+  font-size: 10px;
+  line-height: 1.5rem;
+  text-align: center;
+
+  &:before, &:after {
+    position: absolute;
+    bottom: -1.5rem;
+    content: '';
+    border: 1rem solid transparent;
+  }
+
+  &:before {
+    left: 0;
+    border-left: 4rem solid #ffd06f;
+    border-top: 1rem solid #ffd06f;
+  }
+
+  &:after {
+    right: 0;
+    border-right: 4rem solid #ffd06f;
+    border-top: 1rem solid #ffd06f;
+  }
+}
+
+.left {
+  max-width: 30rem;
+
+  @media (max-width: #{$sm - 1px}) {
+    max-width: none;
+  }
+}
+
+.right {
+  margin-left: 5rem;
+
+  @media (max-width: #{$sm - 1px}) {
+    margin-left: 0;
+  }
+
+  .qr {
+    margin-top: 5rem;
+
+    img {
+      max-width: 22rem;
+    }
+  }
+}
+
+.logo {
+  width: 8rem;
+
+  svg {
+    fill: $color_white;
+  }
+}
+
+.title {
+  margin-top: 4rem;
+  font-size: 29px;
+}
+
+.desc {
+  margin-top: 2rem;
+  font-size: 14px;
+  line-height: 2.5rem;
+}
+
+.buttons {
+
+}
+
+.appleButton {
+  display: inline-block;
+  margin-top: 8rem;
+  cursor: pointer;
+
+  @media (max-width: #{$sm - 1px}) {
+    margin-top: 4rem;
+  }
+
+  img {
+    width: 12rem;
+  }
+}

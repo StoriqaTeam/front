@@ -5,19 +5,27 @@ import { t } from 'translation/utils';
 import type { Translation } from 'translation/utils';
 
 type TranslationDicType = {|
-  nameYourStore: string,
-  setUpStore: string,
-  fillYourStoreWithGoods: string,
-  paymentSettings: string,
+  international: string,
+  russian: string,
+  save: string,
+  cancel: string,
+  edit: string,
+  error: string,
+  close: string,
+  somethingGoingWrong: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
 const translations: TranslationsBundleType = {
   en: {
-    nameYourStore: 'Name your store',
-    setUpStore: 'Set up store',
-    fillYourStoreWithGoods: 'fill your store with goods',
-    paymentSettings: 'Payment settings',
+    international: 'International',
+    russian: 'Russian',
+    save: 'Save',
+    cancel: 'Cancel',
+    edit: 'Edit',
+    error: 'Error: ',
+    close: 'Close.',
+    somethingGoingWrong: 'Something going wrong :(',
   },
 };
 

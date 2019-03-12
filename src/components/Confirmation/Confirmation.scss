@@ -4,7 +4,7 @@
   padding: 4rem 3.5rem;
   background: $color_white;
   max-width: 100%;
- 
+
   @media (min-width: $md) {
     max-width: 82rem;
     padding: 9rem;
@@ -36,7 +36,10 @@
   margin-bottom: 6.25rem;
   text-align: center;
   max-width: 54rem;
+}
 
+.body {
+  margin-bottom: 6.25rem;
 }
 
 .buttons {
@@ -63,5 +66,4 @@
       margin-right: 2rem;
     }
   }
- 
 }

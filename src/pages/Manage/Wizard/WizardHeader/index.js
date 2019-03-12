@@ -52,7 +52,7 @@ const WizardStepper = ({
       <Icon type="arrowRight" />
       <StepLabel step={3} text={t.fillYourStoreWithGoods} />
       <Icon type="arrowRight" />
-      <StepLabel step={4} text={t.addYourCard} />
+      <StepLabel step={4} text={t.paymentSettings} />
     </div>
   );
 };
