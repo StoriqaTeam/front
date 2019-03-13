@@ -81,9 +81,9 @@ class ProductBlock extends PureComponent<PropsType> {
         <div styleName="productInfoBlock">
           <div styleName="productName">
             <Link
-              to={`/store/${product.storeId}/products/${product.id}/variant/${
-                product.rawId
-              }`}
+              to={`/store/${product.storeId}/products/${
+                product.id
+              }/variant/${product.rawId || ''}`}
             >
               <strong styleName="productNameText">{product.name}</strong>
             </Link>
