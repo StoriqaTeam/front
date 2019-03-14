@@ -21,7 +21,7 @@ class Error404 extends PureComponent<PropsType> {
   };
 
   handleToMainPage = () => {
-    this.props.router.replace('/');
+    window.location = '/';
   };
 
   render() {

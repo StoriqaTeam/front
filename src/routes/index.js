@@ -36,7 +36,7 @@ import { Logout } from 'pages/Logout';
 import { StoreOrders, StoreOrder } from 'pages/Manage/Store/Orders';
 import { Invoice } from 'pages/Profile/items/Order';
 import { Store, StoreAbout, StoreItems, Showcase } from 'pages/Store';
-import { StartSelling } from 'pages/StartSelling';
+// import { StartSelling } from 'pages/StartSelling';
 import { Login } from 'pages/Login';
 import { PasswordReset } from 'pages/PasswordReset';
 import {
@@ -391,42 +391,44 @@ const routes = (
         />
       </Route>
 
-      <Redirect from="/start-selling" to={() => '/start-selling/en'} />
-      <Route
-        path="start-selling/:lang"
-        query={graphql`
-          query routes_StartSelling_Query {
-            me {
-              id
-              wizardStore {
-                id
-                rawId
-                completed
-                storeId
+      {/*
+        <Redirect from="/start-selling" to={() => '/start-selling/en'} />
+          <Route
+            path="start-selling/:lang"
+            query={graphql`
+              query routes_StartSelling_Query {
+                me {
+                  id
+                  wizardStore {
+                    id
+                    rawId
+                    completed
+                    storeId
+                  }
+                }
               }
-            }
-          }
-        `}
-        Component={StartSelling}
-        render={({ props, Component }) => {
-          if (props) {
-            const { me } = props;
-            if (
-              !isNil(me) &&
-              !isNil(me.wizardStore) &&
-              me.wizardStore.completed
-            ) {
-              throw new RedirectException(
-                `/manage/store/${me.wizardStore.storeId}`,
-              );
-            } else {
-              return <Component />;
-            }
-          } else {
-            return null;
-          }
-        }}
-      />
+            `}
+            Component={StartSelling}
+            render={({ props, Component }) => {
+              if (props) {
+                const { me } = props;
+                if (
+                  !isNil(me) &&
+                  !isNil(me.wizardStore) &&
+                  me.wizardStore.completed
+                ) {
+                  throw new RedirectException(
+                    `/manage/store/${me.wizardStore.storeId}`,
+                  );
+                } else {
+                  return <Component />;
+                }
+              } else {
+                return null;
+              }
+            }}
+          />
+      */}
 
       <Route
         path="/manage"
