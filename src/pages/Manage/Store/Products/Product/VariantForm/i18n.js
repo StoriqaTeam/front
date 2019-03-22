@@ -7,7 +7,7 @@ import type { Translation } from 'translation/utils';
 type TranslationDicType = {|
   productPhotos: string,
   generalSettings: string,
-  vendorCode: string,
+  SKU: string,
   pricing: string,
   price: string,
   cashback: string,
@@ -23,7 +23,7 @@ const translations: TranslationsBundleType = {
   en: {
     productPhotos: 'PRODUCT PHOTOS',
     generalSettings: 'GENERAL SETTINGS',
-    vendorCode: 'Vendor code',
+    SKU: 'SKU',
     pricing: 'Pricing',
     price: 'Price',
     cashback: 'Cashback',

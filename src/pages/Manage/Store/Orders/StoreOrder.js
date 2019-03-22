@@ -49,6 +49,8 @@ export default createFragmentContainer(
           deliveryCompany
           storeId
           product {
+            id
+            rawId
             baseProduct {
               rawId
               name {

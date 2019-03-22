@@ -2,12 +2,10 @@
 
 import React, { PureComponent } from 'react';
 import { createPaginationContainer, graphql, Relay } from 'react-relay';
-import { pathOr } from 'ramda';
 
 import { withErrorBoundary } from 'components/common/ErrorBoundaries';
 import { Container, Col, Row } from 'layout';
 import { Page } from 'components/App';
-import { categoryViewTracker } from 'rrHalper';
 
 import SearchSidebar from '../SearchSidebar';
 
@@ -32,23 +30,6 @@ class Categories extends PureComponent<PropsType, StateType> {
   state = {
     isOpen: false,
   };
-
-  componentDidMount() {
-    // $FlowIgnore
-    const queryParams = pathOr(
-      null,
-      ['match', 'location', 'query'],
-      this.props,
-    );
-    if (
-      process.env.BROWSER &&
-      process.env.REACT_APP_RRPARTNERID &&
-      queryParams &&
-      queryParams.category
-    ) {
-      categoryViewTracker(parseFloat(queryParams.category));
-    }
-  }
 
   handleOpen = (): void => {
     this.setState(({ isOpen }) => ({

@@ -17,11 +17,12 @@ type TranslationDicType = {|
   services: string,
   services_storiqaWallet: string,
   services_sellingGuides: string,
+  services_storiqaBlog: string,
   services_helpCenter: string,
   //
   copyRight: string,
   allRightsReserved: string,
-  startTrade: string,
+  startSelling: string,
   offscreenSections: string,
   wannaSellYourGoodsGlobally: string,
   storiqaIsAGlobalMarketPlace: string,
@@ -42,13 +43,14 @@ const translations: TranslationsBundleType = {
     //
     services: 'Services',
     services_storiqaWallet: 'Storiqa Wallet',
-    services_sellingGuides: 'Selling guides',
+    services_sellingGuides: 'Selling Guides',
+    services_storiqaBlog: 'Storiqa Blog',
     services_helpCenter: 'Help center',
     //
     copyRight:
       '© Storiqa Marketplace DBA Storiqa Global Trades Inc. (Head Office Unit 617, 6/F 131-132 Connaught Road West Hong Kong)',
     allRightsReserved: 'All rights reserved.',
-    startTrade: 'Start Trade',
+    startSelling: 'Start Selling',
     offscreenSections: 'Storiqa Sections',
     wannaSellYourGoodsGlobally: 'Wanna sell your goods globally?',
     storiqaIsAGlobalMarketPlace:

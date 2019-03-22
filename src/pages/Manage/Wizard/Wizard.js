@@ -16,6 +16,8 @@ import {
   isEmpty,
   map,
   type,
+  concat,
+  append,
 } from 'ramda';
 import debounce from 'lodash.debounce';
 import { routerShape, withRouter } from 'found';
@@ -37,6 +39,8 @@ import {
   DeleteWizardMutation,
   CreateWarehouseMutation,
   SetProductQuantityInWarehouseMutation,
+  CreateStoreSubscriptionMutation,
+  UpdateStoreSubscriptionMutation,
 } from 'relay/mutations';
 import { errorsHandler, log, fromRelayError } from 'utils';
 
@@ -50,6 +54,7 @@ import WizardFooter from './WizardFooter';
 import Step1 from './Step1/Form';
 import Step2 from './Step2/Form';
 import Step3 from './Step3/View';
+import Step4 from './Step4';
 
 import './Wizard.scss';
 
@@ -87,23 +92,33 @@ export type BaseProductNodeType = {
   attributes: Array<AttributeInputType>,
 };
 
+export type MeType = {
+  id: string,
+  rawId: number,
+  myStore: {
+    rawId: number,
+  },
+  wizardStore: {
+    store: {
+      baseProducts: {
+        edges: Array<{
+          node: BaseProductNodeType,
+        }>,
+      },
+    },
+  },
+  stripeCustomer: {
+    id: string,
+  },
+};
+
 type PropsType = {
   showAlert: (input: AddAlertInputType) => void,
   router: routerShape,
   languages: Array<{
     isoCode: string,
   }>,
-  me: {
-    wizardStore: {
-      store: {
-        baseProducts: {
-          edges: Array<{
-            node: BaseProductNodeType,
-          }>,
-        },
-      },
-    },
-  },
+  me: MeType,
   allCategories: CategoriesTreeType,
 };
 
@@ -155,6 +170,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
 
   constructor(props: PropsType) {
     super(props);
+
     this.state = {
       showConfirm: false,
       step: 1,
@@ -395,7 +411,11 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           ['me', 'wizardStore', 'store', 'rawId'],
           this.props,
         );
-        if ((!warehouses || isEmpty(warehouses)) && addressFull) {
+        if (
+          (!warehouses || isEmpty(warehouses)) &&
+          addressFull &&
+          addressFull.country
+        ) {
           CreateWarehouseMutation.commit({
             input: {
               clientMutationId: uuidv4(),
@@ -483,6 +503,10 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         });
         break;
       case 3:
+        this.setState({ isSavingInProgress: false });
+        this.handleOnChangeStep(changedStep);
+        break;
+      case 4:
         this.setState({ showConfirm: true });
         break;
       default:
@@ -493,6 +517,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   handleEndingWizard = () => {
     // $FlowIgnoreMe
     const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
+
     this.setState({ showConfirm: false }, () => {
       this.props.router.push(`/manage/store/${storeId}/products`);
       DeleteWizardMutation.commit({
@@ -518,6 +543,85 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         },
       });
     });
+  };
+
+  handleSetSubscribe = (currency: string) => {
+    // $FlowIgnoreMe
+    const subscriptionCurrency = pathOr(
+      null,
+      ['me', 'myStore', 'storeSubscription', 'currency'],
+      this.props,
+    );
+
+    if (subscriptionCurrency) {
+      this.handleUpdateStoreSubscription(currency);
+    } else {
+      this.handleCreateStoreSubscription(currency);
+    }
+  };
+
+  handleCreateStoreSubscription = (currency: string) => {
+    // $FlowIgnoreMe
+    const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
+
+    CreateStoreSubscriptionMutation({
+      environment: this.context.environment,
+      variables: {
+        input: {
+          clientMutationId: uuidv4(),
+          storeId: parseInt(storeId, 10),
+          currency,
+        },
+      },
+      updater: relayStore => {
+        const storeSubscription = relayStore.getRootField(
+          'createStoreSubscription',
+        );
+        const me = relayStore.getRoot().getLinkedRecord('me');
+        const myStore = me.getLinkedRecord('myStore');
+        myStore.setLinkedRecord(storeSubscription, 'storeSubscription');
+      },
+    })
+      .then(() => true)
+      .catch(() => {
+        this.props.showAlert({
+          type: 'danger',
+          text: t.somethingGoingWrong,
+          link: { text: t.close },
+        });
+      });
+  };
+
+  handleUpdateStoreSubscription = (currency: string) => {
+    // $FlowIgnoreMe
+    const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
+
+    UpdateStoreSubscriptionMutation({
+      environment: this.context.environment,
+      variables: {
+        input: {
+          clientMutationId: uuidv4(),
+          storeId: parseInt(storeId, 10),
+          currency,
+        },
+      },
+      updater: relayStore => {
+        const storeSubscription = relayStore.getRootField(
+          'updateStoreSubscription',
+        );
+        const me = relayStore.getRoot().getLinkedRecord('me');
+        const myStore = me.getLinkedRecord('myStore');
+        myStore.setLinkedRecord(storeSubscription, 'storeSubscription');
+      },
+    })
+      .then(() => true)
+      .catch(() => {
+        this.props.showAlert({
+          type: 'danger',
+          text: t.somethingGoingWrong,
+          link: { text: t.close },
+        });
+      });
   };
 
   // delay for block tonns of query
@@ -902,13 +1006,13 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     });
   };
 
-  handleOnUploadPhoto = (imgType: string, url: string) => {
-    if (imgType === 'main') {
-      this.setState(prevState =>
-        assocPath(['baseProduct', 'product', 'photoMain'], url, prevState),
-      );
-      return;
-    }
+  handleOnUploadMainPhoto = (url: string) => {
+    this.setState(prevState =>
+      assocPath(['baseProduct', 'product', 'photoMain'], url, prevState),
+    );
+  };
+
+  handleOnUploadAdditionalPhotos = (photosUrls: Array<string>) => {
     const additionalPhotos =
       path(['baseProduct', 'product', 'additionalPhotos'], this.state) || [];
     this.setState(prevState => ({
@@ -917,7 +1021,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         ...prevState.baseProduct,
         product: {
           ...prevState.baseProduct.product,
-          additionalPhotos: [...additionalPhotos, url || ''],
+          additionalPhotos: concat(additionalPhotos, photosUrls),
         },
       },
     }));
@@ -933,7 +1037,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
   };
 
   renderForm = () => {
-    const { allCategories } = this.props;
+    const { allCategories, me } = this.props;
     const { step, isSavingInProgress } = this.state;
     // $FlowIgnoreMe
     const wizardStore = pathOr(null, ['me', 'wizardStore'], this.props);
@@ -941,6 +1045,12 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     const baseProducts = pathOr(
       null,
       ['me', 'wizardStore', 'store', 'baseProducts'],
+      this.props,
+    );
+    // $FlowIgnoreMe
+    const subscriptionCurrency = pathOr(
+      null,
+      ['me', 'myStore', 'storeSubscription', 'currency'],
       this.props,
     );
     switch (step) {
@@ -965,7 +1075,8 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
           <Step3
             formStateData={this.state.baseProduct}
             products={baseProducts ? baseProducts.edges : []}
-            onUploadPhoto={this.handleOnUploadPhoto}
+            onUploadMainPhoto={this.handleOnUploadMainPhoto}
+            onUploadAdditionalPhotos={this.handleOnUploadAdditionalPhotos}
             onChange={this.handleOnChangeProductForm}
             onClearProductState={this.handleOnClearProductState}
             onSave={this.handleOnSaveProduct}
@@ -974,6 +1085,14 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
             onChangeEditingProduct={this.handleOnChangeEditingProduct}
             isSavingInProgress={isSavingInProgress}
             allCategories={allCategories}
+          />
+        );
+      case 4:
+        return (
+          <Step4
+            me={me}
+            onSetSubscribe={this.handleSetSubscribe}
+            subscriptionCurrency={subscriptionCurrency}
           />
         );
       default:
@@ -1013,18 +1132,29 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
     const steptTwoChecker = where({
       defaultLanguage: isNotEmpty,
     });
-    const isReadyToNext = () => {
-      if (!wizardStore) {
-        return false;
-      }
+
+    let isReadyToNext = false;
+    let allowedSteps = [];
+    if (wizardStore) {
       const stepOne = pick(['name', 'shortDescription', 'slug'], wizardStore);
       const isStepOnePopulated = stepOneChecker(stepOne);
       const stepTwo = pick(['defaultLanguage'], wizardStore);
       const isStepTwoPopulated = steptTwoChecker(stepTwo);
       const isStepThreePopulated =
         baseProducts && baseProducts.edges.length > 0;
+
+      // set allowed steps
+      if (isStepOnePopulated && isValid) {
+        allowedSteps = append(2, allowedSteps);
+      }
+      if (isStepTwoPopulated && isValid && addressFull && addressFull.country) {
+        allowedSteps = append(3, allowedSteps);
+      }
+      if (isStepThreePopulated && isValid) {
+        allowedSteps = append(4, allowedSteps);
+      }
       if (step === 1 && isStepOnePopulated && isValid) {
-        return true;
+        isReadyToNext = true;
       }
       if (
         step === 2 &&
@@ -1033,32 +1163,24 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
         addressFull &&
         addressFull.country
       ) {
-        return true;
+        isReadyToNext = true;
       }
       if (step === 3 && isStepThreePopulated && isValid) {
-        return true;
+        isReadyToNext = true;
       }
-      return false;
-    };
-    // $FlowIgnoreMe
-    const storeId = pathOr(null, ['me', 'wizardStore', 'storeId'], this.props);
-    const isReadyChangeStep = () => {
-      if (step === 1 && isReadyToNext() && storeId) {
-        return true;
+      if (step === 4 && me.stripeCustomer) {
+        isReadyToNext = true;
       }
-      if (step === 2 && isReadyToNext()) {
-        return true;
-      }
-      return false;
-    };
+    }
 
     return (
       <div styleName="wizardContainer">
         <div styleName="stepperWrapper">
           <WizardHeader
             currentStep={step}
-            isReadyToNext={isReadyChangeStep()}
+            allowedSteps={allowedSteps}
             onChangeStep={this.handleOnChangeStep}
+            onSaveStep={this.handleOnSaveStep}
           />
         </div>
         <div styleName="contentWrapper">{this.renderForm()}</div>
@@ -1068,7 +1190,7 @@ class WizardWrapper extends React.Component<PropsType, StateType> {
               currentStep={step}
               onChangeStep={this.handleOnChangeStep}
               onSaveStep={this.handleOnSaveStep}
-              isReadyToNext={isReadyToNext()}
+              isReadyToNext={isReadyToNext}
               isSavingInProgress={isSavingInProgress}
             />
           </div>
@@ -1115,10 +1237,24 @@ export default createFragmentContainer(
   withRouter(Page(withShowAlert(WizardWrapper), { withoutCategories: true })),
   graphql`
     fragment Wizard_me on User {
+      ...Cards_me
       id
       rawId
       myStore {
+        id
         rawId
+        storeSubscription {
+          id
+          storeId
+          currency
+          value
+          walletAddress
+          trialStartDate
+          status
+        }
+      }
+      stripeCustomer {
+        id
       }
       wizardStore {
         id

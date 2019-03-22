@@ -5,7 +5,7 @@ import { pathOr } from 'ramda';
 
 import { log, jwt as JWT } from 'utils';
 
-const uploadFile = (file: ?File): Promise<{ url?: string, error?: string }> => {
+const uploadFile = (file: ?File): Promise<{ url: string, error?: string }> => {
   if (!file) {
     return Promise.reject(new Error('Please, select file'));
   }

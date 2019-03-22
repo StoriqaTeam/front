@@ -119,6 +119,7 @@ const iconsMap = {
   leftArrowSlider: <LeftArrowSlider />,
   login: <Login />,
   logo: <Logo />,
+  //
   logout: <Logout />,
   magnifier: <Magnifier />,
   minus: <Minus />,

@@ -93,7 +93,7 @@ class PersonalData extends Component<PropsType, StateType> {
   }
 
   componentWillUnmount() {
-    clearInterval(timer);
+    clearTimeout(timer);
   }
 
   handleSave = () => {
@@ -262,11 +262,11 @@ class PersonalData extends Component<PropsType, StateType> {
   );
 
   handleCopyRefLink = (refLink: string) => {
-    clearInterval(timer);
+    clearTimeout(timer);
 
     this.setState({ isCopiedRef: true });
 
-    timer = setInterval(() => {
+    timer = setTimeout(() => {
       this.setState({ isCopiedRef: false });
     }, 3000);
 

@@ -16,13 +16,12 @@ import {
   keys,
   head,
   find,
-  append,
   isNil,
   contains,
   propEq,
   drop,
   length,
-  // values,
+  concat,
 } from 'ramda';
 import { validate } from '@storiqa/shared';
 import classNames from 'classnames';
@@ -103,7 +102,7 @@ type PropsType = {
   onChangeShipping: (shippingData: ?FullShippingType) => void,
   onCreateAttribute: (attribute: GetAttributeType) => void,
   onRemoveAttribute: (id: string) => void,
-  onResetAttribute: () => void,
+  onResetAttribute: (categoryId?: number) => void,
   onSaveShipping: (onlyShippingSave?: boolean) => void,
   showAlert: (input: AddAlertInputType) => void,
   onFetchPackages?: (metrics: MetricsType) => void,
@@ -238,6 +237,7 @@ class Form extends Component<PropsType, StateType> {
         price: 0,
         cashback: null,
         discount: null,
+        quantity: null,
         preOrderDays: '',
         preOrder: false,
         attributeValues: !isEmpty(customAttributes)
@@ -438,7 +438,7 @@ class Form extends Component<PropsType, StateType> {
         shortDescription: [[val => Boolean(val), t.shortDescriptionIsRequired]],
         longDescription: [[val => Boolean(val), t.longDescriptionIsRequired]],
         categoryId: [[val => Boolean(val), t.categoryIsRequired]],
-        vendorCode: [[val => Boolean(val), t.vendorCodeIsRequired]],
+        vendorCode: [[val => Boolean(val), t.SKUIsRequired]],
         price: [[val => Boolean(val), t.priceIsRequired]],
         // metrics: [[val => !contains(0, values(val)), t.metricsError]],
       },
@@ -594,7 +594,11 @@ class Form extends Component<PropsType, StateType> {
         },
         formErrors: dissoc('categoryId', prevState.formErrors),
       }),
-      onResetAttribute,
+      () => {
+        if (onResetAttribute) {
+          onResetAttribute(categoryId);
+        }
+      },
     );
   };
 
@@ -608,9 +612,9 @@ class Form extends Component<PropsType, StateType> {
     );
   };
 
-  handleAddPhoto = (url: string) => {
+  handleAddPhoto = (photosUrls: Array<string>) => {
     const { photos } = this.state.form;
-    const newPhotos = append(url, photos || []);
+    const newPhotos = concat(photos || [], photosUrls);
     this.setState((prevState: StateType) =>
       assocPath(['form', 'photos'], newPhotos, prevState),
     );
@@ -662,6 +666,28 @@ class Form extends Component<PropsType, StateType> {
     }
     this.setState((prevState: StateType) =>
       assocPath(['form', id], parseFloat(value), prevState),
+    );
+  };
+
+  handleQuantityChange = (e: any) => {
+    const {
+      target: { value },
+    } = e;
+    if (value === '') {
+      this.setState((prevState: StateType) =>
+        assocPath(['form', 'quantity'], null, prevState),
+      );
+      return;
+    } else if (value === '0') {
+      this.setState((prevState: StateType) =>
+        assocPath(['form', 'quantity'], 0, prevState),
+      );
+      return;
+    } else if (Number.isNaN(parseFloat(value))) {
+      return;
+    }
+    this.setState((prevState: StateType) =>
+      assocPath(['form', 'quantity'], parseFloat(value), prevState),
     );
   };
 
@@ -904,6 +930,8 @@ class Form extends Component<PropsType, StateType> {
     const storeRawID = pathOr(null, ['store', 'rawId'], baseProduct);
     // $FlowIgnore
     const baseProductRawID = pathOr(null, ['rawId'], baseProduct);
+    const categoryEquality =
+      !isNil(baseProduct) && baseProduct.category.rawId === form.categoryId;
     let defaultAttributes = null;
     // $FlowIgnore
     const categoryAttributes = pathOr(null, ['getAttributes'], category);
@@ -916,7 +944,11 @@ class Form extends Component<PropsType, StateType> {
     if (categoryAttributes && !isEmpty(categoryAttributes)) {
       defaultAttributes = categoryAttributes;
     }
-    if (baseProductAttributes && !isEmpty(baseProductAttributes)) {
+    if (
+      baseProductAttributes &&
+      !isEmpty(baseProductAttributes) &&
+      categoryEquality
+    ) {
       defaultAttributes = baseProductAttributes;
     }
 
@@ -926,6 +958,7 @@ class Form extends Component<PropsType, StateType> {
       price,
       cashback,
       discount,
+      quantity,
       attributeValues,
       preOrder,
       preOrderDays,
@@ -946,6 +979,14 @@ class Form extends Component<PropsType, StateType> {
                 <ModerationStatus
                   status={baseProduct.status}
                   dataTest={`productStatus_${baseProduct.status}`}
+                  link={
+                    process.env.REACT_APP_HOST && storeRawID && baseProductRawID
+                      ? `${
+                          process.env.REACT_APP_HOST
+                          // $FlowIgnore
+                        }/store/${storeRawID}/products/${baseProductRawID}`
+                      : null
+                  }
                 />
               </div>
             )}
@@ -1008,7 +1049,7 @@ class Form extends Component<PropsType, StateType> {
               <div styleName="formItem">
                 {this.renderInput({
                   id: 'vendorCode',
-                  label: t.labelVendorCode,
+                  label: t.labelSKU,
                   limit: 50,
                   required: true,
                 })}
@@ -1029,13 +1070,17 @@ class Form extends Component<PropsType, StateType> {
               <div styleName="categorySelector">
                 <CategorySelector
                   id="categoryId"
-                  onlyView={Boolean(baseProduct)}
                   categories={this.props.allCategories}
                   category={baseProduct && baseProduct.category}
                   onSelect={itemId => {
                     this.handleSelectedCategory(itemId);
                   }}
                 />
+                {!categoryEquality &&
+                  baseProduct &&
+                  restVariants && (
+                    <div styleName="categoryWarn">{t.categoryWarn}</div>
+                  )}
                 {formErrors &&
                   formErrors.categoryId && (
                     <div styleName="categoryError">{formErrors.categoryId}</div>
@@ -1043,15 +1088,14 @@ class Form extends Component<PropsType, StateType> {
               </div>
               {defaultAttributes &&
                 !isEmpty(defaultAttributes) &&
-                (!baseProduct ||
-                  (!isEmpty(customAttributes) && baseProduct)) && (
+                !categoryEquality && (
                   <Fragment>
                     <div styleName="title titleCharacteristics">
                       <strong>{t.characteristics}</strong>
                     </div>
                     <div styleName="formItem additionalAttributes">
                       <AdditionalAttributes
-                        onlyView={Boolean(baseProduct)}
+                        onlyView={categoryEquality}
                         // $FlowIgnore
                         attributes={defaultAttributes}
                         customAttributes={customAttributes}
@@ -1108,6 +1152,18 @@ class Form extends Component<PropsType, StateType> {
                 />
                 <span styleName="inputPostfix">{t.percent}</span>
               </div>
+              {!baseProduct && (
+                <div styleName="formItem">
+                  <Input
+                    fullWidth
+                    id="quantity"
+                    label={t.labelQuantity}
+                    onChange={this.handleQuantityChange}
+                    value={!isNil(quantity) ? `${quantity}` : ''}
+                    dataTest="variantQuantityInput"
+                  />
+                </div>
+              )}
               {/*
                 <div id="metrics" styleName="metrics">
                   <Metrics

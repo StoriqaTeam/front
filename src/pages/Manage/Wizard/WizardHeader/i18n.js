@@ -8,6 +8,7 @@ type TranslationDicType = {|
   nameYourStore: string,
   setUpStore: string,
   fillYourStoreWithGoods: string,
+  paymentSettings: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -16,6 +17,7 @@ const translations: TranslationsBundleType = {
     nameYourStore: 'Name your store',
     setUpStore: 'Set up store',
     fillYourStoreWithGoods: 'fill your store with goods',
+    paymentSettings: 'Payment settings',
   },
 };
 

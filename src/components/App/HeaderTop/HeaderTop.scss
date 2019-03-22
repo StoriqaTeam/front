@@ -6,21 +6,20 @@
   justify-content: flex-end;
   margin-top: 1rem;
   margin-bottom: 1.5rem;
-  padding: 0 2rem;
 
   @media (max-width: #{$lg - 1px}) {
     position: absolute;
     right: 2.5rem;
     top: -35px;
     padding: 0;
-    z-index: 2;
+    z-index: 10;
   }
 
   a {
     margin-left: 3rem;
 
     @media (max-width: #{$sm - 1px}) {
-      margin-left: 1.5rem;
+      margin-left: 0.625rem;
     }
   }
 }

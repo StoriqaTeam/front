@@ -1,14 +1,16 @@
 // @flow strict
 
 import React, { Component } from 'react';
-import { map, isEmpty, pathOr } from 'ramda';
+import { isEmpty, pathOr, head } from 'ramda';
 import { Environment } from 'relay-runtime';
 import { createFragmentContainer, graphql } from 'react-relay';
+import classNames from 'classnames';
 // $FlowIgnoreMe
 import uuidv4 from 'uuid/v4';
 
-import { Table, Button } from 'components/common';
-import { Icon } from 'components/Icon';
+import { ContextDecorator } from 'components/App';
+// import { Button } from 'components/common';
+// import { Icon } from 'components/Icon';
 
 import {
   // $FlowIgnore
@@ -30,7 +32,7 @@ import './Cards.scss';
 import t from './i18n';
 
 type StateType = {
-  isNewCardForm: boolean,
+  // isNewCardForm: boolean,
   isLoading: boolean,
 };
 
@@ -55,6 +57,7 @@ type PropsType = {
   },
   showAlert: (input: AddAlertInputType) => void,
   environment: Environment,
+  wizard?: boolean,
 };
 
 class Cards extends Component<PropsType, StateType> {
@@ -74,9 +77,9 @@ class Cards extends Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
 
-    const { stripeCustomer } = props.me;
+    // const { stripeCustomer } = props.me;
 
-    const isCards = Boolean(stripeCustomer && !isEmpty(stripeCustomer.cards));
+    // const isCards = Boolean(stripeCustomer && !isEmpty(stripeCustomer.cards));
     // let checked = null;
 
     // if (isCards) {
@@ -85,7 +88,7 @@ class Cards extends Component<PropsType, StateType> {
 
     this.state = {
       // checked,
-      isNewCardForm: !isCards,
+      // isNewCardForm: !isCards,
       isLoading: false,
     };
   }
@@ -96,17 +99,17 @@ class Cards extends Component<PropsType, StateType> {
   //   });
   // };
 
-  handleOpenNewCardForm = () => {
-    this.setState({
-      isNewCardForm: true,
-    });
-  };
-
-  handleCancelNewCardForm = () => {
-    this.setState({
-      isNewCardForm: false,
-    });
-  };
+  // handleOpenNewCardForm = () => {
+  //   this.setState({
+  //     isNewCardForm: true,
+  //   });
+  // };
+  //
+  // handleCancelNewCardForm = () => {
+  //   this.setState({
+  //     isNewCardForm: false,
+  //   });
+  // };
 
   handleSaveNewCard = (token: { id: string }) => {
     const { stripeCustomer } = this.props.me;
@@ -158,10 +161,10 @@ class Cards extends Component<PropsType, StateType> {
         }
         this.props.showAlert({
           type: 'success',
-          text: 'success',
+          text: 'Your card was saved',
           link: { text: '' },
         });
-        this.setState(() => ({ isNewCardForm: false }));
+        // this.setState(() => ({ isNewCardForm: false }));
       },
       onError: (error: Error) => {
         this.setState(() => ({ isLoading: false }));
@@ -185,118 +188,155 @@ class Cards extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { firstName, lastName, email, stripeCustomer } = this.props.me;
-    const { isNewCardForm, isLoading } = this.state;
+    const { wizard, me } = this.props;
+    const { firstName, lastName, email, stripeCustomer } = me;
+    const { isLoading } = this.state;
     const isCards = Boolean(stripeCustomer && !isEmpty(stripeCustomer.cards));
+    const card = isCards ? head(stripeCustomer.cards) : null;
+    // $FlowIgnore
+    const productsCount = pathOr(0, ['myStore', 'productsCount'], me);
     return (
-      <div styleName="container">
+      <div styleName={classNames('container', { wizard })}>
         <div styleName="cards">
-          {isCards && (
+          {
             <div styleName="table">
-              <Table
-                minWidth={640}
-                columns={[
-                  // {
-                  //   id: 1,
-                  //   title: '',
-                  // },
-                  {
-                    id: 2,
-                    title: t.tableColumns.cardTypeNumber,
-                  },
-                  {
-                    id: 3,
-                    title: t.tableColumns.expirationDate,
-                  },
-                  {
-                    id: 4,
-                    title: t.tableColumns.cardholderName,
-                  },
-                  {
-                    id: 5,
-                    title: '',
-                  },
-                ]}
-                data={map(
-                  item => ({
-                    id: item.id,
-                    item: [
-                      // {
-                      //   id: 1,
-                      //   content: (
-                      //     <div styleName="radio">
-                      //       <Checkbox
-                      //         id={item.id}
-                      //         isRadio
-                      //         isChecked={checked === item.id}
-                      //         onChange={this.handleChange}
-                      //       />
-                      //     </div>
-                      //   ),
-                      //   byContent: true,
-                      // },
-                      {
-                        id: 2,
-                        content: `•••• •••• •••• ${item.last4}`,
-                      },
-                      {
-                        id: 3,
-                        content: `${item.expMonth}/${item.expYear}`,
-                      },
-                      {
-                        id: 4,
-                        content: item.name,
-                      },
-                      {
-                        id: 5,
-                        content: (
-                          <div
-                            styleName="deleteButton"
-                            onClick={() => {
-                              this.handleDeleteCard(item.id);
-                            }}
-                            onKeyDown={() => {}}
-                            role="button"
-                            tabIndex="0"
-                          >
-                            <Icon type="basket" size={32} />
-                          </div>
-                        ),
-                        byContent: true,
-                        align: 'right',
-                      },
-                    ],
-                  }),
-                  stripeCustomer.cards,
-                )}
-              />
+              {card && (
+                <div styleName="card">
+                  <div styleName="brand">{card.brand}</div>
+                  <div styleName="last4">{`xxxxxxxxxxxx${card.last4}`}</div>
+                  <div styleName="expirationDate">{`${card.expMonth}/${
+                    card.expYear
+                  }`}</div>
+                  <div styleName="successText">
+                    <span>{t.successText}</span>
+                  </div>
+                </div>
+              )}
+
+              {/*
+                <Table
+                  minWidth={640}
+                  columns={[
+                    // {
+                    //   id: 1,
+                    //   title: '',
+                    // },
+                    {
+                      id: 2,
+                      title: t.tableColumns.cardTypeNumber,
+                    },
+                    {
+                      id: 3,
+                      title: t.tableColumns.expirationDate,
+                    },
+                    {
+                      id: 4,
+                      title: t.tableColumns.cardholderName,
+                    },
+                    {
+                      id: 5,
+                      title: '',
+                    },
+                  ]}
+                  data={map(
+                    item => ({
+                      id: item.id,
+                      item: [
+                        // {
+                        //   id: 1,
+                        //   content: (
+                        //     <div styleName="radio">
+                        //       <Checkbox
+                        //         id={item.id}
+                        //         isRadio
+                        //         isChecked={checked === item.id}
+                        //         onChange={this.handleChange}
+                        //       />
+                        //     </div>
+                        //   ),
+                        //   byContent: true,
+                        // },
+                        {
+                          id: 2,
+                          content: `•••• •••• •••• ${item.last4}`,
+                        },
+                        {
+                          id: 3,
+                          content: `${item.expMonth}/${item.expYear}`,
+                        },
+                        {
+                          id: 4,
+                          content: item.name,
+                        },
+                        {
+                          id: 5,
+                          content: (
+                            <div
+                              styleName="deleteButton"
+                              onClick={() => {
+                                this.handleDeleteCard(item.id);
+                              }}
+                              onKeyDown={() => {}}
+                              role="button"
+                              tabIndex="0"
+                            >
+                              <Icon type="basket" size={32} />
+                            </div>
+                          ),
+                          byContent: true,
+                          align: 'right',
+                        },
+                      ],
+                    }),
+                    stripeCustomer.cards,
+                  )}
+                />
+              */}
             </div>
-          )}
-          {isCards && (
-            <div styleName="addButton">
-              <Button
-                disabled={isNewCardForm}
-                wireframe
-                big
-                onClick={this.handleOpenNewCardForm}
-                dataTest="addCardButton"
-              >
-                {t.changeCardInfo}
-              </Button>
+          }
+          {/* (
+              <div styleName="addButton">
+                <Button
+                  disabled={isNewCardForm}
+                  wireframe
+                  big
+                  onClick={this.handleOpenNewCardForm}
+                  dataTest="addCardButton"
+                >
+                  {t.changeCardInfo}
+                </Button>
+              </div>
+            ) */}
+          {
+            <div styleName="block">
+              <div styleName={classNames('newCardForm', { wizard })}>
+                <NewCardForm
+                  wizard={wizard}
+                  name={`${firstName} ${lastName}`}
+                  email={email}
+                  onSave={this.handleSaveNewCard}
+                  isCards={isCards}
+                  isLoading={isLoading}
+                />
+              </div>
+              {wizard !== true && (
+                <div styleName="totalPayment">
+                  <div styleName="productsCount totalPaymentBlock">
+                    <div styleName="count">
+                      <thin>{productsCount}</thin>
+                    </div>
+                    <div styleName="label">{t.productsPublished}</div>
+                  </div>
+                  <div styleName="monthlyPayment totalPaymentBlock">
+                    <div styleName="count">
+                      <thin>$0.00</thin>
+                    </div>
+                    <div styleName="label">{t.monthlyPayment}</div>
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-          {isNewCardForm && (
-            <div styleName="newCardForm">
-              <NewCardForm
-                name={`${firstName} ${lastName}`}
-                email={email}
-                onCancel={this.handleCancelNewCardForm}
-                onSave={this.handleSaveNewCard}
-                isCards={isCards}
-                isLoading={isLoading}
-              />
-            </div>
-          )}
+          }
         </div>
       </div>
     );
@@ -304,9 +344,12 @@ class Cards extends Component<PropsType, StateType> {
 }
 
 export default createFragmentContainer(
-  withShowAlert(Cards),
+  withShowAlert(ContextDecorator(Cards)),
   graphql`
     fragment Cards_me on User {
+      myStore {
+        productsCount
+      }
       firstName
       lastName
       email

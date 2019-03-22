@@ -24,9 +24,9 @@ type PropsType = {
     }) => Promise<*>,
   },
   isCards: boolean,
-  onCancel: () => void,
   onSave: (token: any) => void,
   isLoading: boolean,
+  wizard?: boolean,
 };
 
 type StateType = {
@@ -98,6 +98,7 @@ class NewCardForm extends Component<PropsType, StateType> {
       })
       .then((payload: any) => {
         this.props.onSave(payload.token);
+        this.cardElement.clear();
         return true;
       })
       .finally(() => {
@@ -171,13 +172,17 @@ class NewCardForm extends Component<PropsType, StateType> {
   };
 
   render() {
-    const { onCancel, isCards } = this.props;
+    const { wizard } = this.props;
     const { isFocus, isLoading, errors } = this.state;
 
     return (
       <form
         onSubmit={this.handleSubmit}
-        styleName={classNames('container', { isFocus, isError: errors.card })}
+        styleName={classNames('container', {
+          isFocus,
+          isError: errors.card,
+          wizard,
+        })}
       >
         <label>
           <div styleName="label">
@@ -223,7 +228,7 @@ class NewCardForm extends Component<PropsType, StateType> {
               Save
             </Button>
           </div>
-          {isCards && (
+          {/* isCards && (
             <div
               styleName="cancelButton"
               onClick={onCancel}
@@ -233,7 +238,7 @@ class NewCardForm extends Component<PropsType, StateType> {
             >
               Cancel
             </div>
-          )}
+          ) */}
         </div>
       </form>
     );

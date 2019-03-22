@@ -69,7 +69,7 @@ class Start extends Component<PropsTypes, StateTypes> {
     },
     header: [
       {
-        title: 'Fancy Stuf',
+        title: 'Fancy Stuff',
         description: 'Express yourself with unique handmade items',
       },
       {
@@ -91,12 +91,12 @@ class Start extends Component<PropsTypes, StateTypes> {
       {
         title: 'Worldwide community',
         description:
-          'Storiqa is an online marketplace which global on every side. We have an international community and support that help you buy and sell craft items.',
+          'Storiqa is an online marketplace which is global on every side. We have an international community and support that help you buy and sell craft items.',
       },
       {
         title: 'Cryptopayment option',
         description:
-          'Along with traditional payments, you can finally try out paying for goods with cryptocurrencies—it’s now real with Storiqa.',
+          'Along with traditional payments, you can finally try out paying for goods with cryptocurrencies\u00A0— it’s now real with Storiqa.',
       },
     ],
   };
@@ -295,7 +295,12 @@ class Start extends Component<PropsTypes, StateTypes> {
               We all have inner spirit. We are all individuals. Stand out with
               Storiqa.
             </div>
-            <a styleName="readmoreAboutStoriqa" href="www.storiqa.com">
+            <a
+              styleName="readmoreAboutStoriqa"
+              href="https://storiqa.com/about/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Read more about Storiqa
             </a>
             <Container>

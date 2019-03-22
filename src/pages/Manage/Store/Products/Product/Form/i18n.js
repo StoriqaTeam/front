@@ -11,7 +11,7 @@ type TranslationDicType = {|
   shortDescriptionIsRequired: string,
   longDescriptionIsRequired: string,
   categoryIsRequired: string,
-  vendorCodeIsRequired: string,
+  SKUIsRequired: string,
   priceIsRequired: string,
   metricsError: string,
   addAtLeastOneDeliveryServiceOrPickup: string,
@@ -22,7 +22,7 @@ type TranslationDicType = {|
   labelShortDescription: string,
   labelLongDescription: string,
   labelCurrency: string,
-  labelVendorCode: string,
+  labelSKU: string,
   labelSEOTitle: string,
   labelSEODescription: string,
   pricing: string,
@@ -30,6 +30,7 @@ type TranslationDicType = {|
   labelCashback: string,
   percent: string,
   labelDiscount: string,
+  labelQuantity: string,
   characteristics: string,
   availableForPreOrder: string,
   labelLeadTime: string,
@@ -48,6 +49,8 @@ type TranslationDicType = {|
   baseProductIsOnModeration: string,
   baseProductIsBlocked: string,
   close: string,
+  categoryWarn: string,
+  preview: string,
 |};
 type TranslationsBundleType = Translation<TranslationDicType>;
 
@@ -59,7 +62,7 @@ const translations: TranslationsBundleType = {
     shortDescriptionIsRequired: 'Short description is required',
     longDescriptionIsRequired: 'Long description is required',
     categoryIsRequired: 'Category is required',
-    vendorCodeIsRequired: 'Vendor code is required',
+    SKUIsRequired: 'SKU is required',
     priceIsRequired: 'Price is required',
     metricsError: 'Please, specify all metrics',
     addAtLeastOneDeliveryServiceOrPickup: 'Add at least one delivery service',
@@ -70,7 +73,7 @@ const translations: TranslationsBundleType = {
     labelShortDescription: 'Short description',
     labelLongDescription: 'Long description',
     labelCurrency: 'Currency',
-    labelVendorCode: 'Vendor code',
+    labelSKU: 'SKU',
     labelSEOTitle: 'SEO title',
     labelSEODescription: 'SEO description',
     pricing: 'PRICING',
@@ -78,6 +81,7 @@ const translations: TranslationsBundleType = {
     labelCashback: 'Cashback',
     percent: 'Percent',
     labelDiscount: 'Discount',
+    labelQuantity: 'In stock',
     characteristics: 'Characteristics',
     availableForPreOrder: 'Available for pre-order',
     labelLeadTime: 'Lead time (days)',
@@ -100,6 +104,9 @@ const translations: TranslationsBundleType = {
     baseProductIsOnModeration: 'Product is on moderation',
     baseProductIsBlocked: 'Product is blocked, contact the support service',
     close: 'Close.',
+    categoryWarn:
+      'If you change the category, variants for this product will be deleted',
+    preview: 'Preview',
   },
 };
 

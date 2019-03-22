@@ -46,19 +46,21 @@ class HeaderDisclaimer extends Component<{}, StateType> {
     return (
       <div styleName="container">
         <div styleName="body">
-          <div styleName="text">
-            Dear users! Currently Storiqa is&nbsp;working
-            in&nbsp;the&nbsp;testing&nbsp;mode. If&nbsp;you have any questions
-            or&nbsp;problems, please follow the&nbsp;link&nbsp;below.
+          <div styleName="textWrap">
+            <span styleName="text">
+              Dear users! Currently Storiqa is&nbsp;working
+              in&nbsp;the&nbsp;testing&nbsp;mode. If&nbsp;you have any questions
+              or&nbsp;problems, please follow the&nbsp;link.
+            </span>
+            <a
+              href="https://storiqa.zendesk.com/hc/en-us/requests/new"
+              styleName="link"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Support
+            </a>
           </div>
-          <a
-            href="https://storiqa.zendesk.com/hc/en-us/requests/new"
-            styleName="link"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Support
-          </a>
           <button styleName="cross" onClick={this.handleHiddenDisclaimer}>
             <Icon type="cross" size={8} />
           </button>

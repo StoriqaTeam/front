@@ -35,6 +35,7 @@ export type FormType = {
   price: number,
   cashback: ?number,
   discount: ?number,
+  quantity?: ?number,
   preOrderDays: string,
   preOrder: boolean,
   attributeValues: Array<AttributeValueType>,

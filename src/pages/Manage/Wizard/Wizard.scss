@@ -5,7 +5,7 @@
   flex-direction: column;
   justify-content: space-between;
   background-color: $color_white;
-  min-height: 101rem;
+  min-height: 80rem;
   margin: 0 2rem -2rem 2rem;
   border-top: 1px solid $color_grey_trivial;
   border-bottom: 1px solid $color_grey_trivial;
@@ -20,6 +20,7 @@
     justify-content: flex-start;
     border-bottom: 2px solid $color_grey_trivial;
     overflow: auto;
+
     @media (min-width: $md) {
       justify-content: center;
     }
@@ -28,15 +29,15 @@
   .contentWrapper {
     display: flex;
     flex: 1;
-    padding: 8rem 2rem 2rem 2rem;
+    padding: 8rem 2rem;
     justify-content: center;
 
     @media (min-width: $md) {
-      padding: 12rem 3rem 2rem 3rem;
+      padding: 12rem 3rem;
     }
 
     @media (min-width: $xl) {
-      padding: 14.25rem 3rem 2rem 3rem;
+      padding: 14.25rem 3rem;
     }
 
     .formWrapper {
@@ -119,7 +120,7 @@
     width: 82rem;
   }
 
-  .endingContent{ 
+  .endingContent{
     display: flex;
     flex-direction: column;
     justify-content: center;

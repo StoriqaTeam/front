@@ -2,6 +2,7 @@
 
 import React from 'react';
 import classNames from 'classnames';
+import { contains } from 'ramda';
 
 import { Icon } from 'components/Icon';
 
@@ -12,17 +13,26 @@ import t from './i18n';
 const WizardStepper = ({
   currentStep,
   onChangeStep,
-  isReadyToNext,
+  onSaveStep,
+  allowedSteps,
 }: {
   currentStep: number,
   onChangeStep: (val: number) => void,
-  isReadyToNext: boolean,
+  onSaveStep: (newStep: number) => void,
+  allowedSteps: Array<number>,
 }) => {
   const StepLabel = ({ step, text }: { step: number, text: string }) => (
     <div
       styleName={classNames('item', { active: currentStep === step })}
       onClick={() => {
-        if (isReadyToNext || step < currentStep) {
+        if (contains(step, allowedSteps)) {
+          if (step - currentStep === 1) {
+            onSaveStep(step);
+          } else {
+            onChangeStep(step);
+          }
+        }
+        if (step < currentStep) {
           onChangeStep(step);
         }
       }}
@@ -41,6 +51,8 @@ const WizardStepper = ({
       <StepLabel step={2} text={t.setUpStore} />
       <Icon type="arrowRight" />
       <StepLabel step={3} text={t.fillYourStoreWithGoods} />
+      <Icon type="arrowRight" />
+      <StepLabel step={4} text={t.paymentSettings} />
     </div>
   );
 };

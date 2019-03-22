@@ -60,9 +60,9 @@ const WizardFooter = ({
               dataTest="wizardBackButton"
               big
               disabled={!isReadyToNext}
-              isLoading={currentStep !== 3 && isSavingInProgress}
+              isLoading={currentStep !== 4 && isSavingInProgress}
             >
-              {(currentStep === 3 && <span>{t.publishStore}</span>) || (
+              {(currentStep === 4 && <span>{t.publishStore}</span>) || (
                 <span>{t.nextStep}</span>
               )}
             </Button>

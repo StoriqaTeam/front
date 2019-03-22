@@ -91,6 +91,8 @@ type StateType = {
   isSignUp: boolean,
   modalTitle: string,
   selected: number,
+  isPrivacyChecked: boolean,
+  isTermsChecked: boolean,
 };
 
 const headerTabsItems = [
@@ -136,6 +138,8 @@ class Authorization extends Component<PropsType, StateType> {
       passwordValid: false,
       passwordRepeat: '',
       selected: indexByRegistered,
+      isPrivacyChecked: false,
+      isTermsChecked: false,
     };
     if (process.env.BROWSER) {
       document.addEventListener('keydown', this.handleKeydown);
@@ -168,6 +172,17 @@ class Authorization extends Component<PropsType, StateType> {
       return t.recoverPassword;
     }
     return headerTabsItems[index].name;
+  };
+
+  handlePrivacyCheck = (privacy: string): void => {
+    this.setState(
+      (prevState: StateType) => ({
+        [privacy]: !prevState[privacy],
+      }),
+      () => {
+        this.validateForm();
+      },
+    );
   };
 
   handleAlertOnClick = (): void => {
@@ -324,11 +339,18 @@ class Authorization extends Component<PropsType, StateType> {
       isRecoverPassword,
       password,
       passwordRepeat,
+      isPrivacyChecked,
+      isTermsChecked,
     } = this.state;
     if (isSignUp) {
       this.setState({
         formValid:
-          firstNameValid && lastNameValid && emailValid && passwordValid,
+          firstNameValid &&
+          lastNameValid &&
+          emailValid &&
+          passwordValid &&
+          isPrivacyChecked &&
+          isTermsChecked,
       });
     } else if ((isSignUp === false && isRecoverPassword === false) || isLogin) {
       this.setState({ formValid: emailValid && passwordValid });
@@ -596,6 +618,8 @@ class Authorization extends Component<PropsType, StateType> {
       formValid,
       errors,
       selected,
+      isPrivacyChecked,
+      isTermsChecked,
     } = this.state;
     return selected === 0 ? (
       <SignUp
@@ -607,6 +631,9 @@ class Authorization extends Component<PropsType, StateType> {
         formValid={formValid}
         onRegistrationClick={this.handleRegistrationClick}
         onChange={this.handleChange}
+        onPrivacyCheck={this.handlePrivacyCheck}
+        isPrivacyChecked={isPrivacyChecked}
+        isTermsChecked={isTermsChecked}
       />
     ) : (
       <SignIn

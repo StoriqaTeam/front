@@ -135,10 +135,9 @@
   margin-top: 2rem;
   align-items: center;
   background: $color_grey_bg;
-  height: 100%;
   flex-direction: column;
   justify-content: space-evenly;
-  padding: 1rem 0;
+  padding: 2rem 0;
 
   @media (min-width: $md) {
     margin-top: 0;
@@ -147,10 +146,6 @@
   @media (max-width: #{$md - 1px}) {
     margin-top: 4rem;
   }
-}
-
-.startSeelingLogo {
-  width: 8rem;
 }
 
 .sellGoods {
@@ -164,7 +159,7 @@
 
   @media (min-width: $md) {
     max-width: 26rem;
-    margin: 0;
+    margin: 0 0 2rem;
   }
 }
 

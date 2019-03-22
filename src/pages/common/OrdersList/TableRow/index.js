@@ -44,6 +44,7 @@ class TableRow extends PureComponent<PropsType> {
       <div
         styleName="container"
         onClick={() => this.props.router.push(this.props.linkFactory(rowItem))}
+        data-test={`orderDataTest_${rowItem.number}`}
       >
         <div styleName="rowWrapper">
           <Col size={2} sm={4} md={3} lg={2} xl={1}>

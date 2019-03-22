@@ -50,11 +50,19 @@
   font-size: 14px;
 }
 
+.extraSmall {
+  height: 2.75rem;
+  min-width: auto;
+  line-height: 2.5rem;
+  padding: 0 0.75rem;
+  font-size: 12px;
+}
+
 .disabled {
-  background-color: $color_grey_trivial;
-  border: 1px solid $color_grey_trivial;
-  color: $color_grey_minor;
-  cursor: default;
+  background-color: $color_grey_trivial !important;
+  border: 1px solid $color_grey_trivial !important;
+  color: $color_grey_minor !important;
+  cursor: default !important;
 }
 
 .iconic {
@@ -145,14 +153,14 @@
     }
   }
 
-  &.disabled {
-    opacity: 0.3;
-
-    &:hover {
-      color: $color_blue;
-      background: transparent;
-    }
-  }
+  //&.disabled {
+  //  opacity: 0.3;
+  //
+  //  &:hover {
+  //    color: $color_blue;
+  //    background: transparent;
+  //  }
+  //}
 
   &.pink {
     border: 1px solid $color_pink;
