@@ -9,8 +9,6 @@ import FoundConnectedRouter from 'routes/FoundConnectedRouter';
 import createResolver from 'relay/createResolver';
 import { ClientFetcher } from 'relay/fetcher';
 
-import '../index.scss';
-
 let returnFunc = () => {}; // eslint-disable-line
 
 if (process.env.BROWSER) {

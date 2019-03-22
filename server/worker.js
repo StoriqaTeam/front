@@ -9,7 +9,7 @@ const projectBasePath = require('path').resolve(__dirname, '..');
 
 // this global variable will be used later in express middleware
 global.webpackIsomorphicTools = new WebpackIsomorphicTools(
-  require('../config/webpack-isomorphic-tools-configuration'), // eslint-disable-line
+  require('../build-utils/webpack-isomorphic-tools-configuration'), // eslint-disable-line
 )
   // initializes a server-side instance of webpack-isomorphic-tools
   // (the first parameter is the base path for your project

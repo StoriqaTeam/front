@@ -42,12 +42,13 @@ if (process.env.NODE_ENV === 'development') {
   var config;
   try {
     config = JSON.parse(babelrc);
-    config.ignore = /\/(build|node_modules)\//;
+    // Since Babel7 'ignore' MUST be an array
+    config.ignore = [/\/(build|node_modules)\//];
   } catch (err) {
     console.error('==>     ERROR: Error parsing your .babelrc.');
     console.error(err);
   }
-  require('babel-register')(config);
+  require('@babel/register')(config);
 }
 
 // clear require() cache if in development mode
@@ -57,10 +58,6 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const app = express();
-
-// Set template engine
-app.set('view engine', 'pug');
-app.set('views', path.join(__dirname, 'templates'));
 
 // Support Gzip
 app.use(compression());
@@ -105,9 +102,11 @@ app.use(
 );
 
 if (process.env.NODE_ENV === 'development') {
-  const webpackConfig = require('../config/webpack.config.dev');
+  const webpackConfig = require('../build-utils/webpack.config')({ mode: process.env.NODE_ENV });
   const compiler = webpack(webpackConfig);
-  app.use(webpackMiddleware(compiler, { stats: { colors: true } }));
+  app.use(webpackMiddleware(compiler, {
+    stats: { colors: true },
+  }));
   app.use(webpackHotMiddleware(compiler));
 }
 
@@ -225,11 +224,27 @@ app.use(
     }
 
     if (process.env.NODE_ENV === 'development') {
-      res.render('index_dev', {
-        html: ReactDOMServer.renderToString(element),
-        relayPayloads: serialize(fetcher, { isJSON: true }),
-        reduxState: serialize(store.getState(), { isJSON: true }),
+      const html = ReactDOMServer.renderToString(element);
+      const relayPayload = serialize(fetcher, { isJSON: true });
+      const preloadedState = serialize(store.getState(), { isJSON: true });
+     
+      fs.readFile('./build-utils/templates/index.dev.html', 'utf8', (err, htmlData) => {
+        const scripts = `
+          <script>
+            window.__RELAY_PAYLOADS__ = ${relayPayload}
+            window.__PRELOADED_STATE__ = ${preloadedState}
+          </script>
+        `;
+        const index = htmlData
+          .replace('<!-- ::APP:: -->', html)
+          .replace('<!-- ::SCRIPTS:: -->', scripts);
+        if (err) {
+          console.error('read err', err);
+          return res.status(404).end();
+        }
+        res.send(index);
       });
+     
     } else if (process.env.NODE_ENV === 'production') {
       fs.readFile('./build/index.html', 'utf8', (err, htmlData) => {
         if (err) {

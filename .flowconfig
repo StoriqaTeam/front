@@ -4,7 +4,9 @@
 .*/node_modules/cypress/.*
 .*/node_modules/konfig/.*
 .*/node_modules/config-chain/.*
+.*/node_modules/jsonlint/.*
 ./build/.*
+./build-utils/.*
 ./config/.*
 ./cypress/.*
 ./dist/.*

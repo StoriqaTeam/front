@@ -1,17 +1,13 @@
 {
   "presets": [
     [
-      "es2015",
-      {
-        "loose": true
-      }
+      "@babel/preset-env", { "modules": false }
     ],
-    "react",
-    "react-app",
-    "flow"
+    "@babel/flow",
+    "@babel/preset-react"
+   
   ],
   "plugins": [
-    "dynamic-import-node",
     [
       "relay",
       {
@@ -19,11 +15,23 @@
       }
     ],
     "inline-react-svg",
-    "add-module-exports"
+    "add-module-exports",
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-proposal-object-rest-spread",
+    "@babel/plugin-transform-modules-commonjs",
+    "@babel/plugin-transform-runtime", 
+    "@babel/plugin-syntax-async-generators",
+    "@babel/plugin-transform-async-to-generator",
+    "@babel/plugin-syntax-dynamic-import"
   ],
   "env": {
     "production": {
       "plugins": [
+        [
+          "ramda", {
+            "useES": true
+          }
+        ],
         [
           "module-resolver",
           {
@@ -61,7 +69,7 @@
             "optInOnly": true
           }
         ],
-        "transform-decorators-legacy",
+       
         [
           "react-css-modules",
           {
@@ -79,6 +87,7 @@
     },
     "test": {
       "plugins": [
+        "@babel/plugin-transform-modules-commonjs",
         [
           "module-resolver",
           {

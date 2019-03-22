@@ -251,7 +251,7 @@ export class ServerFetcher extends FetcherBase {
     cookiesInstance: CookieType,
   ) {
     super(url);
-
+    this.url = url;
     this.sessionId = sessionId;
     this.currencyCode = currencyCode;
     this.fiatCurrencyCode = fiatCurrencyCode;
@@ -302,7 +302,7 @@ export class ClientFetcher extends FetcherBase {
 
   constructor(url: string, payloads: Array<any>) {
     super(url);
-
+    this.url = url;
     this.payloads = payloads;
   }
 
